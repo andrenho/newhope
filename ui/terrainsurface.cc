@@ -303,7 +303,7 @@ TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
 
 
 void 
-TerrainSurface::AddTrees(Point<int> p, string side, queue<const Image*>& st)
+TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st)
 {
 	string treecode;
 	TreeType tree = world.Tree(p);
