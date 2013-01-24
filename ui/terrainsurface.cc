@@ -205,8 +205,15 @@ TerrainSurface::BuildTile(Point<int> p, queue<const Image*>& st)
 		st.push(res[basic_terrain + "_c"]);
 	}
 
+	// borders
 	BuildTileBorders(p, terrain, st);
-	AddTrees(p, st);
+
+	// trees
+	vector<string> sides = { 
+		"nw", "n", "ne", "w", "c", "e", "sw", "s", "se" 
+	};
+	for(string side: sides)
+		AddTrees(p, side, st);
 }
 
 
@@ -296,6 +303,17 @@ TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
 
 
 void 
-TerrainSurface::AddTrees(Point<int> p, std::queue<const Image*>& st)
+TerrainSurface::AddTrees(Point<int> p, string side, queue<const Image*>& st)
 {
+	string treecode;
+	TreeType tree = world.Tree(p);
+	if(tree == TreeType::TREE_ROUND) {
+		treecode = "1";
+	} else if(tree == TreeType::TREE_POINTY) {
+		treecode = "2";
+	} else {
+		return;
+	}
+
+	st.push(res["trunk_" + treecode + "_c"]);
 }
