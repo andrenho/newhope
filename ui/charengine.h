@@ -1,5 +1,5 @@
-#ifndef UI_DECORENGINE_H
-#define UI_DECORENGINE_H
+#ifndef UI_CHARENGINE_H
+#define UI_CHARENGINE_H
 
 #include "util/defines.h"
 #include "world/world.h"
@@ -10,36 +10,36 @@ class Person;
 class UI;
 
 typedef enum { TREE, PERSON } ObjType;
-struct DecorObject {
-	DecorObject(int y, ObjType o) : 
+struct CharObject {
+	CharObject(int y, ObjType o) : 
 		y(y), objType(o) { }
 	const int y;
 	const ObjType objType;
 };
-struct DecorObjPerson : public DecorObject {
-	DecorObjPerson(int y, ObjType o, const Person* person) 
-		: DecorObject(y, o), person(person) { }
+struct CharObjPerson : public CharObject {
+	CharObjPerson(int y, ObjType o, const Person* person) 
+		: CharObject(y, o), person(person) { }
 	const Person* person;
 };
-struct DecorObjTree : public DecorObject {
-	DecorObjTree(int y, ObjType o, Point<int> tile, TreeType type) 
-		: DecorObject(y, o), tile(tile), type(type) { }
+struct CharObjTree : public CharObject {
+	CharObjTree(int y, ObjType o, Point<int> tile, TreeType type) 
+		: CharObject(y, o), tile(tile), type(type) { }
 	const Point<int> tile;
 	const TreeType type;
 };
 
-class DecorEngine {
+class CharEngine {
 public:
-	DecorEngine(const World& world, const GraphicLibrary& video, 
+	CharEngine(const World& world, const GraphicLibrary& video, 
 			const Resources& res, const UI& ui)
 		: world(world), video(video), res(res), ui(ui) { }
-	~DecorEngine();
+	~CharEngine();
 
 	void PrepareFrame(int scr_w, int scr_h) const;
 	void Draw() const;
 
 private:
-	void DrawTree(const DecorObjTree* obj) const;
+	void DrawTree(const CharObjTree* obj) const;
 	void DrawPerson(const Person* person) const;
 
 	const World& world;
@@ -47,9 +47,9 @@ private:
 	const Resources& res;
 	const UI& ui;
 
-	mutable std::vector<const DecorObject*> obj_frame;
+	mutable std::vector<const CharObject*> obj_frame;
 
-	DISALLOW_COPY_AND_ASSIGN(DecorEngine);
+	DISALLOW_COPY_AND_ASSIGN(CharEngine);
 };
 
 #endif

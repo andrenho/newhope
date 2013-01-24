@@ -7,7 +7,7 @@ SRC = main.cc		   \
       libs/sdl/sdl.cc      \
       libs/sdl/sdlfont.cc  \
       libs/sdl/sdlimage.cc \
-      ui/decorengine.cc    \
+      ui/charengine.cc     \
       ui/minimap.cc        \
       ui/resource.cc       \
       ui/terrainsurface.cc \

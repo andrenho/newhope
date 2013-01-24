@@ -8,7 +8,7 @@ using namespace std;
 #include "libs/graphiclibrary.h"
 #include "ui/resource.h"
 #include "ui/terrainsurface.h"
-#include "ui/decorengine.h"
+#include "ui/charengine.h"
 #include "ui/minimap.h"
 #include "util/logger.h"
 #include "world/city.h"
@@ -21,7 +21,7 @@ UI::UI(const World& world, const GraphicLibrary& video)
 	  res(new Resources(video)),
 	  terrain_sf(new TerrainSurface(world, video, *res)),
 	  minimap(new Minimap(video, world, *res)), 
-	  decor_engine(new DecorEngine(world, video, *res, *this)),
+	  char_engine(new CharEngine(world, video, *res, *this)),
 	  frame_timer(nullptr)
 {
 	terrain_sf->Resize(video.Window->w, video.Window->h);
@@ -31,7 +31,7 @@ UI::UI(const World& world, const GraphicLibrary& video)
 
 UI::~UI()
 {
-	delete decor_engine;
+	delete char_engine;
 	delete minimap;
 	delete terrain_sf;
 	delete res;
@@ -113,8 +113,8 @@ UI::Draw()
 
 	// draw people and scenery, from bottom to top, in order, so that
 	// everything is hidden behind other things correctly
-	decor_engine->PrepareFrame(video.Window->w, video.Window->h);
-	decor_engine->Draw();
+	char_engine->PrepareFrame(video.Window->w, video.Window->h);
+	char_engine->Draw();
 	
 	// update screen
 	video.Window->Update();

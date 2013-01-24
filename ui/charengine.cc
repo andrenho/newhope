@@ -1,4 +1,4 @@
-#include "ui/decorengine.h"
+#include "ui/charengine.h"
 
 #include <climits>
 #include <cstdlib>
@@ -13,7 +13,7 @@ using namespace std;
 #include "world/world.h"
 #include "world/person.h"
 
-DecorEngine::~DecorEngine()
+CharEngine::~CharEngine()
 {
 	for(const auto& obj: obj_frame)
 		delete obj;
@@ -22,7 +22,7 @@ DecorEngine::~DecorEngine()
 
 
 void 
-DecorEngine::PrepareFrame(int scr_w, int scr_h) const
+CharEngine::PrepareFrame(int scr_w, int scr_h) const
 {
 	// clear frame
 	for(const auto& obj: obj_frame)
@@ -35,7 +35,7 @@ DecorEngine::PrepareFrame(int scr_w, int scr_h) const
 			Point<int> tile = ui.RelToTile(Point<int>(x, y));
 			TreeType tree = world.Tree(tile);
 			if(tree) {
-				DecorObject* obj = new DecorObjTree(
+				CharObject* obj = new CharObjTree(
 						y + 20, ObjType::TREE, tile, tree);
 				obj_frame.push_back(obj);
 			}
@@ -47,7 +47,7 @@ DecorEngine::PrepareFrame(int scr_w, int scr_h) const
 		Point<int> p(ui.TileToRel(person->Pos));
 		if(p.x >= -TileSize && p.y >= -TileSize 
 		&& p.x < scr_w + TileSize && p.y < scr_h + TileSize) {
-			DecorObject* obj = new DecorObjPerson(
+			CharObject* obj = new CharObjPerson(
 					p.y, ObjType::PERSON, person);
 			obj_frame.push_back(obj);
 		}
@@ -55,20 +55,20 @@ DecorEngine::PrepareFrame(int scr_w, int scr_h) const
 
 	// sort frame
 	sort(obj_frame.begin(), obj_frame.end(),
-	[](const DecorObject* const& d1, const DecorObject* const& d2) -> bool { 
+	[](const CharObject* const& d1, const CharObject* const& d2) -> bool { 
 		return d1->y > d2->y;
 	});
 }
 
 
 void 
-DecorEngine::Draw() const
+CharEngine::Draw() const
 {
 	while(!obj_frame.empty()) {
 		if(obj_frame[0]->objType == TREE) {
-			DrawTree(static_cast<const DecorObjTree*>(obj_frame[0]));
+			DrawTree(static_cast<const CharObjTree*>(obj_frame[0]));
 		} else if(obj_frame[0]->objType == PERSON) {
-			DrawPerson(static_cast<const DecorObjPerson*>(
+			DrawPerson(static_cast<const CharObjPerson*>(
 						obj_frame[0])->person);
 		}
 		delete obj_frame[0];
@@ -78,7 +78,7 @@ DecorEngine::Draw() const
 
 
 void 
-DecorEngine::DrawTree(const DecorObjTree* obj) const
+CharEngine::DrawTree(const CharObjTree* obj) const
 {
 	const Image* img;
 	if(obj->type == TREE_ROUND) {
@@ -95,7 +95,7 @@ DecorEngine::DrawTree(const DecorObjTree* obj) const
 
 
 void 
-DecorEngine::DrawPerson(const Person* person) const
+CharEngine::DrawPerson(const Person* person) const
 {
 	// body
 	string body("male");
