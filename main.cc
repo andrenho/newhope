@@ -8,7 +8,7 @@ Logger logger(true, true);
 
 int main(int argc, char** argv)
 {
-	// world initialization
+	// initialization
 	i18n_init();
 	World world(5000, 5000);
 	GraphicLibrary* video(new SDL());
