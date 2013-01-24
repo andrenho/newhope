@@ -15,87 +15,44 @@ using namespace std;
 
 CharEngine::~CharEngine()
 {
-	for(const auto& obj: obj_frame)
-		delete obj;
-	obj_frame.clear();
+	people_frame.clear();
 }
 
 
 void 
-CharEngine::PrepareFrame(int scr_w, int scr_h) const
+CharEngine::Draw(int scr_w, int scr_h) const
 {
 	// clear frame
-	for(const auto& obj: obj_frame)
-		delete obj;
-	obj_frame.clear();
-
-	// add trees
-	for(int x(0); x<scr_w; x+=TileSize) {
-		for(int y(0); y<scr_h; y+=TileSize) {
-			Point<int> tile = ui.RelToTile(Point<int>(x, y));
-			TreeType tree = world.Tree(tile);
-			if(tree) {
-				CharObject* obj = new CharObjTree(
-						y + 20, ObjType::TREE, tile, tree);
-				obj_frame.push_back(obj);
-			}
-		}
-	}
+	people_frame.clear();
 
 	// add people
 	for(const auto& person: world.People) {
 		Point<int> p(ui.TileToRel(person->Pos));
 		if(p.x >= -TileSize && p.y >= -TileSize 
 		&& p.x < scr_w + TileSize && p.y < scr_h + TileSize) {
-			CharObject* obj = new CharObjPerson(
-					p.y, ObjType::PERSON, person);
-			obj_frame.push_back(obj);
+			people_frame.push_back(person);
 		}
 	}
 
 	// sort frame
-	sort(obj_frame.begin(), obj_frame.end(),
-	[](const CharObject* const& d1, const CharObject* const& d2) -> bool { 
-		return d1->y > d2->y;
+	sort(people_frame.begin(), people_frame.end(),
+	[](const Person* const& p1, const Person* const& p2) -> bool { 
+		return p1->Pos.y > p2->Pos.y;
 	});
-}
 
-
-void 
-CharEngine::Draw() const
-{
-	while(!obj_frame.empty()) {
-		if(obj_frame[0]->objType == TREE) {
-			DrawTree(static_cast<const CharObjTree*>(obj_frame[0]));
-		} else if(obj_frame[0]->objType == PERSON) {
-			DrawPerson(static_cast<const CharObjPerson*>(
-						obj_frame[0])->person);
-		}
-		delete obj_frame[0];
-		obj_frame.erase(obj_frame.begin());
+	// draw people
+	while(!people_frame.empty()) {
+		DrawPerson(*people_frame[0]);
+		people_frame.erase(people_frame.begin());
 	}
-}
 
-
-void 
-CharEngine::DrawTree(const CharObjTree* obj) const
-{
-	const Image* img;
-	if(obj->type == TREE_ROUND) {
-		img = res["trunk_1"];
-	} else if(obj->type == TREE_POINTY) {
-		img = res["trunk_2"];
-	} else {
+	if(!people_frame.empty())
 		abort();
-	}
-
-	Point<int> scr(ui.TileToRel(obj->tile));
-	img->Blit(*video.Window, Rect(scr.x-32, scr.y-32));
 }
 
 
 void 
-CharEngine::DrawPerson(const Person* person) const
+CharEngine::DrawPerson(const Person& person) const
 {
 	// body
 	string body("male");
@@ -104,15 +61,15 @@ CharEngine::DrawPerson(const Person* person) const
 	string clothes("pants");
 
 	// direction
-	string direction(1, person->Facing);
+	string direction(1, person.Facing);
 
 	// step
 	std::stringstream s;
-	s << person->Step() % 8;
+	s << person.Step() % 8;
 	string step(s.str());
 
 	// find position
-	Point<int> scr(ui.TileToRel(person->Pos));
+	Point<int> scr(ui.TileToRel(person.Pos));
 
 	// create image
 	string charimage(body + "_" + direction + "_" + step);

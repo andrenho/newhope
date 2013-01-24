@@ -111,10 +111,8 @@ UI::Draw()
 	       -ry % TileSize);
 	terrain_sf->Img->Blit(*video.Window, r); // TODO - not always
 
-	// draw people and scenery, from bottom to top, in order, so that
-	// everything is hidden behind other things correctly
-	char_engine->PrepareFrame(video.Window->w, video.Window->h);
-	char_engine->Draw();
+	// draw people
+	char_engine->Draw(video.Window->w, video.Window->h);
 	
 	// update screen
 	video.Window->Update();
