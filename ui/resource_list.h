@@ -7,6 +7,11 @@
 
 using namespace std;
 
+// basic 9 tiles
+const vector<string> basic_9tiles { 
+	"_nw", "_n", "_ne", "_w", "_c", "_e", "_sw", "_s", "_se"
+};
+
 // single images
 const vector<Rect> terrain_r = {
 	Rect( 0, 160, 32, 32), Rect(32, 160, 32, 32), Rect(64, 160, 32, 32),
@@ -32,9 +37,6 @@ const vector<Rect> mm_r {
 	Rect(353, 195, 60, 59), Rect(413, 195, 66, 59), Rect(479, 195, 64, 59),
 	Rect(353, 254, 60, 65), Rect(413, 254, 66, 65), Rect(479, 254, 64, 65),
 };
-const vector<string> mm_sfx { 
-	"_nw", "_n", "_ne", "_w", "_c", "_e", "_sw", "_s", "_se"
-};
 
 // character
 const int dx = 17, dy = 15, dw=48-dx, dh=60-dy;
@@ -50,6 +52,20 @@ const vector<string> char_sfx {
 	"_w_0", "_w_1", "_w_2", "_w_3", "_w_4", "_w_5", "_w_6", "_w_7", "_w_8",
 	"_s_0", "_s_1", "_s_2", "_s_3", "_s_4", "_s_5", "_s_6", "_s_7", "_s_8", 
 	"_e_0", "_e_1", "_e_2", "_e_3", "_e_4", "_e_5", "_e_6", "_e_7", "_e_8"
+};
+
+// trunk
+constexpr Rect tr(int x, int y) { return Rect(x*32, y*32, 32, 32); }
+const vector<Rect> trunk_rect {
+	tr(0,0),tr(1,0),tr(2,0),tr(3,0),tr(4,0),tr(5,0),
+        tr(0,1),tr(1,1),tr(2,1),tr(3,1),tr(4,1),tr(5,1),
+        tr(0,2),tr(1,2),tr(2,2),tr(3,2),tr(4,2),tr(5,2),
+        tr(0,3),tr(1,3),tr(2,3),tr(3,3),tr(4,3),tr(5,3)
+};
+const vector<string> trunk_sfx {
+	"_1_nw", "_1_n", "_1_ne", "_2_nw", "_2_n", "_2_ne", 
+	"_1_w",  "_1_c", "_1_e",  "_2_w",  "_2_c", "_2_e", 
+	"_1_sw", "_1_s", "_1_se", "_2_sw", "_2_s", "_2_se"
 };
 
 // resource file list
@@ -72,15 +88,14 @@ static const struct {
 	{ "snow",      "snow.png",      terrain_r, terrain_sfx },
 
 	// trees
-	{ "trunk", "trunk.png", { Rect(0,0,96,96), Rect(96,0,96,96) }, 
-		{ "_1", "_2" } },
+	{ "trunk", "trunk.png", trunk_rect, trunk_sfx },
 
 	// map
-	{ "mm", "scrollsandblocks.png", mm_r, mm_sfx },
+	{ "mm", "scrollsandblocks.png", mm_r, basic_9tiles },
 
 	// characters
-	{ "male", "male_walkcycle.png", char_rects, char_sfx },
-	{ "pants", "male_pants.png", char_rects, char_sfx },
+	{ "male",  "male_walkcycle.png", char_rects, char_sfx },
+	{ "pants", "male_pants.png",     char_rects, char_sfx },
 
 	// terminal
 	{ "terminal", "terminal.png", {}, {} },

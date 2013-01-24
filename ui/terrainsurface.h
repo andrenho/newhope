@@ -40,6 +40,7 @@ private:
 			std::queue<const Image*>& st);
 	void BuildBorder(TerrainType t, uint8_t bs, 
 			std::queue<const Image*>& st);
+	void AddTrees(Point<int> p, std::queue<const Image*>& st);
 	
 	std::map<std::queue<const Image*>, const Image*> imagehash;
 

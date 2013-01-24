@@ -206,6 +206,7 @@ TerrainSurface::BuildTile(Point<int> p, queue<const Image*>& st)
 	}
 
 	BuildTileBorders(p, terrain, st);
+	AddTrees(p, st);
 }
 
 
@@ -291,4 +292,10 @@ TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
 		if(b.nw)
 			st.push(res[basic[t] + "_ec_se"]);
 	}
+}
+
+
+void 
+TerrainSurface::AddTrees(Point<int> p, std::queue<const Image*>& st)
+{
 }
