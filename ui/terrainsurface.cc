@@ -57,6 +57,8 @@ TerrainSurface::Resize(int scr_w, int scr_h)
 	tiles_to_redraw.clear();
 	Redraw();
 
+	SetTopLeft({0, 0});
+
 	logger.Debug("window resize resquested: %d %d", w, h);
 	logger.Debug("trsurf resize: %d %d (%d %d)", Img->w, Img->h, w, h);
 }
