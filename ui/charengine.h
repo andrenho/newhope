@@ -2,6 +2,7 @@
 #define UI_CHARENGINE_H
 
 #include "util/defines.h"
+#include "util/rect.h"
 #include "world/world.h"
 
 class GraphicLibrary;
@@ -18,6 +19,7 @@ public:
 	~CharEngine();
 
 	void Draw(int scr_w, int scr_h) const;
+	static const Rect TilesAffected(Person const& person);
 
 private:
 	void DrawPerson(const Person& person) const;

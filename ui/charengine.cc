@@ -79,3 +79,11 @@ CharEngine::DrawPerson(const Person& person) const
 	res[charclothes]->Blit(*video.Window, Rect(scr.x, scr.y));
 }
 
+
+const Rect 
+CharEngine::TilesAffected(Person const& person)
+{
+	int x = person.Pos.x,
+	    y = person.Pos.y;
+	return Rect(x-1, y-1, 1, 1);
+}
