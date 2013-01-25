@@ -361,7 +361,6 @@ TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st,
 
 	// find trunk images
 	for(int i(0); i<9; i++) {
-		logger.Debug("%f %f", (double)around[i].y-0.5, feet);
 		if(around[i].y-0.5 < feet) {
 			continue;
 		}
