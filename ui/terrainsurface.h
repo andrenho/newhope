@@ -1,6 +1,7 @@
 #ifndef UI_TERRAINSURFACE_H
 #define UI_TERRAINSURFACE_H
 
+#include <climits>
 #include <map>
 #include <queue>
 #include <set>
@@ -28,18 +29,27 @@ public:
 	void Resize(int scr_w, int scr_h);
 	void AreasToRedraw(std::vector<Rect>& rects);
 	void SetTopLeft(Point<int> p);
+	void AddFirstPlane(Point<int> p, std::queue<const Image*>& st,
+			double feet=0.0) const;
 
 	Image* Img;
 
 private:
 	void Redraw();
 	void DrawTile(Point<int> p);
+
+	// back plane
 	const Image* TileSurface(Point<int> p);
 	void BuildTile(Point<int> p, std::queue<const Image*>& st);
 	void BuildTileBorders(Point<int> p, TerrainType t, 
 			std::queue<const Image*>& st);
 	void BuildBorder(TerrainType t, uint8_t bs, 
 			std::queue<const Image*>& st);
+	void AddTreeShadows(Point<int> p, std::queue<const Image*>& st) const;
+
+	// first plane
+	void AddTrees(Point<int> p, std::queue<const Image*>& st, 
+			double feet) const;
 	
 	std::map<std::queue<const Image*>, const Image*> imagehash;
 

@@ -57,6 +57,8 @@ TerrainSurface::Resize(int scr_w, int scr_h)
 	tiles_to_redraw.clear();
 	Redraw();
 
+	SetTopLeft({0, 0});
+
 	logger.Debug("window resize resquested: %d %d", w, h);
 	logger.Debug("trsurf resize: %d %d (%d %d)", Img->w, Img->h, w, h);
 }
@@ -205,7 +207,14 @@ TerrainSurface::BuildTile(Point<int> p, queue<const Image*>& st)
 		st.push(res[basic_terrain + "_c"]);
 	}
 
+	// borders
 	BuildTileBorders(p, terrain, st);
+
+	// add tree shadows
+	AddTreeShadows(p, st);
+
+	// add first plane images
+	AddFirstPlane(p, st);
 }
 
 
@@ -290,5 +299,97 @@ TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
 			st.push(res[basic[t] + "_ec_sw"]);
 		if(b.nw)
 			st.push(res[basic[t] + "_ec_se"]);
+	}
+}
+
+
+void 
+TerrainSurface::AddTreeShadows(Point<int> p, std::queue<const Image*>& st) const
+{
+	// sides
+	static vector<string> sfx = {
+		"se", "s", "sw", "e", "c", "w", "ne", "n", "nw"
+	};
+	
+	// find terrains around
+	Point<int> around[9] {
+		{p.x-1, p.y-1}, {p.x  , p.y-1}, {p.x+1, p.y-1},
+		{p.x-1, p.y  }, {p.x,   p.y  }, {p.x+1, p.y  },
+		{p.x-1, p.y+1}, {p.x  , p.y+1}, {p.x+1, p.y+1} };
+
+	// find trunk images
+	for(int i(0); i<9; i++) {
+		string treecode;
+		TreeType t(world.Tree(around[i]));
+		if(t == TreeType::TREE_ROUND) {
+			treecode = "1";
+		} else if(t == TreeType::TREE_POINTY) {
+			treecode = "2";
+		} else {
+			continue;
+		}
+		st.push(res["trunksh_" + treecode + "_" + sfx[i]]);
+	}
+}
+
+
+void 
+TerrainSurface::AddFirstPlane(Point<int> p, std::queue<const Image*>& st,
+		double feet) const
+{
+	// trees
+	AddTrees(p, st, feet);
+}
+
+
+void 
+TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st, 
+		double feet) const
+{
+	// sides
+	static vector<string> sfx = {
+		"se", "s", "sw", "e", "c", "w", "ne", "n", "nw"
+	};
+
+	// find terrains around
+	Point<int> around[9] {
+		{p.x-1, p.y-1}, {p.x  , p.y-1}, {p.x+1, p.y-1},
+		{p.x-1, p.y  }, {p.x,   p.y  }, {p.x+1, p.y  },
+		{p.x-1, p.y+1}, {p.x  , p.y+1}, {p.x+1, p.y+1} };
+	Point<int> around_treetop[9] {
+		{p.x-1, p.y+1}, {p.x  , p.y+1}, {p.x+1, p.y+1},
+		{p.x-1, p.y+2}, {p.x,   p.y+2}, {p.x+1, p.y+2},
+		{p.x-1, p.y+3}, {p.x  , p.y+3}, {p.x+1, p.y+3} };
+
+	// find trunk images
+	for(int i(0); i<9; i++) {
+		if(around[i].y-0.5 < feet) {
+			continue;
+		}
+		string treecode;
+		TreeType t(world.Tree(around[i]));
+		if(t == TreeType::TREE_ROUND) {
+			treecode = "1";
+		} else if(t == TreeType::TREE_POINTY) {
+			treecode = "2";
+		} else {
+			continue;
+		}
+		st.push(res["trunk_" + treecode + "_" + sfx[i]]);
+	}
+
+	// find treetop images
+	for(int i(0); i<9 ;i++) {
+		string treecode;
+		string cl(world.TreeSmall(around_treetop[i]) ? "b" : "a");
+		TreeType t(world.Tree(around_treetop[i]));
+		if(t == TreeType::TREE_ROUND) {
+			treecode = "1";
+		} else if(t == TreeType::TREE_POINTY) {
+			treecode = "2";
+		} else {
+			continue;
+		}
+		st.push(res["treetop_" + treecode + "_" + cl + "_" + sfx[i]]);
 	}
 }
