@@ -209,11 +209,7 @@ TerrainSurface::BuildTile(Point<int> p, queue<const Image*>& st)
 	BuildTileBorders(p, terrain, st);
 
 	// trees
-	vector<string> sides = { 
-		"nw", "n", "ne", "w", "c", "e", "sw", "s", "se" 
-	};
-	for(string side: sides)
-		AddTrees(p, side, st);
+	AddTrees(p, st);
 }
 
 
@@ -303,17 +299,37 @@ TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
 
 
 void 
-TerrainSurface::AddTrees(Point<int> p, string side, queue<const Image*>& st)
+TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st)
 {
-	string treecode;
-	TreeType tree = world.Tree(p);
-	if(tree == TreeType::TREE_ROUND) {
-		treecode = "1";
-	} else if(tree == TreeType::TREE_POINTY) {
-		treecode = "2";
-	} else {
-		return;
-	}
+	// sides
+	static vector<string> sfx = {
+		"se", "s", "sw", "e", "c", "w", "ne", "n", "nw"
+	};
 
-	st.push(res["trunk_" + treecode + "_c"]);
+	// find terrains around
+	TreeType around[9] {
+		world.Tree(Point<int>(p.x-1, p.y-1)),
+		world.Tree(Point<int>(p.x  , p.y-1)),
+		world.Tree(Point<int>(p.x+1, p.y-1)),
+		world.Tree(Point<int>(p.x-1, p.y  )),
+		world.Tree(Point<int>(p.x,   p.y  )),
+		world.Tree(Point<int>(p.x+1, p.y  )),
+		world.Tree(Point<int>(p.x-1, p.y+1)),
+		world.Tree(Point<int>(p.x  , p.y+1)),
+		world.Tree(Point<int>(p.x+1, p.y+1))
+	};
+
+	// find images
+	for(int i(0); i<9; i++)
+	{
+		string treecode;
+		if(around[i] == TreeType::TREE_ROUND) {
+			treecode = "1";
+		} else if(around[i] == TreeType::TREE_POINTY) {
+			treecode = "2";
+		} else {
+			continue;
+		}
+		st.push(res["trunk_" + treecode + "_" + sfx[i]]);
+	}
 }
