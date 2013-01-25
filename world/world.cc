@@ -125,8 +125,11 @@ World::Special(Point<int> p) const
 TreeType 
 World::Tree(Point<int> p) const
 {
+	if(!((p.x + p.y) % 2))
+		return NO_TREE;
+
 	const int DENSITY_NO_FOREST = 99,
-	          DENSITY_FOREST = 20;
+	          DENSITY_FOREST = 40;
 	TerrainType tr = Terrain(p);
 	if(tr == t_SNOW || tr == t_TUNDRA) {
 		if(Special(p) >= DENSITY_NO_FOREST) {
@@ -146,6 +149,13 @@ World::Tree(Point<int> p) const
 		}
 	}
 	return NO_TREE; // TODO - add desert trees
+}
+
+
+bool 
+World::TreeSmall(Point<int> p) const
+{
+	return Special(p) < 50;
 }
 
 

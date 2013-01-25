@@ -208,8 +208,9 @@ SDLImage::DrawLine(Point<int> p1, Point<int> p2, Color c, int line_width)
 						+ ((x0+x+xx) * 4));
 				*(Uint32*)p = color;
 			}
-		if(x0 == x1 && y0 == y1)
+		if(x0 == x1 && y0 == y1) {
 			break;
+		}
 		e2 = err;
 		if(e2 > -dx) {
 			err -= dy;
@@ -227,4 +228,13 @@ void
 SDLImage::Update()
 {
 	SDL_Flip(sf);
+}
+
+
+void 
+SDLImage::RemoveAlphaChannel()
+{
+	SDL_Surface *temp(sf);
+	sf = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
 }
