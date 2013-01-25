@@ -3,6 +3,7 @@
 
 #include "util/defines.h"
 #include "util/point.h"
+#include "util/rect.h"
 #include "world/world.h"
 
 class GraphicLibrary;
@@ -22,7 +23,7 @@ public:
 	void DrawObjectsInFrontOf(const Person& person) const;
 
 private:
-	void DrawTree(Point<int> p, TreeType t) const;
+	void DrawFrontTile(Point<int> p) const;
 
 	const World& world;
 	const GraphicLibrary& video;

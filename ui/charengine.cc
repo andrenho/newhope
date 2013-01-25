@@ -52,7 +52,7 @@ CharEngine::Draw(int scr_w, int scr_h) const
 
 	// draw people
 	while(!people_frame.empty()) {
-		DrawPerson(*people_frame[0]);
+		DrawPerson(*people_frame[0], scr_w, scr_h);
 		people_frame.erase(people_frame.begin());
 	}
 
@@ -62,7 +62,7 @@ CharEngine::Draw(int scr_w, int scr_h) const
 
 
 void 
-CharEngine::DrawPerson(const Person& person) const
+CharEngine::DrawPerson(const Person& person, int scr_w, int scr_h) const
 {
 	// body
 	string body("male");

@@ -1,13 +1,13 @@
 #include "ui/firstplane.h"
 
 #include <cstdlib>
-#include <string>
-#include <vector>
+#include <queue>
 using namespace std;
 
 #include "libs/graphiclibrary.h"
 #include "libs/image.h"
 #include "ui/resource.h"
+#include "ui/terrainsurface.h"
 #include "ui/ui.h"
 #include "util/logger.h"
 #include "world/person.h"
@@ -20,40 +20,26 @@ FirstPlane::~FirstPlane()
 void
 FirstPlane::DrawObjectsInFrontOf(const Person& person) const
 {
-	// check for trees
-	vector<Point<int>> points {
-		Point<int>(person.Pos.x+1, person.Pos.y+1),
-		Point<int>(person.Pos.x, person.Pos.y+1),
-	};
-	for(auto pt: points) {
-		TreeType t = world.Tree(pt);
-		if(t) {
-			DrawTree(pt, t);
+	for(int x(person.Pos.x); x<=(person.Pos.x+1); x++) {
+		for(int y(person.Pos.y); y<=(person.Pos.y+2); y++) {
+			DrawFrontTile({x, y});
 		}
 	}
+
 }
 
 
-void
-FirstPlane::DrawTree(Point<int> p, TreeType t) const
+void 
+FirstPlane::DrawFrontTile(Point<int> p) const
 {
-	logger.Debug("%d %d", p.x, p.y);
+	// find image queue
+	queue<const Image*> st;
+	ui.TerrSurface()->AddFirstPlane(p, st);
 
-	Point<int> scr = ui.TileToRel(Point<int>(p.x-1, p.y-1));
-
-	// draw trunk
-	string treecode;
-	if(t == TreeType::TREE_ROUND) {
-		treecode = "1";
-	} else if(t == TreeType::TREE_POINTY) {
-		treecode = "2";
-	} else {
-		abort();
+	// draw
+	Point<int> rel = ui.TileToRel(p);
+	while(!st.empty()) {
+		st.front()->Blit(*video.Window, rel);
+		st.pop();
 	}
-	res["trunkfull_" + treecode]->Blit(*video.Window, scr);
-	
-	// draw treetop
-	string cl(world.TreeSmall(p) ? "b" : "a");
-	scr = ui.TileToRel(Point<int>(p.x-1, p.y-3));
-	res["treetopfull_" + treecode + "_" + cl]->Blit(*video.Window, scr);
 }

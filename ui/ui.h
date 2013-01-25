@@ -44,7 +44,9 @@ public:
 			 (t.y + ry) / (double)TileSize };
 	}
 
-	inline bool Active() { return active; }
+	inline bool Active() const { return active; }
+
+	inline const TerrainSurface* TerrSurface() const { return terrain_sf; }
 
 private:
 	void ProcessMovementKeys();

@@ -119,12 +119,14 @@ static const struct {
 	{ "snow",      "snow.png",      terrain_r, terrain_sfx },
 
 	// trees - partial
-	{ "trunk",   "trunk.png",   trunk_rect,   trunk_sfx   },
-	{ "treetop", "treetop.png", treetop_rect, treetop_sfx },
+	{ "trunk",   "trunk.png",       trunk_rect,   trunk_sfx   },
+	{ "trunksh", "trunkshadow.png", trunk_rect,   trunk_sfx   },
+	{ "treetop", "treetop.png",     treetop_rect, treetop_sfx },
 
 	// trees - full
-	{ "trunkfull",   "trunk.png",   trunkfull_rect,   trunkfull_sfx   },
-	{ "treetopfull", "treetop.png", treetopfull_rect, treetopfull_sfx },
+	{ "trunkfull",   "trunk.png",       trunkfull_rect,   trunkfull_sfx   },
+	{ "trunkshfull", "trunkshadow.png", trunkfull_rect,   trunkfull_sfx   },
+	{ "treetopfull", "treetop.png",     treetopfull_rect, treetopfull_sfx },
 
 	// map
 	{ "mm", "scrollsandblocks.png", mm_r, basic_9tiles },

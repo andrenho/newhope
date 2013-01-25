@@ -22,7 +22,7 @@ public:
 	static const Rect TilesAffected(Person const& person);
 
 private:
-	void DrawPerson(const Person& person) const;
+	void DrawPerson(const Person& person, int scr_w, int scr_h) const;
 
 	const World& world;
 	const GraphicLibrary& video;

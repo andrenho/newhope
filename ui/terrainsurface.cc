@@ -208,8 +208,11 @@ TerrainSurface::BuildTile(Point<int> p, queue<const Image*>& st)
 	// borders
 	BuildTileBorders(p, terrain, st);
 
-	// trees
-	AddTrees(p, st);
+	// add tree shadows
+	AddTreeShadows(p, st);
+
+	// add first plane images
+	AddFirstPlane(p, st);
 }
 
 
@@ -299,7 +302,45 @@ TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
 
 
 void 
-TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st)
+TerrainSurface::AddTreeShadows(Point<int> p, std::queue<const Image*>& st) const
+{
+	// sides
+	static vector<string> sfx = {
+		"se", "s", "sw", "e", "c", "w", "ne", "n", "nw"
+	};
+	
+	// find terrains around
+	Point<int> around[9] {
+		{p.x-1, p.y-1}, {p.x  , p.y-1}, {p.x+1, p.y-1},
+		{p.x-1, p.y  }, {p.x,   p.y  }, {p.x+1, p.y  },
+		{p.x-1, p.y+1}, {p.x  , p.y+1}, {p.x+1, p.y+1} };
+
+	// find trunk images
+	for(int i(0); i<9; i++) {
+		string treecode;
+		TreeType t(world.Tree(around[i]));
+		if(t == TreeType::TREE_ROUND) {
+			treecode = "1";
+		} else if(t == TreeType::TREE_POINTY) {
+			treecode = "2";
+		} else {
+			continue;
+		}
+		st.push(res["trunksh_" + treecode + "_" + sfx[i]]);
+	}
+}
+
+
+void 
+TerrainSurface::AddFirstPlane(Point<int> p, std::queue<const Image*>& st) const
+{
+	// trees
+	AddTrees(p, st);
+}
+
+
+void 
+TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st) const
 {
 	// sides
 	static vector<string> sfx = {
