@@ -57,6 +57,8 @@ TerrainSurface::Resize(int scr_w, int scr_h)
 	tiles_to_redraw.clear();
 	Redraw();
 
+	SetTopLeft({0, 0});
+
 	logger.Debug("window resize resquested: %d %d", w, h);
 	logger.Debug("trsurf resize: %d %d (%d %d)", Img->w, Img->h, w, h);
 }
@@ -361,7 +363,6 @@ TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st,
 
 	// find trunk images
 	for(int i(0); i<9; i++) {
-		logger.Debug("%f %f", (double)around[i].y-0.5, feet);
 		if(around[i].y-0.5 < feet) {
 			continue;
 		}
