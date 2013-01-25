@@ -332,15 +332,17 @@ TerrainSurface::AddTreeShadows(Point<int> p, std::queue<const Image*>& st) const
 
 
 void 
-TerrainSurface::AddFirstPlane(Point<int> p, std::queue<const Image*>& st) const
+TerrainSurface::AddFirstPlane(Point<int> p, std::queue<const Image*>& st,
+		double feet) const
 {
 	// trees
-	AddTrees(p, st);
+	AddTrees(p, st, feet);
 }
 
 
 void 
-TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st) const
+TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st, 
+		double feet) const
 {
 	// sides
 	static vector<string> sfx = {
@@ -359,6 +361,10 @@ TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st) const
 
 	// find trunk images
 	for(int i(0); i<9; i++) {
+		logger.Debug("%f %f", (double)around[i].y-0.5, feet);
+		if(around[i].y-0.5 < feet) {
+			continue;
+		}
 		string treecode;
 		TreeType t(world.Tree(around[i]));
 		if(t == TreeType::TREE_ROUND) {

@@ -23,7 +23,7 @@ public:
 	void DrawObjectsInFrontOf(const Person& person) const;
 
 private:
-	void DrawFrontTile(Point<int> p) const;
+	void DrawFrontTile(Point<int> p, double feet) const;
 
 	const World& world;
 	const GraphicLibrary& video;

@@ -22,7 +22,7 @@ FirstPlane::DrawObjectsInFrontOf(const Person& person) const
 {
 	for(int x(person.Pos.x); x<=(person.Pos.x+1); x++) {
 		for(int y(person.Pos.y); y<=(person.Pos.y+2); y++) {
-			DrawFrontTile({x, y});
+			DrawFrontTile({x, y}, person.Pos.y);
 		}
 	}
 
@@ -30,11 +30,11 @@ FirstPlane::DrawObjectsInFrontOf(const Person& person) const
 
 
 void 
-FirstPlane::DrawFrontTile(Point<int> p) const
+FirstPlane::DrawFrontTile(Point<int> p, double feet) const
 {
 	// find image queue
 	queue<const Image*> st;
-	ui.TerrSurface()->AddFirstPlane(p, st);
+	ui.TerrSurface()->AddFirstPlane(p, st, feet);
 
 	// draw
 	Point<int> rel = ui.TileToRel(p);
