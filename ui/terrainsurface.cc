@@ -307,29 +307,41 @@ TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st)
 	};
 
 	// find terrains around
-	TreeType around[9] {
-		world.Tree(Point<int>(p.x-1, p.y-1)),
-		world.Tree(Point<int>(p.x  , p.y-1)),
-		world.Tree(Point<int>(p.x+1, p.y-1)),
-		world.Tree(Point<int>(p.x-1, p.y  )),
-		world.Tree(Point<int>(p.x,   p.y  )),
-		world.Tree(Point<int>(p.x+1, p.y  )),
-		world.Tree(Point<int>(p.x-1, p.y+1)),
-		world.Tree(Point<int>(p.x  , p.y+1)),
-		world.Tree(Point<int>(p.x+1, p.y+1))
-	};
+	Point<int> around[9] {
+		{p.x-1, p.y-1}, {p.x  , p.y-1}, {p.x+1, p.y-1},
+		{p.x-1, p.y  }, {p.x,   p.y  }, {p.x+1, p.y  },
+		{p.x-1, p.y+1}, {p.x  , p.y+1}, {p.x+1, p.y+1} };
+	Point<int> around_treetop[9] {
+		{p.x-1, p.y+1}, {p.x  , p.y+1}, {p.x+1, p.y+1},
+		{p.x-1, p.y+2}, {p.x,   p.y+2}, {p.x+1, p.y+2},
+		{p.x-1, p.y+3}, {p.x  , p.y+3}, {p.x+1, p.y+3} };
 
-	// find images
-	for(int i(0); i<9; i++)
-	{
+	// find trunk images
+	for(int i(0); i<9; i++) {
 		string treecode;
-		if(around[i] == TreeType::TREE_ROUND) {
+		TreeType t(world.Tree(around[i]));
+		if(t == TreeType::TREE_ROUND) {
 			treecode = "1";
-		} else if(around[i] == TreeType::TREE_POINTY) {
+		} else if(t == TreeType::TREE_POINTY) {
 			treecode = "2";
 		} else {
 			continue;
 		}
 		st.push(res["trunk_" + treecode + "_" + sfx[i]]);
+	}
+
+	// find treetop images
+	for(int i(0); i<9 ;i++) {
+		string treecode;
+		string cl(world.TreeSmall(around_treetop[i]) ? "b" : "a");
+		TreeType t(world.Tree(around_treetop[i]));
+		if(t == TreeType::TREE_ROUND) {
+			treecode = "1";
+		} else if(t == TreeType::TREE_POINTY) {
+			treecode = "2";
+		} else {
+			continue;
+		}
+		st.push(res["treetop_" + treecode + "_" + cl + "_" + sfx[i]]);
 	}
 }

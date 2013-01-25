@@ -68,6 +68,26 @@ const vector<string> trunk_sfx {
 	"_1_sw", "_1_s", "_1_se", "_2_sw", "_2_s", "_2_se"
 };
 
+// treetop
+const vector<Rect> treetop_rect {
+	tr(0,0),tr(1,0),tr(2,0),tr(3,0),tr(4,0),tr(5,0),
+        tr(0,1),tr(1,1),tr(2,1),tr(3,1),tr(4,1),tr(5,1),
+        tr(0,2),tr(1,2),tr(2,2),tr(3,2),tr(4,2),tr(5,2),
+        tr(0,3),tr(1,3),tr(2,3),tr(3,3),tr(4,3),tr(5,3),
+	tr(0,4),tr(1,4),tr(2,4),tr(3,4),tr(4,4),tr(5,4),
+        tr(0,5),tr(1,5),tr(2,5),tr(3,5),tr(4,5),tr(5,5),
+        tr(0,6),tr(1,6),tr(2,6),tr(3,6),tr(4,6),tr(5,6),
+        tr(0,7),tr(1,7),tr(2,7),tr(3,7),tr(4,7),tr(5,7)
+};
+const vector<string> treetop_sfx {
+	"_1_a_nw", "_1_a_n", "_1_a_ne", "_1_b_nw", "_1_b_n", "_1_b_ne", 
+	"_1_a_w",  "_1_a_c", "_1_a_e",  "_1_b_w",  "_1_b_c", "_1_b_e", 
+	"_1_a_sw", "_1_a_s", "_1_a_se", "_1_b_sw", "_1_b_s", "_1_b_se",
+	"_2_a_nw", "_2_a_n", "_2_a_ne", "_2_b_nw", "_2_b_n", "_2_b_ne", 
+	"_2_a_w",  "_2_a_c", "_2_a_e",  "_2_b_w",  "_2_b_c", "_2_b_e", 
+	"_2_a_sw", "_2_a_s", "_2_a_se", "_2_b_sw", "_2_b_s", "_2_b_se"
+};
+
 // resource file list
 static const struct {
 	const string name;
@@ -88,7 +108,8 @@ static const struct {
 	{ "snow",      "snow.png",      terrain_r, terrain_sfx },
 
 	// trees
-	{ "trunk", "trunk.png", trunk_rect, trunk_sfx },
+	{ "trunk",   "trunk.png",   trunk_rect,   trunk_sfx   },
+	{ "treetop", "treetop.png", treetop_rect, treetop_sfx },
 
 	// map
 	{ "mm", "scrollsandblocks.png", mm_r, basic_9tiles },
