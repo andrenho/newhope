@@ -228,3 +228,9 @@ SDLImage::Update()
 {
 	SDL_Flip(sf);
 }
+
+
+void 
+SDLImage::RemoveAlphaChannel()
+{
+}

@@ -88,6 +88,17 @@ const vector<string> treetop_sfx {
 	"_2_a_sw", "_2_a_s", "_2_a_se", "_2_b_sw", "_2_b_s", "_2_b_se"
 };
 
+// trunk and treetop - full
+const vector<Rect> trunkfull_rect {
+	Rect(0, 0, 96, 96), Rect(96, 0, 96, 96)
+};
+const vector<string> trunkfull_sfx { "_1", "_2" };
+const vector<Rect> treetopfull_rect {
+	Rect(0,  0, 96, 96), Rect(96,  0, 96, 96),
+	Rect(0, 96, 96, 96), Rect(96, 96, 96, 96),
+};
+const vector<string> treetopfull_sfx { "_1_a", "_1_b", "_2_a", "_2_b" };
+
 // resource file list
 static const struct {
 	const string name;
@@ -107,9 +118,13 @@ static const struct {
 	{ "watergrass","watergrass.png",terrain_r, terrain_sfx },
 	{ "snow",      "snow.png",      terrain_r, terrain_sfx },
 
-	// trees
+	// trees - partial
 	{ "trunk",   "trunk.png",   trunk_rect,   trunk_sfx   },
 	{ "treetop", "treetop.png", treetop_rect, treetop_sfx },
+
+	// trees - full
+	{ "trunkfull",   "trunk.png",   trunkfull_rect,   trunkfull_sfx   },
+	{ "treetopfull", "treetop.png", treetopfull_rect, treetopfull_sfx },
 
 	// map
 	{ "mm", "scrollsandblocks.png", mm_r, basic_9tiles },

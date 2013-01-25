@@ -2,6 +2,8 @@
 #define UI_FIRSTPLANE_H
 
 #include "util/defines.h"
+#include "util/point.h"
+#include "world/world.h"
 
 class GraphicLibrary;
 class Resources;
@@ -17,9 +19,11 @@ public:
 		: world(world), video(video), res(res), ui(ui) { }
 	~FirstPlane();
 
-	void Draw(int scr_w, int scr_h) const;
+	void DrawObjectsInFrontOf(const Person& person) const;
 
 private:
+	void DrawTree(Point<int> p, TreeType t) const;
+
 	const World& world;
 	const GraphicLibrary& video;
 	const Resources& res;

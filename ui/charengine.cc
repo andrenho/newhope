@@ -8,14 +8,24 @@ using namespace std;
 
 #include "libs/image.h"
 #include "libs/graphiclibrary.h"
+#include "ui/firstplane.h"
 #include "ui/resource.h"
 #include "ui/ui.h"
 #include "world/world.h"
 #include "world/person.h"
 
+CharEngine::CharEngine(const World& world, const GraphicLibrary& video, 
+	 	       const Resources& res, const UI& ui)
+	: world(world), video(video), res(res), ui(ui),
+	  first_plane(new FirstPlane(world, video, res, ui))
+{
+}
+
+
 CharEngine::~CharEngine()
 {
 	people_frame.clear();
+	delete first_plane;
 }
 
 
@@ -73,10 +83,13 @@ CharEngine::DrawPerson(const Person& person) const
 
 	// create image
 	string charimage(body + "_" + direction + "_" + step);
-	res[charimage]->Blit(*video.Window, Rect(scr.x, scr.y));
+	res[charimage]->Blit(*video.Window, scr);
 
 	string charclothes(clothes + "_" + direction + "_" + step);
-	res[charclothes]->Blit(*video.Window, Rect(scr.x, scr.y));
+	res[charclothes]->Blit(*video.Window, scr);
+
+	// draw other objects
+	first_plane->DrawObjectsInFrontOf(person);
 }
 
 
