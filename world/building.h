@@ -3,9 +3,16 @@
 
 #include "util/defines.h"
 
+class BuildingType;
+
 class Building {
+public:
+	explicit Building(const BuildingType& type);
+
 private:
-	DISALLOW_COPY_AND_ASSIGN(City);
-}
+	const BuildingType& type;
+
+	DISALLOW_COPY_AND_ASSIGN(Building);
+};
 
 #endif
