@@ -29,7 +29,8 @@ SDL = yes
 PNG = yes
 
 # basic flags
-CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${NEWHOPEPREFIX}\" -Wall -Wfatal-errors -I. -I/usr/include -std=c++11
+CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${NEWHOPEPREFIX}\" -Wall \
+	   -Wfatal-errors -I. -I/usr/include -std=c++11
 LDFLAGS = -L/usr/lib -lm
 
 UNAME = $(shell uname -o)
