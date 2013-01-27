@@ -4,6 +4,7 @@
 #include <vector>
 #include "util/defines.h"
 #include "util/point.h"
+#include "util/rect.h"
 
 class Biome;
 class Building;
@@ -12,6 +13,8 @@ class City {
 public:
 	City(Point<int> pos, const Biome& biome);
 	~City();
+
+	const Rect Limits() const;
 
 	const Point<int> pos;
 	const Biome& biome;

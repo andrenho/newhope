@@ -107,8 +107,8 @@ static const vector<Rect> house_rect {
 	Rect(96,0,32,48), Rect(160,0,32,48), Rect(232,90,48,54), // doors
 };
 static const vector<string> house_sfx {
-	"nw", "n", "ne", "w", "c", "e", "sw", "s", "se",
-	"door_1", "door_2", "door_frame",
+	"_nw", "_n", "_ne", "_w", "_c", "_e", "_sw", "_s", "_se",
+	"_door_1", "_door_2", "_door_frame",
 };
 
 

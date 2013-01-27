@@ -16,13 +16,12 @@ class GraphicLibrary;
 class Image;
 class Resources;
 class World;
+class CityEngine;
 
 class TerrainSurface {
 public:
 	TerrainSurface(const World& world, const GraphicLibrary& video,
-			const Resources& res) :
-		Img(nullptr), world(world), video(video), res(res), 
-		x(-10000), y(-10000), w(0), h(0) { }
+			const Resources& res);
 	~TerrainSurface();
 
 	void RedrawImg(std::vector<Rect>& rects);
@@ -50,6 +49,10 @@ private:
 	// first plane
 	void AddTrees(Point<int> p, std::queue<const Image*>& st, 
 			double feet) const;
+	void AddBuildings(Point<int> p, std::queue<const Image*>& st, 
+			double feet) const;
+	void AddBuildingTile(Point<int> p, std::queue<const Image*>& st, 
+			double feet) const;
 	
 	std::map<std::queue<const Image*>, const Image*> imagehash;
 
@@ -58,6 +61,7 @@ private:
 	const Resources& res;
 	int x, y, w, h;
 	std::set<Point<int>> tiles_to_redraw;
+	const CityEngine* city_engine;
 
 	DISALLOW_COPY_AND_ASSIGN(TerrainSurface);
 };

@@ -11,8 +11,21 @@ using namespace std;
 
 #include "libs/graphiclibrary.h"
 #include "libs/image.h"
+#include "ui/cityengine.h"
 #include "ui/resource.h"
 #include "util/logger.h"
+#include "world/building.h"
+#include "world/city.h"
+#include "world/mapbuild.h"
+
+TerrainSurface::TerrainSurface(const World& world, const GraphicLibrary& video,
+		const Resources& res) :
+	Img(nullptr), world(world), video(video), res(res), 
+	x(-10000), y(-10000), w(0), h(0), 
+	city_engine(new CityEngine(world, video, res))
+{ 
+}
+
 
 TerrainSurface::~TerrainSurface()
 {
@@ -22,6 +35,7 @@ TerrainSurface::~TerrainSurface()
 	if(Img) {
 		delete Img;
 	}
+	delete city_engine;
 }
 
 
@@ -337,8 +351,8 @@ void
 TerrainSurface::AddFirstPlane(Point<int> p, std::queue<const Image*>& st,
 		double feet) const
 {
-	// trees
 	AddTrees(p, st, feet);
+	AddBuildings(p, st, feet);
 }
 
 
@@ -392,4 +406,34 @@ TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st,
 		}
 		st.push(res["treetop_" + treecode + "_" + cl + "_" + sfx[i]]);
 	}
+}
+
+
+void 
+TerrainSurface::AddBuildings(Point<int> p, std::queue<const Image*>& st, 
+		double feet) const
+{
+	for(const auto& city: world.map->cities) {
+		if(city->Limits().ContainsPoint(p)) {
+			for(const auto& b: city->buildings) {
+				Rect r(city->pos.x + b->xrel,
+				       city->pos.y + b->yrel,
+				       b->W(), b->H());
+				if(r.ContainsPoint(p)) {
+					AddBuildingTile(p, st, feet);
+				}
+			}
+		}
+	}
+}
+
+
+void 
+TerrainSurface::AddBuildingTile(Point<int> p, std::queue<const Image*>& st, 
+		double feet) const
+{
+	if(p.y-0.5 < feet) {
+		return;
+	}
+	st.push(res["house_c"]);
 }
