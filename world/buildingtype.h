@@ -1,11 +1,18 @@
 #ifndef WORLD_BUILDINGTYPE_H
 #define WORLD_BUILDINGTYPE_H
 
+#include <string>
+#include <vector>
+
 class BuildingType {
 public:
-	static const BuildingType BANK;
-};
+	BuildingType(int w, int h, std::vector<std::string> layout)
+		: w(w), h(h), layout(layout) { }
 
-const BuildingType BuildingType::BANK = BuildingType();
+	static const BuildingType BANK;
+
+	const int w, h;
+	const std::vector<std::string> layout;
+};
 
 #endif

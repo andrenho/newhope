@@ -3,23 +3,24 @@
 
 include config.mk
 
-SRC = main.cc		   \
-      libs/sdl/sdl.cc      \
-      libs/sdl/sdlfont.cc  \
-      libs/sdl/sdlimage.cc \
-      ui/charengine.cc     \
-      ui/firstplane.cc     \
-      ui/minimap.cc        \
-      ui/resource.cc       \
-      ui/terrainsurface.cc \
-      ui/ui.cc             \
-      util/logger.cc       \
-      util/i18n.cc         \
-      util/polygon.cc      \
-      world/building.cc    \
-      world/city.cc        \
-      world/mapbuild.cc    \
-      world/person.cc      \
+SRC = main.cc		    \
+      libs/sdl/sdl.cc       \
+      libs/sdl/sdlfont.cc   \
+      libs/sdl/sdlimage.cc  \
+      ui/charengine.cc      \
+      ui/firstplane.cc      \
+      ui/minimap.cc         \
+      ui/resource.cc        \
+      ui/terrainsurface.cc  \
+      ui/ui.cc              \
+      util/logger.cc        \
+      util/i18n.cc          \
+      util/polygon.cc       \
+      world/building.cc     \
+      world/buildingtype.cc \
+      world/city.cc         \
+      world/mapbuild.cc     \
+      world/person.cc       \
       world/world.cc
 TRANSLATIONS = pt_BR
 	

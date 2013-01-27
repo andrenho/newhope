@@ -6,7 +6,7 @@
 City::City(Point<int> pos, const Biome& biome)
 		: pos(pos), biome(biome)
 {
-	buildings.push_back(new Building(BuildingType::BANK));
+	buildings.push_back(new Building(BuildingType::BANK, 5, 5));
 }
 
 

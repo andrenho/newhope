@@ -7,10 +7,11 @@ class BuildingType;
 
 class Building {
 public:
-	explicit Building(const BuildingType& type);
+	explicit Building(const BuildingType& type, int xrel, int yrel);
 
 private:
 	const BuildingType& type;
+	const int xrel, yrel;
 
 	DISALLOW_COPY_AND_ASSIGN(Building);
 };
