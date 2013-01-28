@@ -1,6 +1,8 @@
 #ifndef WORLD_PERSON_H
 #define WORLD_PERSON_H
 
+#include <vector>
+
 #include "util/defines.h"
 #include "util/point.h"
 class World;

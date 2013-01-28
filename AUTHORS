@@ -17,7 +17,7 @@ The following software was used when writing this game:
  Programming environment:
    - GNU/Linux (Arch Linux)
    - Bash
-   - GNU C compiler and GNU make
+   - GNU C++ compiler and GNU make
    - VIM editor
 
  Libraries:

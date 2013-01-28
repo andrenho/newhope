@@ -7,6 +7,11 @@
 
 using namespace std;
 
+// basic 9 tiles
+const vector<string> basic_9tiles { 
+	"_nw", "_n", "_ne", "_w", "_c", "_e", "_sw", "_s", "_se"
+};
+
 // single images
 const vector<Rect> terrain_r = {
 	Rect( 0, 160, 32, 32), Rect(32, 160, 32, 32), Rect(64, 160, 32, 32),
@@ -32,9 +37,6 @@ const vector<Rect> mm_r {
 	Rect(353, 195, 60, 59), Rect(413, 195, 66, 59), Rect(479, 195, 64, 59),
 	Rect(353, 254, 60, 65), Rect(413, 254, 66, 65), Rect(479, 254, 64, 65),
 };
-const vector<string> mm_sfx { 
-	"_nw", "_n", "_ne", "_w", "_c", "_e", "_sw", "_s", "_se"
-};
 
 // character
 const int dx = 17, dy = 15, dw=48-dx, dh=60-dy;
@@ -51,6 +53,51 @@ const vector<string> char_sfx {
 	"_s_0", "_s_1", "_s_2", "_s_3", "_s_4", "_s_5", "_s_6", "_s_7", "_s_8", 
 	"_e_0", "_e_1", "_e_2", "_e_3", "_e_4", "_e_5", "_e_6", "_e_7", "_e_8"
 };
+
+// trunk
+constexpr Rect tr(int x, int y) { return Rect(x*32, y*32, 32, 32); }
+const vector<Rect> trunk_rect {
+	tr(0,0),tr(1,0),tr(2,0),tr(3,0),tr(4,0),tr(5,0),
+        tr(0,1),tr(1,1),tr(2,1),tr(3,1),tr(4,1),tr(5,1),
+        tr(0,2),tr(1,2),tr(2,2),tr(3,2),tr(4,2),tr(5,2),
+        tr(0,3),tr(1,3),tr(2,3),tr(3,3),tr(4,3),tr(5,3)
+};
+const vector<string> trunk_sfx {
+	"_1_nw", "_1_n", "_1_ne", "_2_nw", "_2_n", "_2_ne", 
+	"_1_w",  "_1_c", "_1_e",  "_2_w",  "_2_c", "_2_e", 
+	"_1_sw", "_1_s", "_1_se", "_2_sw", "_2_s", "_2_se"
+};
+
+// treetop
+const vector<Rect> treetop_rect {
+	tr(0,0),tr(1,0),tr(2,0),tr(3,0),tr(4,0),tr(5,0),
+        tr(0,1),tr(1,1),tr(2,1),tr(3,1),tr(4,1),tr(5,1),
+        tr(0,2),tr(1,2),tr(2,2),tr(3,2),tr(4,2),tr(5,2),
+        tr(0,3),tr(1,3),tr(2,3),tr(3,3),tr(4,3),tr(5,3),
+	tr(0,4),tr(1,4),tr(2,4),tr(3,4),tr(4,4),tr(5,4),
+        tr(0,5),tr(1,5),tr(2,5),tr(3,5),tr(4,5),tr(5,5),
+        tr(0,6),tr(1,6),tr(2,6),tr(3,6),tr(4,6),tr(5,6),
+        tr(0,7),tr(1,7),tr(2,7),tr(3,7),tr(4,7),tr(5,7)
+};
+const vector<string> treetop_sfx {
+	"_1_a_nw", "_1_a_n", "_1_a_ne", "_1_b_nw", "_1_b_n", "_1_b_ne", 
+	"_1_a_w",  "_1_a_c", "_1_a_e",  "_1_b_w",  "_1_b_c", "_1_b_e", 
+	"_1_a_sw", "_1_a_s", "_1_a_se", "_1_b_sw", "_1_b_s", "_1_b_se",
+	"_2_a_nw", "_2_a_n", "_2_a_ne", "_2_b_nw", "_2_b_n", "_2_b_ne", 
+	"_2_a_w",  "_2_a_c", "_2_a_e",  "_2_b_w",  "_2_b_c", "_2_b_e", 
+	"_2_a_sw", "_2_a_s", "_2_a_se", "_2_b_sw", "_2_b_s", "_2_b_se"
+};
+
+// trunk and treetop - full
+const vector<Rect> trunkfull_rect {
+	Rect(0, 0, 96, 96), Rect(96, 0, 96, 96)
+};
+const vector<string> trunkfull_sfx { "_1", "_2" };
+const vector<Rect> treetopfull_rect {
+	Rect(0,  0, 96, 96), Rect(96,  0, 96, 96),
+	Rect(0, 96, 96, 96), Rect(96, 96, 96, 96),
+};
+const vector<string> treetopfull_sfx { "_1_a", "_1_b", "_2_a", "_2_b" };
 
 // resource file list
 static const struct {
@@ -71,16 +118,22 @@ static const struct {
 	{ "watergrass","watergrass.png",terrain_r, terrain_sfx },
 	{ "snow",      "snow.png",      terrain_r, terrain_sfx },
 
-	// trees
-	{ "trunk", "trunk.png", { Rect(0,0,96,96), Rect(96,0,96,96) }, 
-		{ "_1", "_2" } },
+	// trees - partial
+	{ "trunk",   "trunk.png",       trunk_rect,   trunk_sfx   },
+	{ "trunksh", "trunkshadow.png", trunk_rect,   trunk_sfx   },
+	{ "treetop", "treetop.png",     treetop_rect, treetop_sfx },
+
+	// trees - full
+	{ "trunkfull",   "trunk.png",       trunkfull_rect,   trunkfull_sfx   },
+	{ "trunkshfull", "trunkshadow.png", trunkfull_rect,   trunkfull_sfx   },
+	{ "treetopfull", "treetop.png",     treetopfull_rect, treetopfull_sfx },
 
 	// map
-	{ "mm", "scrollsandblocks.png", mm_r, mm_sfx },
+	{ "mm", "scrollsandblocks.png", mm_r, basic_9tiles },
 
 	// characters
-	{ "male", "male_walkcycle.png", char_rects, char_sfx },
-	{ "pants", "male_pants.png", char_rects, char_sfx },
+	{ "male",  "male_walkcycle.png", char_rects, char_sfx },
+	{ "pants", "male_pants.png",     char_rects, char_sfx },
 
 	// terminal
 	{ "terminal", "terminal.png", {}, {} },

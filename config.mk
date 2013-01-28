@@ -29,7 +29,8 @@ SDL = yes
 PNG = yes
 
 # basic flags
-CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${NEWHOPEPREFIX}\" -Wall -Wfatal-errors -I. -I/usr/include -std=c++11
+CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${NEWHOPEPREFIX}\" -Wall \
+	   -Wfatal-errors -I. -I/usr/include -std=c++11
 LDFLAGS = -L/usr/lib -lm
 
 UNAME = $(shell uname -o)
@@ -46,15 +47,15 @@ endif
 ifeq (${PNG},yes)
   CPPFLAGS += `pkg-config --cflags libpng`
   LDFLAGS += `pkg-config --libs libpng` -lz
-endif
+	endif
 
-# gettext
-ifeq (${GETTEXT},yes)
-  CPPFLAGS += -DI18N -DLOCALEDIR=\"${LOCALEPREFIX}\"
-  ifeq (${UNAME},Msys)
-    LDFLAGS += -lintl
-  endif
-endif
+	# gettext
+	ifeq (${GETTEXT},yes)
+	  CPPFLAGS += -DI18N -DLOCALEDIR=\"${LOCALEPREFIX}\"
+	  ifeq (${UNAME},Msys)
+	    LDFLAGS += -lintl
+	  endif
+	endif
 
 # Duma libraries
 ifeq (${DUMA}, yes)

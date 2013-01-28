@@ -41,6 +41,7 @@ public:
 	TerrainType Terrain(Point<int> p, bool use_cache=true) const;
 	int Special(Point<int> p) const;
 	TreeType Tree(Point<int> p) const;
+	bool TreeSmall(Point<int> p) const;
 
 	static TerrainType TerrainCache(void* obj, Point<int> p);
 

@@ -8,7 +8,7 @@ class World;
 class GraphicLibrary;
 class Resources;
 class TerrainSurface;
-class DecorEngine;
+class CharEngine;
 class GraphicLibrary;
 class Minimap;
 class Timer;
@@ -44,7 +44,9 @@ public:
 			 (t.y + ry) / (double)TileSize };
 	}
 
-	inline bool Active() { return active; }
+	inline bool Active() const { return active; }
+
+	inline const TerrainSurface* TerrSurface() const { return terrain_sf; }
 
 private:
 	void ProcessMovementKeys();
@@ -61,7 +63,7 @@ private:
 	Resources* res;
 	TerrainSurface* terrain_sf;
 	Minimap* minimap;
-	const DecorEngine* decor_engine;
+	const CharEngine* char_engine;
 	Timer* frame_timer;
 
 	DISALLOW_COPY_AND_ASSIGN(UI);
