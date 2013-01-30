@@ -27,7 +27,9 @@ Resources::Resources(const GraphicLibrary& video)
 		logger.Debug(filepath + " loaded.");
 	}
 
-	PostProcess();
+	for(const auto& d: _desloc) {
+		desloc[(*this)[d.name]] = { d.x, d.y };
+	}
 }
 
 
@@ -78,22 +80,4 @@ void
 Resources::LoadFile(const string& name, const string& path)
 {
 	LoadFile(name, path, Rect(0, 0, 0, 0), "");
-}
-
-
-void 
-Resources::PostProcess()
-{
-	PostProcessDoorFrame();
-}
-
-
-void
-Resources::PostProcessDoorFrame()
-{
-	Image* im = video.CreateImage(TileSize, TileSize, true);
-	//im->FillBox({255, 0, 255});
-	(*this)["house_door_frame"]->Blit(Rect(0, 0, 6, 6),
-		*im, Rect(TileSize-6, TileSize-6));
-	res["house_door_frame_nw"] = im;
 }

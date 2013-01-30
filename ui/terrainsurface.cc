@@ -179,7 +179,8 @@ TerrainSurface::TileSurface(Point<int> p)
 		Image* image(video.CreateImage(TileSize, TileSize, false));
 		imagehash[st] = image;
 		while(!st.empty()) {
-			st.front()->Blit(*image);
+			const Image* im = st.front();
+			im->Blit(*image, res.Desloc(im));
 			st.pop();
 		}
 		return image;
@@ -490,8 +491,9 @@ TerrainSurface::AddDoorFrames(Point<int> p, std::queue<const Image*>& st,
 {
 	p = Point<int> { p.x-building.X(), p.y-building.Y() };
 	
-	string nw = building.OutdoorsLayout(p.Sum(1, 1));
-	if(nw == "d1") {
+	if(building.OutdoorsLayout(p.Sum(1, 1)) == "d1") {
 		st.push(res["house_door_frame_nw"]);
+	} else if(building.OutdoorsLayout(p.Sum(0, 1)) == "d1") {
+		st.push(res["house_door_frame_n"]);
 	}
 }

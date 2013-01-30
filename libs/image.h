@@ -9,7 +9,7 @@
 
 class Image : public Resource {
 public:
-	Image(int w, int h, int has_alpha) 
+	Image(int w, int h, bool has_alpha) 
 		: w(w), h(h), has_alpha(has_alpha) { }
 	virtual ~Image() { }
 
