@@ -46,9 +46,9 @@ options:
 
 ${OBJ}: config.mk
 
--include depend
+#-include depend
 
-newhope: ${OBJ} depend
+newhope: ${OBJ} 
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
 

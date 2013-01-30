@@ -6,12 +6,15 @@
 City::City(Point<int> pos, const Biome& biome)
 		: pos(pos), biome(biome)
 {
-	buildings.push_back(new Building(BuildingType::BANK, 5, 5));
+	buildings.push_back(new Building(*this, BuildingType::BANK, -4, -4));
 }
 
 
 City::~City()
 {
+	for(auto& b: buildings)
+		delete b;
+	buildings.clear();
 }
 
 
@@ -33,5 +36,6 @@ City::Limits() const
 			max_.y = pos.y + building->yrel + building->H();
 		}
 	}
+	++max_.x; ++max_.y;
 	return Rect(min_, max_);
 }

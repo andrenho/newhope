@@ -14,7 +14,7 @@ struct SDL_Surface;
 
 class SDLImage : public Image {
 public:
-	SDLImage(int w, int h); // create blank surface
+	SDLImage(int w, int h, int has_alpha); // create blank surface
 	explicit SDLImage(SDL_Surface* sf, bool must_free=true);
 	SDLImage(const std::string& filename, const Rect& r);
 	~SDLImage();

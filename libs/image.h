@@ -9,8 +9,8 @@
 
 class Image : public Resource {
 public:
-	Image(int w, int h) 
-		: w(w), h(h) { }
+	Image(int w, int h, int has_alpha) 
+		: w(w), h(h), has_alpha(has_alpha) { }
 	virtual ~Image() { }
 
 	virtual void SetPixel(int x, int y, Color c) = 0;
@@ -35,6 +35,8 @@ public:
 	const int w, h;
 
 protected:
+	bool has_alpha;
+
 	DISALLOW_COPY_AND_ASSIGN(Image);
 };
 

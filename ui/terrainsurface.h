@@ -12,11 +12,12 @@
 #include "util/defines.h"
 #include "world/world.h"
 
+class Building;
+class CityEngine;
 class GraphicLibrary;
 class Image;
 class Resources;
 class World;
-class CityEngine;
 
 class TerrainSurface {
 public:
@@ -52,7 +53,7 @@ private:
 	void AddBuildings(Point<int> p, std::queue<const Image*>& st, 
 			double feet) const;
 	void AddBuildingTile(Point<int> p, std::queue<const Image*>& st, 
-			double feet) const;
+			const Building& building, double feet) const;
 	
 	std::map<std::queue<const Image*>, const Image*> imagehash;
 

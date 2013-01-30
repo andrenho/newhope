@@ -101,16 +101,20 @@ static const vector<string> treetopfull_sfx { "_1_a", "_1_b", "_2_a", "_2_b" };
 
 // house
 static const vector<Rect> house_rect {
-	tr(0,0),tr(1,0),tr(2,0), // walls
+	tr(0,0),tr(1,0),tr(2,0), 		// walls
         tr(0,1),tr(1,1),tr(2,1),
         tr(0,2),tr(1,2),tr(2,2),
-	Rect(96,0,32,48), Rect(160,0,32,48), Rect(232,90,48,54), // doors
+	tr(3,0),tr(3,1),tr(5,0),tr(5,1), 	// doors
+	tr(4,0),tr(4,1),			// stairs
+
+	//Rect(96,0,32,48), Rect(160,0,32,48), Rect(232,90,48,54), // doors
 };
 static const vector<string> house_sfx {
 	"_nw", "_n", "_ne", "_w", "_c", "_e", "_sw", "_s", "_se",
-	"_door_1", "_door_2", "_door_frame",
+	"_door_a_1", "_door_a_2", "_door_b_1", "door_b_2",
+	"_stairs_1", "_stairs_2",
+	//"_door_frame",
 };
-
 
 // resource file list
 static const struct {

@@ -11,23 +11,27 @@ using namespace std;
 #include "util/logger.h"
 
 SDLImage::SDLImage(SDL_Surface* sf, bool must_free)
-	: Image(sf->w, sf->h), sf(sf), must_free(must_free)
+	: Image(sf->w, sf->h, sf->format->alpha), sf(sf), must_free(must_free)
 {
 }
 
 
-SDLImage::SDLImage(int w, int h)
-	: Image(w, h), must_free(true)
+SDLImage::SDLImage(int w, int h, int has_alpha)
+	: Image(w, h, has_alpha), must_free(true)
 {
 	SDL_Surface* sf2 = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32,
 			0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
-	sf = SDL_DisplayFormat(sf2);
+	if(has_alpha) {
+		sf = SDL_DisplayFormatAlpha(sf2);
+	} else {
+		sf = SDL_DisplayFormat(sf2);
+	}
 	SDL_FreeSurface(sf2);
 }
 
 
 SDLImage::SDLImage(const string& filename, const Rect& r)
-	: Image(r.w, r.h), must_free(true)
+	: Image(r.w, r.h, true), must_free(true)
 {
 	int _x = r.x, _y = r.y, _w = r.w, _h = r.h;
 

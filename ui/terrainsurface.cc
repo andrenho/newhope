@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <algorithm>
 #include <bitset>
+#include <string>
 #include <sstream>
 #include <vector>
 using namespace std;
@@ -64,7 +65,7 @@ TerrainSurface::Resize(int scr_w, int scr_h)
 		delete Img;
 	}
 	Img = video.CreateImage(scr_w + (TileSize + (scr_w % TileSize)),
-			        scr_h + (TileSize + (scr_h % TileSize)));
+			        scr_h + (TileSize + (scr_h % TileSize)), false);
 	this->w = Img->w / TileSize;
 	this->h = Img->h / TileSize;
 
@@ -175,7 +176,7 @@ TerrainSurface::TileSurface(Point<int> p)
 	// lookup in the hash
 	if(imagehash.find(st) == imagehash.end()) {
 		// not found, create image
-		Image* image(video.CreateImage(TileSize, TileSize));
+		Image* image(video.CreateImage(TileSize, TileSize, false));
 		imagehash[st] = image;
 		while(!st.empty()) {
 			st.front()->Blit(*image);
@@ -418,9 +419,9 @@ TerrainSurface::AddBuildings(Point<int> p, std::queue<const Image*>& st,
 			for(const auto& b: city->buildings) {
 				Rect r(city->pos.x + b->xrel,
 				       city->pos.y + b->yrel,
-				       b->W(), b->H());
+				       b->W()+1, b->H()+1); // +1 for shadow
 				if(r.ContainsPoint(p)) {
-					AddBuildingTile(p, st, feet);
+					AddBuildingTile(p, st, *b, feet);
 				}
 			}
 		}
@@ -430,10 +431,50 @@ TerrainSurface::AddBuildings(Point<int> p, std::queue<const Image*>& st,
 
 void 
 TerrainSurface::AddBuildingTile(Point<int> p, std::queue<const Image*>& st, 
-		double feet) const
+		const Building& building, double feet) const
 {
-	if(p.y-0.5 < feet) {
+	// if the building foot is below the character feet, we don't draw
+	// the building in firt plane
+	double bfoot = building.Y() + building.H();
+	if(bfoot < (feet+1.5) && feet != 0.0)
 		return;
+
+	if(p.x <= building.X() + building.W() - 1 
+	&& p.y <= building.Y() + building.H() - 1)
+	{
+		string s = building.OutdoorsLayout(p.x-building.X(), 
+				p.y-building.Y());
+		if(s == "w1") {
+			st.push(res["house_nw"]);
+		} else if(s == "w2") {
+			st.push(res["house_n"]);
+		} else if(s == "w3") {
+			st.push(res["house_ne"]);
+		} else if(s == "w4") {
+			st.push(res["house_w"]);
+		} else if(s == "w5") {
+			st.push(res["house_c"]);
+		} else if(s == "w6") {
+			st.push(res["house_e"]);
+		} else if(s == "w7") {
+			st.push(res["house_sw"]);
+		} else if(s == "w8") {
+			st.push(res["house_s"]);
+		} else if(s == "w9") {
+			st.push(res["house_se"]);
+		} else if(s == "d1") {
+			st.push(res["house_door_a_1"]);
+		} else if(s == "d2") {
+			st.push(res["house_s"]);
+			st.push(res["house_door_a_2"]);
+			st.push(res["house_stairs_1"]);
+		}
+	} else {
+		// upper tile
+		Point<int> p2 = { p.x - building.X(), p.y - 1 - building.Y() };
+		string sn = building.OutdoorsLayout(p2);
+		if(sn == "d2") {
+			st.push(res["house_stairs_2"]);
+		}
 	}
-	st.push(res["house_c"]);
 }
