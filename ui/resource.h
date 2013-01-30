@@ -36,6 +36,9 @@ private:
 			const Rect& r, const std::string& suffix);
 	void LoadFile(const std::string& name, const std::string& path);
 
+	void PostProcess();
+	void PostProcessDoorFrame();
+
 	const GraphicLibrary& video;
 	std::map<const std::string, const Resource*> res;
 

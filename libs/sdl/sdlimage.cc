@@ -157,19 +157,18 @@ SDLImage::SurfaceFromPNGAlpha(const Rect& r, png_bytep* row_pointers,
 
 
 void 
-SDLImage::Blit(const Image& image) const
+SDLImage::Blit(const Rect& rs, const Image& image, const Rect& rd) const
 {
-	const SDLImage* dest((const SDLImage*)&image);
-	SDL_BlitSurface(sf, NULL, dest->sf, NULL);
-}
-
-
-void 
-SDLImage::Blit(const Image& image, const Rect& r) const
-{
-	SDL_Rect rect { (Sint16)r.x, (Sint16)r.y, (Uint16)r.w, (Uint16)r.h };
-	const SDLImage* dest((const SDLImage*)&image);
-	SDL_BlitSurface(sf, NULL, dest->sf, &rect);
+	if(this->HasAlpha() && image.HasAlpha()) {
+		BlitRGBA_RGBA(rs, image, rd);
+	}/* else */{
+		SDL_Rect rects { (Sint16)rs.x, (Sint16)rs.y, 
+			(Uint16)rs.w, (Uint16)rs.h };
+		SDL_Rect rectd { (Sint16)rd.x, (Sint16)rd.y, 
+			(Uint16)rd.w, (Uint16)rd.h };
+		const SDLImage* dest((const SDLImage*)&image);
+		SDL_BlitSurface(sf, &rects, dest->sf, &rectd);
+	}
 }
 
 
@@ -241,4 +240,18 @@ SDLImage::RemoveAlphaChannel()
 	SDL_Surface *temp(sf);
 	sf = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
+}
+
+
+void 
+SDLImage::BlitRGBA_RGBA(const Rect& rs, const Image& image, const Rect& rd) const
+{
+	logger.Debug("XXX");
+}
+
+
+bool 
+SDLImage::HasAlpha() const
+{
+	return sf->format->alpha > 0;
 }

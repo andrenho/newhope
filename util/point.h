@@ -56,6 +56,10 @@ public:
 		return (y*10000+x) < (p.y*10000+p.x);
 	}
 
+	inline Point Sum(int x, int y) const {
+		return Point { this->x+x, this->y+y };
+	}
+
 	template<class F> operator Point<F>() const {
 		return { static_cast<F>(x), static_cast<F>(y) };
 	}

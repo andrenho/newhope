@@ -19,8 +19,7 @@ public:
 	SDLImage(const std::string& filename, const Rect& r);
 	~SDLImage();
 
-	void Blit(const Image& image) const;
-	void Blit(const Image& image, const Rect& r) const;
+	void Blit(const Rect& rs, const Image& image, const Rect& rd) const;
 	void Update();
 	void FillBox(Color c);
 	void FillBox(Rect r, Color c);
@@ -37,6 +36,8 @@ public:
 		*(Uint32*)p = color;
 	}
 
+	bool HasAlpha() const;
+	
 protected:
 	struct SDL_Surface* sf;
 
@@ -45,6 +46,8 @@ private:
 	SDL_Surface* SurfaceFromPNGAlpha(const Rect& r, png_bytep* row_pointers, 
 			int n_col, png_color* palette, 
 			int n_transp, png_bytep trans, int x_width) const;
+	void BlitRGBA_RGBA(const Rect& rs, 
+			const Image& image, const Rect& rd) const;
 
 	DISALLOW_COPY_AND_ASSIGN(SDLImage);
 };

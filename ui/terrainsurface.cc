@@ -469,6 +469,10 @@ TerrainSurface::AddBuildingTile(Point<int> p, std::queue<const Image*>& st,
 			st.push(res["house_door_a_2"]);
 			st.push(res["house_stairs_1"]);
 		}
+
+		if(s[0] == 'w') {
+			AddDoorFrames(p, st, building);
+		}
 	} else {
 		// upper tile
 		Point<int> p2 = { p.x - building.X(), p.y - 1 - building.Y() };
@@ -476,5 +480,18 @@ TerrainSurface::AddBuildingTile(Point<int> p, std::queue<const Image*>& st,
 		if(sn == "d2") {
 			st.push(res["house_stairs_2"]);
 		}
+	}
+}
+
+
+void 
+TerrainSurface::AddDoorFrames(Point<int> p, std::queue<const Image*>& st, 
+		const Building& building) const
+{
+	p = Point<int> { p.x-building.X(), p.y-building.Y() };
+	
+	string nw = building.OutdoorsLayout(p.Sum(1, 1));
+	if(nw == "d1") {
+		st.push(res["house_door_frame_nw"]);
 	}
 }
