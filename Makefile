@@ -40,6 +40,9 @@ options:
 	@echo "LDFLAGS = ${LDFLAGS}"
 	@echo "CC      = ${CC}"
 
+# TODO - correct dependencies
+ui/resource.cc: ui/resource_list.h
+
 .cc.o:
 	@echo CC $<
 	@${CC} -c ${CPPFLAGS} -o $@ $<

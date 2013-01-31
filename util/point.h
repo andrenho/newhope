@@ -64,7 +64,11 @@ public:
 		return Point { this->x+p.x, this->y+p.y };
 	}
 
-	template<class F> operator Point<F>() const {
+	template<typename F> Point<F> operator-(Point<F> p) const {
+		return Point { this->x-p.x, this->y-p.y };
+	}
+
+	template<typename F> operator Point<F>() const {
 		return { static_cast<F>(x), static_cast<F>(y) };
 	}
 };

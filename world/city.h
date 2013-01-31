@@ -1,6 +1,7 @@
 #ifndef WORLD_CITY_H
 #define WORLD_CITY_H
 
+#include <string>
 #include <vector>
 #include "util/defines.h"
 #include "util/point.h"
@@ -15,6 +16,8 @@ public:
 	~City();
 
 	const Rect Limits() const;
+	std::string Layout(Point<int> p) const;
+	const Building* BuildingInPoint(Point<int> p) const;
 
 	const Point<int> pos;
 	const Biome& biome;

@@ -50,12 +50,6 @@ private:
 	// first plane
 	void AddTrees(Point<int> p, std::queue<const Image*>& st, 
 			double feet) const;
-	void AddBuildings(Point<int> p, std::queue<const Image*>& st, 
-			double feet) const;
-	void AddBuildingTile(Point<int> p, std::queue<const Image*>& st, 
-			const Building& building, double feet) const;
-	void AddDoorFrames(Point<int> p, std::queue<const Image*>& st, 
-			const Building& building) const;
 	
 	std::map<std::queue<const Image*>, const Image*> imagehash;
 

@@ -109,13 +109,17 @@ static const vector<Rect> house_rect {
         tr(0,2),tr(1,2),tr(2,2),
 	tr(3,0),tr(3,1),tr(5,0),tr(5,1), 	// doors
 	tr(4,0),tr(4,1),			// stairs
-	tt(14,5), tt(15,5,2)
+	tt(14,5), tt(15,5,2), tt(17,5),		// door frames
+	tt(14,6,1,2), tt(17,6,1,2),
+	tt(14,8,1,2), tt(17,8,1,2),
 };
 static const vector<string> house_sfx {
 	"_nw", "_n", "_ne", "_w", "_c", "_e", "_sw", "_s", "_se",
 	"_door_a_1", "_door_a_2", "_door_b_1", "door_b_2",
 	"_stairs_1", "_stairs_2",
-	"_door_frame_nw", "_door_frame_n"
+	"_door_frame_nw", "_door_frame_n", "_door_frame_ne",
+	"_door_frame_w", "_door_frame_e",
+	"_door_frame_sw", "_door_frame_se",
 };
 
 // resource file list
@@ -164,12 +168,19 @@ static const struct {
 	{ "termfont", "Glass_TTY_VT220.ttf", { Rect(20) }, { "_20" } },
 };
 
+
+/* Define the deslocament of the images. The tiles are 32x32 and the image
+ * is different from it (16x16, for example), and it's not in the top left,
+ * this informs how much it must be deslocated. */
 static const struct {
 	const string name;
 	int x, y;
 } _desloc[] { 
 	{ "house_door_frame_nw", 16, 16 },
 	{ "house_door_frame_n",   0, 16 },
+	{ "house_door_frame_ne",  0, 16 },
+	{ "house_door_frame_w",  16,  0 },
+	{ "house_door_frame_sw", 16,  0 },
 };
 
 #endif

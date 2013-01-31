@@ -39,3 +39,29 @@ City::Limits() const
 	++max_.x; ++max_.y;
 	return Rect(min_, max_);
 }
+
+
+std::string 
+City::Layout(Point<int> p) const
+{
+	if(!Limits().ContainsPoint(p)) {
+		return "  ";
+	}
+
+	for(const auto& b: buildings) {
+		Point<int> p2 = p - pos - Point<int>(b->xrel, b->yrel);
+		return b->OutdoorsLayout(p2);
+	}
+	return "  ";
+}
+
+
+const Building* 
+City::BuildingInPoint(Point<int> p) const
+{
+	for(const auto& b: buildings) {
+		if(b->Rectangle().ContainsPoint(p))
+			return b;
+	}
+	return nullptr;
+}

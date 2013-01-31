@@ -4,6 +4,7 @@
 #include <string>
 
 #include "util/defines.h"
+#include "util/rect.h"
 #include "world/buildingtype.h"
 #include "world/city.h"
 
@@ -16,6 +17,9 @@ public:
 	inline int Y() const { return city.pos.y + yrel; }
 	inline int W() const { return type.w; }
 	inline int H() const { return type.h; }
+	inline const Rect Rectangle() const { 
+		return Rect(X(), Y(), W()+1, H()+1); 
+	}
 
 	std::string OutdoorsLayout(int x, int y) const;
 	template <typename T> std::string OutdoorsLayout(Point<T> p) const {
