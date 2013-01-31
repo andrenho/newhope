@@ -11,23 +11,27 @@ using namespace std;
 #include "util/logger.h"
 
 SDLImage::SDLImage(SDL_Surface* sf, bool must_free)
-	: Image(sf->w, sf->h), sf(sf), must_free(must_free)
+	: Image(sf->w, sf->h, sf->format->alpha), sf(sf), must_free(must_free)
 {
 }
 
 
-SDLImage::SDLImage(int w, int h)
-	: Image(w, h), must_free(true)
+SDLImage::SDLImage(int w, int h, bool has_alpha)
+	: Image(w, h, has_alpha), must_free(true)
 {
 	SDL_Surface* sf2 = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32,
 			0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
-	sf = SDL_DisplayFormat(sf2);
+	if(has_alpha) {
+		sf = SDL_DisplayFormatAlpha(sf2);
+	} else {
+		sf = SDL_DisplayFormat(sf2);
+	}
 	SDL_FreeSurface(sf2);
 }
 
 
 SDLImage::SDLImage(const string& filename, const Rect& r)
-	: Image(r.w, r.h), must_free(true)
+	: Image(r.w, r.h, true), must_free(true)
 {
 	int _x = r.x, _y = r.y, _w = r.w, _h = r.h;
 
@@ -153,19 +157,18 @@ SDLImage::SurfaceFromPNGAlpha(const Rect& r, png_bytep* row_pointers,
 
 
 void 
-SDLImage::Blit(const Image& image) const
+SDLImage::Blit(const Rect& rs, const Image& image, const Rect& rd) const
 {
-	const SDLImage* dest((const SDLImage*)&image);
-	SDL_BlitSurface(sf, NULL, dest->sf, NULL);
-}
-
-
-void 
-SDLImage::Blit(const Image& image, const Rect& r) const
-{
-	SDL_Rect rect { (Sint16)r.x, (Sint16)r.y, (Uint16)r.w, (Uint16)r.h };
-	const SDLImage* dest((const SDLImage*)&image);
-	SDL_BlitSurface(sf, NULL, dest->sf, &rect);
+	if(this->HasAlpha() && image.HasAlpha()) {
+		BlitRGBA_RGBA(rs, image, rd);
+	} else {
+		SDL_Rect rects { (Sint16)rs.x, (Sint16)rs.y, 
+			(Uint16)rs.w, (Uint16)rs.h };
+		SDL_Rect rectd { (Sint16)rd.x, (Sint16)rd.y, 
+			(Uint16)rd.w, (Uint16)rd.h };
+		const SDLImage* dest((const SDLImage*)&image);
+		SDL_BlitSurface(sf, &rects, dest->sf, &rectd);
+	}
 }
 
 
@@ -237,4 +240,44 @@ SDLImage::RemoveAlphaChannel()
 	SDL_Surface *temp(sf);
 	sf = SDL_DisplayFormat(temp);
 	SDL_FreeSurface(temp);
+}
+
+
+void 
+SDLImage::BlitRGBA_RGBA(const Rect& rs, const Image& image, const Rect& rd) const
+{
+	logger.Debug("RGBA->RGBA : not implemented");
+
+	// TODO - the code below does not work
+	const SDLImage* dest((const SDLImage*)&image);
+
+	// copy image
+	for(int sx=rs.x, dx=rd.x; ; ++sx, ++dx) {
+		for(int sy=rs.y, dy=rd.y; ; ++sy, ++dy) {
+
+			// find source pointer
+			Uint8 *ps = (Uint8*)sf->pixels + 
+				(sy * sf->pitch) + (sx * 4);
+			Uint32 cs = (*(Uint32*)ps);
+
+			// find dest pointer
+			Uint8 *pd = (Uint8*)dest->sf->pixels + 
+				(dy * sf->pitch) + (dx * 4);
+			*(Uint32*)pd = cs;
+
+			if(sy >= (rs.y+rs.h) || dy >= (rd.y+rd.h)) {
+				break;
+			}
+		}
+		if(sx >= (rs.x+rs.w) || dx >= (rd.x+rd.w)) {
+			break;
+		}
+	}
+}
+
+
+bool 
+SDLImage::HasAlpha() const
+{
+	return sf->format->alpha == SDL_ALPHA_TRANSPARENT;
 }

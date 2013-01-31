@@ -47,15 +47,15 @@ endif
 ifeq (${PNG},yes)
   CPPFLAGS += `pkg-config --cflags libpng`
   LDFLAGS += `pkg-config --libs libpng` -lz
-	endif
+endif
 
-	# gettext
-	ifeq (${GETTEXT},yes)
-	  CPPFLAGS += -DI18N -DLOCALEDIR=\"${LOCALEPREFIX}\"
-	  ifeq (${UNAME},Msys)
-	    LDFLAGS += -lintl
-	  endif
-	endif
+# gettext
+ifeq (${GETTEXT},yes)
+  CPPFLAGS += -DI18N -DLOCALEDIR=\"${LOCALEPREFIX}\"
+  ifeq (${UNAME},Msys)
+    LDFLAGS += -lintl
+  endif
+endif
 
 # Duma libraries
 ifeq (${DUMA}, yes)

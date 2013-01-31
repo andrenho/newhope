@@ -72,7 +72,7 @@ public:
 	virtual Timer* CreateTimer(int wait_ms) const = 0;
 
 	virtual Image* LoadImage(const std::string& filename, const Rect& r) const = 0;
-	virtual Image* CreateImage(int w, int h) const = 0;
+	virtual Image* CreateImage(int w, int h, int has_alpha) const = 0;
 	virtual Font* LoadFont(const std::string& filename, int size) const = 0;
 
 	virtual const Event* GetEvent() const = 0;

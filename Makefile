@@ -3,22 +3,25 @@
 
 include config.mk
 
-SRC = main.cc		   \
-      libs/sdl/sdl.cc      \
-      libs/sdl/sdlfont.cc  \
-      libs/sdl/sdlimage.cc \
-      ui/charengine.cc     \
-      ui/firstplane.cc     \
-      ui/minimap.cc        \
-      ui/resource.cc       \
-      ui/terrainsurface.cc \
-      ui/ui.cc             \
-      util/logger.cc       \
-      util/i18n.cc         \
-      util/polygon.cc      \
-      world/city.cc        \
-      world/mapbuild.cc    \
-      world/person.cc      \
+SRC = main.cc		    \
+      libs/sdl/sdl.cc       \
+      libs/sdl/sdlfont.cc   \
+      libs/sdl/sdlimage.cc  \
+      ui/charengine.cc      \
+      ui/cityengine.cc      \
+      ui/firstplane.cc      \
+      ui/minimap.cc         \
+      ui/resource.cc        \
+      ui/terrainsurface.cc  \
+      ui/ui.cc              \
+      util/logger.cc        \
+      util/i18n.cc          \
+      util/polygon.cc       \
+      world/building.cc     \
+      world/buildingtype.cc \
+      world/city.cc         \
+      world/mapbuild.cc     \
+      world/person.cc       \
       world/world.cc
 TRANSLATIONS = pt_BR
 	
@@ -37,15 +40,18 @@ options:
 	@echo "LDFLAGS = ${LDFLAGS}"
 	@echo "CC      = ${CC}"
 
+# TODO - correct dependencies
+ui/resource.o: ui/resource_list.h
+
 .cc.o:
 	@echo CC $<
 	@${CC} -c ${CPPFLAGS} -o $@ $<
 
 ${OBJ}: config.mk
 
--include depend
+#-include depend
 
-newhope: ${OBJ} depend
+newhope: ${OBJ} 
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
 

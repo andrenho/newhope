@@ -26,6 +26,10 @@ Resources::Resources(const GraphicLibrary& video)
 		}
 		logger.Debug(filepath + " loaded.");
 	}
+
+	for(const auto& d: _desloc) {
+		desloc[(*this)[d.name]] = { d.x, d.y };
+	}
 }
 
 

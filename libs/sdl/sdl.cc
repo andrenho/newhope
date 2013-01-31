@@ -46,9 +46,9 @@ SDL::~SDL()
 
 
 Image* 
-SDL::CreateImage(int w, int h) const
+SDL::CreateImage(int w, int h, int has_alpha) const
 {
-	SDLImage* img(new SDLImage(w, h));
+	SDLImage* img(new SDLImage(w, h, has_alpha));
 	return img;
 }
 

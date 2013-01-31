@@ -96,6 +96,7 @@ UI::ProcessMovementKeys()
 }
 
 
+#include "libs/sdl/sdlimage.h"
 void 
 UI::Draw()
 {
@@ -113,7 +114,7 @@ UI::Draw()
 
 	// draw people
 	char_engine->Draw(video.Window->w, video.Window->h);
-	
+
 	// update screen
 	video.Window->Update();
 }

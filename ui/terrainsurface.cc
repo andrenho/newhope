@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <algorithm>
 #include <bitset>
+#include <string>
 #include <sstream>
 #include <vector>
 using namespace std;
@@ -11,8 +12,21 @@ using namespace std;
 
 #include "libs/graphiclibrary.h"
 #include "libs/image.h"
+#include "ui/cityengine.h"
 #include "ui/resource.h"
 #include "util/logger.h"
+#include "world/building.h"
+#include "world/city.h"
+#include "world/mapbuild.h"
+
+TerrainSurface::TerrainSurface(const World& world, const GraphicLibrary& video,
+		const Resources& res) :
+	Img(nullptr), world(world), video(video), res(res), 
+	x(-10000), y(-10000), w(0), h(0), 
+	city_engine(new CityEngine(world, video, res))
+{ 
+}
+
 
 TerrainSurface::~TerrainSurface()
 {
@@ -22,6 +36,7 @@ TerrainSurface::~TerrainSurface()
 	if(Img) {
 		delete Img;
 	}
+	delete city_engine;
 }
 
 
@@ -50,7 +65,7 @@ TerrainSurface::Resize(int scr_w, int scr_h)
 		delete Img;
 	}
 	Img = video.CreateImage(scr_w + (TileSize + (scr_w % TileSize)),
-			        scr_h + (TileSize + (scr_h % TileSize)));
+			        scr_h + (TileSize + (scr_h % TileSize)), false);
 	this->w = Img->w / TileSize;
 	this->h = Img->h / TileSize;
 
@@ -155,16 +170,17 @@ const Image*
 TerrainSurface::TileSurface(Point<int> p)
 {
 	// build queue
-	queue<const Image*> st;
+	ImgQueue st;
 	BuildTile(p, st);
 
 	// lookup in the hash
 	if(imagehash.find(st) == imagehash.end()) {
 		// not found, create image
-		Image* image(video.CreateImage(TileSize, TileSize));
+		Image* image(video.CreateImage(TileSize, TileSize, false));
 		imagehash[st] = image;
 		while(!st.empty()) {
-			st.front()->Blit(*image);
+			const Image* im = st.front();
+			im->Blit(*image, res.Desloc(im));
 			st.pop();
 		}
 		return image;
@@ -193,7 +209,7 @@ static map<TerrainType, string> basic {
 
 
 void 
-TerrainSurface::BuildTile(Point<int> p, queue<const Image*>& st)
+TerrainSurface::BuildTile(Point<int> p, ImgQueue& st)
 {
 	// basic terrain
 	TerrainType terrain(world.Terrain(p));
@@ -219,8 +235,7 @@ TerrainSurface::BuildTile(Point<int> p, queue<const Image*>& st)
 
 
 void
-TerrainSurface::BuildTileBorders(Point<int> p, TerrainType t, 
-		queue<const Image*>& st)
+TerrainSurface::BuildTileBorders(Point<int> p, TerrainType t, ImgQueue& st)
 {
 	// find terrains around
 	TerrainType around[8] {
@@ -259,7 +274,7 @@ TerrainSurface::BuildTileBorders(Point<int> p, TerrainType t,
 
 
 void
-TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
+TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, ImgQueue& st)
 {
 	struct { int nw, n, ne, w, e, sw, s, se; } b = {
 		(bs & 0b00000001), (bs & 0b00000010), (bs & 0b00000100),
@@ -304,7 +319,7 @@ TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
 
 
 void 
-TerrainSurface::AddTreeShadows(Point<int> p, std::queue<const Image*>& st) const
+TerrainSurface::AddTreeShadows(Point<int> p, ImgQueue& st) const
 {
 	// sides
 	static vector<string> sfx = {
@@ -334,17 +349,15 @@ TerrainSurface::AddTreeShadows(Point<int> p, std::queue<const Image*>& st) const
 
 
 void 
-TerrainSurface::AddFirstPlane(Point<int> p, std::queue<const Image*>& st,
-		double feet) const
+TerrainSurface::AddFirstPlane(Point<int> p, ImgQueue& st, double feet) const
 {
-	// trees
 	AddTrees(p, st, feet);
+	city_engine->AddBuildings(p, st, feet);
 }
 
 
 void 
-TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st, 
-		double feet) const
+TerrainSurface::AddTrees(Point<int> p, ImgQueue& st, double feet) const
 {
 	// sides
 	static vector<string> sfx = {
@@ -393,3 +406,5 @@ TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st,
 		st.push(res["treetop_" + treecode + "_" + cl + "_" + sfx[i]]);
 	}
 }
+
+
