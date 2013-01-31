@@ -170,7 +170,7 @@ const Image*
 TerrainSurface::TileSurface(Point<int> p)
 {
 	// build queue
-	queue<const Image*> st;
+	ImgQueue st;
 	BuildTile(p, st);
 
 	// lookup in the hash
@@ -209,7 +209,7 @@ static map<TerrainType, string> basic {
 
 
 void 
-TerrainSurface::BuildTile(Point<int> p, queue<const Image*>& st)
+TerrainSurface::BuildTile(Point<int> p, ImgQueue& st)
 {
 	// basic terrain
 	TerrainType terrain(world.Terrain(p));
@@ -235,8 +235,7 @@ TerrainSurface::BuildTile(Point<int> p, queue<const Image*>& st)
 
 
 void
-TerrainSurface::BuildTileBorders(Point<int> p, TerrainType t, 
-		queue<const Image*>& st)
+TerrainSurface::BuildTileBorders(Point<int> p, TerrainType t, ImgQueue& st)
 {
 	// find terrains around
 	TerrainType around[8] {
@@ -275,7 +274,7 @@ TerrainSurface::BuildTileBorders(Point<int> p, TerrainType t,
 
 
 void
-TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
+TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, ImgQueue& st)
 {
 	struct { int nw, n, ne, w, e, sw, s, se; } b = {
 		(bs & 0b00000001), (bs & 0b00000010), (bs & 0b00000100),
@@ -320,7 +319,7 @@ TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, queue<const Image*>& st)
 
 
 void 
-TerrainSurface::AddTreeShadows(Point<int> p, std::queue<const Image*>& st) const
+TerrainSurface::AddTreeShadows(Point<int> p, ImgQueue& st) const
 {
 	// sides
 	static vector<string> sfx = {
@@ -350,8 +349,7 @@ TerrainSurface::AddTreeShadows(Point<int> p, std::queue<const Image*>& st) const
 
 
 void 
-TerrainSurface::AddFirstPlane(Point<int> p, std::queue<const Image*>& st,
-		double feet) const
+TerrainSurface::AddFirstPlane(Point<int> p, ImgQueue& st, double feet) const
 {
 	AddTrees(p, st, feet);
 	city_engine->AddBuildings(p, st, feet);
@@ -359,8 +357,7 @@ TerrainSurface::AddFirstPlane(Point<int> p, std::queue<const Image*>& st,
 
 
 void 
-TerrainSurface::AddTrees(Point<int> p, queue<const Image*>& st, 
-		double feet) const
+TerrainSurface::AddTrees(Point<int> p, ImgQueue& st, double feet) const
 {
 	// sides
 	static vector<string> sfx = {

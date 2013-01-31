@@ -32,8 +32,7 @@ CityEngine::~CityEngine()
 
 
 void 
-CityEngine::AddBuildings(Point<int> p, std::queue<const Image*>& st, 
-		double feet) const
+CityEngine::AddBuildings(Point<int> p, ImgQueue& st, double feet) const
 {
 	for(const auto& city: world.map->cities) {
 		if(city->Limits().ContainsPoint(p)) {
@@ -55,7 +54,7 @@ CityEngine::AddBuildings(Point<int> p, std::queue<const Image*>& st,
 
 
 void 
-CityEngine::AddBuildingTile(Point<int> p, std::queue<const Image*>& st, 
+CityEngine::AddBuildingTile(Point<int> p, ImgQueue& st, 
 		const City& city, double feet) const
 {
 	// find building
@@ -65,7 +64,7 @@ CityEngine::AddBuildingTile(Point<int> p, std::queue<const Image*>& st,
 
 	// if the building foot is below the character feet, we don't draw
 	// the building in firt plane
-	double bfoot = building->Y() + building->H();
+	double bfoot = building->Y() + building->HeightAt(p.x);
 	if(bfoot < (feet+1.5) && feet != 0.0)
 		return;
 
@@ -86,10 +85,11 @@ CityEngine::AddBuildingTile(Point<int> p, std::queue<const Image*>& st,
 	AddBackWall(st, tile);
 	AddWall(st, tile);
 	AddDoorFrames(st, tile);
+	AddRoof(st, tile);
 }
 
 void 
-CityEngine::AddBackWall(std::queue<const Image*>& st, const Tiles& tile) const
+CityEngine::AddBackWall(ImgQueue& st, const Tiles& tile) const
 {
 	if((tile.c == "w1" || tile.c == "w4" || tile.c == "w7") 
 	&& tile.w == "w2") {
@@ -119,7 +119,7 @@ CityEngine::AddBackWall(std::queue<const Image*>& st, const Tiles& tile) const
 
 
 void 
-CityEngine::AddWall(std::queue<const Image*>& st, const Tiles& tile) const
+CityEngine::AddWall(ImgQueue& st, const Tiles& tile) const
 {
 	// draw walls
 	if(tile.c == "w1") {
@@ -156,7 +156,7 @@ CityEngine::AddWall(std::queue<const Image*>& st, const Tiles& tile) const
 
 
 void 
-CityEngine::AddDoorFrames(std::queue<const Image*>& st, const Tiles& tile) const
+CityEngine::AddDoorFrames(ImgQueue& st, const Tiles& tile) const
 {
 	if(tile.se == "d1")
 		st.push(res["house_door_frame_nw"]);
@@ -172,4 +172,51 @@ CityEngine::AddDoorFrames(std::queue<const Image*>& st, const Tiles& tile) const
 		st.push(res["house_door_frame_sw"]);
 	if(tile.w == "d2")
 		st.push(res["house_door_frame_se"]);
+}
+
+
+void 
+CityEngine::AddRoof(ImgQueue& st, const Tiles& tile) const
+{
+	if(tile.c == "R1") { 
+		st.push(res["house_roof_corner_nw"]);
+	} else if(tile.c == "R2") { 
+		st.push(res["house_roof_corner_n"]);
+	} else if(tile.c == "R3") { 
+		st.push(res["house_roof_corner_ne"]);
+	} else if(tile.c == "R4") { 
+		st.push(res["house_roof_corner_w"]);
+	} else if(tile.c == "R5") { 
+		st.push(res["house_roof_corner_c"]);
+	} else if(tile.c == "R6") { 
+		st.push(res["house_roof_corner_e"]);
+	} else if(tile.c == "R7") { 
+		st.push(res["house_roof_corner_sw"]);
+	} else if(tile.c == "R8") { 
+		st.push(res["house_roof_corner_s"]);
+	} else if(tile.c == "R9") { 
+		st.push(res["house_roof_corner_se"]);
+	} else if(tile.c == "r1") { 
+		st.push(res["house_roof_nw"]);
+	} else if(tile.c == "r2") { 
+		st.push(res["house_roof_n"]);
+	} else if(tile.c == "r3") { 
+		st.push(res["house_roof_ne"]);
+	} else if(tile.c == "r4") { 
+		st.push(res["house_roof_w"]);
+	} else if(tile.c == "r5") { 
+		st.push(res["house_roof_c"]);
+	} else if(tile.c == "r6") { 
+		st.push(res["house_roof_e"]);
+	} else if(tile.c == "r7") { 
+		st.push(res["house_roof_sw"]);
+	} else if(tile.c == "r8") { 
+		st.push(res["house_roof_s"]);
+	} else if(tile.c == "r9") { 
+		st.push(res["house_roof_se"]);
+	} else if(tile.c == "RL") { 
+		st.push(res["house_roof_inner_left"]);
+	} else if(tile.c == "RR") { 
+		st.push(res["house_roof_inner_right"]);
+	}
 }

@@ -112,6 +112,13 @@ static const vector<Rect> house_rect {
 	tt(14,5), tt(15,5,2), tt(17,5),		// door frames
 	tt(14,6,1,2), tt(17,6,1,2),
 	tt(14,8,1,2), tt(17,8,1,2),
+	tr(0,3),tr(1,3),tr(2,3),		// roof corners
+	tr(0,4),tr(1,4),tr(2,4),
+	tr(0,5),tr(1,5),tr(2,5),
+	tr(0,6),        tr(2,6),
+	tr(3,4),tr(4,4),tr(5,4),		// roof middle
+	tr(3,6),tr(4,6),tr(5,6),
+	tr(3,5),tr(4,5),tr(5,5),
 };
 static const vector<string> house_sfx {
 	"_nw", "_n", "_ne", "_w", "_c", "_e", "_sw", "_s", "_se",
@@ -120,6 +127,13 @@ static const vector<string> house_sfx {
 	"_door_frame_nw", "_door_frame_n", "_door_frame_ne",
 	"_door_frame_w", "_door_frame_e",
 	"_door_frame_sw", "_door_frame_se",
+	"_roof_corner_nw", "_roof_corner_n", "_roof_corner_ne",
+	"_roof_corner_w",  "_roof_corner_c", "_roof_corner_e",
+	"_roof_corner_sw", "_roof_corner_s", "_roof_corner_se",
+	"_roof_inner_left", "_roof_inner_right",
+	"_roof_nw", "_roof_n", "_roof_ne",
+	"_roof_w",  "_roof_c", "_roof_e",
+	"_roof_sw", "_roof_s", "_roof_se",
 };
 
 // resource file list

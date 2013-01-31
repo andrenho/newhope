@@ -26,6 +26,8 @@ public:
 		return OutdoorsLayout(p.x, p.y);
 	}
 
+	int HeightAt(int x) const;
+
 	const int xrel, yrel;
 private:
 	const City& city;

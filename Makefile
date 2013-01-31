@@ -41,7 +41,7 @@ options:
 	@echo "CC      = ${CC}"
 
 # TODO - correct dependencies
-ui/resource.cc: ui/resource_list.h
+ui/resource.o: ui/resource_list.h
 
 .cc.o:
 	@echo CC $<

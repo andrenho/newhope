@@ -2,6 +2,7 @@
 #define UI_CITYENGINE_H
 
 #include <queue>
+#include "ui/terrainsurface.h"
 #include "util/defines.h"
 #include "util/point.h"
 #include "util/rect.h"
@@ -22,15 +23,14 @@ public:
 			const Resources& res);
 	~CityEngine();
 
-	void AddBuildings(Point<int> p, std::queue<const Image*>& st, 
-			double feet) const;
+	void AddBuildings(Point<int> p, ImgQueue& st, double feet) const;
 private:
-	void AddBuildingTile(Point<int> p, std::queue<const Image*>& st, 
+	void AddBuildingTile(Point<int> p, ImgQueue& st, 
 			const City& city, double feet) const;
-	void AddBackWall(std::queue<const Image*>& st, const Tiles& tile) const;
-	void AddWall(std::queue<const Image*>& st, const Tiles& tile) const;
-	void AddDoorFrames(std::queue<const Image*>& st, 
-			const Tiles& tile) const;
+	void AddBackWall(ImgQueue& st, const Tiles& tile) const;
+	void AddWall(ImgQueue& st, const Tiles& tile) const;
+	void AddDoorFrames(ImgQueue& st, const Tiles& tile) const;
+	void AddRoof(ImgQueue& st, const Tiles& tile) const;
 
 	const World& world;
 	const GraphicLibrary& video;

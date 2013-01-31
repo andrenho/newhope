@@ -20,3 +20,16 @@ Building::OutdoorsLayout(int x, int y) const
 		return type.layout[y].substr(x*2, 2);
 	}
 }
+
+
+int 
+Building::HeightAt(int x) const
+{
+	x -= city.pos.x + xrel;
+	for(int y=0; y < H(); y++) {
+		if(OutdoorsLayout(x, y) == "  ") {
+			return y;
+		}
+	}
+	return H();
+}
