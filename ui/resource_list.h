@@ -155,11 +155,13 @@ static const vector<Rect> shadow_rect {
 	Rect(96, 0, 2, 32), Rect(96, 7, 2, 32),
 	Rect(98, 0, 2, 32), Rect(98, 7, 2, 32),
 	Rect(96, 0, 4, 32), Rect(96, 7, 4, 32),
+	tr(5,0),tr(5,1),
 };
 static const vector<string> shadow_sfx {
 	"_house_nw", "_house_sw",
 	"_house_ne", "_house_se",
 	"_roof_n", "_roof_s",
+	"_stairs_n", "_stairs_s",
 };
 
 // resource file list
