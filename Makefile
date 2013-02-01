@@ -33,7 +33,7 @@ OBJ = ${SRC:.cc=.o}
 HEADERS = $(filter-out main.h,${SRC:.cc=.h}) libs/graphiclibrary.h \
 	util/point.h world/biome.h util/mapcache.h util/defines.h  \
 	libs/sdl/sdltimer.h
-DIST = AUTHORS HACKING LICENSE NEWS README INSTALL
+DIST = AUTHORS HACKING NEWS README INSTALL
 DATA = $(wildcard data/*.png) $(wildcard data/*.ttf)
 
 all: options newhope translation
