@@ -71,6 +71,7 @@ CityEngine::AddBuildingTile(Point<int> p, ImgQueue& st,
 	};
 
 	// draw stuff
+	AddShadows(st, tile);
 	AddBackWall(st, tile);
 	AddWall(st, tile, *building);
 	AddWindows(st, tile);
@@ -118,18 +119,21 @@ CityEngine::AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const
 		st.push(res["house_n"]);
 	} else if(tile.c == "w3") {
 		st.push(res["house_ne"]);
+		st.push(res["shadow_house_nw"]);
 	} else if(tile.c == "w4") {
 		st.push(res["house_w"]);
 	} else if(tile.c == "w5") {
 		st.push(res["house_c"]);
 	} else if(tile.c == "w6") {
 		st.push(res["house_e"]);
+		st.push(res["shadow_house_nw"]);
 	} else if(tile.c == "w7") {
 		st.push(res["house_sw"]);
 	} else if(tile.c == "w8") {
 		st.push(res["house_s"]);
 	} else if(tile.c == "w9") {
 		st.push(res["house_se"]);
+		st.push(res["shadow_house_sw"]);
 	} else if(tile.c == "dn" || tile.c == "dN") {
 		st.push(res["house_door_a_1"]);
 	} else if(tile.c == "ds") {
@@ -149,6 +153,28 @@ CityEngine::AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const
 	// stairs
 	if(tile.n == "ds") {
 		st.push(res["house_stairs_2"]);
+	}
+}
+
+
+void 
+CityEngine::AddShadows(ImgQueue& st, const Tiles& tile) const
+{
+	if(tile.c != "  ") {
+		return;
+	}
+
+	if(tile.w == "w9") {
+		st.push(res["shadow_house_se"]);
+	} else if(tile.w == "w6" || tile.w == "w3") {
+		st.push(res["shadow_house_ne"]);
+	}
+
+	if(tile.w == "R9") {
+		st.push(res["shadow_house_ne"]);
+		st.push(res["shadow_roof_s"]);
+	} else if(tile.w == "R6") {
+		st.push(res["shadow_roof_n"]);
 	}
 }
 

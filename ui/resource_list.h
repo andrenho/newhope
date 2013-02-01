@@ -150,6 +150,18 @@ static const vector<string> signs_sfx {
 	"_inn", "_weapons", "_bank",
 };
 
+// shadow
+static const vector<Rect> shadow_rect {
+	Rect(96, 0, 2, 32), Rect(96, 7, 2, 32),
+	Rect(98, 0, 2, 32), Rect(98, 7, 2, 32),
+	Rect(96, 0, 4, 32), Rect(96, 7, 4, 32),
+};
+static const vector<string> shadow_sfx {
+	"_house_nw", "_house_sw",
+	"_house_ne", "_house_se",
+	"_roof_n", "_roof_s",
+};
+
 // resource file list
 static const struct {
 	const string name;
@@ -192,6 +204,9 @@ static const struct {
 	// signs
 	{ "sign", "signs.png", signs_rect, signs_sfx },
 
+	// shadow
+	{ "shadow", "shadow.png", shadow_rect, shadow_sfx },
+
 	// terminal
 	{ "terminal", "terminal.png", {}, {} },
 
@@ -213,6 +228,8 @@ static const struct {
 	{ "house_door_frame_w",  16,  0 },
 	{ "house_door_frame_sw", 16,  0 },
 	{ "house_window_n",       0, 16 },
+	{ "shadow_house_sw",     30,  0 },
+	{ "shadow_house_nw",     30,  0 },
 };
 
 #endif
