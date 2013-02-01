@@ -154,6 +154,12 @@ CityEngine::AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const
 	if(tile.n == "ds") {
 		st.push(res["house_stairs_2"]);
 	}
+	if(tile.w == "ds") {
+		st.push(res["shadow_stairs_n"]);
+	}
+	if(tile.nw == "ds") {
+		st.push(res["shadow_stairs_s"]);
+	}
 }
 
 
