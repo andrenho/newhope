@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <thread>
 
 #include "libs/colors.h"
 #include "util/point.h"
@@ -38,7 +39,7 @@ private:
 	const GraphicLibrary& video;
 	const World& world;
 	const Resources& res;
-	void* thread;
+	std::thread* thr;
 	Image* image;
 	int sz;
 	bool thread_killed;

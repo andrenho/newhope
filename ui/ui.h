@@ -45,6 +45,7 @@ public:
 	}
 
 	inline bool Active() const { return active; }
+	inline void TurnOff() { active = false; }
 
 	inline const TerrainSurface* TerrSurface() const { return terrain_sf; }
 

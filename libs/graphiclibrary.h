@@ -33,6 +33,9 @@ private:
 
 
 struct KeyState {
+	KeyState() : Shift(false), Control(false), Left(false), Right(false),
+		     Up(false), Down(false) { }
+
 	bool Shift, Control;
 	bool Left, Right, Up, Down;
 };

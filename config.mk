@@ -16,6 +16,9 @@ DEBUG = yes
 PROFILING = no
 DUMA = no
 
+# libraries
+SDL = yes
+
 
 #
 # PLEASE AVOID CHANGING THE INFORMATION BELOW, UNLESS NECESSARY
@@ -25,13 +28,12 @@ DUMA = no
 VERSION = 0.0.1
 
 # system libraries
-SDL = yes
 PNG = yes
 
 # basic flags
 CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${NEWHOPEPREFIX}\" -Wall \
 	   -Wfatal-errors -I. -I/usr/include -std=c++11
-LDFLAGS = -L/usr/lib -lm
+LDFLAGS = -L/usr/lib -lm -lpthread -ldl
 
 UNAME = $(shell uname -o)
 
