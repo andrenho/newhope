@@ -1,7 +1,12 @@
 #include "world/buildingtype.h"
 
-/* w1..9 = house wall
- * d1..2 = house door
+/* MEDIEVAL
+ *   w1..9 = house wall
+ *   wl    = logo
+ *   d1..2 = house door
+ *   R1..9 = roof corners
+ *   RL/RR = roof inner corners
+ *   r1..9 = roof
  */
 
 const BuildingType BuildingType::BANK = BuildingType(9, 7,
@@ -10,5 +15,5 @@ const BuildingType BuildingType::BANK = BuildingType(9, 7,
 		  "R7R8R8R8R8RLr7r9R6",
 		  "w1w2w2w2w2R7R8R8R9",
 		  "w4w5w5w5w5w1w2w2w3",
-		  "w7w8w8w8w8w4w5d1w6",
+		  "w7w8w8w8w8w4wld1w6",
 		  "          w7w8d2w9" });

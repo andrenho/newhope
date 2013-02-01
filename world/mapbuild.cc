@@ -301,7 +301,7 @@ try_again:
 
 		// add city
 		Point<int> pos(biomes[b]->polygon->Midpoint());
-		cities.push_back(new City(pos, *biomes[b]));
+		cities.push_back(new City(pos, *biomes[b], CityStyle::VICTORIAN));
 		biomes[b]->has_city = true;
 	}
 }

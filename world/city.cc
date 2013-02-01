@@ -3,8 +3,8 @@
 #include "world/building.h"
 #include "world/buildingtype.h"
 
-City::City(Point<int> pos, const Biome& biome)
-		: pos(pos), biome(biome)
+City::City(Point<int> pos, const Biome& biome, CityStyle style)
+		: pos(pos), biome(biome), Style(style)
 {
 	buildings.push_back(new Building(*this, BuildingType::BANK, -4, -4));
 }

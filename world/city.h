@@ -7,12 +7,14 @@
 #include "util/point.h"
 #include "util/rect.h"
 
+enum CityStyle { VICTORIAN };
+
 class Biome;
 class Building;
 
 class City {
 public:
-	City(Point<int> pos, const Biome& biome);
+	City(Point<int> pos, const Biome& biome, CityStyle style);
 	~City();
 
 	const Rect Limits() const;
@@ -21,6 +23,7 @@ public:
 
 	const Point<int> pos;
 	const Biome& biome;
+	const CityStyle Style;
 	std::vector<const City*> connections;
 	std::vector<const Building*> buildings;
 
