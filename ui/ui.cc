@@ -14,8 +14,6 @@ using namespace std;
 #include "world/city.h"
 #include "world/person.h"
 
-#include "SDL.h"
-
 UI::UI(const World& world, const GraphicLibrary& video)
 	: world(world), active(true), rx(0), ry(0), video(video), 
 	  res(new Resources(video)),
@@ -96,7 +94,6 @@ UI::ProcessMovementKeys()
 }
 
 
-#include "libs/sdl/sdlimage.h"
 void 
 UI::Draw()
 {

@@ -4,9 +4,6 @@
 include config.mk
 
 SRC = main.cc		    \
-      libs/sdl/sdl.cc       \
-      libs/sdl/sdlfont.cc   \
-      libs/sdl/sdlimage.cc  \
       ui/charengine.cc      \
       ui/cityengine.cc      \
       ui/firstplane.cc      \
@@ -23,6 +20,13 @@ SRC = main.cc		    \
       world/mapbuild.cc     \
       world/person.cc       \
       world/world.cc
+
+ifeq (${SDL},yes)
+  SRC += libs/sdl/sdl.cc       \
+         libs/sdl/sdlfont.cc   \
+         libs/sdl/sdlimage.cc
+endif
+
 TRANSLATIONS = pt_BR
 	
 OBJ = ${SRC:.cc=.o}

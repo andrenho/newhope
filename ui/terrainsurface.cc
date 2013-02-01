@@ -8,8 +8,6 @@
 #include <vector>
 using namespace std;
 
-#include "SDL.h"
-
 #include "libs/graphiclibrary.h"
 #include "libs/image.h"
 #include "ui/cityengine.h"
@@ -43,17 +41,17 @@ TerrainSurface::~TerrainSurface()
 void
 TerrainSurface::RedrawImg(vector<Rect>& rects)
 {
-	uint32_t t(SDL_GetTicks());
+	//uint32_t t(SDL_GetTicks());
 
 	for(const auto& tile: tiles_to_redraw) {
 		rects.push_back(Rect(tile.x, tile.y, TileSize, TileSize));
 		DrawTile(tile);
 	}
 
-	if(!tiles_to_redraw.empty()) {
-		logger.DebugFrame("Frame redraw: %d tiles, %d ms", 
-				tiles_to_redraw.size(), SDL_GetTicks() - t);
-	}
+	//if(!tiles_to_redraw.empty()) {
+	//	logger.DebugFrame("Frame redraw: %d tiles, %d ms", 
+	//			tiles_to_redraw.size(), SDL_GetTicks() - t);
+	//}
 	tiles_to_redraw.clear();
 }
 

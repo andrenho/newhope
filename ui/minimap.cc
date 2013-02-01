@@ -1,9 +1,11 @@
 #include "ui/minimap.h"
 
-#include <algorithm>
-using namespace std;
+// FIXME: due to a bug in clang++, the thread code is not working here.
+// bug: http://llvm.org/bugs/show_bug.cgi?id=12730
 
-#include "SDL.h"
+#include <algorithm>
+#include <thread>
+using namespace std;
 
 #include "libs/image.h"
 #include "libs/graphiclibrary.h"
@@ -15,7 +17,7 @@ using namespace std;
 
 Minimap::Minimap(const GraphicLibrary& video, const World& world, 
 		const Resources& res)
-	: video(video), world(world), res(res), thread(nullptr), image(nullptr), 
+	: video(video), world(world), res(res), thr(nullptr), image(nullptr), 
 	  sz(0), thread_killed(false)
 {
 	SetupColors();
@@ -49,9 +51,7 @@ void
 Minimap::Reset()
 {
 	KillThread();
-	thread = (void*)SDL_CreateThread(
-			(int(*)(void*))&Minimap::CreationThread,
-			(void*)this);
+	thr = new thread(Minimap::CreationThread, (void*)this);
 }
 
 
@@ -63,10 +63,9 @@ Minimap::Display()
 	video.Window->Update();
 
 	// wait for thread to finish
-	if(thread) {
-		int n;
-		SDL_WaitThread((SDL_Thread*)thread, &n);
-		thread = 0;
+	if(thr) {
+		thr->join();
+		thr = nullptr;
 	}
 
 	// draw map
@@ -112,11 +111,11 @@ void Minimap::Create()
 void
 Minimap::KillThread()
 {
-	if(thread) {
-		int n;
+	if(thr) {
 		thread_killed = 1;
-		SDL_WaitThread((SDL_Thread*)thread, &n);
-		thread = 0;
+		thr->join();
+		delete thr;
+		thr = nullptr;
 		logger.Debug("Minimap thread killed.");
 	}
 	thread_killed = 0;
