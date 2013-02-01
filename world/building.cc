@@ -3,9 +3,10 @@
 #include <cstdlib>
 using namespace std;
 
-Building::Building(const City& city, const BuildingType& type, 
+Building::Building(const City& city, const BuildingType type, 
 		int xrel, int yrel)
-	: xrel(xrel), yrel(yrel), city(city), type(type)
+	: xrel(xrel), yrel(yrel), city(city), type(type), 
+	  image(Image())
 {
 
 }
@@ -17,7 +18,7 @@ Building::OutdoorsLayout(int x, int y) const
 	if(x < 0 || y < 0 || x >= W() || y >= H()) {
 		return "  ";
 	} else {
-		return type.layout[y].substr(x*2, 2);
+		return image.layout[y].substr(x*2, 2);
 	}
 }
 
@@ -32,4 +33,19 @@ Building::HeightAt(int x) const
 		}
 	}
 	return H();
+}
+
+
+const BuildingImage& 
+Building::Image() const
+{
+	if(city.Style == CityStyle::VICTORIAN) {
+		if(type == BuildingType::BANK) {
+			return BuildingImage::VICTORIAN_BANK;
+		} else {
+			abort();
+		}
+	} else {
+		abort();
+	}
 }

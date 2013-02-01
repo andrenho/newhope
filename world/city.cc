@@ -1,7 +1,6 @@
 #include "world/city.h"
 
 #include "world/building.h"
-#include "world/buildingtype.h"
 
 City::City(Point<int> pos, const Biome& biome, CityStyle style)
 		: pos(pos), biome(biome), Style(style)

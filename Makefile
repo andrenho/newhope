@@ -3,27 +3,27 @@
 
 include config.mk
 
-SRC = main.cc		    \
-      ui/charengine.cc      \
-      ui/cityengine.cc      \
-      ui/firstplane.cc      \
-      ui/minimap.cc         \
-      ui/resource.cc        \
-      ui/terrainsurface.cc  \
-      ui/ui.cc              \
-      util/logger.cc        \
-      util/i18n.cc          \
-      util/polygon.cc       \
-      world/building.cc     \
-      world/buildingtype.cc \
-      world/city.cc         \
-      world/mapbuild.cc     \
-      world/person.cc       \
+SRC = main.cc		    	\
+      ui/charengine.cc      	\
+      ui/cityengine.cc      	\
+      ui/firstplane.cc      	\
+      ui/minimap.cc         	\
+      ui/resource.cc        	\
+      ui/terrainsurface.cc  	\
+      ui/ui.cc              	\
+      util/logger.cc        	\
+      util/i18n.cc          	\
+      util/polygon.cc       	\
+      world/building.cc     	\
+      world/buildingimage.cc	\
+      world/city.cc         	\
+      world/mapbuild.cc     	\
+      world/person.cc       	\
       world/world.cc
 
 ifeq (${SDL},yes)
-  SRC += libs/sdl/sdl.cc       \
-         libs/sdl/sdlfont.cc   \
+  SRC += libs/sdl/sdl.cc       	\
+         libs/sdl/sdlfont.cc   	\
          libs/sdl/sdlimage.cc
 endif
 
