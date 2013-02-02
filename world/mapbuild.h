@@ -26,11 +26,11 @@ public:
 	explicit MapBuild(const MapParameters& pars);
 	~MapBuild();
 
-	std::vector<Biome*> biomes;
-	std::vector<Polygon*> rivers;
-	std::vector<Polygon*> lava;
-	std::vector<Polygon*> roads;
-	std::vector<City*> cities;
+	const std::vector<Biome*>& biomes() const { return biomes_; }
+	const std::vector<Polygon*>& rivers() const { return rivers_; }
+	const std::vector<Polygon*>& lava() const { return lava_; }
+	const std::vector<Polygon*>& roads() const { return roads_; }
+	const std::vector<City*>& cities() const { return cities_; }
 
 private:
 	void CreatePolygons();
@@ -56,7 +56,12 @@ private:
 	void BiomeNeighbours(const Biome& biome, 
 			std::vector<const Biome*>& biomes);
 
-	const MapParameters& pars;
+	const MapParameters& pars_;
+	std::vector<Biome*> biomes_;
+	std::vector<Polygon*> rivers_;
+	std::vector<Polygon*> lava_;
+	std::vector<Polygon*> roads_;
+	std::vector<City*> cities_;
 
 	DISALLOW_COPY_AND_ASSIGN(MapBuild);
 };

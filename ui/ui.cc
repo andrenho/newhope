@@ -74,23 +74,23 @@ UI::ProcessMovementKeys()
 	KeyState state;
 	video.GetKeyState(state);
 	if(state.Left && state.Up)
-		world.Hero->Movement(-1, -1);
+		world.Hero().Movement(-1, -1);
 	else if(state.Right && state.Up)
-		world.Hero->Movement(1, -1);
+		world.Hero().Movement(1, -1);
 	else if(state.Up)
-		world.Hero->Movement(0, -1);
+		world.Hero().Movement(0, -1);
 	else if(state.Left && state.Down)
-		world.Hero->Movement(-1, 1);
+		world.Hero().Movement(-1, 1);
 	else if(state.Right && state.Down)
-		world.Hero->Movement(1, 1);
+		world.Hero().Movement(1, 1);
 	else if(state.Down)
-		world.Hero->Movement(0, 1);
+		world.Hero().Movement(0, 1);
 	else if(state.Left)
-		world.Hero->Movement(-1, 0);
+		world.Hero().Movement(-1, 0);
 	else if(state.Right)
-		world.Hero->Movement(1, 0);
+		world.Hero().Movement(1, 0);
 	else
-		world.Hero->Movement(0, 0);
+		world.Hero().Movement(0, 0);
 }
 
 
@@ -152,7 +152,7 @@ UI::GoToScr(Point<T> p)
 void
 UI::CenterHero()
 {
-	Point<int> src(TileToScr(world.Hero->Pos));
+	Point<int> src(TileToScr(world.Hero().pos()));
 	src.x -= video.Window->w / 2;
 	src.y -= video.Window->h / 2;
 	GoToScr(src);

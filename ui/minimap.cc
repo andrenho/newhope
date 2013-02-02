@@ -169,9 +169,9 @@ Minimap::DrawMap()
 	logger.Debug("Drawing biomes...");
 
 	int px, py;
-	double x, y, ps = (double)world.w / (double)sz;
-	for(x=px=0; x<world.w && px < sz; x+=ps, px++) {
-		for(y=py=0; y<world.h && py < sz; y+=ps, py++) {
+	double x, y, ps = (double)world.w() / (double)sz;
+	for(x=px=0; x<world.w() && px < sz; x+=ps, px++) {
+		for(y=py=0; y<world.h() && py < sz; y+=ps, py++) {
 			if(thread_killed) {
 				return;
 			}
@@ -186,15 +186,15 @@ void
 Minimap::DrawRivers()
 {
 	logger.Debug("Drawing lava...");
-	for(const auto& lavapath: world.map->lava)
+	for(const auto& lavapath: world.map().lava())
 		DrawPath(lavapath->points, Color(0xcf, 0x10, 0x20));
 
 	logger.Debug("Drawing rivers...");
-	for(const auto& river: world.map->rivers)
+	for(const auto& river: world.map().rivers())
 		DrawPath(river->points, colors[t_WATER]);
 
 	logger.Debug("Drawing roads...");
-	for(const auto& road: world.map->roads)
+	for(const auto& road: world.map().roads())
 		DrawPath(road->points, Color(0, 0, 0));
 }
 
@@ -202,7 +202,7 @@ Minimap::DrawRivers()
 void 
 Minimap::DrawPath(vector<Point<int>>& points, Color c)
 {
-	double ps = double(world.w) / double(sz);
+	double ps = double(world.w()) / double(sz);
 	Point<int> p2 = Point<int>(-1, -1);
 	for(const auto& p1: points) {
 		if(p2 == Point<int>(-1, -1)) {
@@ -224,8 +224,8 @@ Minimap::DrawPath(vector<Point<int>>& points, Color c)
 void
 Minimap::DrawCities()
 {
-	double ps = (double)world.w / (double)sz;
-	for(const auto& city : world.map->cities) {
+	double ps = (double)world.w() / (double)sz;
+	for(const auto& city : world.map().cities()) {
 		Point<int> p = city->pos();
 		Color c(128, 0, 0);
 		image->HollowBox(Rect((p.x/ps)-6, (p.y/ps)-6, 12, 12), c);

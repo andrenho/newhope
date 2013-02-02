@@ -34,7 +34,7 @@ CityEngine::~CityEngine()
 void 
 CityEngine::AddBuildings(Point<int> p, ImgQueue& st, double feet) const
 {
-	for(const auto& city: world.map->cities) {
+	for(const auto& city: world.map().cities()) {
 		if(city->Limits().ContainsPoint(p)) {
 			AddBuildingTile(p, st, *city, feet);
 		}
