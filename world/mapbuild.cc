@@ -119,7 +119,7 @@ MapBuild::CreateElevation()
 	// set water elevation
 	for(const auto& biome : biomes_) {
 		if(biome->terrain() == t_WATER) {
-			for(const auto& point : biome->polygon().points) {
+			for(const auto& point : biome->polygon().points()) {
 				point.elevation = -1;
 			}
 			biome->set_elevation(-1);
@@ -132,7 +132,7 @@ MapBuild::CreateElevation()
 		if(biome->terrain() != t_WATER)
 		{
 			int tot_alt(0);
-			for(const auto& point: biome->polygon().points) {
+			for(const auto& point: biome->polygon().points()) {
 				point.elevation = DistanceFromWater(
 						point, false);
 				point.elevation += rand() % 200;
@@ -140,7 +140,7 @@ MapBuild::CreateElevation()
 				max_alt = max(max_alt, point.elevation);
 			}
 			biome->set_elevation(tot_alt / 
-					biome->polygon().points.size());
+					biome->polygon().points().size());
 		}
 	}
 	
@@ -164,8 +164,8 @@ MapBuild::CreateRivers()
 	while(rivers__left > 0) {
 		int b(rand() % biomes_.size());
 		if(biomes_[b]->terrain() != t_WATER) {
-			int k(rand() % biomes_[b]->polygon().points.size());
-			Point<int> p(biomes_[b]->polygon().points[k]);
+			int k(rand() % biomes_[b]->polygon().points().size());
+			Point<int> p(biomes_[b]->polygon().points()[k]);
 			if(DistanceFromWater(p, false) > 600) {
 				rivers_.push_back(CreateFlow(p));
 				--rivers__left;
@@ -188,13 +188,13 @@ MapBuild::CreateMoisture()
 			biome->set_moisture(0);
 		} else {
 			int tot_moi(0);
-			for(const auto& point : biome->polygon().points) {
+			for(const auto& point : biome->polygon().points()) {
 				int moi(DistanceFromWater(point, true));
 				tot_moi += moi;
 				max_moi = max(max_moi, moi);
 			}
 			biome->set_moisture(tot_moi / 
-					    biome->polygon().points.size());
+					    biome->polygon().points().size());
 		}
 	}
 	
@@ -224,7 +224,7 @@ MapBuild::CreateLava()
 
 	// draw lava_ path
 	for(int i=0; i<3; i++) {
-		auto points(bs[i]->polygon().points);
+		auto points(bs[i]->polygon().points());
 		lava_.push_back(CreateFlow(points[rand() % points.size()], 4));
 	}
 }
@@ -468,7 +468,7 @@ MapBuild::CreateRoad(const City& c1, const City& c2)
 	// create road points
 	while(b != &c2.biome()) {
 
-		road->points.push_back(b->polygon().Midpoint());
+		road->AddPoint(b->polygon().Midpoint());
 
 		// find neighbour biomes_
 		vector<const Biome*> biomes_;
@@ -492,12 +492,12 @@ MapBuild::CreateRoad(const City& c1, const City& c2)
 			});
 		
 		// next biome
-		road->points.push_back(b->polygon().Midpoint());
+		road->AddPoint(b->polygon().Midpoint());
 		b = biomes_[0];
 	}
 
 	// add roads_
-	road->points.push_back(c2.biome().polygon().Midpoint());
+	road->AddPoint(c2.biome().polygon().Midpoint());
 	road->CalculateLimits();
 	roads_.push_back(road);
 }
@@ -512,7 +512,7 @@ MapBuild::CreateFlow(Point<int> start, int iterations)
 
 	while(p.elevation != -1 && iter < iterations) {
 
-		poly->points.push_back(p);
+		poly->AddPoint(p);
 		
 		// find neighbours
 		vector<Point<int>> neighbours;
@@ -534,8 +534,8 @@ MapBuild::CreateFlow(Point<int> start, int iterations)
 		unsigned int n(0);
 		while(true) {
 			p = neighbours[n];
-			if(find(poly->points.begin(), poly->points.end(), p) == 
-					poly->points.end()) {
+			if(find(poly->points().begin(), poly->points().end(), p) == 
+					poly->points().end()) {
 				break;
 			}
 			if(n >= neighbours.size()) {
@@ -569,7 +569,7 @@ MapBuild::DistanceFromWater(Point<int> const& p, bool include_rivers_)
 	// distance from a river
 	if(include_rivers_) {
 		for(const auto& river : rivers_) {
-			for(const auto& point : river->points) {
+			for(const auto& point : river->points()) {
 				int new_dist(point.Distance(p));
 				if(new_dist < dist) {
 					dist = new_dist;

@@ -33,7 +33,7 @@ public:
 	void SetTopLeft(Point<int> p);
 	void AddFirstPlane(Point<int> p, ImgQueue& st, double feet=0.0) const;
 
-	Image* Img;
+	inline const Image& image() const { return *image_; }
 
 private:
 	void Redraw();
@@ -50,6 +50,8 @@ private:
 	void AddTrees(Point<int> p, ImgQueue& st, double feet) const;
 	
 	std::map<ImgQueue, const Image*> imagehash;
+
+	Image* image_;
 
 	const World& world;
 	const GraphicLibrary& video;

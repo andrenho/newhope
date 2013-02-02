@@ -10,7 +10,7 @@
 class Image : public Resource {
 public:
 	Image(int w, int h, bool has_alpha) 
-		: w(w), h(h), has_alpha(has_alpha) { }
+		: w(w), h(h), has_alpha_(has_alpha) { }
 	virtual ~Image() { }
 
 	virtual void SetPixel(int x, int y, Color c) = 0;
@@ -38,12 +38,12 @@ public:
 	virtual void DrawLine(Point<int> p1, Point<int> p2, Color c, int w=1) = 0;
 	virtual void RemoveAlphaChannel() = 0;
 
-	virtual inline bool HasAlpha() const { return has_alpha; }
+	virtual inline bool HasAlpha() const { return has_alpha_; }
 
 	const int w, h;
 
 protected:
-	bool has_alpha;
+	bool has_alpha_;
 
 	DISALLOW_COPY_AND_ASSIGN(Image);
 };

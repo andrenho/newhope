@@ -83,10 +83,10 @@ CharEngine::DrawPerson(const Person& person, int scr_w, int scr_h) const
 
 	// create image
 	string charimage(body + "_" + direction + "_" + step);
-	res[charimage]->Blit(*video.Window, scr);
+	res[charimage]->Blit(video.Window(), scr);
 
 	string charclothes(clothes + "_" + direction + "_" + step);
-	res[charclothes]->Blit(*video.Window, scr);
+	res[charclothes]->Blit(video.Window(), scr);
 
 	// draw other objects
 	first_plane->DrawObjectsInFrontOf(person);

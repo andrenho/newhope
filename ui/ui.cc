@@ -22,7 +22,7 @@ UI::UI(const World& world, const GraphicLibrary& video)
 	  char_engine(new CharEngine(world, video, *res, *this)),
 	  frame_timer(nullptr)
 {
-	terrain_sf->Resize(video.Window->w, video.Window->h);
+	terrain_sf->Resize(video.Window().w, video.Window().h);
 	minimap->Reset();
 }
 
@@ -55,13 +55,13 @@ UI::ProcessEvents()
 		active = false;
 	} else if(event->type == Event::KEY) {
 		const KeyEvent* key = (const KeyEvent*)event;
-		if(key->key == '\t') {
+		if(key->key() == '\t') {
 			minimap->Display();
-		} else if(key->key == 'q') {
+		} else if(key->key() == 'q') {
 			active = false;
 		}
 	} else if(event->type == Event::RESIZE) {
-		terrain_sf->Resize(video.Window->w, video.Window->h);
+		terrain_sf->Resize(video.Window().w, video.Window().h);
 		minimap->Reset();
 	}
 	delete event;
@@ -102,18 +102,17 @@ UI::Draw()
 	// redraw terrain
 	vector<Rect> rects;
 	terrain_sf->RedrawImg(rects);
-	assert(terrain_sf->Img);
 
 	// blit terrain
 	Rect r(-rx % TileSize, 
 	       -ry % TileSize);
-	terrain_sf->Img->Blit(*video.Window, r); // TODO - not always
+	terrain_sf->image().Blit(video.Window(), r); // TODO - not always
 
 	// draw people
-	char_engine->Draw(video.Window->w, video.Window->h);
+	char_engine->Draw(video.Window().w, video.Window().h);
 
 	// update screen
-	video.Window->Update();
+	video.Window().Update();
 }
 
 
@@ -153,7 +152,7 @@ void
 UI::CenterHero()
 {
 	Point<int> src(TileToScr(world.Hero().pos()));
-	src.x -= video.Window->w / 2;
-	src.y -= video.Window->h / 2;
+	src.x -= video.Window().w / 2;
+	src.y -= video.Window().h / 2;
 	GoToScr(src);
 }

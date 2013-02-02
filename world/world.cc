@@ -177,8 +177,8 @@ World::CreatePathsCache()
 		// create a set with all the points
 		set<Point<int>> points;
 		for(const auto& each: polygon.map_build) {
-			for(unsigned int i=0; i<each->points.size()-1; i++) {
-				AddPoints(each->points[i], each->points[i+1],
+			for(unsigned int i=0; i<each->points().size()-1; i++) {
+				AddPoints(each->points()[i], each->points()[i+1],
 						points, polygon.width);
 			}
 		}

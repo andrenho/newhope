@@ -41,7 +41,7 @@ FirstPlane::DrawFrontTile(Point<int> p, double feet) const
 	while(!st.empty()) {
 		const Image* im = st.front();
 		Point<int> p = res.Desloc(im);
-		st.front()->Blit(*video.Window, rel + p);
+		st.front()->Blit(video.Window(), rel + p);
 		st.pop();
 	}
 }

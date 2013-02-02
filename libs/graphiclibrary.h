@@ -24,10 +24,13 @@ typedef enum Key { UP=256, DOWN, LEFT, RIGHT } Key;
 class KeyEvent : public Event {
 public:
 	explicit KeyEvent(int key) 
-		: Event(KEY), key(key) { }
-	const int key;
+		: Event(KEY), key_(key) { }
+	
+	inline const int key() const { return key_; }
 
 private:
+	const int key_;
+
 	DISALLOW_COPY_AND_ASSIGN(KeyEvent);
 };
 
@@ -41,7 +44,7 @@ struct KeyState {
 };
 
 
-class ClickEvent : public Event {
+struct ClickEvent : public Event {
 public:
 	enum MouseButton { LEFT, RIGHT, MIDDLE };
 	ClickEvent(int x, int y, enum MouseButton button) : Event(CLICK),
@@ -81,7 +84,10 @@ public:
 	virtual const Event* GetEvent() const = 0;
 	virtual void GetKeyState(KeyState& state) const = 0;
 
-	mutable Image* Window;
+	inline Image& Window() const { return *window_; }
+
+protected:
+	mutable Image* window_;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(GraphicLibrary);

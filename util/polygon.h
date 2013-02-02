@@ -33,11 +33,16 @@ public:
 	static void FakeVoronoi(unsigned int seed, int w, int h, int density,
 			std::vector<Polygon*>& polygons);
 
-	std::vector<Point<int>> points;
+	inline const void AddPoint(Point<int> p) {
+		points_.push_back(p);
+	}
+
+	inline const std::vector<Point<int>>& points() const { return points_; }
 
 private:
 	mutable int limit_x1, limit_y1, limit_x2, limit_y2;
 	mutable Point<int> midpoint;
+	std::vector<Point<int>> points_;
 
 	DISALLOW_COPY_AND_ASSIGN(Polygon);
 
@@ -51,10 +56,10 @@ public:
 		}
 
 		// prepare
-		int nvert(points.size());
+		int nvert(points_.size());
 		float vertx[nvert], verty[nvert];
 		int i(0);
-		for(const auto& point: points) {
+		for(const auto& point: points_) {
 			vertx[i] = point.x;
 			verty[i++] = point.y;
 		}
