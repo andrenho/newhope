@@ -36,8 +36,8 @@ CharEngine::Draw(int scr_w, int scr_h) const
 	people_frame.clear();
 
 	// add people
-	for(const auto& person: world.People) {
-		Point<int> p(ui.TileToRel(person->Pos));
+	for(const auto& person: world.people()) {
+		Point<int> p(ui.TileToRel(person->pos()));
 		if(p.x >= -TileSize && p.y >= -TileSize 
 		&& p.x < scr_w + TileSize && p.y < scr_h + TileSize) {
 			people_frame.push_back(person);
@@ -47,7 +47,7 @@ CharEngine::Draw(int scr_w, int scr_h) const
 	// sort frame
 	sort(people_frame.begin(), people_frame.end(),
 	[](const Person* const& p1, const Person* const& p2) -> bool { 
-		return p1->Pos.y > p2->Pos.y;
+		return p1->pos().y > p2->pos().y;
 	});
 
 	// draw people
@@ -71,22 +71,22 @@ CharEngine::DrawPerson(const Person& person, int scr_w, int scr_h) const
 	string clothes("pants");
 
 	// direction
-	string direction(1, person.Facing);
+	string direction(1, person.facing());
 
 	// step
 	std::stringstream s;
-	s << person.Step() % 8;
+	s << person.step() % 8;
 	string step(s.str());
 
 	// find position
-	Point<int> scr(ui.TileToRel(person.Pos));
+	Point<int> scr(ui.TileToRel(person.pos()));
 
 	// create image
 	string charimage(body + "_" + direction + "_" + step);
-	res[charimage]->Blit(*video.Window, scr);
+	res[charimage]->Blit(video.Window(), scr);
 
 	string charclothes(clothes + "_" + direction + "_" + step);
-	res[charclothes]->Blit(*video.Window, scr);
+	res[charclothes]->Blit(video.Window(), scr);
 
 	// draw other objects
 	first_plane->DrawObjectsInFrontOf(person);
@@ -96,7 +96,7 @@ CharEngine::DrawPerson(const Person& person, int scr_w, int scr_h) const
 const Rect 
 CharEngine::TilesAffected(Person const& person)
 {
-	int x = person.Pos.x,
-	    y = person.Pos.y;
+	int x = person.pos().x,
+	    y = person.pos().y;
 	return Rect(x-1, y-1, 1, 1);
 }

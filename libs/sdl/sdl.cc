@@ -22,7 +22,7 @@ SDL::SDL()
 	if(!screen)
 		logger.Error(2, "Could not initialize screen: %s.", 
 				SDL_GetError());
-	Window = new SDLImage(screen, false);
+	window_ = new SDLImage(screen, false);
 	logger.Debug("SDL window initialized.");
 
 	// setup window
@@ -38,7 +38,7 @@ SDL::SDL()
 
 SDL::~SDL()
 {
-	delete Window;
+	delete window_;
 	TTF_Quit();
 	SDL_Quit();
 	logger.Debug("SDL terminated.");
@@ -108,8 +108,8 @@ SDL::GetEvent() const
 		case SDL_VIDEORESIZE:
 			screen = SDL_SetVideoMode(e.resize.w, e.resize.h, 32, 
 				SDL_SWSURFACE|SDL_RESIZABLE);
-			delete Window;
-			Window = new SDLImage(screen, false);
+			delete window_;
+			window_ = new SDLImage(screen, false);
 			return new Event(Event::RESIZE);
 	}
 	return new Event(Event::NO_EVENT);

@@ -45,10 +45,12 @@ public:
 
 	static TerrainType TerrainCache(void* obj, Point<int> p);
 
-	const int w, h;
-	const MapBuild* map;
-	std::vector<Person*> People;
-	Person* Hero;
+	inline Person& Hero() const { return *people_[0]; }
+
+	inline const int w() const { return w_; }
+	inline const int h() const { return h_; }
+	inline const MapBuild& map() const { return *map_; }
+	inline const std::vector<Person*> people() const { return people_; }
 
 private:
 	void CreatePathsCache();
@@ -60,6 +62,10 @@ private:
 	std::vector<Point<int>> riverpts, roadpts, lavapts;
 	mapcache<Point<int>,TerrainType>* cache;
 	int randspecial[100][100];
+
+	const int w_, h_;
+	const MapBuild* map_;
+	std::vector<Person*> people_;
 
 	DISALLOW_COPY_AND_ASSIGN(World);
 };

@@ -20,9 +20,9 @@ FirstPlane::~FirstPlane()
 void
 FirstPlane::DrawObjectsInFrontOf(const Person& person) const
 {
-	for(int x(person.Pos.x); x<=(person.Pos.x+1); x++) {
-		for(int y(person.Pos.y); y<=(person.Pos.y+2); y++) {
-			DrawFrontTile({x, y}, person.Pos.y);
+	for(int x(person.pos().x); x<=(person.pos().x+1); x++) {
+		for(int y(person.pos().y); y<=(person.pos().y+2); y++) {
+			DrawFrontTile({x, y}, person.pos().y);
 		}
 	}
 
@@ -41,7 +41,7 @@ FirstPlane::DrawFrontTile(Point<int> p, double feet) const
 	while(!st.empty()) {
 		const Image* im = st.front();
 		Point<int> p = res.Desloc(im);
-		st.front()->Blit(*video.Window, rel + p);
+		st.front()->Blit(video.Window(), rel + p);
 		st.pop();
 	}
 }
