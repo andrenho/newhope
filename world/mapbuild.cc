@@ -84,9 +84,9 @@ MapBuild::CreateCoastline()
 	Polygon polygon(pts, 4);
 	polygon.MidlineDisplacement(4);
 	for(const auto& biome: biomes) {
-		Point<int> p(biome->polygon->Midpoint());
+		Point<int> p(biome->polygon().Midpoint());
 		if(!polygon.PointInPolygon(p)) {
-			biome->terrain = t_WATER;
+			biome->set_terrain(t_WATER);
 		}
 	}
 }
@@ -103,8 +103,8 @@ MapBuild::CreateLakes()
 		Polygon lake(r);
 		lake.MidlineDisplacement(2);
 		for(const auto& biome : biomes) {
-			if(lake.PointInPolygon(biome->polygon->Midpoint())) {
-				biome->terrain = t_WATER;
+			if(lake.PointInPolygon(biome->polygon().Midpoint())) {
+				biome->set_terrain(t_WATER);
 			}
 		}
 	}
@@ -118,37 +118,37 @@ MapBuild::CreateElevation()
 
 	// set water elevation
 	for(const auto& biome : biomes) {
-		if(biome->terrain == t_WATER) {
-			for(const auto& point : biome->polygon->points) {
+		if(biome->terrain() == t_WATER) {
+			for(const auto& point : biome->polygon().points) {
 				point.elevation = -1;
 			}
-			biome->elevation = -1;
+			biome->set_elevation(-1);
 		}
 	}
 
 	// set other tiles elevation
 	int max_alt(0);
 	for(const auto& biome : biomes) {
-		if(biome->terrain != t_WATER)
+		if(biome->terrain() != t_WATER)
 		{
 			int tot_alt(0);
-			for(const auto& point: biome->polygon->points) {
+			for(const auto& point: biome->polygon().points) {
 				point.elevation = DistanceFromWater(
 						point, false);
 				point.elevation += rand() % 200;
 				tot_alt += point.elevation;
 				max_alt = max(max_alt, point.elevation);
 			}
-			biome->elevation = tot_alt / 
-				biome->polygon->points.size();
+			biome->set_elevation(tot_alt / 
+					biome->polygon().points.size());
 		}
 	}
 	
 	// normalize elevation
 	for(const auto& biome : biomes) {
-		if(biome->elevation != -1) {
-			biome->elevation = (double)biome->elevation /
-				           (double)max_alt * (double)100;
+		if(biome->elevation() != -1) {
+			biome->set_elevation((double)biome->elevation() /
+				             (double)max_alt * (double)100);
 		}
 	}
 }
@@ -163,9 +163,9 @@ MapBuild::CreateRivers()
 
 	while(rivers_left > 0) {
 		int b(rand() % biomes.size());
-		if(biomes[b]->terrain != t_WATER) {
-			int k(rand() % biomes[b]->polygon->points.size());
-			Point<int> p(biomes[b]->polygon->points[k]);
+		if(biomes[b]->terrain() != t_WATER) {
+			int k(rand() % biomes[b]->polygon().points.size());
+			Point<int> p(biomes[b]->polygon().points[k]);
 			if(DistanceFromWater(p, false) > 600) {
 				rivers.push_back(CreateFlow(p));
 				--rivers_left;
@@ -184,24 +184,24 @@ MapBuild::CreateMoisture()
 	int max_moi(0);
 	for(const auto& biome : biomes)
 	{
-		if(biome->terrain == t_WATER) {
-			biome->moisture = 0;
+		if(biome->terrain() == t_WATER) {
+			biome->set_moisture(0);
 		} else {
 			int tot_moi(0);
-			for(const auto& point : biome->polygon->points) {
+			for(const auto& point : biome->polygon().points) {
 				int moi(DistanceFromWater(point, true));
 				tot_moi += moi;
 				max_moi = max(max_moi, moi);
 			}
-			biome->moisture = tot_moi / 
-				biome->polygon->points.size();
+			biome->set_moisture(tot_moi / 
+					    biome->polygon().points.size());
 		}
 	}
 	
 	// normalize moisture
 	for(const auto& biome : biomes) {
-		biome->moisture = 100 - ((double)biome->moisture /
-			                 (double)max_moi * (double)100);
+		biome->set_moisture(100 - ((double)biome->moisture() /
+			                   (double)max_moi * (double)100));
 	}
 }
 
@@ -217,14 +217,14 @@ MapBuild::CreateLava()
 	sort(bs.begin(), bs.end(), 
 	[](const Biome* const& b1, const Biome* const& b2) -> bool
 		{
-			int i1((100 - b1->elevation) + b1->moisture);
-			int i2((100 - b2->elevation) + b2->moisture);
+			int i1((100 - b1->elevation()) + b1->moisture());
+			int i2((100 - b2->elevation()) + b2->moisture());
 			return i1 < i2;
 		});
 
 	// draw lava path
 	for(int i=0; i<3; i++) {
-		auto points(bs[i]->polygon->points);
+		auto points(bs[i]->polygon().points);
 		lava.push_back(CreateFlow(points[rand() % points.size()], 4));
 	}
 }
@@ -240,12 +240,12 @@ MapBuild::CreateBiomes()
 	 * 60-100       LAVAROCK   SNOW       COLDFOREST
 	 */
 	for(const auto& biome : biomes) {
-		if(biome->terrain == t_WATER) {
+		if(biome->terrain() == t_WATER) {
 			continue;
 		}
 
-		int alt = biome->elevation;
-		int moi = biome->moisture;
+		int alt = biome->elevation();
+		int moi = biome->moisture();
 		TerrainType t = t_DIRT;
 		if(alt < 20) {
 			t = t_DIRT;
@@ -271,7 +271,7 @@ MapBuild::CreateBiomes()
 			else
 				t = t_COLDFOREST;
 		}
-		biome->terrain = t;
+		biome->set_terrain(t);
 	}
 }
 
@@ -286,7 +286,7 @@ try_again:
 		int b(rand() % biomes.size());
 		
 		// check if it's not in the sea
-		if(biomes[b]->terrain == t_WATER) {
+		if(biomes[b]->terrain() == t_WATER) {
 			goto try_again;
 		}
 
@@ -294,15 +294,15 @@ try_again:
 		vector<const Biome*> neighbours;
 		BiomeNeighbours(*biomes[b], neighbours);
 		for(const auto& neigh: neighbours) {
-			if(neigh->has_city) {
+			if(neigh->has_city()) {
 				goto try_again;
 			}
 		}
 
 		// add city
-		Point<int> pos(biomes[b]->polygon->Midpoint());
+		Point<int> pos(biomes[b]->polygon().Midpoint());
 		cities.push_back(new City(pos, *biomes[b], CityStyle::VICTORIAN));
-		biomes[b]->has_city = true;
+		biomes[b]->set_has_city(true);
 	}
 }
 
@@ -319,8 +319,8 @@ MapBuild::CreateRoads()
 		sort(cs.begin(), cs.end(), 
 			[&city](City* const& c1, City* const& c2) -> bool
 			{ 
-				int d1 = c1->pos.Distance(city->pos);
-				int d2 = c2->pos.Distance(city->pos);
+				int d1 = c1->pos().Distance(city->pos());
+				int d2 = c2->pos().Distance(city->pos());
 				return d1 < d2;
 			});
 
@@ -330,7 +330,7 @@ MapBuild::CreateRoads()
 			if(n >= cs.size()) {
 				goto next;
 			}
-			auto conn = cs[n]->connections;
+			auto conn = cs[n]->connections();
 			if(find(conn.begin(), conn.end(), city) == conn.end()) {
 				break;
 			}
@@ -340,8 +340,8 @@ MapBuild::CreateRoads()
 		CreateRoad(*city, *cs[n]);
 		
 		// add connections
-		cs[n]->connections.push_back(city);
-		city->connections.push_back(cs[n]);
+		cs[n]->AddConnection(city);
+		city->AddConnection(cs[n]);
 
 next: ;
 	}
@@ -390,7 +390,7 @@ MapBuild::FindCityCluster(const City* city, vector<const City*>& cluster)
 	}
 
 	cluster.push_back(city);
-	for(const auto& conn: city->connections) {
+	for(const auto& conn: city->connections()) {
 		FindCityCluster(conn, cluster); // recursive
 	}
 }
@@ -405,7 +405,7 @@ MapBuild::ConnectClusters(vector<const City*> const& c1,
 	for(unsigned int i(0); i<c1.size(); i++) {
 		for(unsigned int j(i+1); j<c2.size(); j++) {
 			if(c1[i] != c2[j]) {
-				int dist(c1[i]->pos.Distance(c2[j]->pos));
+				int dist(c1[i]->pos().Distance(c2[j]->pos()));
 				if(dist < min_dist) {
 					min_dist = dist;
 					cities = make_pair(c1[i], c2[j]);
@@ -462,13 +462,13 @@ MapBuild::CreateRoad(const City& c1, const City& c2)
 		return;
 	}
 
-	const Biome* b(&c1.biome);
+	const Biome* b(&c1.biome());
 	Polygon* road(new Polygon());
 
 	// create road points
-	while(b != &c2.biome) {
+	while(b != &c2.biome()) {
 
-		road->points.push_back(b->polygon->Midpoint());
+		road->points.push_back(b->polygon().Midpoint());
 
 		// find neighbour biomes
 		vector<const Biome*> biomes;
@@ -478,26 +478,26 @@ MapBuild::CreateRoad(const City& c1, const City& c2)
 		sort(biomes.begin(), biomes.end(), 
 			[&c2](const Biome* const& b1, const Biome* const& b2) -> bool
 			{ 
-				int d1(b1->polygon->Midpoint().Distance(
-					c2.biome.polygon->Midpoint()));
-				int d2(b2->polygon->Midpoint().Distance(
-					c2.biome.polygon->Midpoint()));
-				if(b1->terrain == t_WATER) {
+				int d1(b1->polygon().Midpoint().Distance(
+					c2.biome().polygon().Midpoint()));
+				int d2(b2->polygon().Midpoint().Distance(
+					c2.biome().polygon().Midpoint()));
+				if(b1->terrain() == t_WATER) {
 					d1 = INT_MAX;
 				}
-				if(b2->terrain == t_WATER) {
+				if(b2->terrain() == t_WATER) {
 					d2 = INT_MAX;
 				}
 				return d1 < d2;
 			});
 		
 		// next biome
-		road->points.push_back(b->polygon->Midpoint());
+		road->points.push_back(b->polygon().Midpoint());
 		b = biomes[0];
 	}
 
 	// add roads
-	road->points.push_back(c2.biome.polygon->Midpoint());
+	road->points.push_back(c2.biome().polygon().Midpoint());
 	road->CalculateLimits();
 	roads.push_back(road);
 }
@@ -517,8 +517,8 @@ MapBuild::CreateFlow(Point<int> start, int iterations)
 		// find neighbours
 		vector<Point<int>> neighbours;
 		for(const auto& biome : biomes) {
-			if(biome->polygon->ContainsPoint(p)) {
-				biome->polygon->NeighbourPoints(p, neighbours);
+			if(biome->polygon().ContainsPoint(p)) {
+				biome->polygon().NeighbourPoints(p, neighbours);
 			}
 		}
 		assert(neighbours.size() > 0);
@@ -558,8 +558,8 @@ MapBuild::DistanceFromWater(Point<int> const& p, bool include_rivers)
 
 	// distance from sea
 	for(const auto& biome : biomes) {
-		if(biome->terrain == t_WATER) {
-			int new_dist(p.Distance(biome->polygon->Midpoint()));
+		if(biome->terrain() == t_WATER) {
+			int new_dist(p.Distance(biome->polygon().Midpoint()));
 			if(new_dist < dist) {
 				dist = new_dist;
 			}
@@ -596,7 +596,7 @@ void
 MapBuild::BiomeNeighbours(const Biome& biome, vector<const Biome*>& biomes)
 {
 	for(const auto& b: this->biomes) {
-		if(biome.polygon->IsTouching(*b->polygon) && &biome != b) {
+		if(biome.polygon().IsTouching(b->polygon()) && &biome != b) {
 			biomes.push_back(b);
 		}
 	}

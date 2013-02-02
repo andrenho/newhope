@@ -32,7 +32,7 @@ World::World(int w, int h) :
 	CreatePathsCache();
 
 	// add people
-	People.push_back(new Person(*this, map->cities[0]->pos));
+	People.push_back(new Person(*this, map->cities[0]->pos()));
 	Hero = People[0];
 
 	// create terrain cache
@@ -84,8 +84,8 @@ World::FindBiome(World* ths, Point<int> p)
 	// find biome
 	unsigned int sz(ths->map->biomes.size());
 	for(unsigned int i(0); i<sz; i++) {
-		if(ths->map->biomes[i]->polygon->PointInPolygon(p)) {
-			return ths->map->biomes[i]->terrain;
+		if(ths->map->biomes[i]->polygon().PointInPolygon(p)) {
+			return ths->map->biomes[i]->terrain();
 		}
 	}
 	return t_WATER;
