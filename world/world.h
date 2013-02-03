@@ -38,12 +38,12 @@ public:
 	~World();
 
 	void Process();
-	TerrainType Terrain(Point<int> p, bool use_cache=true) const;
-	int Special(Point<int> p) const;
-	TreeType Tree(Point<int> p) const;
-	bool TreeSmall(Point<int> p) const;
+	TerrainType Terrain(Tile p, bool use_cache=true) const;
+	int Special(Tile p) const;
+	TreeType Tree(Tile p) const;
+	bool TreeSmall(Tile p) const;
 
-	static TerrainType TerrainCache(void* obj, Point<int> p);
+	static TerrainType TerrainCache(void* obj, Tile p);
 
 	inline Person& Hero() const { return *people_[0]; }
 
@@ -54,13 +54,13 @@ public:
 
 private:
 	void CreatePathsCache();
-	void AddPoints(Point<int> p1, Point<int> p2, 
-			std::set<Point<int>>& points, int w);
+	void AddPoints(Tile p1, Tile p2, 
+			std::set<Tile>& points, int w);
 
-	static TerrainType FindBiome(World* ths, Point<int> p);
+	static TerrainType FindBiome(World* ths, Tile p);
 
-	std::vector<Point<int>> riverpts, roadpts, lavapts;
-	mapcache<Point<int>,TerrainType>* cache;
+	std::vector<Tile> riverpts, roadpts, lavapts;
+	mapcache<Tile,TerrainType>* cache;
 	int randspecial[100][100];
 
 	const int w_, h_;

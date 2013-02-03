@@ -72,6 +72,7 @@ protected:
 class Tile : public Point<double> {
 public:
 	Tile(double x, double y) : Point<double>(x, y) { }
+	template <typename F> Tile(const Point<F>& p) : Tile(p.x, p.y) { }
 
 	Tile operator+(Tile p) const {
 		return Tile(this->x+p.x, this->y+p.y);

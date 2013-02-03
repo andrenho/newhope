@@ -175,7 +175,7 @@ Minimap::DrawMap()
 			if(thread_killed) {
 				return;
 			}
-			TerrainType t = world.Terrain(Point<int>(x, y), false);
+			TerrainType t = world.Terrain(Tile(x, y), false);
 			image->SetPixel(px, py, colors[t]);
 		}
 	}
@@ -203,17 +203,17 @@ void
 Minimap::DrawPath(const vector<Tile>& points, Color c)
 {
 	double ps = double(world.w()) / double(sz);
-	Point<int> p2 = Point<int>(-1, -1);
+	Tile p2 = Tile(-1, -1);
 	for(const auto& p1: points) {
-		if(p2 == Point<int>(-1, -1)) {
-			p2 = Point<int>(p1.x, p1.y);
+		if(p2 == Tile(-1, -1)) {
+			p2 = Tile(p1.x, p1.y);
 			continue;
 		}
 
-		Point<int> pa(int(double(p1.x)/ps), 
-		              int(double(p1.y)/ps));
-		Point<int> pb(int(double(p2.x)/ps), 
-		              int(double(p2.y)/ps));
+		Tile pa(int(double(p1.x)/ps), 
+		        int(double(p1.y)/ps));
+		Tile pb(int(double(p2.x)/ps), 
+		        int(double(p2.y)/ps));
 		image->DrawLine(pa, pb, c, 2);
 
 		p2 = p1;
@@ -226,7 +226,7 @@ Minimap::DrawCities()
 {
 	double ps = (double)world.w() / (double)sz;
 	for(const auto& city : world.map().cities()) {
-		Point<int> p = city->pos();
+		Tile p = city->pos();
 		Color c(128, 0, 0);
 		image->HollowBox(Rect((p.x/ps)-6, (p.y/ps)-6, 12, 12), c);
 		image->FillBox(Rect((p.x/ps)-4, (p.y/ps)-4, 8, 8), c);

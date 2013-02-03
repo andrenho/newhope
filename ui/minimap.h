@@ -32,7 +32,7 @@ private:
 	void DrawRivers();
 	void DrawCities();
 	void HandleEvents();
-	void DrawPath(const std::vector<Point<int>>& points, Color c);
+	void DrawPath(const std::vector<Tile>& points, Color c);
 
 	static int CreationThread(void* self);
 

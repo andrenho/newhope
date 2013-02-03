@@ -58,9 +58,9 @@ private:
 
 	const MapParameters& pars_;
 	std::vector<Biome*> biomes_;
-	std::vector<Polygon*> rivers_;
-	std::vector<Polygon*> lava_;
-	std::vector<Polygon*> roads_;
+	std::vector<Polygon<Tile>*> rivers_;
+	std::vector<Polygon<Tile>*> lava_;
+	std::vector<Polygon<Tile>*> roads_;
 	std::vector<City*> cities_;
 
 	DISALLOW_COPY_AND_ASSIGN(MapBuild);
