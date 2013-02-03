@@ -200,7 +200,7 @@ Minimap::DrawRivers()
 
 
 void 
-Minimap::DrawPath(const vector<Point<int>>& points, Color c)
+Minimap::DrawPath(const vector<Tile>& points, Color c)
 {
 	double ps = double(world.w()) / double(sz);
 	Point<int> p2 = Point<int>(-1, -1);

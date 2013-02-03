@@ -8,7 +8,8 @@ using namespace std;
 
 #include "util/logger.h"
 
-Polygon::Polygon(Point<int>* points, int n_points)
+template<typename T>
+Polygon<T>::Polygon(T* points, int n_points)
 	: Polygon()
 {
 	for(int i(0); i<n_points; i++) {
@@ -17,17 +18,19 @@ Polygon::Polygon(Point<int>* points, int n_points)
 }
 
 
-Polygon::Polygon(Rect r)
+template<typename T>
+Polygon<T>::Polygon(Rect r)
 	: Polygon()
 {
-	points_.push_back(Point<int>(r.x, r.y));
-	points_.push_back(Point<int>((r.x+r.w), r.y));
-	points_.push_back(Point<int>((r.x+r.w), (r.y+r.h)));
-	points_.push_back(Point<int>(r.x, (r.y+r.h)));
+	points_.push_back(T(r.x, r.y));
+	points_.push_back(T((r.x+r.w), r.y));
+	points_.push_back(T((r.x+r.w), (r.y+r.h)));
+	points_.push_back(T(r.x, (r.y+r.h)));
 }
 
 
-void Polygon::FakeVoronoi(unsigned int seed, int w, int h, int density, 
+template<typename T>
+void Polygon<T>::FakeVoronoi(unsigned int seed, int w, int h, int density, 
 		vector<Polygon*>& polygons)
 {
 	if(density > 100) {
@@ -42,7 +45,7 @@ void Polygon::FakeVoronoi(unsigned int seed, int w, int h, int density,
 
 	// add points
 	int n_points(0), max_x(0), max_y(0);
-	Point<int> points[100][100];
+	T points[100][100];
 	const int d(w / density / 4);
 	for(x=(w/density*3/2), xx=0; x<w; x+=(w/density*3/2)) {
 		for(y=(h/density), yy=0; y<h; y+=(h/density)) {
@@ -87,16 +90,16 @@ void Polygon::FakeVoronoi(unsigned int seed, int w, int h, int density,
 }
 
 
-const Point<int> 
-Polygon::Midpoint() const
+template<typename T> const T 
+Polygon<T>::Midpoint() const
 {
-	static Point<int> invalid( -1, -1);
+	static T invalid( -1, -1);
 	if(midpoint == invalid)
 	{
 		if(limit_x1 == INT_MAX) {
 			CalculateLimits();
 		}
-		midpoint = (const Point<int>) {
+		midpoint = (const T) {
 			limit_x1 + (limit_x2 - limit_x1) / 2,
 			limit_y1 + (limit_y2 - limit_y1) / 2
 		};
@@ -105,8 +108,8 @@ Polygon::Midpoint() const
 }
 
 
-void 
-Polygon::CalculateLimits() const
+template<typename T> void 
+Polygon<T>::CalculateLimits() const
 {
 	for(const auto& point : points_) {
 		int x(point.x);
@@ -124,19 +127,19 @@ Polygon::CalculateLimits() const
 }
 
 
-void 
-Polygon::MidlineDisplacement(int n)
+template<typename T> void 
+Polygon<T>::MidlineDisplacement(int n)
 {
 	if(n == 0) {
 		CalculateLimits();
 	} else {
-		vector<Point<int>> new_points;
+		vector<T> new_points;
 		for(auto point = points_.begin(); point != points_.end(); point++) {
-			Point<int> p1(*point);
-			Point<int> p2(points_.front());
+			T p1(*point);
+			T p2(points_.front());
 			if(point+1 != points_.end())
 				p2 = *(point+1);
-			Point<int> p3(p1.Displace(p2, 6));
+			T p3(p1.Displace(p2, 6));
 			new_points.push_back(p1);
 			new_points.push_back(p3);
 		}
@@ -147,8 +150,8 @@ Polygon::MidlineDisplacement(int n)
 }
 
 
-void
-Polygon::Debug() const
+template<typename T> void
+Polygon<T>::Debug() const
 {
 	for(const auto& point : points_) {
 		logger.Debug("%d %d", point.x, point.y);
@@ -156,15 +159,15 @@ Polygon::Debug() const
 }
 
 
-bool 
-Polygon::ContainsPoint(Point<int> p) const
+template<typename T> template<typename F> bool 
+Polygon<T>::ContainsPoint(F p) const
 {
 	return find(points_.begin(), points_.end(), p) != points_.end();
 }
 
 
-void 
-Polygon::NeighbourPoints(Point<int> p, vector<Point<int>>& neigh_points) const
+template<typename T> template<typename F> void 
+Polygon<T>::NeighbourPoints(F p, vector<F>& neigh_points) const
 {
 	assert(points_.size() >= 3);
 
@@ -187,8 +190,8 @@ Polygon::NeighbourPoints(Point<int> p, vector<Point<int>>& neigh_points) const
 }
 
 
-bool 
-Polygon::IsTouching(Polygon const& poly)
+template<typename T> bool 
+Polygon<T>::IsTouching(Polygon const& poly)
 {
 	for(auto const& p: poly.points_) {
 		if(find(points_.begin(), points_.end(), p) != points_.end()) {
@@ -199,10 +202,10 @@ Polygon::IsTouching(Polygon const& poly)
 }
 
 
-bool
-Polygon::BorderIntersects(Rect const& r)
+template<typename T> bool
+Polygon<T>::BorderIntersects(Rect const& r)
 {
-	Point<int> prect[4][2] {
+	T prect[4][2] {
 		{ { r.x,     r.y     }, { r.x+r.w, r.y } },
 		{ { r.x+r.w, r.y     }, { r.x+r.w, r.y+r.h } },
 		{ { r.x+r.w, r.y+r.h }, { r.x,     r.y+r.h } },
@@ -211,11 +214,11 @@ Polygon::BorderIntersects(Rect const& r)
 
 	for(unsigned int i(0); i<points_.size()-1; i++)
 	{
-		Point<int> a(points_[i]),
+		T a(points_[i]),
 		           b(points_[i+1]);
 
 		for(int j(0); j<4; j++) {
-			Point<int> c(prect[j][0]),
+			T c(prect[j][0]),
 			           d(prect[j][1]);
 			bool abc((b.x - a.x) * (c.y - a.y) > 
 				 (b.y - a.y) * (c.x - a.x));

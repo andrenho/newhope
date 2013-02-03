@@ -23,9 +23,9 @@ public:
 			const Resources& res);
 	~CityEngine();
 
-	void AddBuildings(Point<int> p, ImgQueue& st, double feet) const;
+	void AddBuildings(Tile p, ImgQueue& st, double feet) const;
 private:
-	void AddBuildingTile(Point<int> p, ImgQueue& st, 
+	void AddBuildingTile(Tile p, ImgQueue& st, 
 			const City& city, double feet) const;
 	void AddBackWall(ImgQueue& st, const Tiles& tile) const;
 	void AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const;

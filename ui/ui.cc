@@ -22,6 +22,9 @@ UI::UI(const World& world, const GraphicLibrary& video)
 	  char_engine(new CharEngine(world, video, *res, *this)),
 	  frame_timer(nullptr)
 {
+	RelPoint::rx = &rx;
+	RelPoint::ry = &ry;
+
 	terrain_sf->Resize(video.Window().w, video.Window().h);
 	minimap->Reset();
 }
@@ -134,8 +137,8 @@ UI::MoveView(int horiz, int vert)
 	rx -= horiz;
 	ry -= vert;
 
-	terrain_sf->SetTopLeft(Point<int>((rx/TileSize), 
-			                 (ry/TileSize)));
+	terrain_sf->SetTopLeft(Tile((rx/TileSize), 
+			            (ry/TileSize)));
 }
 
 
@@ -151,7 +154,7 @@ UI::GoToScr(Point<T> p)
 void
 UI::CenterHero()
 {
-	Point<int> src(TileToScr(world.Hero().pos()));
+	ScreenPoint src(world.Hero().pos());
 	src.x -= video.Window().w / 2;
 	src.y -= video.Window().h / 2;
 	GoToScr(src);

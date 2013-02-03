@@ -84,7 +84,7 @@ TerrainSurface::AreasToRedraw(vector<Rect>& rects)
 
 
 void 
-TerrainSurface::SetTopLeft(Point<int> p)
+TerrainSurface::SetTopLeft(Tile p)
 {
 	tiles_to_redraw.clear();
 
@@ -114,13 +114,13 @@ TerrainSurface::SetTopLeft(Point<int> p)
 			for(nx=(this->w + this->x - (p.x - tsx)); 
 					nx < (this->w + this->x); nx++) {
 				for(ny=this->y; ny < (this->h + this->y); ny++) {
-					tiles_to_redraw.insert(Point<int>(nx, ny));
+					tiles_to_redraw.insert(Tile(nx, ny));
 				}
 			}
 		} else if(p.x < tsx) {
 			for(nx=this->x; nx < (this->x + tsx - p.x); nx++) {
 				for(ny=this->y; ny < (this->h + this->y); ny++) {
-					tiles_to_redraw.insert(Point<int>(nx, ny));
+					tiles_to_redraw.insert(Tile(nx, ny));
 				}
 			}
 		}
@@ -128,14 +128,14 @@ TerrainSurface::SetTopLeft(Point<int> p)
 			for(ny=(this->h + this->y - (p.y - tsy)); 
 					ny < (this->h + this->y); ny++) {
 				for(nx=this->x; nx < (this->w + this->x); nx++) {
-					tiles_to_redraw.insert(Point<int>(nx, ny));
+					tiles_to_redraw.insert(Tile(nx, ny));
 				}
 			}
 		}
 		else if(p.y < tsy) {
 			for(ny=this->y; ny < (this->y + tsy - p.y); ny++) {
 				for(nx=this->x; nx < (this->w + this->x); nx++) {
-					tiles_to_redraw.insert(Point<int>(nx, ny));
+					tiles_to_redraw.insert(Tile(nx, ny));
 				}
 			}
 		}
@@ -148,12 +148,12 @@ TerrainSurface::Redraw()
 {
 	for(int x(this->x); x<(this->x + this->w); x++)
 		for(int y(this->y); y<(this->y + this->h); y++)
-			tiles_to_redraw.insert(Point<int>(x, y));
+			tiles_to_redraw.insert(Tile(x, y));
 }
 
 
 void 
-TerrainSurface::DrawTile(Point<int> p)
+TerrainSurface::DrawTile(Tile p)
 {
 	Rect r((p.x - this->x) * TileSize, 
 	       (p.y - this->y) * TileSize, 
@@ -164,7 +164,7 @@ TerrainSurface::DrawTile(Point<int> p)
 
 
 const Image* 
-TerrainSurface::TileSurface(Point<int> p)
+TerrainSurface::TileSurface(Tile p)
 {
 	// build queue
 	ImgQueue st;
@@ -206,7 +206,7 @@ static map<TerrainType, string> basic {
 
 
 void 
-TerrainSurface::BuildTile(Point<int> p, ImgQueue& st)
+TerrainSurface::BuildTile(Tile p, ImgQueue& st)
 {
 	// basic terrain
 	TerrainType terrain(world.Terrain(p));
@@ -232,18 +232,18 @@ TerrainSurface::BuildTile(Point<int> p, ImgQueue& st)
 
 
 void
-TerrainSurface::BuildTileBorders(Point<int> p, TerrainType t, ImgQueue& st)
+TerrainSurface::BuildTileBorders(Tile p, TerrainType t, ImgQueue& st)
 {
 	// find terrains around
 	TerrainType around[8] {
-		world.Terrain(Point<int>(p.x-1, p.y-1)),
-		world.Terrain(Point<int>(p.x  , p.y-1)),
-		world.Terrain(Point<int>(p.x+1, p.y-1)),
-		world.Terrain(Point<int>(p.x-1, p.y  )),
-		world.Terrain(Point<int>(p.x+1, p.y  )),
-		world.Terrain(Point<int>(p.x-1, p.y+1)),
-		world.Terrain(Point<int>(p.x  , p.y+1)),
-		world.Terrain(Point<int>(p.x+1, p.y+1))
+		world.Terrain(Tile(p.x-1, p.y-1)),
+		world.Terrain(Tile(p.x  , p.y-1)),
+		world.Terrain(Tile(p.x+1, p.y-1)),
+		world.Terrain(Tile(p.x-1, p.y  )),
+		world.Terrain(Tile(p.x+1, p.y  )),
+		world.Terrain(Tile(p.x-1, p.y+1)),
+		world.Terrain(Tile(p.x  , p.y+1)),
+		world.Terrain(Tile(p.x+1, p.y+1))
 	};
 	
 	// compact list and order by importance
@@ -316,7 +316,7 @@ TerrainSurface::BuildBorder(TerrainType t, uint8_t bs, ImgQueue& st)
 
 
 void 
-TerrainSurface::AddTreeShadows(Point<int> p, ImgQueue& st) const
+TerrainSurface::AddTreeShadows(Tile p, ImgQueue& st) const
 {
 	// sides
 	static vector<string> sfx = {
@@ -324,7 +324,7 @@ TerrainSurface::AddTreeShadows(Point<int> p, ImgQueue& st) const
 	};
 	
 	// find terrains around
-	Point<int> around[9] {
+	Tile around[9] {
 		{p.x-1, p.y-1}, {p.x  , p.y-1}, {p.x+1, p.y-1},
 		{p.x-1, p.y  }, {p.x,   p.y  }, {p.x+1, p.y  },
 		{p.x-1, p.y+1}, {p.x  , p.y+1}, {p.x+1, p.y+1} };
@@ -346,7 +346,7 @@ TerrainSurface::AddTreeShadows(Point<int> p, ImgQueue& st) const
 
 
 void 
-TerrainSurface::AddFirstPlane(Point<int> p, ImgQueue& st, double feet) const
+TerrainSurface::AddFirstPlane(Tile p, ImgQueue& st, double feet) const
 {
 	AddTrees(p, st, feet);
 	city_engine->AddBuildings(p, st, feet);
@@ -354,7 +354,7 @@ TerrainSurface::AddFirstPlane(Point<int> p, ImgQueue& st, double feet) const
 
 
 void 
-TerrainSurface::AddTrees(Point<int> p, ImgQueue& st, double feet) const
+TerrainSurface::AddTrees(Tile p, ImgQueue& st, double feet) const
 {
 	// sides
 	static vector<string> sfx = {
@@ -362,11 +362,11 @@ TerrainSurface::AddTrees(Point<int> p, ImgQueue& st, double feet) const
 	};
 
 	// find terrains around
-	Point<int> around[9] {
+	Tile around[9] {
 		{p.x-1, p.y-1}, {p.x  , p.y-1}, {p.x+1, p.y-1},
 		{p.x-1, p.y  }, {p.x,   p.y  }, {p.x+1, p.y  },
 		{p.x-1, p.y+1}, {p.x  , p.y+1}, {p.x+1, p.y+1} };
-	Point<int> around_treetop[9] {
+	Tile around_treetop[9] {
 		{p.x-1, p.y+1}, {p.x  , p.y+1}, {p.x+1, p.y+1},
 		{p.x-1, p.y+2}, {p.x,   p.y+2}, {p.x+1, p.y+2},
 		{p.x-1, p.y+3}, {p.x  , p.y+3}, {p.x+1, p.y+3} };
