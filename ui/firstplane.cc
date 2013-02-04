@@ -22,7 +22,7 @@ FirstPlane::DrawObjectsInFrontOf(const Person& person) const
 {
 	for(double x(person.pos().x); x<=(person.pos().x+1); x++) {
 		for(double y(person.pos().y); y<=(person.pos().y+2); y++) {
-			DrawFrontTile({x, y}, person.pos().y);
+			DrawFrontTile(Tile(x, y).ToInt(), person.pos().y);
 		}
 	}
 

@@ -55,7 +55,7 @@ void Polygon<T>::FakeVoronoi(unsigned int seed, int w, int h, int density,
 			} else {
 				mx = (xx % 2) ? x+d : x-d;
 			}
-			points[xx][yy++] = { mx, y };
+			points[xx][yy++] = T(mx, y);
 			n_points++;
 		}
 		max_y = yy;
@@ -99,10 +99,8 @@ Polygon<T>::Midpoint() const
 		if(limit_x1 == INT_MAX) {
 			CalculateLimits();
 		}
-		midpoint = (const T) {
-			limit_x1 + (limit_x2 - limit_x1) / 2,
-			limit_y1 + (limit_y2 - limit_y1) / 2
-		};
+		midpoint = T(limit_x1 + (limit_x2 - limit_x1) / 2,
+			     limit_y1 + (limit_y2 - limit_y1) / 2);
 	}
 	return midpoint;
 }

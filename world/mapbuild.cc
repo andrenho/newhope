@@ -11,6 +11,8 @@ using namespace std;
 #include "world/biome.h"
 #include "world/city.h"
 
+#include "util/polygon.cc"
+
 MapBuild::MapBuild(const MapParameters& pars)
 	: pars_(pars)
 {
@@ -53,8 +55,8 @@ MapBuild::CreatePolygons()
 	logger.Debug("Generating map polygons...");
 
 	// create layout
-	vector<Polygon*> polygons;
-	Polygon::FakeVoronoi(pars_.seed, pars_.w, pars_.h, 60, polygons);
+	vector<Polygon<TileElevation>*> polygons;
+	Polygon<TileElevation>::FakeVoronoi(pars_.seed, pars_.w, pars_.h, 60, polygons);
 
 	// add biomes_
 	for(auto it(polygons.begin()); it != polygons.end(); it++)
@@ -68,10 +70,10 @@ MapBuild::CreateCoastline()
 	logger.Debug("Generating map coastline...");
 
 	// middle square
-	int qw(pars_.w / 8),
-	    qh(pars_.h / 8);
-	Point<int> pts[] { { qw*2, qh*2 }, { qw*6, qh*2 }, 
-		           { qw*6, qh*6 }, { qw*2, qh*6 } };
+	double qw(pars_.w / 8),
+	       qh(pars_.h / 8);
+	Tile pts[] { { qw*2, qh*2 }, { qw*6, qh*2 }, 
+	             { qw*6, qh*6 }, { qw*2, qh*6 } };
 
 	// disturb points
 	int max_disturb(qw);
@@ -81,10 +83,10 @@ MapBuild::CreateCoastline()
 	}
 	
 	// create coastline
-	Polygon polygon(pts, 4);
+	Polygon<Tile> polygon(pts, 4);
 	polygon.MidlineDisplacement(4);
 	for(const auto& biome: biomes_) {
-		Point<int> p(biome->polygon().Midpoint());
+		Tile p(biome->polygon().Midpoint());
 		if(!polygon.PointInPolygon(p)) {
 			biome->set_terrain(t_WATER);
 		}
@@ -100,7 +102,7 @@ MapBuild::CreateLakes()
 	for(int i(0); i<rand()%2+3; i++) {
 		Rect r(rand() % 3000 + 800, rand() % 3000 + 800,
 				rand() % 500 + 100, rand() % 500 + 100);
-		Polygon lake(r);
+		Polygon<Tile> lake(r);
 		lake.MidlineDisplacement(2);
 		for(const auto& biome : biomes_) {
 			if(lake.PointInPolygon(biome->polygon().Midpoint())) {
@@ -119,8 +121,8 @@ MapBuild::CreateElevation()
 	// set water elevation
 	for(const auto& biome : biomes_) {
 		if(biome->terrain() == t_WATER) {
-			for(const auto& point : biome->polygon().points()) {
-				point.elevation = -1;
+			for(auto& point : biome->polygon().changeable_points()) {
+				point.set_elevation(-1);
 			}
 			biome->set_elevation(-1);
 		}
@@ -132,12 +134,11 @@ MapBuild::CreateElevation()
 		if(biome->terrain() != t_WATER)
 		{
 			int tot_alt(0);
-			for(const auto& point: biome->polygon().points()) {
-				point.elevation = DistanceFromWater(
-						point, false);
-				point.elevation += rand() % 200;
-				tot_alt += point.elevation;
-				max_alt = max(max_alt, point.elevation);
+			for(auto& point: biome->polygon().changeable_points()) {
+				point.set_elevation(DistanceFromWater(
+						point, false) + (rand() % 200));
+				tot_alt += point.elevation();
+				max_alt = max(max_alt, point.elevation());
 			}
 			biome->set_elevation(tot_alt / 
 					biome->polygon().points().size());
@@ -165,7 +166,7 @@ MapBuild::CreateRivers()
 		int b(rand() % biomes_.size());
 		if(biomes_[b]->terrain() != t_WATER) {
 			int k(rand() % biomes_[b]->polygon().points().size());
-			Point<int> p(biomes_[b]->polygon().points()[k]);
+			TileElevation p(biomes_[b]->polygon().points()[k]);
 			if(DistanceFromWater(p, false) > 600) {
 				rivers_.push_back(CreateFlow(p));
 				--rivers__left;
@@ -319,8 +320,8 @@ MapBuild::CreateRoads()
 		sort(cs.begin(), cs.end(), 
 			[&city](City* const& c1, City* const& c2) -> bool
 			{ 
-				int d1 = c1->pos().Distance(city->pos());
-				int d2 = c2->pos().Distance(city->pos());
+				double d1 = c1->pos().Distance(city->pos());
+				double d2 = c2->pos().Distance(city->pos());
 				return d1 < d2;
 			});
 
@@ -463,24 +464,33 @@ MapBuild::CreateRoad(const City& c1, const City& c2)
 	}
 
 	const Biome* b(&c1.biome());
-	Polygon* road(new Polygon());
+	Polygon<Tile>* road(new Polygon<Tile>());
 
 	// create road points
 	while(b != &c2.biome()) {
 
 		road->AddPoint(b->polygon().Midpoint());
 
-		// find neighbour biomes_
-		vector<const Biome*> biomes_;
-		BiomeNeighbours(*b, biomes_);
+		// ignore biomes that already have this road point
+		vector<const Biome*> ign;
+		for(const auto& biome: biomes_) {
+			if(find(road->points().begin(), road->points().end(), 
+			biome->polygon().Midpoint()) != road->points().end()) {
+				ign.push_back(biome);
+			}
+		}
+
+		// find neighbour biomes
+		vector<const Biome*> biomes;
+		BiomeNeighbours(*b, biomes, ign);
 
 		// find closest biome
-		sort(biomes_.begin(), biomes_.end(), 
+		sort(biomes.begin(), biomes.end(), 
 			[&c2](const Biome* const& b1, const Biome* const& b2) -> bool
 			{ 
-				int d1(b1->polygon().Midpoint().Distance(
+				double d1(b1->polygon().Midpoint().Distance(
 					c2.biome().polygon().Midpoint()));
-				int d2(b2->polygon().Midpoint().Distance(
+				double d2(b2->polygon().Midpoint().Distance(
 					c2.biome().polygon().Midpoint()));
 				if(b1->terrain() == t_WATER) {
 					d1 = INT_MAX;
@@ -493,7 +503,7 @@ MapBuild::CreateRoad(const City& c1, const City& c2)
 		
 		// next biome
 		road->AddPoint(b->polygon().Midpoint());
-		b = biomes_[0];
+		b = biomes[0];
 	}
 
 	// add roads_
@@ -503,19 +513,19 @@ MapBuild::CreateRoad(const City& c1, const City& c2)
 }
 
 
-Polygon*
-MapBuild::CreateFlow(Point<int> start, int iterations)
+Polygon<Tile>*
+MapBuild::CreateFlow(TileElevation start, int iterations)
 {
-	Polygon* poly(new Polygon());
-	Point<int> p(start);
+	Polygon<Tile>* poly(new Polygon<Tile>());
+	TileElevation p(start);
 	int iter(0);
 
-	while(p.elevation != -1 && iter < iterations) {
+	while(p.elevation() != -1 && iter < iterations) {
 
 		poly->AddPoint(p);
 		
 		// find neighbours
-		vector<Point<int>> neighbours;
+		vector<TileElevation> neighbours;
 		for(const auto& biome : biomes_) {
 			if(biome->polygon().ContainsPoint(p)) {
 				biome->polygon().NeighbourPoints(p, neighbours);
@@ -525,9 +535,9 @@ MapBuild::CreateFlow(Point<int> start, int iterations)
 
 		// order by elevation
 		sort(neighbours.begin(), neighbours.end(), 
-		[](Point<int> const& p1, Point<int> const& p2) -> bool
+		[](TileElevation const& p1, TileElevation const& p2) -> bool
 		{ 
-			return p1.elevation < p2.elevation; 
+			return p1.elevation() < p2.elevation(); 
 		});
 
 		// skip points already added
@@ -552,7 +562,7 @@ MapBuild::CreateFlow(Point<int> start, int iterations)
 
 
 int 
-MapBuild::DistanceFromWater(Point<int> const& p, bool include_rivers_)
+MapBuild::DistanceFromWater(Tile const& p, bool include_rivers_)
 {
 	int dist = INT_MAX;
 
@@ -593,11 +603,14 @@ MapBuild::AreNeighbours(const Biome& b1, const Biome& b2)
 
 
 void 
-MapBuild::BiomeNeighbours(const Biome& biome, vector<const Biome*>& biomes_)
+MapBuild::BiomeNeighbours(const Biome& biome, vector<const Biome*>& biomes, 
+		const vector<const Biome*>& ign)
 {
 	for(const auto& b: this->biomes_) {
+		if(find(ign.begin(), ign.end(), b) != ign.end())
+			continue;
 		if(biome.polygon().IsTouching(b->polygon()) && &biome != b) {
-			biomes_.push_back(b);
+			biomes.push_back(b);
 		}
 	}
 }

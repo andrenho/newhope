@@ -14,6 +14,7 @@ SRC = main.cc		    	\
       util/logger.cc        	\
       util/i18n.cc          	\
       util/polygon.cc       	\
+      util/point.cc		\
       world/building.cc     	\
       world/buildingimage.cc	\
       world/city.cc         	\

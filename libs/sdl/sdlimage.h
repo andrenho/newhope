@@ -23,7 +23,6 @@ public:
 	void Update();
 	void FillBox(Color c);
 	void FillBox(Rect r, Color c);
-	void DrawLine(Point<int> p1, Point<int> p2, Color c, int w=1);
 	void RemoveAlphaChannel();
 
 	inline void SetPixel(int x, int y, Color c)

@@ -17,7 +17,7 @@ public:
 
 	Point (const Point& other) :
 		x(other.x), y(other.y) { }
-	
+
 	Point& operator=(const Point& other)
 	{
 		if(this != &other) {
@@ -48,10 +48,6 @@ public:
 		return (y*10000+x) < (p.y*10000+p.x);
 	}
 
-	inline Point Sum(int x, int y) const {
-		return Point { this->x+x, this->y+y };
-	}
-
 	template<typename F> Point<F> operator+(Point<F> p) const {
 		return Point { this->x+p.x, this->y+p.y };
 	}
@@ -74,20 +70,33 @@ public:
 	Tile(double x, double y) : Point<double>(x, y) { }
 	template <typename F> Tile(const Point<F>& p) : Tile(p.x, p.y) { }
 
-	Tile operator+(Tile p) const {
+	Tile operator+(const Tile& p) const {
 		return Tile(this->x+p.x, this->y+p.y);
 	}
 
-	Tile operator-(Tile p) const {
+	Tile operator-(const Tile& p) const {
 		return Tile(this->x-p.x, this->y-p.y);
+	}
+
+	Tile ToInt() const {
+		return Tile(static_cast<int>(x), static_cast<int>(y));
 	}
 };
 
 
 class TileElevation: public Tile {
 public:
-	TileElevation(double x, double y) : Tile(x, y), elevation(0) { }
-	int elevation;
+	TileElevation() : Tile(0, 0), elevation_(0) { }
+	TileElevation(double x, double y) : Tile(x, y), elevation_(0) { }
+
+	TileElevation(const TileElevation& other) :
+		Tile(other.x, other.y), elevation_(other.elevation()) { }
+
+	inline const int elevation() const { return elevation_; }
+	inline void set_elevation(int e) { elevation_ = e; }
+
+private:
+	int elevation_;
 };
 
 
@@ -106,8 +115,8 @@ public:
 	RelPoint(int x, int y) : Point<int>(x, y) { }
 
 	RelPoint(const Tile& t) : 
-		RelPoint((int)((t.x * (double)TileSize)) - *rx,
-			 (int)((t.y * (double)TileSize)) - *ry) { }
+		RelPoint((int)((t.x * (double)TileSize)) - *RelPoint::rx,
+			 (int)((t.y * (double)TileSize)) - *RelPoint::ry) { }
 
 	static int *rx, *ry;
 };

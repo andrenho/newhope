@@ -39,6 +39,7 @@ public:
 	}
 
 	inline const std::vector<T>& points() const { return points_; }
+	inline std::vector<T>& changeable_points() { return points_; }
 
 private:
 	mutable int limit_x1, limit_y1, limit_x2, limit_y2;
@@ -48,7 +49,7 @@ private:
 	DISALLOW_COPY_AND_ASSIGN(Polygon);
 
 public:
-	inline bool PointInPolygon(T p) const
+	template <typename F> inline bool PointInPolygon(F p) const
 	{
 		// prefilter
 		if(p.x < limit_x1 || p.y < limit_y1 

@@ -50,11 +50,12 @@ private:
 			std::vector<const City*> const& c2);
 	void FindCityCluster(const City* city, std::vector<const City*>& cs);
 	void CreateRoad(const City& c1, const City& c2);
-	Polygon<Tile>* CreateFlow(Tile start, int iterations=INT_MAX);
-	int DistanceFromWater(Point<int> const& p, bool include_rivers);
+	Polygon<Tile>* CreateFlow(TileElevation start, int iterations=INT_MAX);
+	int DistanceFromWater(Tile const& p, bool include_rivers);
 	bool AreNeighbours(const Biome& b1, const Biome& b2);
 	void BiomeNeighbours(const Biome& biome, 
-			std::vector<const Biome*>& biomes);
+			std::vector<const Biome*>& biomes,
+			const std::vector<const Biome*>& ign=std::vector<const Biome*>());
 
 	const MapParameters& pars_;
 	std::vector<Biome*> biomes_;
