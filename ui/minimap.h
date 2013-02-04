@@ -3,7 +3,11 @@
 
 #include <map>
 #include <vector>
-#include <thread>
+#ifdef USE_CPP_THREADS
+#  include <thread>
+#else
+#  include <pthread.h>
+#endif
 
 #include "libs/colors.h"
 #include "util/point.h"
@@ -34,12 +38,17 @@ private:
 	void HandleEvents();
 	void DrawPath(const std::vector<Tile>& points, Color c);
 
-	static int CreationThread(void* self);
-
 	const GraphicLibrary& video;
 	const World& world;
 	const Resources& res;
+
+#ifdef USE_CPP_THREADS
+	static int CreationThread(void* self);
 	std::thread* thr;
+#else
+	static void* CreationThread(void* self);
+	pthread_t* thr;
+#endif
 	Image* image;
 	int sz;
 	bool thread_killed;

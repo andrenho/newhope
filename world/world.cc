@@ -18,7 +18,7 @@ World::World(int w, int h) :
 {
 	logger.Debug("Building map_...");
 	MapParameters pars {
-		.seed = 1,
+		.seed = 2,
 		.w = w_,
 		.h = h_,
 		.n_rivers = 15,
