@@ -48,9 +48,9 @@ private:
 
 class NullLibrary : public GraphicLibrary {
 public:
-	NullLibrary() : GraphicLibrary() { Window = new NullImage(); }
+	NullLibrary() : GraphicLibrary() { window_ = new NullImage(); }
 
-	~NullLibrary() { delete Window; }
+	~NullLibrary() { delete window_; }
 
 	inline Timer* CreateTimer(int wait_ms) const {
 		return new NullTimer();

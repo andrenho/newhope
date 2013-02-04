@@ -1,5 +1,7 @@
 #include "world/building.h"
 
+#include "world/city.h"
+
 #include <cstdlib>
 using namespace std;
 
@@ -11,6 +13,11 @@ Building::Building(const City& city, const BuildingType type,
 
 }
 
+
+int Building::X() const { return city_.pos().x + xrel_; }
+int Building::Y() const { return city_.pos().y + yrel_; }
+int Building::W() const { return image_.w(); }
+int Building::H() const { return image_.h(); }
 
 string 
 Building::OutdoorsLayout(int x, int y) const

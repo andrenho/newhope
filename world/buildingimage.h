@@ -4,6 +4,17 @@
 #include <string>
 #include <vector>
 
+// TODO building types:
+//  - bank
+//  - car dealership
+//  - market
+//  - dwellings
+
+// Second phase:
+//  - merchants guild (?)
+//  - knights guild (?)
+//  - bar
+
 class BuildingImage {
 public:
 	BuildingImage(int w, int h, std::vector<std::string> layout)
