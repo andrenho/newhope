@@ -10,22 +10,23 @@ class World;
 class Person {
 public:
 	Person(const World& world, Point<double> pos)
-		: Pos(pos), Facing('s'), world(world), mov_x(0), mov_y(0),
-	          step(0) { }
+		: pos_(pos), facing_('s'), world_(world), mov_x_(0), mov_y_(0),
+	          step_(0) { }
 	~Person();
 
 	void Process();
 	void Movement(int x, int y);
 
-	inline int Step() const { return step; }
-
-	Point<double> Pos;
-	char Facing;
+	inline const int step() const { return step_; }
+	inline const Point<double> pos() const { return pos_; }
+	inline const char facing() const { return facing_; }
 
 private:
-	const World& world;
-	int mov_x, mov_y;
-	int step;
+	Point<double> pos_;
+	char facing_;
+	const World& world_;
+	int mov_x_, mov_y_;
+	int step_;
 
 	DISALLOW_COPY_AND_ASSIGN(Person);
 };

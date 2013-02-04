@@ -34,21 +34,10 @@ CityEngine::~CityEngine()
 void 
 CityEngine::AddBuildings(Point<int> p, ImgQueue& st, double feet) const
 {
-	for(const auto& city: world.map->cities) {
+	for(const auto& city: world.map().cities()) {
 		if(city->Limits().ContainsPoint(p)) {
 			AddBuildingTile(p, st, *city, feet);
 		}
-		/*
-		if(city->Limits().ContainsPoint(p)) {
-			for(const auto& b: city->buildings) {
-				Rect r(city->pos.x + b->xrel,
-				       city->pos.y + b->yrel,
-				       b->W()+1, b->H()+1); // +1 for shadow
-				if(r.ContainsPoint(p)) {
-					AddBuildingTile(p, st, *b, feet);
-				}
-			}
-		}*/
 	}
 }
 
@@ -82,8 +71,10 @@ CityEngine::AddBuildingTile(Point<int> p, ImgQueue& st,
 	};
 
 	// draw stuff
+	AddShadows(st, tile);
 	AddBackWall(st, tile);
-	AddWall(st, tile);
+	AddWall(st, tile, *building);
+	AddWindows(st, tile);
 	AddDoorFrames(st, tile);
 	AddRoof(st, tile);
 }
@@ -119,7 +110,7 @@ CityEngine::AddBackWall(ImgQueue& st, const Tiles& tile) const
 
 
 void 
-CityEngine::AddWall(ImgQueue& st, const Tiles& tile) const
+CityEngine::AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const
 {
 	// draw walls
 	if(tile.c == "w1") {
@@ -128,29 +119,84 @@ CityEngine::AddWall(ImgQueue& st, const Tiles& tile) const
 		st.push(res["house_n"]);
 	} else if(tile.c == "w3") {
 		st.push(res["house_ne"]);
+		st.push(res["shadow_house_nw"]);
 	} else if(tile.c == "w4") {
 		st.push(res["house_w"]);
 	} else if(tile.c == "w5") {
 		st.push(res["house_c"]);
 	} else if(tile.c == "w6") {
 		st.push(res["house_e"]);
+		st.push(res["shadow_house_nw"]);
 	} else if(tile.c == "w7") {
 		st.push(res["house_sw"]);
 	} else if(tile.c == "w8") {
 		st.push(res["house_s"]);
 	} else if(tile.c == "w9") {
 		st.push(res["house_se"]);
-	} else if(tile.c == "d1") {
+		st.push(res["shadow_house_sw"]);
+	} else if(tile.c == "dn" || tile.c == "dN") {
 		st.push(res["house_door_a_1"]);
-	} else if(tile.c == "d2") {
+	} else if(tile.c == "ds") {
 		st.push(res["house_s"]);
 		st.push(res["house_door_a_2"]);
 		st.push(res["house_stairs_1"]);
 	}
 
+	// sign
+	if(tile.c == "ws") {
+		st.push(res["house_c"]);
+		if(b.Type() == BuildingType::BANK) {
+			st.push(res["sign_bank"]);
+		}
+	}
+
 	// stairs
-	if(tile.n == "d2") {
+	if(tile.n == "ds") {
 		st.push(res["house_stairs_2"]);
+	}
+	if(tile.w == "ds") {
+		st.push(res["shadow_stairs_n"]);
+	}
+	if(tile.nw == "ds") {
+		st.push(res["shadow_stairs_s"]);
+	}
+}
+
+
+void 
+CityEngine::AddShadows(ImgQueue& st, const Tiles& tile) const
+{
+	if(tile.c != "  ") {
+		return;
+	}
+
+	if(tile.w == "w9") {
+		st.push(res["shadow_house_se"]);
+	} else if(tile.w == "w6" || tile.w == "w3") {
+		st.push(res["shadow_house_ne"]);
+	}
+
+	if(tile.w == "R9") {
+		st.push(res["shadow_house_ne"]);
+		st.push(res["shadow_roof_s"]);
+	} else if(tile.w == "R6") {
+		st.push(res["shadow_roof_n"]);
+	}
+}
+
+
+void 
+CityEngine::AddWindows(ImgQueue& st, const Tiles& tile) const
+{
+	if(tile.c == "Ww" || tile.c == "WW") {
+		st.push(res["house_c"]);
+		st.push(res["house_window_c"]);
+	} else if(tile.s == "Ww") {
+		st.push(res["house_window_n"]);
+	} else if(tile.s == "WW") {
+		st.push(res["house_window_decor"]);
+	} else if(tile.n == "Ww" || tile.n == "WW") {
+		st.push(res["house_window_s"]);
 	}
 }
 
@@ -158,26 +204,36 @@ CityEngine::AddWall(ImgQueue& st, const Tiles& tile) const
 void 
 CityEngine::AddDoorFrames(ImgQueue& st, const Tiles& tile) const
 {
-	if(tile.se == "d1")
+	if(tile.se == "dn" || tile.se == "dN") {
 		st.push(res["house_door_frame_nw"]);
-	if(tile.s == "d1")
+	}
+	if(tile.s == "dn") {
 		st.push(res["house_door_frame_n"]);
-	if(tile.sw == "d1")
+	} else if(tile.s == "dN") {
+		st.push(res["house_door_decor"]);
+	}
+	if(tile.sw == "dn" || tile.sw == "dN") {
 		st.push(res["house_door_frame_ne"]);
-	if(tile.e == "d1")
+	}
+	if(tile.e == "dn" || tile.e == "dN") {
 		st.push(res["house_door_frame_w"]);
-	if(tile.w == "d1")
+	}
+	if(tile.w == "dn" || tile.w == "dN") {
 		st.push(res["house_door_frame_e"]);
-	if(tile.e == "d2")
+	}
+	if(tile.e == "ds") {
 		st.push(res["house_door_frame_sw"]);
-	if(tile.w == "d2")
+	}
+	if(tile.w == "ds") {
 		st.push(res["house_door_frame_se"]);
+	}
 }
 
 
 void 
 CityEngine::AddRoof(ImgQueue& st, const Tiles& tile) const
 {
+	// roof corners
 	if(tile.c == "R1") { 
 		st.push(res["house_roof_corner_nw"]);
 	} else if(tile.c == "R2") { 
@@ -196,7 +252,10 @@ CityEngine::AddRoof(ImgQueue& st, const Tiles& tile) const
 		st.push(res["house_roof_corner_s"]);
 	} else if(tile.c == "R9") { 
 		st.push(res["house_roof_corner_se"]);
-	} else if(tile.c == "r1") { 
+	}
+
+	// roofs
+	if(tile.c == "r1") { 
 		st.push(res["house_roof_nw"]);
 	} else if(tile.c == "r2") { 
 		st.push(res["house_roof_n"]);
@@ -218,5 +277,13 @@ CityEngine::AddRoof(ImgQueue& st, const Tiles& tile) const
 		st.push(res["house_roof_inner_left"]);
 	} else if(tile.c == "RR") { 
 		st.push(res["house_roof_inner_right"]);
+	}
+
+	// chimneys
+	if(tile.c == "C6") {
+		st.push(res["house_roof_e"]);
+		st.push(res["house_chimney_s"]);
+	} else if(tile.s == "C6") {
+		st.push(res["house_chimney_n"]);
 	}
 }

@@ -10,10 +10,10 @@ Person::~Person()
 void
 Person::Process()
 {
-	if(!(mov_x == 0 && mov_y == 0)) {
-		Pos.x += mov_x / 4.0;
-		Pos.y += mov_y / 4.0;
-		++step;
+	if(!(mov_x_ == 0 && mov_y_ == 0)) {
+		pos_.x += mov_x_ / 4.0;
+		pos_.y += mov_y_ / 4.0;
+		++step_;
 	}
 }
 
@@ -21,21 +21,21 @@ Person::Process()
 void 
 Person::Movement(int x, int y)
 {
-	if(mov_x == x && mov_y == y) {
+	if(mov_x_ == x && mov_y_ == y) {
 		return;
 	}
 
-	mov_x = x; 
-	mov_y = y;
-	step = 0;
+	mov_x_ = x; 
+	mov_y_ = y;
+	step_ = 0;
 
 	if(x == 1) {
-		Facing = 'e';
+		facing_ = 'e';
 	} else if(x == -1) {
-		Facing = 'w';
+		facing_ = 'w';
 	} else if(y == 1) {
-		Facing = 's';
+		facing_ = 's';
 	} else if(y == -1) {
-		Facing = 'n';
+		facing_ = 'n';
 	}
 }

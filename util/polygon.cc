@@ -12,7 +12,7 @@ Polygon::Polygon(Point<int>* points, int n_points)
 	: Polygon()
 {
 	for(int i(0); i<n_points; i++) {
-		this->points.push_back(points[i]);
+		this->points_.push_back(points[i]);
 	}
 }
 
@@ -20,10 +20,10 @@ Polygon::Polygon(Point<int>* points, int n_points)
 Polygon::Polygon(Rect r)
 	: Polygon()
 {
-	points.push_back(Point<int>(r.x, r.y));
-	points.push_back(Point<int>((r.x+r.w), r.y));
-	points.push_back(Point<int>((r.x+r.w), (r.y+r.h)));
-	points.push_back(Point<int>(r.x, (r.y+r.h)));
+	points_.push_back(Point<int>(r.x, r.y));
+	points_.push_back(Point<int>((r.x+r.w), r.y));
+	points_.push_back(Point<int>((r.x+r.w), (r.y+r.h)));
+	points_.push_back(Point<int>(r.x, (r.y+r.h)));
 }
 
 
@@ -75,12 +75,12 @@ void Polygon::FakeVoronoi(unsigned int seed, int w, int h, int density,
 	for(y=0; y<(max_y-2); y++) {
 		for(x=(y % 2) ? 1 : 0; x<(max_x-1); x+=2) {
 			polygons.push_back(new Polygon());
-			polygons.back()->points.push_back(points[x][y]);
-			polygons.back()->points.push_back(points[x+1][y]);
-			polygons.back()->points.push_back(points[x+1][y+1]);
-			polygons.back()->points.push_back(points[x+1][y+2]);
-			polygons.back()->points.push_back(points[x][y+2]);
-			polygons.back()->points.push_back(points[x][y+1]);
+			polygons.back()->points_.push_back(points[x][y]);
+			polygons.back()->points_.push_back(points[x+1][y]);
+			polygons.back()->points_.push_back(points[x+1][y+1]);
+			polygons.back()->points_.push_back(points[x+1][y+2]);
+			polygons.back()->points_.push_back(points[x][y+2]);
+			polygons.back()->points_.push_back(points[x][y+1]);
 			polygons.back()->CalculateLimits();
 		}
 	}
@@ -108,7 +108,7 @@ Polygon::Midpoint() const
 void 
 Polygon::CalculateLimits() const
 {
-	for(const auto& point : points) {
+	for(const auto& point : points_) {
 		int x(point.x);
 		if(x < limit_x1)
 			limit_x1 = x;
@@ -131,16 +131,16 @@ Polygon::MidlineDisplacement(int n)
 		CalculateLimits();
 	} else {
 		vector<Point<int>> new_points;
-		for(auto point = points.begin(); point != points.end(); point++) {
+		for(auto point = points_.begin(); point != points_.end(); point++) {
 			Point<int> p1(*point);
-			Point<int> p2(points.front());
-			if(point+1 != points.end())
+			Point<int> p2(points_.front());
+			if(point+1 != points_.end())
 				p2 = *(point+1);
 			Point<int> p3(p1.Displace(p2, 6));
 			new_points.push_back(p1);
 			new_points.push_back(p3);
 		}
-		points.swap(new_points);
+		points_.swap(new_points);
 		
 		MidlineDisplacement(n-1);
 	}
@@ -150,7 +150,7 @@ Polygon::MidlineDisplacement(int n)
 void
 Polygon::Debug() const
 {
-	for(const auto& point : points) {
+	for(const auto& point : points_) {
 		logger.Debug("%d %d", point.x, point.y);
 	}
 }
@@ -159,28 +159,28 @@ Polygon::Debug() const
 bool 
 Polygon::ContainsPoint(Point<int> p) const
 {
-	return find(points.begin(), points.end(), p) != points.end();
+	return find(points_.begin(), points_.end(), p) != points_.end();
 }
 
 
 void 
 Polygon::NeighbourPoints(Point<int> p, vector<Point<int>>& neigh_points) const
 {
-	assert(points.size() >= 3);
+	assert(points_.size() >= 3);
 
-	auto r(find(points.begin(), points.end(), p));
-	if(r == points.end()) {
+	auto r(find(points_.begin(), points_.end(), p));
+	if(r == points_.end()) {
 		return;
 	}
 
-	if(*r == points.back()) {
-		neigh_points.push_back(points.front());
+	if(*r == points_.back()) {
+		neigh_points.push_back(points_.front());
 	} else {
 		neigh_points.push_back(*(r+1));
 	}
 
-	if(*r == points.front()) {
-		neigh_points.push_back(points.back());
+	if(*r == points_.front()) {
+		neigh_points.push_back(points_.back());
 	} else {
 		neigh_points.push_back(*(r-1));
 	}
@@ -190,8 +190,8 @@ Polygon::NeighbourPoints(Point<int> p, vector<Point<int>>& neigh_points) const
 bool 
 Polygon::IsTouching(Polygon const& poly)
 {
-	for(auto const& p: poly.points) {
-		if(find(points.begin(), points.end(), p) != points.end()) {
+	for(auto const& p: poly.points_) {
+		if(find(points_.begin(), points_.end(), p) != points_.end()) {
 			return true;
 		}
 	}
@@ -209,10 +209,10 @@ Polygon::BorderIntersects(Rect const& r)
 		{ { r.x,     r.y+r.h }, { r.x,     r.y } }
 	};
 
-	for(unsigned int i(0); i<points.size()-1; i++)
+	for(unsigned int i(0); i<points_.size()-1; i++)
 	{
-		Point<int> a(points[i]),
-		           b(points[i+1]);
+		Point<int> a(points_[i]),
+		           b(points_[i+1]);
 
 		for(int j(0); j<4; j++) {
 			Point<int> c(prect[j][0]),

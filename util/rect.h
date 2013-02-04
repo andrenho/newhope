@@ -32,16 +32,6 @@ public:
 		return p.x >= x && p.x < (x+w) && p.y >= y && p.y < (y+h);
 	}
 
-	/*Rect& operator=(const Rect& other) {
-		if(this != &other) {
-			x = other.x;
-			y = other.y;
-			w = other.w;
-			h = other.h;
-		}
-		return *this;
-	}*/
-
 	constexpr Rect(const Rect& other) :
 		x(other.x), y(other.y), w(other.w), h(other.h) { }
 

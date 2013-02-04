@@ -1,39 +1,38 @@
 #include "world/city.h"
 
 #include "world/building.h"
-#include "world/buildingtype.h"
 
-City::City(Point<int> pos, const Biome& biome)
-		: pos(pos), biome(biome)
+City::City(Point<int> pos, const Biome& biome, CityStyle style)
+		: pos_(pos), biome_(biome), style_(style)
 {
-	buildings.push_back(new Building(*this, BuildingType::BANK, -4, -4));
+	buildings_.push_back(new Building(*this, BuildingType::BANK, -4, -4));
 }
 
 
 City::~City()
 {
-	for(auto& b: buildings)
+	for(auto& b: buildings_)
 		delete b;
-	buildings.clear();
+	buildings_.clear();
 }
 
 
 const Rect 
 City::Limits() const
 {
-	Point<int> min_(pos), max_(pos);
-	for(const auto& building: buildings) {
-		if(pos.x + building->xrel < min_.x) {
-			min_.x = pos.x + building->xrel;
+	Point<int> min_(pos_), max_(pos_);
+	for(const auto& building: buildings_) {
+		if(building->X() < min_.x) {
+			min_.x = building->X();
 		}
-		if(pos.y + building->yrel < min_.y) {
-			min_.y = pos.y + building->yrel;
+		if(building->Y() < min_.y) {
+			min_.y = building->Y();
 		}
-		if(pos.x + building->xrel + building->W() > max_.x) {
-			max_.x = pos.x + building->xrel + building->W();
+		if(building->X() + building->W() > max_.x + 1) {
+			max_.x = building->X() + building->W() + 1;
 		}
-		if(pos.y + building->yrel + building->H() > max_.y) {
-			max_.y = pos.y + building->yrel + building->H();
+		if(building->Y() + building->H() > max_.y + 1) {
+			max_.y = building->Y() + building->H() + 1;
 		}
 	}
 	++max_.x; ++max_.y;
@@ -48,8 +47,8 @@ City::Layout(Point<int> p) const
 		return "  ";
 	}
 
-	for(const auto& b: buildings) {
-		Point<int> p2 = p - pos - Point<int>(b->xrel, b->yrel);
+	for(const auto& b: buildings_) {
+		Point<int> p2 = p - pos_ - Point<int>(b->xrel(), b->yrel());
 		return b->OutdoorsLayout(p2);
 	}
 	return "  ";
@@ -59,7 +58,7 @@ City::Layout(Point<int> p) const
 const Building* 
 City::BuildingInPoint(Point<int> p) const
 {
-	for(const auto& b: buildings) {
+	for(const auto& b: buildings_) {
 		if(b->Rectangle().ContainsPoint(p))
 			return b;
 	}

@@ -28,7 +28,9 @@ private:
 	void AddBuildingTile(Point<int> p, ImgQueue& st, 
 			const City& city, double feet) const;
 	void AddBackWall(ImgQueue& st, const Tiles& tile) const;
-	void AddWall(ImgQueue& st, const Tiles& tile) const;
+	void AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const;
+	void AddShadows(ImgQueue& st, const Tiles& tile) const;
+	void AddWindows(ImgQueue& st, const Tiles& tile) const;
 	void AddDoorFrames(ImgQueue& st, const Tiles& tile) const;
 	void AddRoof(ImgQueue& st, const Tiles& tile) const;
 

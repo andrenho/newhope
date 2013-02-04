@@ -19,7 +19,7 @@ using namespace std;
 
 TerrainSurface::TerrainSurface(const World& world, const GraphicLibrary& video,
 		const Resources& res) :
-	Img(nullptr), world(world), video(video), res(res), 
+	image_(nullptr), world(world), video(video), res(res), 
 	x(-10000), y(-10000), w(0), h(0), 
 	city_engine(new CityEngine(world, video, res))
 { 
@@ -31,8 +31,8 @@ TerrainSurface::~TerrainSurface()
 	for(const auto& image: imagehash) {
 		delete image.second;
 	}
-	if(Img) {
-		delete Img;
+	if(image_) {
+		delete image_;
 	}
 	delete city_engine;
 }
@@ -59,13 +59,13 @@ TerrainSurface::RedrawImg(vector<Rect>& rects)
 void 
 TerrainSurface::Resize(int scr_w, int scr_h)
 {
-	if(Img) {
-		delete Img;
+	if(image_) {
+		delete image_;
 	}
-	Img = video.CreateImage(scr_w + (TileSize + (scr_w % TileSize)),
+	image_ = video.CreateImage(scr_w + (TileSize + (scr_w % TileSize)),
 			        scr_h + (TileSize + (scr_h % TileSize)), false);
-	this->w = Img->w / TileSize;
-	this->h = Img->h / TileSize;
+	this->w = image_->w / TileSize;
+	this->h = image_->h / TileSize;
 
 	tiles_to_redraw.clear();
 	Redraw();
@@ -73,7 +73,7 @@ TerrainSurface::Resize(int scr_w, int scr_h)
 	SetTopLeft({0, 0});
 
 	logger.Debug("window resize resquested: %d %d", w, h);
-	logger.Debug("trsurf resize: %d %d (%d %d)", Img->w, Img->h, w, h);
+	logger.Debug("trsurf resize: %d %d (%d %d)", image_->w, image_->h, w, h);
 }
 
 
@@ -92,8 +92,8 @@ TerrainSurface::SetTopLeft(Point<int> p)
 		return;
 	}
 
-	if(abs(this->x - p.x)*TileSize > video.Window->w
-	|| abs(this->y - p.y)*TileSize > video.Window->h) {
+	if(abs(this->x - p.x)*TileSize > video.Window().w
+	|| abs(this->y - p.y)*TileSize > video.Window().h) {
 		this->x = p.x;
 		this->y = p.y;
 		Redraw();
@@ -101,7 +101,7 @@ TerrainSurface::SetTopLeft(Point<int> p)
 		int nx, ny;
 
 		Rect r((this->x - p.x)*TileSize, (this->y - p.y)*TileSize);
-		Img->Blit(*Img, r);
+		image_->Blit(*image_, r);
 
 		int tsx = this->x, 
 		    tsy = this->y;
@@ -159,8 +159,7 @@ TerrainSurface::DrawTile(Point<int> p)
 	       (p.y - this->y) * TileSize, 
 	       TileSize, TileSize);
 
-	const Image* img = TileSurface(p);
-	img->Blit(*Img, r);
+	TileSurface(p)->Blit(*image_, r);
 }
 
 

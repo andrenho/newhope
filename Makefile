@@ -3,27 +3,27 @@
 
 include config.mk
 
-SRC = main.cc		    \
-      ui/charengine.cc      \
-      ui/cityengine.cc      \
-      ui/firstplane.cc      \
-      ui/minimap.cc         \
-      ui/resource.cc        \
-      ui/terrainsurface.cc  \
-      ui/ui.cc              \
-      util/logger.cc        \
-      util/i18n.cc          \
-      util/polygon.cc       \
-      world/building.cc     \
-      world/buildingtype.cc \
-      world/city.cc         \
-      world/mapbuild.cc     \
-      world/person.cc       \
+SRC = main.cc		    	\
+      ui/charengine.cc      	\
+      ui/cityengine.cc      	\
+      ui/firstplane.cc      	\
+      ui/minimap.cc         	\
+      ui/resource.cc        	\
+      ui/terrainsurface.cc  	\
+      ui/ui.cc              	\
+      util/logger.cc        	\
+      util/i18n.cc          	\
+      util/polygon.cc       	\
+      world/building.cc     	\
+      world/buildingimage.cc	\
+      world/city.cc         	\
+      world/mapbuild.cc     	\
+      world/person.cc       	\
       world/world.cc
 
 ifeq (${SDL},yes)
-  SRC += libs/sdl/sdl.cc       \
-         libs/sdl/sdlfont.cc   \
+  SRC += libs/sdl/sdl.cc       	\
+         libs/sdl/sdlfont.cc   	\
          libs/sdl/sdlimage.cc
 endif
 
@@ -33,7 +33,7 @@ OBJ = ${SRC:.cc=.o}
 HEADERS = $(filter-out main.h,${SRC:.cc=.h}) libs/graphiclibrary.h \
 	util/point.h world/biome.h util/mapcache.h util/defines.h  \
 	libs/sdl/sdltimer.h
-DIST = AUTHORS HACKING LICENSE NEWS README INSTALL
+DIST = AUTHORS HACKING NEWS README INSTALL
 DATA = $(wildcard data/*.png) $(wildcard data/*.ttf)
 
 all: options newhope translation

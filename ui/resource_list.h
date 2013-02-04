@@ -119,6 +119,9 @@ static const vector<Rect> house_rect {
 	tr(3,4),tr(4,4),tr(5,4),		// roof middle
 	tr(3,6),tr(4,6),tr(5,6),
 	tr(3,5),tr(4,5),tr(5,5),
+	tt(16,0,2,1),tt(16,1,2,2),tt(16,3,2,1), // windows
+	tr(3,2),tr(4,2),			// decoration
+	tr(6,0),tr(6,1),			// chimney
 };
 static const vector<string> house_sfx {
 	"_nw", "_n", "_ne", "_w", "_c", "_e", "_sw", "_s", "_se",
@@ -134,6 +137,31 @@ static const vector<string> house_sfx {
 	"_roof_nw", "_roof_n", "_roof_ne",
 	"_roof_w",  "_roof_c", "_roof_e",
 	"_roof_sw", "_roof_s", "_roof_se",
+	"_window_n", "_window_c", "_window_s",
+	"_door_decor", "_window_decor",
+	"_chimney_n", "_chimney_s",
+};
+
+// signs
+static const vector<Rect> signs_rect {
+	tr(0,1),tr(1,1),tr(2,1),
+};
+static const vector<string> signs_sfx {
+	"_inn", "_weapons", "_bank",
+};
+
+// shadow
+static const vector<Rect> shadow_rect {
+	Rect(96, 0, 2, 32), Rect(96, 7, 2, 32),
+	Rect(98, 0, 2, 32), Rect(98, 7, 2, 32),
+	Rect(96, 0, 4, 32), Rect(96, 7, 4, 32),
+	tr(5,0),tr(5,1),
+};
+static const vector<string> shadow_sfx {
+	"_house_nw", "_house_sw",
+	"_house_ne", "_house_se",
+	"_roof_n", "_roof_s",
+	"_stairs_n", "_stairs_s",
 };
 
 // resource file list
@@ -175,6 +203,12 @@ static const struct {
 	// house
 	{ "house", "house.png", house_rect, house_sfx },
 
+	// signs
+	{ "sign", "signs.png", signs_rect, signs_sfx },
+
+	// shadow
+	{ "shadow", "shadow.png", shadow_rect, shadow_sfx },
+
 	// terminal
 	{ "terminal", "terminal.png", {}, {} },
 
@@ -195,6 +229,9 @@ static const struct {
 	{ "house_door_frame_ne",  0, 16 },
 	{ "house_door_frame_w",  16,  0 },
 	{ "house_door_frame_sw", 16,  0 },
+	{ "house_window_n",       0, 16 },
+	{ "shadow_house_sw",     30,  0 },
+	{ "shadow_house_nw",     30,  0 },
 };
 
 #endif

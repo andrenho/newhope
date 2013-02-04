@@ -5,18 +5,20 @@
 
 #include "util/defines.h"
 #include "util/rect.h"
-#include "world/buildingtype.h"
+#include "world/buildingimage.h"
 #include "world/city.h"
+
+enum BuildingType { BANK };
 
 class Building {
 public:
-	explicit Building(const City& city, const BuildingType& type, 
+	explicit Building(const City& city, const BuildingType type, 
 			int xrel, int yrel);
 
-	inline int X() const { return city.pos.x + xrel; }
-	inline int Y() const { return city.pos.y + yrel; }
-	inline int W() const { return type.w; }
-	inline int H() const { return type.h; }
+	inline int X() const { return city_.pos().x + xrel_; }
+	inline int Y() const { return city_.pos().y + yrel_; }
+	inline int W() const { return image_.w(); }
+	inline int H() const { return image_.h(); }
 	inline const Rect Rectangle() const { 
 		return Rect(X(), Y(), W()+1, H()+1); 
 	}
@@ -27,11 +29,19 @@ public:
 	}
 
 	int HeightAt(int x) const;
+	inline const BuildingType Type() const { return type_; }
 
-	const int xrel, yrel;
+	// read members
+	inline int xrel() const { return xrel_; }
+	inline int yrel() const { return yrel_; }
+
 private:
-	const City& city;
-	const BuildingType& type;
+	const BuildingImage& Image() const;
+
+	const int xrel_, yrel_;
+	const City& city_;
+	const BuildingType type_;
+	const BuildingImage& image_;
 
 	DISALLOW_COPY_AND_ASSIGN(Building);
 };
