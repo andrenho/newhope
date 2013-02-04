@@ -1,10 +1,11 @@
 #include "ui/minimap.h"
 
-// FIXME: due to a bug in clang++, the thread code is not working here.
-// bug: http://llvm.org/bugs/show_bug.cgi?id=12730
-
 #include <algorithm>
-#include <thread>
+#ifdef USE_CPP_THREADS
+#  include <thread>
+#else
+#  include <pthread.h>
+#endif
 using namespace std;
 
 #include "libs/image.h"
@@ -51,7 +52,12 @@ void
 Minimap::Reset()
 {
 	KillThread();
+#ifdef USE_CPP_THREADS
 	thr = new thread(Minimap::CreationThread, (void*)this);
+#else
+	thr = new pthread_t();
+	pthread_create(thr, NULL, Minimap::CreationThread, (void*)this);
+#endif
 }
 
 
@@ -64,7 +70,11 @@ Minimap::Display()
 
 	// wait for thread to finish
 	if(thr) {
+#ifdef USE_CPP_THREADS
 		thr->join();
+#else
+		pthread_join(*thr, NULL);
+#endif
 		thr = nullptr;
 	}
 
@@ -80,7 +90,11 @@ Minimap::Display()
 }
 
 
+#ifdef USE_CPP_THREADS
 int
+#else
+void*
+#endif
 Minimap::CreationThread(void* minimap)
 {
 	static_cast<Minimap*>(minimap)->Create();
@@ -113,7 +127,11 @@ Minimap::KillThread()
 {
 	if(thr) {
 		thread_killed = 1;
+#ifdef USE_CPP_THREADS
 		thr->join();
+#else
+		pthread_join(*thr, NULL);
+#endif
 		delete thr;
 		thr = nullptr;
 		logger.Debug("Minimap thread killed.");

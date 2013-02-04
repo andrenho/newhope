@@ -8,6 +8,13 @@ MANPREFIX = ${PREFIX}/share/man
 NEWHOPEPREFIX = ${PREFIX}/share/newhope
 LOCALEPREFIX = /usr/share/locale
 
+# libraries
+SDL = yes
+
+# compiler and linker
+CC = g++
+#CC = clang++
+
 # parse translations
 GETTEXT = yes
 
@@ -16,10 +23,7 @@ DEBUG = yes
 PROFILING = no
 DUMA = no
 
-# libraries
-SDL = yes
-
-
+#########################################################################
 #
 # PLEASE AVOID CHANGING THE INFORMATION BELOW, UNLESS NECESSARY
 #
@@ -29,6 +33,7 @@ VERSION = 0.0.1
 
 # system libraries
 PNG = yes
+USE_CPP_THREADS = yes
 
 # basic flags
 CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${NEWHOPEPREFIX}\" -Wall \
@@ -81,6 +86,11 @@ ifeq (${PROFILING},yes)
   LDFLAGS += -pg
 endif
 
-# compiler and linker
-CC = g++
-#CC = clang++
+# use C++ threads
+ifeq (${USE_CPP_THREADS},yes)
+  ifeq (${CC},clang++)
+    USE_CPP_THREADS = no
+  else
+    CPPFLAGS += -DUSE_CPP_THREADS
+  endif
+endif
