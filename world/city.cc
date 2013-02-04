@@ -2,7 +2,7 @@
 
 #include "world/building.h"
 
-City::City(Point<int> pos, const Biome& biome, CityStyle style)
+City::City(Tile pos, const Biome& biome, CityStyle style)
 		: pos_(pos), biome_(biome), style_(style)
 {
 	buildings_.push_back(new Building(*this, BuildingType::BANK, -4, -4));
@@ -20,7 +20,7 @@ City::~City()
 const Rect 
 City::Limits() const
 {
-	Point<int> min_(pos_), max_(pos_);
+	Tile min_(pos_), max_(pos_);
 	for(const auto& building: buildings_) {
 		if(building->X() < min_.x) {
 			min_.x = building->X();
@@ -41,14 +41,14 @@ City::Limits() const
 
 
 std::string 
-City::Layout(Point<int> p) const
+City::Layout(Tile p) const
 {
 	if(!Limits().ContainsPoint(p)) {
 		return "  ";
 	}
 
 	for(const auto& b: buildings_) {
-		Point<int> p2 = p - pos_ - Point<int>(b->xrel(), b->yrel());
+		Tile p2 = p - pos_ - Tile(b->xrel(), b->yrel());
 		return b->OutdoorsLayout(p2);
 	}
 	return "  ";
@@ -56,7 +56,7 @@ City::Layout(Point<int> p) const
 
 
 const Building* 
-City::BuildingInPoint(Point<int> p) const
+City::BuildingInPoint(Tile p) const
 {
 	for(const auto& b: buildings_) {
 		if(b->Rectangle().ContainsPoint(p))

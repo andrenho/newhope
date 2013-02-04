@@ -9,7 +9,7 @@ class World;
 
 class Person {
 public:
-	Person(const World& world, Point<double> pos)
+	Person(const World& world, Tile pos)
 		: pos_(pos), facing_('s'), world_(world), mov_x_(0), mov_y_(0),
 	          step_(0) { }
 	~Person();
@@ -18,11 +18,11 @@ public:
 	void Movement(int x, int y);
 
 	inline const int step() const { return step_; }
-	inline const Point<double> pos() const { return pos_; }
+	inline const Tile pos() const { return pos_; }
 	inline const char facing() const { return facing_; }
 
 private:
-	Point<double> pos_;
+	Tile pos_;
 	char facing_;
 	const World& world_;
 	int mov_x_, mov_y_;

@@ -15,7 +15,7 @@ public:
 		: x(n), y(0), w(0), h(0) { }
 	Rect(int x, int y)
 		: x(x), y(y), w(0), h(0) { }
-	Rect(Point<int> p1, Point<int> p2)
+	template <typename T> Rect(Point<T> p1, Point<T> p2)
 		: x(std::min(p1.x, p2.x)),
 		  y(std::min(p1.y, p2.y)),
 		  w(std::max(p1.x, p2.x) - x),

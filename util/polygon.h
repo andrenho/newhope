@@ -9,6 +9,7 @@
 #include "util/rect.h"
 #include "util/point.h"
 
+template<typename T>
 class Polygon 
 {
 public:
@@ -17,15 +18,15 @@ public:
 		limit_x1(INT_MAX), limit_y1(INT_MAX), limit_x2(0), limit_y2(0),
 		midpoint({ -1, -1})
 	{ }
-	Polygon(Point<int>* points, int n_points);
+	Polygon(T* points, int n_points);
 	explicit Polygon(Rect r);
 
-	const Point<int> Midpoint() const;
+	const T Midpoint() const;
 	void MidlineDisplacement(int n);
 	void Debug() const;
-	void NeighbourPoints(Point<int> p, 
-			std::vector<Point<int>>& neigh_points) const;
-	bool ContainsPoint(Point<int> p) const;
+	template<typename F> void NeighbourPoints(F p, 
+			std::vector<F>& neigh_points) const;
+	template<typename F> bool ContainsPoint(F p) const;
 	bool IsTouching(Polygon const& p);
 	bool BorderIntersects(Rect const& r);
 	void CalculateLimits() const;
@@ -33,21 +34,22 @@ public:
 	static void FakeVoronoi(unsigned int seed, int w, int h, int density,
 			std::vector<Polygon*>& polygons);
 
-	inline const void AddPoint(Point<int> p) {
+	template<typename F> inline const void AddPoint(F p) {
 		points_.push_back(p);
 	}
 
-	inline const std::vector<Point<int>>& points() const { return points_; }
+	inline const std::vector<T>& points() const { return points_; }
+	inline std::vector<T>& changeable_points() { return points_; }
 
 private:
 	mutable int limit_x1, limit_y1, limit_x2, limit_y2;
-	mutable Point<int> midpoint;
-	std::vector<Point<int>> points_;
+	mutable T midpoint;
+	std::vector<T> points_;
 
 	DISALLOW_COPY_AND_ASSIGN(Polygon);
 
 public:
-	inline bool PointInPolygon(Point<int> p) const
+	template <typename F> inline bool PointInPolygon(F p) const
 	{
 		// prefilter
 		if(p.x < limit_x1 || p.y < limit_y1 

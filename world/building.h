@@ -24,7 +24,7 @@ public:
 	}
 
 	std::string OutdoorsLayout(int x, int y) const;
-	template <typename T> std::string OutdoorsLayout(Point<T> p) const {
+	std::string OutdoorsLayout(const Tile& p) const {
 		return OutdoorsLayout(p.x, p.y);
 	}
 

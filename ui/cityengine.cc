@@ -32,7 +32,7 @@ CityEngine::~CityEngine()
 
 
 void 
-CityEngine::AddBuildings(Point<int> p, ImgQueue& st, double feet) const
+CityEngine::AddBuildings(Tile p, ImgQueue& st, double feet) const
 {
 	for(const auto& city: world.map().cities()) {
 		if(city->Limits().ContainsPoint(p)) {
@@ -43,8 +43,8 @@ CityEngine::AddBuildings(Point<int> p, ImgQueue& st, double feet) const
 
 
 void 
-CityEngine::AddBuildingTile(Point<int> p, ImgQueue& st, 
-		const City& city, double feet) const
+CityEngine::AddBuildingTile(Tile p, ImgQueue& st, const City& city, 
+		double feet) const
 {
 	// find building
 	const Building* building = city.BuildingInPoint(p);
@@ -59,15 +59,15 @@ CityEngine::AddBuildingTile(Point<int> p, ImgQueue& st,
 
 	// find tiles
 	Tiles tile = {
-		city.Layout(p + Point<int>(-1, -1)),
-		city.Layout(p + Point<int>( 0, -1)),
-		city.Layout(p + Point<int>( 1, -1)),
-		city.Layout(p + Point<int>(-1,  0)),
-		city.Layout(p + Point<int>( 0,  0)),
-		city.Layout(p + Point<int>( 1,  0)),
-		city.Layout(p + Point<int>(-1,  1)),
-		city.Layout(p + Point<int>( 0,  1)),
-		city.Layout(p + Point<int>( 1,  1))
+		city.Layout(p + Tile(-1, -1)),
+		city.Layout(p + Tile( 0, -1)),
+		city.Layout(p + Tile( 1, -1)),
+		city.Layout(p + Tile(-1,  0)),
+		city.Layout(p + Tile( 0,  0)),
+		city.Layout(p + Tile( 1,  0)),
+		city.Layout(p + Tile(-1,  1)),
+		city.Layout(p + Tile( 0,  1)),
+		city.Layout(p + Tile( 1,  1))
 	};
 
 	// draw stuff

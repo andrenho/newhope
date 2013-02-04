@@ -24,6 +24,7 @@ public:
 	void Draw();
 	void EndFrame();
 
+	/*
 	template<typename T> Point<int> TileToScr(Point<T> t) const
 	{
 		return { (int)((t.x * (double)TileSize)),
@@ -42,7 +43,7 @@ public:
 	{
 		return { (t.x + rx) / (double)TileSize,
 			 (t.y + ry) / (double)TileSize };
-	}
+	}*/
 
 	inline bool Active() const { return active; }
 	inline void TurnOff() { active = false; }

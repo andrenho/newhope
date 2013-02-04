@@ -35,7 +35,38 @@ public:
 		FillBox(Rect(r.x, r.y+r.h-width, r.w, width), c);
 		FillBox(Rect(r.x+r.w-width, r.y, width, r.h), c);
 	}
-	virtual void DrawLine(Point<int> p1, Point<int> p2, Color c, int w=1) = 0;
+
+	template <typename T> void DrawLine(Point<T> p1, Point<T> p2, Color c, int line_width=1) {
+		int x0(min(max(p1.x, T(0)), T(this->w - line_width))),
+		    y0(min(max(p1.y, T(0)), T(this->h - line_width))),
+		    x1(min(p2.x, T(this->w - line_width))),
+		    y1(min(p2.y, T(this->h - line_width)));
+		int dx(abs(x1-x0)), sx(x0<x1 ? 1 : -1);
+		int dy(abs(y1-y0)), sy(y0<y1 ? 1 : -1);
+		int err((dx>dy ? dx : -dy)/2), e2;
+
+		for(;;) {
+			int xx(0);
+			int yy(0);
+			for(int x(0); x<line_width; x++)
+				for(int y(0); y<line_width; y++) {
+					SetPixel(x0+x+xx, y0+y+yy, c);
+				}
+			if(x0 == x1 && y0 == y1) {
+				break;
+			}
+			e2 = err;
+			if(e2 > -dx) {
+				err -= dy;
+				x0 += sx;
+			}
+			if(e2 < dy) {
+				err += dx;
+				y0 += sy;
+			}
+		}
+	}
+
 	virtual void RemoveAlphaChannel() = 0;
 
 	virtual inline bool HasAlpha() const { return has_alpha_; }

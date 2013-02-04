@@ -18,7 +18,7 @@ World::World(int w, int h) :
 {
 	logger.Debug("Building map_...");
 	MapParameters pars {
-		.seed = 2,
+		.seed = 1,
 		.w = w_,
 		.h = h_,
 		.n_rivers = 15,
@@ -35,7 +35,7 @@ World::World(int w, int h) :
 	people_.push_back(new Person(*this, map_->cities()[0]->pos()));
 
 	// create terrain cache
-	cache = new mapcache<Point<int>,TerrainType>(4000, TerrainCache, this);
+	cache = new mapcache<Tile,TerrainType>(4000, TerrainCache, this);
 
 	// randomize terrain
 	for(int i(0); i<100; i++) {
@@ -67,7 +67,7 @@ World::Process()
 
 
 TerrainType 
-World::Terrain(Point<int> p, bool use_cache) const
+World::Terrain(Tile p, bool use_cache) const
 {
 	if(use_cache) {
 		return (*cache)[p];
@@ -78,7 +78,7 @@ World::Terrain(Point<int> p, bool use_cache) const
 
 
 TerrainType
-World::FindBiome(World* ths, Point<int> p)
+World::FindBiome(World* ths, Tile p)
 {
 	// find biome
 	unsigned int sz(ths->map_->biomes().size());
@@ -92,7 +92,7 @@ World::FindBiome(World* ths, Point<int> p)
 
 
 TerrainType 
-World::TerrainCache(void* obj, Point<int> p)
+World::TerrainCache(void* obj, Tile p)
 {
 	World* ths((World*)obj);
 
@@ -115,16 +115,16 @@ World::TerrainCache(void* obj, Point<int> p)
 
 
 int
-World::Special(Point<int> p) const
+World::Special(Tile p) const
 {
-	return randspecial[p.x % 100][p.y % 100];
+	return randspecial[(int)p.x % 100][(int)p.y % 100];
 }
 
 
 TreeType 
-World::Tree(Point<int> p) const
+World::Tree(Tile p) const
 {
-	if(!((p.x + p.y) % 2))
+	if(!(((int)p.x + (int)p.y) % 2))
 		return NO_TREE;
 
 	const int DENSITY_NO_FOREST = 99,
@@ -152,7 +152,7 @@ World::Tree(Point<int> p) const
 
 
 bool 
-World::TreeSmall(Point<int> p) const
+World::TreeSmall(Tile p) const
 {
 	return Special(p) < 50;
 }
@@ -164,8 +164,8 @@ World::CreatePathsCache()
 	logger.Debug("Drawing polygons...");
 
 	static struct {
-		vector<Polygon*> const& map_build;
-		vector<Point<int>>& points;
+		vector<Polygon<Tile>*> const& map_build;
+		vector<Tile>& points;
 		int width;
 	} polygons[] {
 		{ map_->roads(),  roadpts,  6 },
@@ -175,7 +175,7 @@ World::CreatePathsCache()
 
 	for(const auto& polygon: polygons) {
 		// create a set with all the points
-		set<Point<int>> points;
+		set<Tile> points;
 		for(const auto& each: polygon.map_build) {
 			for(unsigned int i=0; i<each->points().size()-1; i++) {
 				AddPoints(each->points()[i], each->points()[i+1],
@@ -194,13 +194,13 @@ World::CreatePathsCache()
 
 
 void
-World::AddPoints(Point<int> p1, Point<int> p2, set<Point<int>>& points, 
+World::AddPoints(Tile p1, Tile p2, set<Tile>& points, 
 		int line_width)
 {
-	int x0(min(max(p1.x, 0), w_ - line_width)),
-	    y0(min(max(p1.y, 0), h_ - line_width)),
-	    x1(min(p2.x, w_ - line_width)),
-	    y1(min(p2.y, h_ - line_width));
+	int x0(min(max(p1.x, 0.0), double(w_ - line_width))),
+	    y0(min(max(p1.y, 0.0), double(h_ - line_width))),
+	    x1(min(p2.x, double(w_ - line_width))),
+	    y1(min(p2.y, double(h_ - line_width)));
 	int dx(abs(x1-x0)), sx(x0<x1 ? 1 : -1);
 	int dy(abs(y1-y0)), sy(y0<y1 ? 1 : -1);
 	int err((dx>dy ? dx : -dy)/2), e2;
@@ -210,7 +210,7 @@ World::AddPoints(Point<int> p1, Point<int> p2, set<Point<int>>& points,
 		int yy(0);
 		for(int x(-line_width/2); x<line_width/2; x++) {
 			for(int y(-line_width/2); y<line_width/2; y++) {
-				points.insert(Point<int>(x0+x+xx, y0+y+yy));
+				points.insert(Tile(x0+x+xx, y0+y+yy));
 			}
 		}
 		if(x0 == x1 && y0 == y1) {

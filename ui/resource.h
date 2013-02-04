@@ -8,6 +8,7 @@
 #include "libs/image.h"
 #include "util/logger.h"
 #include "util/defines.h"
+#include "util/point.h"
 
 class GraphicLibrary;
 class Rect;
@@ -29,11 +30,11 @@ public:
 		}
 	}
 
-	const inline Point<int> Desloc(const Image* name) const {
+	const inline ScreenPoint Desloc(const Image* name) const {
 		try {
 			return desloc.at(name);
 		} catch (std::out_of_range& e) {
-			return Point<int>(0, 0);
+			return ScreenPoint(0, 0);
 		}
 	}
 
@@ -45,7 +46,7 @@ private:
 
 	const GraphicLibrary& video;
 	std::map<const std::string, const Resource*> res;
-	std::map<const Image*, Point<int>> desloc;
+	std::map<const Image*, ScreenPoint> desloc;
 
 	DISALLOW_COPY_AND_ASSIGN(Resources);
 };

@@ -37,7 +37,7 @@ CharEngine::Draw(int scr_w, int scr_h) const
 
 	// add people
 	for(const auto& person: world.people()) {
-		Point<int> p(ui.TileToRel(person->pos()));
+		RelPoint p(person->pos());
 		if(p.x >= -TileSize && p.y >= -TileSize 
 		&& p.x < scr_w + TileSize && p.y < scr_h + TileSize) {
 			people_frame.push_back(person);
@@ -79,7 +79,7 @@ CharEngine::DrawPerson(const Person& person, int scr_w, int scr_h) const
 	string step(s.str());
 
 	// find position
-	Point<int> scr(ui.TileToRel(person.pos()));
+	RelPoint scr(person.pos());
 
 	// create image
 	string charimage(body + "_" + direction + "_" + step);

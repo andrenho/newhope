@@ -20,9 +20,9 @@ FirstPlane::~FirstPlane()
 void
 FirstPlane::DrawObjectsInFrontOf(const Person& person) const
 {
-	for(int x(person.pos().x); x<=(person.pos().x+1); x++) {
-		for(int y(person.pos().y); y<=(person.pos().y+2); y++) {
-			DrawFrontTile({x, y}, person.pos().y);
+	for(double x(person.pos().x); x<=(person.pos().x+1); x++) {
+		for(double y(person.pos().y); y<=(person.pos().y+2); y++) {
+			DrawFrontTile(Tile(x, y).ToInt(), person.pos().y);
 		}
 	}
 
@@ -30,17 +30,17 @@ FirstPlane::DrawObjectsInFrontOf(const Person& person) const
 
 
 void 
-FirstPlane::DrawFrontTile(Point<int> p, double feet) const
+FirstPlane::DrawFrontTile(Tile p, double feet) const
 {
 	// find image queue
 	queue<const Image*> st;
 	ui.TerrSurface()->AddFirstPlane(p, st, feet);
 
 	// draw
-	Point<int> rel = ui.TileToRel(p);
+	RelPoint rel(p);
 	while(!st.empty()) {
-		const Image* im = st.front();
-		Point<int> p = res.Desloc(im);
+		const Image* im(st.front());
+		Point<int> p(res.Desloc(im));
 		st.front()->Blit(video.Window(), rel + p);
 		st.pop();
 	}
