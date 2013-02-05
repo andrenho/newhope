@@ -2,6 +2,7 @@
 
 using namespace std;
 
+#include "util/logger.h"
 #include "world/building.h"
 
 City::City(Tile pos, const Biome& biome, CityStyle style)
@@ -73,9 +74,8 @@ void
 City::CreateLayout()
 {
 	int x1(-2), x2(2), turn(false);
-	for(auto bt: BuildingList())
-	{
-		int x(x2);
+	for(auto bt: BuildingList()) {
+		int x(turn ? x1 : x2);
 		const BuildingImage& image(Building::Image(*this, bt));
 		if(turn) {
 			x1 -= image.w() + 1;
@@ -83,8 +83,9 @@ City::CreateLayout()
 		}
 		buildings_.push_back(new Building(*this, bt, x, -image.h()));
 		if(!turn) {
-			x2 += image.w();
+			x2 += image.w() + 1;
 		}
+		turn = !turn;
 	}
 }
 
@@ -92,5 +93,5 @@ City::CreateLayout()
 const vector<BuildingType>
 City::BuildingList() const
 {
-	return { BANK, };
+	return { BANK, BANK };
 }
