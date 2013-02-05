@@ -44,10 +44,10 @@ Building::HeightAt(int x) const
 
 
 const BuildingImage& 
-Building::Image() const
+Building::Image(const City& city, const BuildingType type)
 {
-	if(city_.style() == CityStyle::VICTORIAN) {
-		if(type_ == BuildingType::BANK) {
+	if(city.style() == CityStyle::VICTORIAN) {
+		if(type == BuildingType::BANK) {
 			return BuildingImage::VICTORIAN_BANK;
 		} else {
 			abort();

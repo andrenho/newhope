@@ -72,9 +72,20 @@ City::BuildingInPoint(Tile p) const
 void
 City::CreateLayout()
 {
-	int x1(0), x2(0);
+	int x1(-2), x2(2), turn(false);
 	for(auto bt: BuildingList())
-		buildings_.push_back(new Building(*this, bt, -4, -4));
+	{
+		int x(x2);
+		const BuildingImage& image(Building::Image(*this, bt));
+		if(turn) {
+			x1 -= image.w() + 1;
+			x = x1;
+		}
+		buildings_.push_back(new Building(*this, bt, x, -image.h()));
+		if(!turn) {
+			x2 += image.w();
+		}
+	}
 }
 
 

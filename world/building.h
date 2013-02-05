@@ -26,19 +26,24 @@ public:
 	}
 
 	int HeightAt(int x) const;
-	inline const BuildingType Type() const { return type_; }
+	const BuildingType Type() const { return type_; }
 
 	int X() const;
 	int Y() const;
 	int W() const;
 	int H() const;
 
+	static const BuildingImage& Image(const City& city, 
+			const BuildingType type);
+
 	// read members
 	inline int xrel() const { return xrel_; }
 	inline int yrel() const { return yrel_; }
 
 private:
-	const BuildingImage& Image() const;
+	const BuildingImage& Image() const {
+		return Building::Image(city_, type_);
+	}
 
 	const int xrel_, yrel_;
 	const City& city_;
