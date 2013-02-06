@@ -5,12 +5,13 @@
 #include <cstdlib>
 using namespace std;
 
+int Building::unique_id_counter_ = 0;
+
 Building::Building(const City& city, const BuildingType type, 
 		int xrel, int yrel)
 	: xrel_(xrel), yrel_(yrel), city_(city), type_(type), 
-	  image_(Image())
+	  image_(Image()), unique_id_(unique_id_counter_++)
 {
-
 }
 
 

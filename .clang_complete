@@ -1,1 +1,1 @@
--DVERSION="0.0.1" -DDATADIR="/usr/local/share/newhope" -Wall -Wfatal-errors -I. -I/usr/include -std=c++11 -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -D_SDL -I/usr/include/libpng15   -DI18N -DLOCALEDIR="/usr/share/locale" -g -O0 -DDEBUG -DUSE_CPP_THREADS
+-DVERSION="0.0.1" -DDATADIR="/usr/local/share/newhope" -I. -I/usr/include -std=c++11 -I/usr/include/SDL -I/usr/include/libpng15

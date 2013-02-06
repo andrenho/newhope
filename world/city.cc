@@ -52,7 +52,10 @@ City::Layout(Tile p) const
 
 	for(const auto& b: buildings_) {
 		Tile p2 = p - pos_ - Tile(b->xrel(), b->yrel());
-		return b->OutdoorsLayout(p2);
+		string s = b->OutdoorsLayout(p2);
+		if(s != "  ") {
+			return s;
+		}
 	}
 	return "  ";
 }
@@ -62,8 +65,9 @@ const Building*
 City::BuildingInPoint(Tile p) const
 {
 	for(const auto& b: buildings_) {
-		if(b->Rectangle().ContainsPoint(p))
+		if(b->Rectangle().ContainsPoint(p)) {
 			return b;
+		}
 	}
 	return nullptr;
 }
