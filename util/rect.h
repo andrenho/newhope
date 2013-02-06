@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include "util/point.h"
+#include "util/logger.h"
 
 class Rect {
 public:
@@ -21,7 +22,7 @@ public:
 		  w(std::max(p1.x, p2.x) - x),
 		  h(std::max(p1.y, p2.y) - y) { }
 
-	inline void Add(int x, int y, int w, int h) {
+	void Add(int x, int y, int w, int h) {
 		this->x += x;
 		this->y += y;
 		this->w += w;
@@ -30,6 +31,10 @@ public:
 
 	template<typename T> bool ContainsPoint(Point<T> p) const {
 		return p.x >= x && p.x < (x+w) && p.y >= y && p.y < (y+h);
+	}
+
+	void Debug() const {
+		logger.Debug("%d %d %d %d", x, y, w, h);
 	}
 
 	constexpr Rect(const Rect& other) :

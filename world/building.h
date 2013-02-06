@@ -26,12 +26,13 @@ public:
 	}
 
 	int HeightAt(int x) const;
-	const BuildingType Type() const { return type_; }
-
 	int X() const;
 	int Y() const;
 	int W() const;
 	int H() const;
+
+	const BuildingType Type() const { return type_; }
+	const int UniqueID() const { return unique_id_; }
 
 	static const BuildingImage& Image(const City& city, 
 			const BuildingType type);
@@ -39,6 +40,8 @@ public:
 	// read members
 	inline int xrel() const { return xrel_; }
 	inline int yrel() const { return yrel_; }
+
+	static int unique_id_counter_;
 
 private:
 	const BuildingImage& Image() const {
@@ -49,6 +52,8 @@ private:
 	const City& city_;
 	const BuildingType type_;
 	const BuildingImage& image_;
+
+	int unique_id_;
 
 	DISALLOW_COPY_AND_ASSIGN(Building);
 };

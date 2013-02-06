@@ -22,7 +22,7 @@ World::World(int w, int h) :
 		.w = w_,
 		.h = h_,
 		.n_rivers = 15,
-		.n_cities = 20,
+		.n_cities = 1,
 		.n_roads = 10,
 	};
 	map_ = new MapBuild(pars);
