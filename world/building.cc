@@ -52,6 +52,8 @@ Building::Image(const City& city, const BuildingType type)
 			return BuildingImage::VICTORIAN_BANK;
 		} else if(type == BuildingType::MARKET) {
 			return BuildingImage::VICTORIAN_MARKET;
+		} else if(type == BuildingType::CAR_DEALERSHIP) {
+			return BuildingImage::VICTORIAN_CAR_DEALERSHIP;
 		} else {
 			abort();
 		}

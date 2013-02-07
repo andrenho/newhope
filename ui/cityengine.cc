@@ -143,11 +143,12 @@ CityEngine::AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const
 	}
 
 	// sign
-	if(tile.c == "ws") {
+	if(tile.c == "ws" || tile.c == "wS") {
 		st.push(res["house_c"]);
 		string s = b.Image().sign();
 		if(s != "") {
-			st.push(res["sign_" + s]);
+			st.push(res["sign_" + s + 
+				(tile.c[1] == 's' ? "_left" : "_right")]);
 		}
 	}
 
