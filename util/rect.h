@@ -22,11 +22,30 @@ public:
 		  w(std::max(p1.x, p2.x) - x),
 		  h(std::max(p1.y, p2.y) - y) { }
 
-	void Add(int x, int y, int w, int h) {
-		this->x += x;
-		this->y += y;
-		this->w += w;
-		this->h += h;
+	const Rect operator+(const Rect& r) const {
+		return Rect(r.x+x, r.y+y, r.w+w, r.h+h);
+	}
+
+	Rect& operator+=(const Rect& other) {
+		x += other.x;
+		y += other.y;
+		w += other.w;
+		h += other.h;
+		return *this;
+	}
+
+	Rect& operator=(const Rect& other) {
+		if(this != &other) {
+			x = other.x;
+			y = other.y;
+			w = other.w;
+			h = other.h;
+		}
+		return *this;
+	}
+
+	template<typename T> const Rect operator+(const Point<T>& p) const {
+		return Rect(x+p.x, y+p.y, w, h);
 	}
 
 	template<typename T> bool ContainsPoint(Point<T> p) const {
@@ -41,9 +60,6 @@ public:
 		x(other.x), y(other.y), w(other.w), h(other.h) { }
 
 	int x, y, w, h;
-
-private:
-	Rect& operator=(const Rect& other); // disallow assignment
 };
 
 #endif

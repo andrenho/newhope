@@ -27,7 +27,6 @@ public:
 private:
 	void AddBuildingTile(Tile p, ImgQueue& st, 
 			const City& city, double feet) const;
-	void AddGround(ImgQueue& st, const Tiles& tile) const;
 	void AddBackWall(ImgQueue& st, const Tiles& tile) const;
 	void AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const;
 	void AddShadows(ImgQueue& st, const Tiles& tile) const;

@@ -16,8 +16,8 @@ public:
 	explicit Building(const City& city, const BuildingType type, 
 			int xrel, int yrel);
 
-	inline const Rect Rectangle() const { 
-		return Rect(X(), Y(), W()+1, H()+1); 
+	const Rect Limits() const { 
+		return Rect(x(), y(), w()+1, h()+1); 
 	}
 
 	std::string OutdoorsLayout(int x, int y) const;
@@ -26,13 +26,15 @@ public:
 	}
 
 	int HeightAt(int x) const;
-	int X() const;
-	int Y() const;
-	int W() const;
-	int H() const;
+	int x() const;
+	int y() const;
+	int w() const;
+	int h() const;
+	const Rect ParkingLot() const; 
+	void Move(int x, int y) { xrel_ += x; yrel_ += y; }
 
-	const BuildingType Type() const { return type_; }
-	const int UniqueID() const { return unique_id_; }
+	const BuildingType type() const { return type_; }
+	const int uniqueID() const { return unique_id_; }
 
 	static const BuildingImage& Image(const City& city, 
 			const BuildingType type);
@@ -48,12 +50,12 @@ public:
 	static int unique_id_counter_;
 
 private:
-	const int xrel_, yrel_;
+	int xrel_, yrel_;
 	const City& city_;
 	const BuildingType type_;
 	const BuildingImage& image_;
-
 	int unique_id_;
+	Rect patio_;
 
 	DISALLOW_COPY_AND_ASSIGN(Building);
 };

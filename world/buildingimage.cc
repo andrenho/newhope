@@ -9,7 +9,7 @@
  *   r1..9 = roof
  *   C6    = roof with chimney
  *   Ww    = window (bottom, top is automatic, WW: extra decor)
- *   aa    = asphalt
+ *   a1..9 = asphalt
  */
 
 const BuildingImage BuildingImage::VICTORIAN_BANK = BuildingImage(
@@ -34,10 +34,10 @@ const BuildingImage BuildingImage::VICTORIAN_MARKET = BuildingImage(
 		  }, "market");
 
 const BuildingImage BuildingImage::VICTORIAN_CAR_DEALERSHIP = BuildingImage(
-		{ "R1r1r2r2r3R3  ",
-		  "R4r7r5r5C6R6  ",
-		  "R7R8R8R8R8R9  ",
-		  "w1w2w2w2w2w3aa",
-		  "w4Www5dnwSw6  ",
-		  "w7w8w8dsw8w9  ",
+		{ "R1r1r2r2r3R3",
+		  "R4r7r5r5C6R6",
+		  "R7R8R8R8R8R9",
+		  "w1w2w2w2w2w3",
+		  "w4Www5dnwSw6",
+		  "w7w8w8dsw8w9",
 		}, "car_dealership");

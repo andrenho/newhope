@@ -34,10 +34,9 @@ CityEngine::~CityEngine()
 void 
 CityEngine::AddBuildings(Tile p, ImgQueue& st, double feet) const
 {
-	for(const auto& city: world.map().cities()) {
-		if(city->Limits().ContainsPoint(p)) {
-			AddBuildingTile(p, st, *city, feet);
-		}
+	const City* city = nullptr;
+	if((city = world.CityOnTile(p))) {
+		AddBuildingTile(p, st, *city, feet);
 	}
 }
 
@@ -53,7 +52,7 @@ CityEngine::AddBuildingTile(Tile p, ImgQueue& st, const City& city,
 
 	// if the building foot is below the character feet, we don't draw
 	// the building in firt plane
-	double bfoot = building->Y() + building->HeightAt(p.x);
+	double bfoot = building->y() + building->HeightAt(p.x);
 	if(bfoot < (feet+1.5) && feet != 0.0)
 		return;
 
@@ -71,22 +70,12 @@ CityEngine::AddBuildingTile(Tile p, ImgQueue& st, const City& city,
 	};
 
 	// draw stuff
-	AddGround(st, tile);
 	AddShadows(st, tile);
 	AddBackWall(st, tile);
 	AddWall(st, tile, *building);
 	AddWindows(st, tile);
 	AddDoorFrames(st, tile);
 	AddRoof(st, tile);
-}
-
-
-void 
-CityEngine::AddGround(ImgQueue& st, const Tiles& tile) const
-{
-	if(tile.c == "aa") {
-		st.push(res["lavarock_c"]);
-	}
 }
 
 

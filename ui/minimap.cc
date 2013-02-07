@@ -147,7 +147,7 @@ Minimap::DrawPaper()
 		(video.Window().h/2) - (sz/2),
 		sz, sz);
 	Rect r2(r.x - 20, r.y - 20, r.w + 40, r.h + 40);
-	r.Add(-60, -85, 120, 170);
+	r += Rect(-60, -85, 120, 170);
 
 	// laterals
 	for(int y(r.y + res["mm_nw"]->h); y < r.y + r.h - 60; 

@@ -25,17 +25,17 @@ City::Limits() const
 {
 	Tile min_(pos_), max_(pos_);
 	for(const auto& building: buildings_) {
-		if(building->X() < min_.x) {
-			min_.x = building->X();
+		if(building->x() < min_.x) {
+			min_.x = building->x();
 		}
-		if(building->Y() < min_.y) {
-			min_.y = building->Y();
+		if(building->y() < min_.y) {
+			min_.y = building->y();
 		}
-		if(building->X() + building->W() > max_.x + 1) {
-			max_.x = building->X() + building->W() + 1;
+		if(building->x() + building->w() > max_.x + 1) {
+			max_.x = building->x() + building->w() + 1;
 		}
-		if(building->Y() + building->H() > max_.y + 1) {
-			max_.y = building->Y() + building->H() + 1;
+		if(building->y() + building->h() > max_.y + 1) {
+			max_.y = building->y() + building->h() + 1;
 		}
 	}
 	++max_.x; ++max_.y;
@@ -65,7 +65,7 @@ const Building*
 City::BuildingInPoint(Tile p) const
 {
 	for(const auto& b: buildings_) {
-		if(b->Rectangle().ContainsPoint(p)) {
+		if(b->Limits().ContainsPoint(p)) {
 			return b;
 		}
 	}
@@ -79,17 +79,18 @@ City::CreateLayout()
 {
 	int x1(-2), x2(2), turn(false);
 	for(auto bt: BuildingList()) {
+		auto b = new Building(*this, bt, 0, 0);
 		int x(turn ? x1 : x2);
-		const BuildingImage& image(Building::Image(*this, bt));
 		if(turn) {
-			x1 -= image.w() + 1;
+			x1 -= b->w() + 1;
 			x = x1;
 		}
-		buildings_.push_back(new Building(*this, bt, x, -image.h()));
+		b->Move(x, -b->h());
 		if(!turn) {
-			x2 += image.w() + 1;
+			x2 += b->w() + 1;
 		}
 		turn = !turn;
+		buildings_.push_back(b);
 	}
 }
 

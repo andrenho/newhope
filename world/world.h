@@ -7,7 +7,9 @@
 #include "util/defines.h"
 #include "util/point.h"
 #include "util/mapcache.h"
+#include "util/rect.h"
 
+class City;
 class MapBuild;
 class Person;
 
@@ -42,20 +44,22 @@ public:
 	int Special(Tile p) const;
 	TreeType Tree(Tile p) const;
 	bool TreeSmall(Tile p) const;
+	const City* CityOnTile(Tile t) const;
 
 	static TerrainType TerrainCache(void* obj, Tile p);
 
-	inline Person& Hero() const { return *people_[0]; }
+	Person& Hero() const { return *people_[0]; }
 
-	inline const int w() const { return w_; }
-	inline const int h() const { return h_; }
-	inline const MapBuild& map() const { return *map_; }
-	inline const std::vector<Person*> people() const { return people_; }
+	const int w() const { return w_; }
+	const int h() const { return h_; }
+	const MapBuild& map() const { return *map_; }
+	const std::vector<Person*> people() const { return people_; }
 
 private:
-	void CreatePathsCache();
+	void CreateCaches();
 	void AddPoints(Tile p1, Tile p2, 
 			std::set<Tile>& points, int w);
+	bool IsParkingLot(Tile p) const;
 
 	static TerrainType FindBiome(World* ths, Tile p);
 
@@ -66,6 +70,7 @@ private:
 	const int w_, h_;
 	const MapBuild* map_;
 	std::vector<Person*> people_;
+	std::map<const City*, Rect> city_rects_;
 
 	DISALLOW_COPY_AND_ASSIGN(World);
 };
