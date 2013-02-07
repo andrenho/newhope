@@ -71,6 +71,7 @@ CityEngine::AddBuildingTile(Tile p, ImgQueue& st, const City& city,
 	};
 
 	// draw stuff
+	AddGround(st, tile);
 	AddShadows(st, tile);
 	AddBackWall(st, tile);
 	AddWall(st, tile, *building);
@@ -78,6 +79,16 @@ CityEngine::AddBuildingTile(Tile p, ImgQueue& st, const City& city,
 	AddDoorFrames(st, tile);
 	AddRoof(st, tile);
 }
+
+
+void 
+CityEngine::AddGround(ImgQueue& st, const Tiles& tile) const
+{
+	if(tile.c == "aa") {
+		st.push(res["lavarock_c"]);
+	}
+}
+
 
 void 
 CityEngine::AddBackWall(ImgQueue& st, const Tiles& tile) const
