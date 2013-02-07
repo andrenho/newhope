@@ -9,7 +9,7 @@
 
 class City;
 
-enum BuildingType { BANK };
+enum BuildingType { BANK, MARKET };
 
 class Building {
 public:

@@ -20,7 +20,7 @@ public:
 	BuildingImage(int w, int h, std::vector<std::string> layout)
 		: w_(w), h_(h), layout_(layout) { }
 
-	static const BuildingImage VICTORIAN_BANK;
+	static const BuildingImage VICTORIAN_BANK, VICTORIAN_MARKET;
 
 	// read members
 	const int w() const { return w_; }
