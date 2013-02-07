@@ -50,6 +50,8 @@ Building::Image(const City& city, const BuildingType type)
 	if(city.style() == CityStyle::VICTORIAN) {
 		if(type == BuildingType::BANK) {
 			return BuildingImage::VICTORIAN_BANK;
+		} else if(type == BuildingType::MARKET) {
+			return BuildingImage::VICTORIAN_MARKET;
 		} else {
 			abort();
 		}

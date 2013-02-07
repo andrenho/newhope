@@ -20,4 +20,6 @@ const BuildingImage BuildingImage::VICTORIAN_BANK = BuildingImage(13, 7,
 		  "w7w8w8w8w8w8w8w8w8w4wsdNw6",
 		  "                  w7w8dsw9" });
 
-
+const BuildingImage BuildingImage::VICTORIAN_MARKET = BuildingImage(10, 9, 
+		{ "R1r1r2r2r2r2r2r2r3R3",
+		  "R4r4r5r5r5r5r5r5r6R6" });
