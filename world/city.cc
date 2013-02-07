@@ -1,11 +1,14 @@
 #include "world/city.h"
 
+using namespace std;
+
+#include "util/logger.h"
 #include "world/building.h"
 
 City::City(Tile pos, const Biome& biome, CityStyle style)
 		: pos_(pos), biome_(biome), style_(style)
 {
-	buildings_.push_back(new Building(*this, BuildingType::BANK, -4, -4));
+	CreateLayout();
 }
 
 
@@ -63,4 +66,32 @@ City::BuildingInPoint(Tile p) const
 			return b;
 	}
 	return nullptr;
+}
+
+
+
+void
+City::CreateLayout()
+{
+	int x1(-2), x2(2), turn(false);
+	for(auto bt: BuildingList()) {
+		int x(turn ? x1 : x2);
+		const BuildingImage& image(Building::Image(*this, bt));
+		if(turn) {
+			x1 -= image.w() + 1;
+			x = x1;
+		}
+		buildings_.push_back(new Building(*this, bt, x, -image.h()));
+		if(!turn) {
+			x2 += image.w() + 1;
+		}
+		turn = !turn;
+	}
+}
+
+
+const vector<BuildingType>
+City::BuildingList() const
+{
+	return { BANK, BANK };
 }

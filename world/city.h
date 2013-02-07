@@ -6,6 +6,7 @@
 #include "util/defines.h"
 #include "util/point.h"
 #include "util/rect.h"
+#include "world/building.h"
 
 enum CityStyle { VICTORIAN };
 
@@ -25,16 +26,20 @@ public:
 	// read members
 	const Tile pos() const { return pos_; }
 	const Biome& biome() const { return biome_; }
-	CityStyle style() const { return style_; }
+	const CityStyle style() const { return style_; }
 	const std::vector<const City*>& connections() const { return connections_; }
 	const std::vector<const Building*>& buildings() const { return buildings_; }
 
 private:
+	void CreateLayout();
+	const std::vector<BuildingType> BuildingList() const;
+
 	const Tile pos_;
 	const Biome& biome_;
 	const CityStyle style_;
 	std::vector<const City*> connections_;
 	std::vector<const Building*> buildings_;
+	std::vector<Tile> main_street_;
 
 	DISALLOW_COPY_AND_ASSIGN(City);
 };
