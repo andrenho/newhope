@@ -17,8 +17,9 @@
 
 class BuildingImage {
 public:
-	BuildingImage(int w, int h, std::vector<std::string> layout)
-		: w_(w), h_(h), layout_(layout) { }
+	BuildingImage(int w, int h, std::vector<std::string> layout, 
+			std::string sign="")
+		: w_(w), h_(h), layout_(layout), sign_(sign) { }
 
 	static const BuildingImage VICTORIAN_BANK, VICTORIAN_MARKET;
 
@@ -26,10 +27,12 @@ public:
 	const int w() const { return w_; }
 	const int h() const { return h_; }
 	const std::vector<std::string>& layout() const { return layout_; }
+	const std::string sign() const { return sign_; }
 
 private:
 	const int w_, h_;
 	const std::vector<std::string> layout_;
+	const std::string sign_;
 };
 
 #endif

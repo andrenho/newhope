@@ -145,8 +145,9 @@ CityEngine::AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const
 	// sign
 	if(tile.c == "ws") {
 		st.push(res["house_c"]);
-		if(b.Type() == BuildingType::BANK) {
-			st.push(res["sign_bank"]);
+		string s = b.Image().sign();
+		if(s != "") {
+			st.push(res["sign_" + s]);
 		}
 	}
 
@@ -286,4 +287,11 @@ CityEngine::AddRoof(ImgQueue& st, const Tiles& tile) const
 	} else if(tile.s == "C6") {
 		st.push(res["house_chimney_n"]);
 	}
+	if(tile.c == "C5") {
+		st.push(res["house_roof_c"]);
+		st.push(res["house_chimney_s"]);
+	} else if(tile.s == "C5") {
+		st.push(res["house_chimney_n"]);
+	}
+		
 }

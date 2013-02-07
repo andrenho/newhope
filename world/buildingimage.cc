@@ -18,8 +18,16 @@ const BuildingImage BuildingImage::VICTORIAN_BANK = BuildingImage(13, 7,
 		  "w1w2w2w2w2w2w2w2w2R7R8R8R9",
 		  "w4WWw5WWw5WWw5WWw5w1w2w2w3",
 		  "w7w8w8w8w8w8w8w8w8w4wsdNw6",
-		  "                  w7w8dsw9" });
+		  "                  w7w8dsw9" }, "bank");
 
-const BuildingImage BuildingImage::VICTORIAN_MARKET = BuildingImage(10, 9, 
-		{ "R1r1r2r2r2r2r2r2r3R3",
-		  "R4r4r5r5r5r5r5r5r6R6" });
+const BuildingImage BuildingImage::VICTORIAN_MARKET = BuildingImage(11, 9, 
+		{ "R1r1r2r2r2r2r2r2r2r3R3",
+		  "R4r4r5r5r5r5r5r5r5r6R6",
+		  "R4r4C5r5C5r5C5r5C5r6R6",
+		  "R4r4r5r5r5r5r5r5r5r6R6",
+		  "R4r4r5r5r5r5r5r5r5r6R6",
+		  "R7R8R8R8R8R8R8R8R8R8R9",
+		  "w1w2w2w2w2w2w2w2w2w2w3",
+		  "w4Www5Wwwsdnw5Www5Www6",
+		  "w7w8w8w8w8dsw8w8w8w8w9",
+		  }, "market");

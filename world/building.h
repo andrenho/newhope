@@ -36,6 +36,10 @@ public:
 
 	static const BuildingImage& Image(const City& city, 
 			const BuildingType type);
+	const BuildingImage& Image() const {
+		return Building::Image(city_, type_);
+	}
+
 
 	// read members
 	inline int xrel() const { return xrel_; }
@@ -44,10 +48,6 @@ public:
 	static int unique_id_counter_;
 
 private:
-	const BuildingImage& Image() const {
-		return Building::Image(city_, type_);
-	}
-
 	const int xrel_, yrel_;
 	const City& city_;
 	const BuildingType type_;
