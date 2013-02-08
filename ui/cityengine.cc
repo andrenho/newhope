@@ -34,10 +34,9 @@ CityEngine::~CityEngine()
 void 
 CityEngine::AddBuildings(Tile p, ImgQueue& st, double feet) const
 {
-	for(const auto& city: world.map().cities()) {
-		if(city->Limits().ContainsPoint(p)) {
-			AddBuildingTile(p, st, *city, feet);
-		}
+	const City* city = nullptr;
+	if((city = world.CityOnTile(p))) {
+		AddBuildingTile(p, st, *city, feet);
 	}
 }
 
@@ -53,7 +52,7 @@ CityEngine::AddBuildingTile(Tile p, ImgQueue& st, const City& city,
 
 	// if the building foot is below the character feet, we don't draw
 	// the building in firt plane
-	double bfoot = building->Y() + building->HeightAt(p.x);
+	double bfoot = building->y() + building->HeightAt(p.x);
 	if(bfoot < (feet+1.5) && feet != 0.0)
 		return;
 
@@ -78,6 +77,7 @@ CityEngine::AddBuildingTile(Tile p, ImgQueue& st, const City& city,
 	AddDoorFrames(st, tile);
 	AddRoof(st, tile);
 }
+
 
 void 
 CityEngine::AddBackWall(ImgQueue& st, const Tiles& tile) const
@@ -143,10 +143,12 @@ CityEngine::AddWall(ImgQueue& st, const Tiles& tile, const Building& b) const
 	}
 
 	// sign
-	if(tile.c == "ws") {
+	if(tile.c == "ws" || tile.c == "wS") {
 		st.push(res["house_c"]);
-		if(b.Type() == BuildingType::BANK) {
-			st.push(res["sign_bank"]);
+		string s = b.Image().sign();
+		if(s != "") {
+			st.push(res["sign_" + s + 
+				(tile.c[1] == 's' ? "_left" : "_right")]);
 		}
 	}
 
@@ -286,4 +288,17 @@ CityEngine::AddRoof(ImgQueue& st, const Tiles& tile) const
 	} else if(tile.s == "C6") {
 		st.push(res["house_chimney_n"]);
 	}
+	if(tile.c == "C5") {
+		st.push(res["house_roof_c"]);
+		st.push(res["house_chimney_s"]);
+	} else if(tile.s == "C5") {
+		st.push(res["house_chimney_n"]);
+	}
+	if(tile.c == "C9") {
+		st.push(res["house_roof_se"]);
+		st.push(res["house_chimney_s"]);
+	} else if(tile.s == "C9") {
+		st.push(res["house_chimney_n"]);
+	}
+		
 }

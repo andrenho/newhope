@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include "util/point.h"
+#include "util/logger.h"
 
 class Rect {
 public:
@@ -21,24 +22,44 @@ public:
 		  w(std::max(p1.x, p2.x) - x),
 		  h(std::max(p1.y, p2.y) - y) { }
 
-	inline void Add(int x, int y, int w, int h) {
-		this->x += x;
-		this->y += y;
-		this->w += w;
-		this->h += h;
+	const Rect operator+(const Rect& r) const {
+		return Rect(r.x+x, r.y+y, r.w+w, r.h+h);
+	}
+
+	Rect& operator+=(const Rect& other) {
+		x += other.x;
+		y += other.y;
+		w += other.w;
+		h += other.h;
+		return *this;
+	}
+
+	Rect& operator=(const Rect& other) {
+		if(this != &other) {
+			x = other.x;
+			y = other.y;
+			w = other.w;
+			h = other.h;
+		}
+		return *this;
+	}
+
+	template<typename T> const Rect operator+(const Point<T>& p) const {
+		return Rect(x+p.x, y+p.y, w, h);
 	}
 
 	template<typename T> bool ContainsPoint(Point<T> p) const {
 		return p.x >= x && p.x < (x+w) && p.y >= y && p.y < (y+h);
 	}
 
+	void Debug() const {
+		logger.Debug("%d %d %d %d", x, y, w, h);
+	}
+
 	constexpr Rect(const Rect& other) :
 		x(other.x), y(other.y), w(other.w), h(other.h) { }
 
 	int x, y, w, h;
-
-private:
-	Rect& operator=(const Rect& other); // disallow assignment
 };
 
 #endif

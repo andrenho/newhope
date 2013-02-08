@@ -144,10 +144,12 @@ static const vector<string> house_sfx {
 
 // signs
 static const vector<Rect> signs_rect {
-	tr(0,1),tr(1,1),tr(2,1),
+	tr(0,0),tr(1,0),tr(2,0),tr(3,0),
+	tr(0,1),tr(1,1),tr(2,1),tr(3,1),
 };
 static const vector<string> signs_sfx {
-	"_inn", "_weapons", "_bank",
+	"_inn_right", "_car_dealership_right", "_market_right", "_bank_right",
+	"_inn_left", "_car_dealership_left", "_market_left", "_bank_left",
 };
 
 // shadow

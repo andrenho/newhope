@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include "util/defines.h"
+#include "util/logger.h"
 
 template <typename T> int sgn(T val) { return (T(0) < val) - (val < T(0)); }
 
@@ -58,6 +59,10 @@ public:
 
 	template<typename F> operator Point<F>() const {
 		return { static_cast<F>(x), static_cast<F>(y) };
+	}
+
+	void Debug() {
+		logger.Debug("%f %f", x, y);
 	}
 
 protected:

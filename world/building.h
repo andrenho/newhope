@@ -9,15 +9,15 @@
 
 class City;
 
-enum BuildingType { BANK };
+enum BuildingType { BANK, MARKET, CAR_DEALERSHIP };
 
 class Building {
 public:
 	explicit Building(const City& city, const BuildingType type, 
 			int xrel, int yrel);
 
-	inline const Rect Rectangle() const { 
-		return Rect(X(), Y(), W()+1, H()+1); 
+	const Rect Limits() const { 
+		return Rect(x(), y(), w(), h()); 
 	}
 
 	std::string OutdoorsLayout(int x, int y) const;
@@ -26,29 +26,36 @@ public:
 	}
 
 	int HeightAt(int x) const;
-	const BuildingType Type() const { return type_; }
+	int x() const;
+	int y() const;
+	int w() const;
+	int h() const;
+	const Rect ParkingLot() const; 
+	void Move(int x, int y) { xrel_ += x; yrel_ += y; }
 
-	int X() const;
-	int Y() const;
-	int W() const;
-	int H() const;
+	const BuildingType type() const { return type_; }
+	const int uniqueID() const { return unique_id_; }
 
 	static const BuildingImage& Image(const City& city, 
 			const BuildingType type);
+	const BuildingImage& Image() const {
+		return Building::Image(city_, type_);
+	}
+
 
 	// read members
 	inline int xrel() const { return xrel_; }
 	inline int yrel() const { return yrel_; }
 
-private:
-	const BuildingImage& Image() const {
-		return Building::Image(city_, type_);
-	}
+	static int unique_id_counter_;
 
-	const int xrel_, yrel_;
+private:
+	int xrel_, yrel_;
 	const City& city_;
 	const BuildingType type_;
 	const BuildingImage& image_;
+	int unique_id_;
+	Rect patio_;
 
 	DISALLOW_COPY_AND_ASSIGN(Building);
 };

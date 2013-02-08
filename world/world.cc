@@ -16,20 +16,20 @@ using namespace std;
 World::World(int w, int h) :
 	w_(w), h_(h)
 {
-	logger.Debug("Building map_...");
+	logger.Debug("Building map...");
 	MapParameters pars {
 		.seed = 2,
 		.w = w_,
 		.h = h_,
 		.n_rivers = 15,
-		.n_cities = 20,
+		.n_cities = 1,
 		.n_roads = 10,
 	};
 	map_ = new MapBuild(pars);
 	logger.Debug("Map built.");
 
 	// create vectors with rivers, lava and roads
-	CreatePathsCache();
+	CreateCaches();
 
 	// add people
 	people_.push_back(new Person(*this, map_->cities()[0]->pos()));
@@ -96,6 +96,10 @@ World::TerrainCache(void* obj, Tile p)
 {
 	World* ths((World*)obj);
 
+	if(ths->IsParkingLot(p)) {
+		return t_ROAD;
+	}
+
 	if(binary_search(ths->roadpts.begin(), ths->roadpts.end(), p))
 	{
 		if(FindBiome(ths, p) != t_LAVAROCK)
@@ -159,7 +163,7 @@ World::TreeSmall(Tile p) const
 
 
 void 
-World::CreatePathsCache()
+World::CreateCaches()
 {
 	logger.Debug("Drawing polygons...");
 
@@ -173,6 +177,7 @@ World::CreatePathsCache()
 		{ map_->lava(),   lavapts,  2 },
 	};
 
+	// road, rivers and lava
 	for(const auto& polygon: polygons) {
 		// create a set with all the points
 		set<Tile> points;
@@ -186,7 +191,11 @@ World::CreatePathsCache()
 		// transform the set in a vector and sort it
 		copy(points.begin(), points.end(), back_inserter(polygon.points));
 		sort(polygon.points.begin(), polygon.points.end());
-		logger.Debug("%d", polygon.points.size());
+	}
+
+	// cities
+	for(const auto& city: map_->cities()) {
+		city_rects_[city] = city->Limits();
 	}
 	
 	logger.Debug("Polygons drawn.");
@@ -226,4 +235,31 @@ World::AddPoints(Tile p1, Tile p2, set<Tile>& points,
 			y0 += sy;
 		}
 	}
+}
+
+
+const City* 
+World::CityOnTile(Tile t) const
+{
+	for(auto const& kv: city_rects_) {
+		if(kv.second.ContainsPoint(t)) {
+			return kv.first;
+		}
+	}
+	return nullptr;
+}
+
+
+bool 
+World::IsParkingLot(Tile p) const
+{
+	const City* city(CityOnTile(p));
+	if(city) {
+		for(auto const& b: city->buildings()) {
+			if(b->ParkingLot().ContainsPoint(p)) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
