@@ -211,6 +211,9 @@ static const struct {
 	// shadow
 	{ "shadow", "shadow.png", shadow_rect, shadow_sfx },
 
+	// inside
+	{ "inside", "inside.png", { tr(0,4) }, { "" } },
+
 	// terminal
 	{ "terminal", "terminal.png", {}, {} },
 
