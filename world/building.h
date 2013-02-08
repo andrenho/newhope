@@ -31,10 +31,11 @@ public:
 	int w() const;
 	int h() const;
 	const Rect ParkingLot() const; 
-	void Move(int x, int y) { xrel_ += x; yrel_ += y; }
+	void Move(int x, int y);
 
 	const BuildingType type() const { return type_; }
 	const int uniqueID() const { return unique_id_; }
+	const Tile Door() const { return door_; }
 
 	static const BuildingImage& Image(const City& city, 
 			const BuildingType type);
@@ -56,6 +57,7 @@ private:
 	const BuildingImage& image_;
 	int unique_id_;
 	Rect patio_;
+	Tile door_;
 
 	DISALLOW_COPY_AND_ASSIGN(Building);
 };

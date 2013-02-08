@@ -11,11 +11,25 @@ Building::Building(const City& city, const BuildingType type,
 		int xrel, int yrel)
 	: xrel_(xrel), yrel_(yrel), city_(city), type_(type), 
 	  image_(Image()), unique_id_(unique_id_counter_++),
-	  patio_(Rect(0,0,0,0))
+	  patio_(Rect(0,0,0,0)), door_(Tile(-1,-1))
 {
+	// add patio to dealerships
 	if(type == BuildingType::CAR_DEALERSHIP) {
 		patio_ = Rect(0, 3, 15, 10);
 	}
+
+	// find door
+	int j = 0;
+	for(const auto& s: image_.layout()) {
+		for(int i=0; i<s.size(); i+=2) {
+			if(s[i] == 'd' && s[i+1] == 's') {
+				door_ = Tile(x()+(i/2), y()+j);
+				goto done;
+			}
+		}
+		++j;
+	}
+done:;
 }
 
 
@@ -72,4 +86,12 @@ const Rect
 Building::ParkingLot() const
 {
 	return patio_ + Tile(x(), y());
+}
+
+
+void 
+Building::Move(int x, int y) 
+{ 
+	xrel_ += x; yrel_ += y;
+	door_ += Tile(x, y);
 }

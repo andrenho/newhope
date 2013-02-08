@@ -22,6 +22,8 @@ public:
 	inline const char facing() const { return facing_; }
 
 private:
+	void CheckDoor();
+
 	Tile pos_;
 	char facing_;
 	const World& world_;
