@@ -14,15 +14,16 @@ Building::Building(const City& city, const BuildingType type,
 	  patio_(Rect(0,0,0,0))
 {
 	if(type == BuildingType::CAR_DEALERSHIP) {
-		patio_ = Rect(0, 3, 10, 10);
+		patio_ = Rect(0, 3, 15, 10);
 	}
 }
 
 
 int Building::x() const { return city_.pos().x + xrel_; }
 int Building::y() const { return city_.pos().y + yrel_; }
-int Building::w() const { return image_.w() + patio_.x + patio_.w; }
-int Building::h() const { return image_.h() + patio_.y + patio_.h; }
+int Building::w() const { return image_.w() - patio_.x + patio_.w; }
+int Building::h() const { return image_.h() - patio_.y + patio_.h; }
+
 
 string 
 Building::OutdoorsLayout(int x, int y) const

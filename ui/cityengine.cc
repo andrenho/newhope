@@ -294,5 +294,11 @@ CityEngine::AddRoof(ImgQueue& st, const Tiles& tile) const
 	} else if(tile.s == "C5") {
 		st.push(res["house_chimney_n"]);
 	}
+	if(tile.c == "C9") {
+		st.push(res["house_roof_se"]);
+		st.push(res["house_chimney_s"]);
+	} else if(tile.s == "C9") {
+		st.push(res["house_chimney_n"]);
+	}
 		
 }

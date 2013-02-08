@@ -9,6 +9,14 @@ City::City(Tile pos, const Biome& biome, CityStyle style)
 		: pos_(pos), biome_(biome), style_(style)
 {
 	CreateLayout();
+
+	logger.Debug("City limits:");
+	Limits().Debug();
+
+	for(auto& b: buildings_) {
+		logger.Debug("Building limits:");
+		b->Limits().Debug();
+	}
 }
 
 

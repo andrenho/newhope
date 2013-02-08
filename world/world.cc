@@ -16,7 +16,7 @@ using namespace std;
 World::World(int w, int h) :
 	w_(w), h_(h)
 {
-	logger.Debug("Building map_...");
+	logger.Debug("Building map...");
 	MapParameters pars {
 		.seed = 2,
 		.w = w_,
@@ -97,7 +97,6 @@ World::TerrainCache(void* obj, Tile p)
 	World* ths((World*)obj);
 
 	if(ths->IsParkingLot(p)) {
-		p.Debug();
 		return t_ROAD;
 	}
 
@@ -258,7 +257,6 @@ World::IsParkingLot(Tile p) const
 	if(city) {
 		for(auto const& b: city->buildings()) {
 			if(b->ParkingLot().ContainsPoint(p)) {
-				b->ParkingLot().Debug();
 				return true;
 			}
 		}

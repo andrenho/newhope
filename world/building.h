@@ -17,7 +17,7 @@ public:
 			int xrel, int yrel);
 
 	const Rect Limits() const { 
-		return Rect(x(), y(), w()+1, h()+1); 
+		return Rect(x(), y(), w(), h()); 
 	}
 
 	std::string OutdoorsLayout(int x, int y) const;
