@@ -21,7 +21,7 @@ Building::Building(const City& city, const BuildingType type,
 	// find door
 	int j = 0;
 	for(const auto& s: image_.layout()) {
-		for(int i=0; i<s.size(); i+=2) {
+		for(unsigned int i=0; i<s.size(); i+=2) {
 			if(s[i] == 'd' && s[i+1] == 's') {
 				door_ = Tile(x()+(i/2), y()+j);
 				goto done;
