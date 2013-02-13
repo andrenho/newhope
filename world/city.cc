@@ -39,11 +39,11 @@ City::Limits() const
 		if(building->y() < min_.y) {
 			min_.y = building->y();
 		}
-		if(building->x() + building->w() > max_.x + 1) {
-			max_.x = building->x() + building->w() + 1;
+		if(building->x() + building->w() > max_.x) {
+			max_.x = building->x() + building->w();
 		}
-		if(building->y() + building->h() > max_.y + 1) {
-			max_.y = building->y() + building->h() + 1;
+		if(building->y() + building->h() > max_.y) {
+			max_.y = building->y() + building->h();
 		}
 	}
 	++max_.x; ++max_.y;
