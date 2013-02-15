@@ -106,5 +106,5 @@ City::CreateLayout()
 const vector<BuildingType>
 City::BuildingList() const
 {
-	return { CAR_DEALERSHIP, BANK, MARKET };
+	return { MARKET /*, CAR_DEALERSHIP, BANK, MARKET*/ };
 }
