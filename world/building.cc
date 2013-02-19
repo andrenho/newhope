@@ -35,8 +35,8 @@ done:;
 
 int Building::x() const { return city_.pos().x + xrel_; }
 int Building::y() const { return city_.pos().y + yrel_; }
-int Building::w() const { return image_.w() - patio_.x + patio_.w; }
-int Building::h() const { return image_.h() - patio_.y + patio_.h; }
+int Building::w() const { return image_.w() - patio_.x + patio_.w + 1; }
+int Building::h() const { return image_.h() - patio_.y + patio_.h + 1; }
 
 
 string 
