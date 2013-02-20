@@ -1,6 +1,8 @@
 #include "world/person.h"
 
 #include "util/logger.h"
+#include "world/city.h"
+#include "world/world.h"
 
 Person::~Person()
 {
@@ -15,6 +17,8 @@ Person::Process()
 		pos_.y += mov_y_ / 4.0;
 		++step_;
 	}
+
+	CheckDoor();
 }
 
 
@@ -37,5 +41,19 @@ Person::Movement(int x, int y)
 		facing_ = 's';
 	} else if(y == -1) {
 		facing_ = 'n';
+	}
+}
+
+
+void 
+Person::CheckDoor()
+{
+	const City* city = world_.CityOnTile(pos_);
+	if(city) {
+		for(const auto& b: city->buildings()) {
+			if(b->Door() == pos_.ToInt()) {
+				logger.Debug("Door!");
+			}
+		}
 	}
 }

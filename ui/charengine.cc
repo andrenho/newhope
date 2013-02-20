@@ -34,7 +34,7 @@ CharEngine::Draw(int scr_w, int scr_h) const
 {
 	// clear frame
 	people_frame.clear();
-
+	
 	// add people
 	for(const auto& person: world.people()) {
 		RelPoint p(person->pos());
@@ -43,19 +43,19 @@ CharEngine::Draw(int scr_w, int scr_h) const
 			people_frame.push_back(person);
 		}
 	}
-
+	
 	// sort frame
 	sort(people_frame.begin(), people_frame.end(),
 	[](const Person* const& p1, const Person* const& p2) -> bool { 
 		return p1->pos().y > p2->pos().y;
 	});
-
+	
 	// draw people
 	while(!people_frame.empty()) {
 		DrawPerson(*people_frame[0], scr_w, scr_h);
 		people_frame.erase(people_frame.begin());
 	}
-
+	
 	if(!people_frame.empty())
 		abort();
 }
@@ -80,6 +80,7 @@ CharEngine::DrawPerson(const Person& person, int scr_w, int scr_h) const
 
 	// find position
 	RelPoint scr(person.pos());
+	scr.y -= 32;
 
 	// create image
 	string charimage(body + "_" + direction + "_" + step);
@@ -98,5 +99,5 @@ CharEngine::TilesAffected(Person const& person)
 {
 	int x = person.pos().x,
 	    y = person.pos().y;
-	return Rect(x-1, y-1, 1, 1);
+	return Rect(x-1, y-2, 1, 1);
 }

@@ -45,6 +45,12 @@ public:
 		return x == p.x && y == p.y;
 	}
 
+	template<typename F> Point& operator+=(const Point<F>& other) {
+		x += other.x;
+		y += other.y;
+		return *this;
+	}
+
 	inline bool operator<(const Point& p) const {
 		return (y*10000+x) < (p.y*10000+p.x);
 	}
