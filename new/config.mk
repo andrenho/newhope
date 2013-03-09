@@ -92,6 +92,14 @@ ifeq (${PROFILING},yes)
   LDFLAGS += -pg
 endif
 
+# SDL libraries
+ifeq (${SDL},yes)
+  CPPFLAGS += `sdl-config --cflags` -D_SDL
+  # if you want the console window on Windows, edit the sdl-config script
+  # and remove the '-mwindows' option
+  LDFLAGS += `sdl-config --libs` -lSDL_ttf
+endif
+
 # use C++ threads
 ifeq (${USE_CPP_THREADS},yes)
   ifeq (${CC},clang++)

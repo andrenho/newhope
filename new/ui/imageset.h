@@ -1,12 +1,22 @@
 #ifndef UI_IMAGESET_H
 #define UI_IMAGESET_H
 
+typedef struct Reference { 
+	int idx;
+	int x, y;
+} Reference;
+
+
 class Imageset {
 public:
 	Imageset();
 
+	const Reference operator[](std::string s) const { return hash_.at(s); }
+	unsigned int const* Texture() const { return texture_; }
+
 private:
-	Image* tileset_;
+	std::map<std::string, Reference> hash_;
+	unsigned int texture_[1];
 };
 
 #endif

@@ -8,7 +8,9 @@ SRC = main.cc 		 	\
       ui/ui.cc		 	\
       ui/imageset.cc	 	\
       ui/image.cc	 	\
-      ui/imageindexed.cc 
+      ui/imageindexed.cc	\
+      ui/imagergb.cc		\
+      ui/layerterrain.cc
 
 TRANSLATIONS = pt_BR
 	

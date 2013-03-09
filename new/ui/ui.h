@@ -16,13 +16,16 @@ public:
 	void StartFrame();
 	void WaitNextFrame();
 
+	class Imageset const& Imageset() { return *imageset_; }
+
 private:
 	void WindowResize(int w, int h);
 
 	bool active_;
 	double time_;
 	int win_w_, win_h_;
-	Imageset const& imageset_;
+	class Imageset const* imageset_;
+	std::vector<Layer*> layers_;
 };
 
 #endif

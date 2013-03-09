@@ -5,7 +5,7 @@ using namespace std;
 #include <GL/glfw.h>
 
 UI::UI()
-	: active_(true), time_(0), win_w_(0), win_h_(0), imageset_(Imageset())
+	: active_(true), time_(0), win_w_(0), win_h_(0)
 { 
 	// init GLFW
 	if(!glfwInit()) {
@@ -17,9 +17,13 @@ UI::UI()
 	glfwSetWindowTitle("New Hope " VERSION);
 
 	// init OpenGL
+	imageset_ = new class Imageset();
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+	// initialize layers
+	layers_.push_back(new LayerTerrain(t_GRASS));
 }
 
 
@@ -58,6 +62,11 @@ UI::ProcessInputs()
 void 
 UI::Render() 
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	for(auto const& layer: layers_) {
+		layer->Render();
+	}
 	glfwSwapBuffers();
 }
 
