@@ -3,7 +3,7 @@
 
 typedef struct Reference { 
 	int idx;
-	int x, y;
+	float x, y, w, h;
 } Reference;
 
 

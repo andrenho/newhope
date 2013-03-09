@@ -81,6 +81,9 @@ UI::StartFrame()
 void 
 UI::WaitNextFrame() 
 {
+	if(glfwGetTime() > time_ + 1/30.0f) {
+		cout << "Frame delayed!" << endl;
+	}
 	while(glfwGetTime() < time_ + 1/30.0f) {
 		glfwSleep(0.02);
 	}
