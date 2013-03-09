@@ -3,7 +3,7 @@
 
 class Game {
 public:
-	Game(int w, int h) { }
+	Game(int w, int h);
 };
 
 #endif
