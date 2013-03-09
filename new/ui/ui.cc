@@ -13,6 +13,7 @@ UI::UI()
 	if(!glfwOpenWindow(0, 0, 0, 0, 0, 0, 0, 0, GLFW_WINDOW)) {
 		throw glfw_error("error opening window");
 	}
+	glfwSetWindowTitle("New Hope " VERSION);
 }
 
 bool 
