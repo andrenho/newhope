@@ -37,12 +37,14 @@ static void initGL()
 	loadTextures();
 
 	glEnable(GL_TEXTURE_2D);
-	glShadeModel(GL_SMOOTH);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth(1.0f);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	//glShadeModel(GL_SMOOTH);
+	glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
+	//glClearDepth(1.0f);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LEQUAL);
+	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	//gluOrtho2D(0.0f, 300.0f, 0.0f, 300.0f);
 }
 
 
@@ -51,7 +53,7 @@ static void drawGLScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -25.0f);
+	glTranslatef(5.0f, 5.0f, -0.0f);
 
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 
@@ -62,7 +64,7 @@ static void drawGLScene()
 	  glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f,  1.0f, 0.0f);
 	glEnd();
 
-	glTranslatef(0.5f, 0.5f, -0.1f);
+	glTranslatef(2.0f, 0.0f, 0.5f);
 	glBegin(GL_QUADS);
 	  glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, -1.0f, 0.0f);
 	  glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, -1.0f, 0.0f);
@@ -78,9 +80,11 @@ static void resizeWindow(int w, int h)
 {
 	GLfloat ratio = (GLfloat)w / (GLfloat)h;
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+	gluOrtho2D(0.0f, w/16.0, 0.0f, h/16.0);
+	//gluPerspective(45.0f, ratio, 0.1f, 100.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
