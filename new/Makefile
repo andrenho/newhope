@@ -3,9 +3,12 @@
 
 include config.mk
 
-SRC = main.cc 		\
-      game/game.cc 	\
-      ui/ui.cc
+SRC = main.cc 		 	\
+      game/game.cc 	 	\
+      ui/ui.cc		 	\
+      ui/imageset.cc	 	\
+      ui/image.cc	 	\
+      ui/imageindexed.cc 
 
 TRANSLATIONS = pt_BR
 	

@@ -12,12 +12,13 @@ int main()
 	game = new Game(20, 20);
 	try {
 		ui = new UI();
-	} catch(glfw_error const& e) {
+	} catch(ui_error const& e) {
 		cerr << "Error initializing UI: " << e.what() << endl;
 		exit(EXIT_FAILURE);
 	}
 
 	while(ui->Active()) {
+		ui->StartFrame();
 		ui->ProcessInputs();
 		ui->Render();
 		ui->WaitNextFrame();
