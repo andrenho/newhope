@@ -6,8 +6,9 @@ void
 LayerTerrain::Render() const
 {
 	glLoadIdentity();
-	glTranslatef(ui->RelX, float(ui->WindowH())/64.0f - 1.0f + ui->RelY, 
-			0.0f);
+	glTranslatef(ui->RelX, 
+		float(ui->WindowH())/(ui->Zoom()*16.0f) - 1.0f + ui->RelY, 
+		0.0f);
 
 	// TODO - only draw the part on the screen
 	for(int x=0; x<40; x++) {
@@ -56,6 +57,7 @@ LayerTerrain::TerrainStr() const
 	switch(terrain_)
 	{
 	case t_GRASS: return "grass";
+	case t_WATER: return "water";
 	default: throw new ui_error("Invalid terrain " + terrain_);
 	}
 }

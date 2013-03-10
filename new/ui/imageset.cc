@@ -15,6 +15,8 @@ Imageset::Imageset()
 	delete tileset;
 	hash_["grass_c"] = { 0, 1.0f/(float)t.W*16, 2.0f/(float)t.H*16, 
 		1.0f/(float)t.W*16, 1.0f/(float)t.H*16 };
+	hash_["water_c"] = { 0, 1.0f/(float)t.W*16, 6.0f/(float)t.H*16, 
+		1.0f/(float)t.W*16, 1.0f/(float)t.H*16 };
 
 	// texture parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

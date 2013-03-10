@@ -5,7 +5,8 @@ using namespace std;
 #include <GL/glfw.h>
 
 UI::UI()
-	: RelX(0), RelY(0), active_(true), time_(0), win_w_(0), win_h_(0)
+	: RelX(0), RelY(0), active_(true), time_(0), win_w_(0), win_h_(0),
+	  zoom_(4)
 { 
 	// init GLFW
 	if(!glfwInit()) {
@@ -24,6 +25,7 @@ UI::UI()
 
 	// initialize layers
 	layers_.push_back(new LayerTerrain(t_GRASS));
+	layers_.push_back(new LayerTerrain(t_WATER));
 }
 
 
@@ -55,6 +57,37 @@ UI::ProcessInputs()
 	if(w != win_w_ || h != win_h_) {
 		WindowResize(w, h);
 		return;
+	}
+
+	// screen movement
+	if(glfwGetKey(GLFW_KEY_UP)) {
+		RelY += 0.2;
+	}
+	if(glfwGetKey(GLFW_KEY_DOWN)) {
+		RelY -= 0.2;
+	}
+	if(glfwGetKey(GLFW_KEY_LEFT)) {
+		RelX -= 0.2;
+	}
+	if(glfwGetKey(GLFW_KEY_RIGHT)) {
+		RelX += 0.2;
+	}
+
+	// zoom
+	if(glfwGetKey('=')) {
+		zoom_ *= 2.0f;
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluOrtho2D(0.0f, w/(zoom_*16.0), 0.0f, h/(zoom_*16.0));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	} else if(glfwGetKey('-')) {
+		zoom_ /= 2.0f;
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluOrtho2D(0.0f, w/(zoom_*16.0), 0.0f, h/(zoom_*16.0));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 	}
 }
 
@@ -101,7 +134,7 @@ UI::WindowResize(int w, int h)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0.0f, w/64.0, 0.0f, h/64.0);
+	gluOrtho2D(0.0f, w/(zoom_*16.0), 0.0f, h/(zoom_*16.0));
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }

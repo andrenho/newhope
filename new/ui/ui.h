@@ -19,6 +19,7 @@ public:
 	inline class Imageset const& Imageset() const { return *imageset_; }
 	inline int WindowW() const { return win_w_; }
 	inline int WindowH() const { return win_h_; }
+	inline int Zoom() const { return zoom_; }
 
 	float RelX, RelY;
 
@@ -28,6 +29,7 @@ private:
 	bool active_;
 	double time_;
 	int win_w_, win_h_;
+	float zoom_;
 	class Imageset const* imageset_;
 	std::vector<Layer*> layers_;
 };
