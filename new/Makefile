@@ -17,7 +17,7 @@ TRANSLATIONS = pt_BR
 OBJ = ${SRC:.cc=.o}
 HEADERS = $(filter-out main.h,${SRC:.cc=.h}) 
 DIST = AUTHORS NEWS README INSTALL
-DATA = $(wildcard data/*.png) $(wildcard data/*.ttf)
+DATA = $(wildcard data/*.png) $(wildcard data/*.txt)
 
 all: options newhope translation
 
