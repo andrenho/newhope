@@ -16,7 +16,11 @@ public:
 	void StartFrame();
 	void WaitNextFrame();
 
-	class Imageset const& Imageset() { return *imageset_; }
+	inline class Imageset const& Imageset() const { return *imageset_; }
+	inline int WindowW() const { return win_w_; }
+	inline int WindowH() const { return win_h_; }
+
+	float RelX, RelY;
 
 private:
 	void WindowResize(int w, int h);

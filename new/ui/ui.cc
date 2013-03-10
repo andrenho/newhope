@@ -5,7 +5,7 @@ using namespace std;
 #include <GL/glfw.h>
 
 UI::UI()
-	: active_(true), time_(0), win_w_(0), win_h_(0)
+	: RelX(0), RelY(0), active_(true), time_(0), win_w_(0), win_h_(0)
 { 
 	// init GLFW
 	if(!glfwInit()) {
@@ -101,7 +101,7 @@ UI::WindowResize(int w, int h)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0.0f, w/16.0, 0.0f, h/16.0);
+	gluOrtho2D(0.0f, w/64.0, 0.0f, h/64.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
