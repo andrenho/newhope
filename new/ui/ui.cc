@@ -25,7 +25,7 @@ UI::UI()
 
 	// initialize layers
 	layers_.push_back(new LayerTerrain(t_GRASS));
-	//layers_.push_back(new LayerTerrain(t_WATER));
+	layers_.push_back(new LayerTerrain(t_WATER));
 }
 
 

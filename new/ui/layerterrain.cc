@@ -11,8 +11,10 @@ LayerTerrain::Render() const
 		0.0f);
 
 	// TODO - only draw the part on the screen
-	for(int x=0; x<40; x++) {
-		for(int y=0; y<40; y++) {
+	int left = (int)(-ui->RelX-1)+(ui->WindowW()/ui->Zoom()/16.0f)+3;
+	int bottom = (int)(ui->RelY-1)+(ui->WindowH()/ui->Zoom()/16.0f)+3;
+	for(int x=(int)(-ui->RelX-1); x<left; x++) {
+		for(int y=(int)(ui->RelY-1); y<bottom; y++) {
 			DrawTile(x, y);
 		}
 	}
@@ -35,10 +37,10 @@ LayerTerrain::DrawTile(int x, int y) const
 		float px = float(x);
 		float py = -float(y);
 		glBegin(GL_QUADS);
-		  glTexCoord2f(rc.x,      rc.y+rc.h); glVertex3f(px,   py,   0.0f);
-		  glTexCoord2f(rc.x+rc.w, rc.y+rc.h); glVertex3f(px+1, py,   0.0f);
-		  glTexCoord2f(rc.x+rc.w, rc.y);      glVertex3f(px+1, py+1, 0.0f);
-		  glTexCoord2f(rc.x,      rc.y);      glVertex3f(px,   py+1, 0.0f);
+		  glTexCoord2f(rc.x, rc.y+rc.h); glVertex3f(px, py, 0.0f);
+		  glTexCoord2f(rc.x+rc.w, rc.y+rc.h); glVertex3f(px+1, py, 0.0f);
+		  glTexCoord2f(rc.x+rc.w, rc.y); glVertex3f(px+1, py+1, 0.0f);
+		  glTexCoord2f(rc.x, rc.y); glVertex3f(px, py+1, 0.0f);
 		glEnd();
 	}
 }
@@ -55,7 +57,7 @@ LayerTerrain::TileSuffixes(int x, int y, vector<string>& s) const
 		return;
 	}
 
-	// corners
+	// inner corners
 	if(m.Terrain(x-1, y) == terrain_ && m.Terrain(x, y-1) == terrain_) {
 		s.push_back("corner_nw");
 	}
@@ -67,6 +69,42 @@ LayerTerrain::TileSuffixes(int x, int y, vector<string>& s) const
 	}
 	if(m.Terrain(x+1, y) == terrain_ && m.Terrain(x, y+1) == terrain_) {
 		s.push_back("corner_se");
+	}
+
+	// outer corners
+	if(m.Terrain(x-1, y-1) == terrain_ 
+	&& m.Terrain(x, y-1) != terrain_ && m.Terrain(x-1, y) != terrain_) {
+		s.push_back("se");
+	}
+	if(m.Terrain(x+1, y-1) == terrain_ 
+	&& m.Terrain(x, y-1) != terrain_ && m.Terrain(x+1, y) != terrain_) {
+		s.push_back("sw");
+	}
+	if(m.Terrain(x-1, y+1) == terrain_ 
+	&& m.Terrain(x, y+1) != terrain_ && m.Terrain(x-1, y) != terrain_) {
+		s.push_back("ne");
+	}
+	if(m.Terrain(x+1, y+1) == terrain_ 
+	&& m.Terrain(x, y+1) != terrain_ && m.Terrain(x+1, y) != terrain_) {
+		s.push_back("nw");
+	}
+
+	// sides
+	if(m.Terrain(x-1, y) == terrain_
+	&& m.Terrain(x, y-1) != terrain_ && m.Terrain(x, y+1) != terrain_) {
+		s.push_back("e");
+	}
+	if(m.Terrain(x+1, y) == terrain_
+	&& m.Terrain(x, y-1) != terrain_ && m.Terrain(x, y+1) != terrain_) {
+		s.push_back("w");
+	}
+	if(m.Terrain(x, y-1) == terrain_
+	&& m.Terrain(x-1, y) != terrain_ && m.Terrain(x+1, y) != terrain_) {
+		s.push_back("s");
+	}
+	if(m.Terrain(x, y+1) == terrain_
+	&& m.Terrain(x-1, y) != terrain_ && m.Terrain(x+1, y) != terrain_) {
+		s.push_back("n");
 	}
 }
 
