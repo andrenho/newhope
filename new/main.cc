@@ -4,19 +4,30 @@
 #include <iostream>
 using namespace std;
 
-Game*  game;
-UI*    ui;
+GameMode* game;
+UI*       ui;
+Options*  opt;
 
-int main()
+int main(int argc, char** argv)
 {
-	game = new Game(20, 20);
+	// find execution type and initialize UI
+	opt = new Options(argc, argv);
 	try {
-		ui = new UI();
+		if(opt->Type == OPT_GAME) {
+			game = new Game(20, 20);
+			ui = new UIGame();
+		} else if(opt->Type == OPT_EDITOR) {
+			game = new Editor();
+			ui = new UIEditor();
+		} else {
+			abort();
+		}
 	} catch(ui_error const& e) {
 		cerr << "Error initializing UI: " << e.what() << endl;
 		exit(EXIT_FAILURE);
 	}
 
+	// main loop
 	while(ui->Active()) {
 		ui->StartFrame();
 		ui->ProcessInputs();
@@ -26,6 +37,8 @@ int main()
 		}
 	}
 
+	// cleanup
 	delete ui;
 	delete game;
+	delete opt;
 }

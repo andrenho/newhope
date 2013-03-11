@@ -1,6 +1,8 @@
 #ifndef UI_IMAGESET_H
 #define UI_IMAGESET_H
 
+#include <GL/gl.h>
+
 typedef struct Reference { 
 	int idx;
 	float x, y, w, h;
@@ -24,7 +26,7 @@ private:
 
 	map<string, Reference> hash_;
 	map<int, ImageSize> sizes_;
-	unsigned int* texture_;
+	GLuint* texture_;
 	int n_textures, c_texture;
 };
 

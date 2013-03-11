@@ -4,8 +4,11 @@
 include config.mk
 
 SRC = main.cc 		 	\
+      options.cc		\
       game/game.cc 	 	\
       ui/ui.cc		 	\
+      ui/uigame.cc		\
+      ui/uieditor.cc		\
       ui/imageset.cc	 	\
       ui/image.cc	 	\
       ui/imageindexed.cc	\

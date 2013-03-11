@@ -5,8 +5,8 @@
 void
 Imageset::SetupImageMap()
 {
-	SetupImageTerrain("grass", 0, 1, 2);
-	SetupImageTerrain("water", 0, 1, 6);
+	SetupImageTerrain("grass", 1, 1, 2);
+	SetupImageTerrain("water", 1, 1, 6);
 }
 
 
@@ -14,20 +14,16 @@ Imageset::Imageset()
 	: c_texture(0)
 {
 	// load images
-	static vector<string> images = { "tiles.png" };
+	static vector<string> images = { "dialog.png", "tiles.png" };
 	n_textures = images.size();
-	texture_ = new unsigned int[n_textures];
+	texture_ = new GLuint[n_textures];
+	glGenTextures(n_textures, &texture_[c_texture]);
 	
 	for(string image: images) {
 		LoadImage(image);
 	}
 
 	// texture parameters
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
 	// setup images map
 	SetupImageMap();
 }
@@ -45,9 +41,12 @@ Imageset::LoadImage(string filename)
 	// load tiles
 	Image* tileset = Image::LoadImage(filename);
 	ImageRGB t = *((ImageIndexed*)tileset);
-	glGenTextures(1, &texture_[c_texture]);
-	glBindTexture(GL_TEXTURE_2D, texture_[c_texture]);
 
+	glBindTexture(GL_TEXTURE_2D, texture_[c_texture]);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 4, t.W, t.H, 0, GL_RGBA, 
 			GL_UNSIGNED_BYTE, t.Data());
 	

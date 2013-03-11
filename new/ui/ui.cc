@@ -1,7 +1,5 @@
 #include "defines.h"
 
-using namespace std;
-
 #include <GL/glfw.h>
 
 UI::UI()
@@ -62,36 +60,23 @@ UI::ProcessInputs()
 		return;
 	}
 
-	// screen movement
-	if(glfwGetKey(GLFW_KEY_UP)) {
-		RelY += 0.3;
-	}
-	if(glfwGetKey(GLFW_KEY_DOWN)) {
-		RelY -= 0.3;
-	}
-	if(glfwGetKey(GLFW_KEY_LEFT)) {
-		RelX -= 0.3;
-	}
-	if(glfwGetKey(GLFW_KEY_RIGHT)) {
-		RelX += 0.3;
-	}
-
 	// zoom
 	if(glfwGetKey('=')) {
 		zoom_ *= 2.0f;
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		gluOrtho2D(0.0f, w/(zoom_*16.0), 0.0f, h/(zoom_*16.0));
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		WindowResize(0, 0);
+		Render();
+		glfwSleep(0.2);
+		return;
 	} else if(glfwGetKey('-')) {
 		zoom_ /= 2.0f;
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		gluOrtho2D(0.0f, w/(zoom_*16.0), 0.0f, h/(zoom_*16.0));
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		WindowResize(0, 0);
+		Render();
+		glfwSleep(0.2);
+		return;
 	}
+
+	// game/editor events
+	ProcessSpecificInputs();
 }
 
 
@@ -130,14 +115,16 @@ void
 UI::WindowResize(int w, int h)
 {
 	cout << "Resize: " << w << "x" << h << endl;
-	win_w_ = w;
-	win_h_ = h;
+	if(w != 0 && h != 0) {
+		win_w_ = w;
+		win_h_ = h;
+	}
 
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+	glViewport(0, 0, (GLsizei)win_w_, (GLsizei)win_h_);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0.0f, w/(zoom_*16.0), 0.0f, h/(zoom_*16.0));
+	gluOrtho2D(0.0f, win_w_/(zoom_*16.0), 0.0f, win_h_/(zoom_*16.0));
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }

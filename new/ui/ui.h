@@ -1,15 +1,14 @@
 #ifndef UI_UI_H
 #define UI_UI_H
 
-struct ui_error : public std::runtime_error {
-	ui_error(std::string s) : std::runtime_error(s) { }
+struct ui_error : public runtime_error {
+	ui_error(string s) : runtime_error(s) { }
 };
 
 
 class UI {
 public:
-	UI();
-	~UI();
+	virtual ~UI();
 	bool Active();
 	void ProcessInputs();
 	void Render();
@@ -22,6 +21,10 @@ public:
 	inline int Zoom() const { return zoom_; }
 
 	float RelX, RelY;
+
+protected:
+	UI();
+	virtual void ProcessSpecificInputs() = 0;
 
 private:
 	void WindowResize(int w, int h);

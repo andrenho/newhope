@@ -1,0 +1,18 @@
+@startuml
+
+GameMode <|-- Game
+GameMode <|-- Editor
+GameMode --> Map
+UI <|-- UIGame
+UI <|-- UIEditor
+UI --> Imageset
+Imageset --> Image
+Image <|-- ImageIndexed
+Image <|-- ImageRGB
+UI --> Layer
+Layer <|-- LayerTerrain
+LayerTerrain .. Map
+GameMode .. Options
+Dialog <|-- TextWall
+
+@enduml

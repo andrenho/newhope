@@ -3,13 +3,17 @@
 
 #include <iostream>
 #include <map>
+#include <queue>
 #include <stdexcept>
 #include <string>
 #include <vector>
 using namespace std;
 
+#include "options.h"
 #include "game/map.h"
+#include "game/gamemode.h"
 #include "game/game.h"
+#include "game/editor.h"
 #include "ui/image.h"
 #include "ui/imageindexed.h"
 #include "ui/imagergb.h"
@@ -17,8 +21,10 @@ using namespace std;
 #include "ui/layer.h"
 #include "ui/layerterrain.h"
 #include "ui/ui.h"
+#include "ui/uieditor.h"
+#include "ui/uigame.h"
 
-extern Game* game;
-extern UI*   ui;
+extern GameMode* game;
+extern UI*       ui;
 
 #endif
