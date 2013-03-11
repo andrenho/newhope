@@ -16,9 +16,14 @@ public:
 	unsigned int const* Texture() const { return texture_; }
 
 private:
-	void LoadImage(string filename);
+	typedef struct ImageSize { float w, h; } ImageSize;
 
-	std::map<std::string, Reference> hash_;
+	void LoadImage(string filename);
+	void SetupImageMap();
+	void SetupImageTerrain(string name, int idx, float x, float y);
+
+	map<string, Reference> hash_;
+	map<int, ImageSize> sizes_;
 	unsigned int* texture_;
 	int n_textures, c_texture;
 };

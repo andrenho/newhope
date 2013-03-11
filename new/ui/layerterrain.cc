@@ -21,33 +21,53 @@ LayerTerrain::Render() const
 void
 LayerTerrain::DrawTile(int x, int y) const
 {
-	string suffix = TileSuffix(x, y);
-	if(suffix == "") {
+	vector<string> suffixes;
+	TileSuffixes(x, y, suffixes);
+	if(suffixes.empty()) {
 		return;
 	}
-	Reference rc = ui->Imageset()[TerrainStr() + "_" + suffix];
 
-	glBindTexture(GL_TEXTURE_2D, ui->Imageset().Texture()[rc.idx]);
+	for(auto const& suffix: suffixes) {
+		Reference rc = ui->Imageset()[TerrainStr() + "_" + suffix];
 
-	float px = float(x);
-	float py = -float(y);
+		glBindTexture(GL_TEXTURE_2D, ui->Imageset().Texture()[rc.idx]);
 
-	glBegin(GL_QUADS);
-	  glTexCoord2f(rc.x,      rc.y+rc.h); glVertex3f(px,   py,   0.0f);
-	  glTexCoord2f(rc.x+rc.w, rc.y+rc.h); glVertex3f(px+1, py,   0.0f);
-	  glTexCoord2f(rc.x+rc.w, rc.y);      glVertex3f(px+1, py+1, 0.0f);
-	  glTexCoord2f(rc.x,      rc.y);      glVertex3f(px,   py+1, 0.0f);
-	glEnd();
+		float px = float(x);
+		float py = -float(y);
+		glBegin(GL_QUADS);
+		  glTexCoord2f(rc.x,      rc.y+rc.h); glVertex3f(px,   py,   0.0f);
+		  glTexCoord2f(rc.x+rc.w, rc.y+rc.h); glVertex3f(px+1, py,   0.0f);
+		  glTexCoord2f(rc.x+rc.w, rc.y);      glVertex3f(px+1, py+1, 0.0f);
+		  glTexCoord2f(rc.x,      rc.y);      glVertex3f(px,   py+1, 0.0f);
+		glEnd();
+	}
 }
 
 
-string 
-LayerTerrain::TileSuffix(int x, int y) const
+void
+LayerTerrain::TileSuffixes(int x, int y, vector<string>& s) const
 {
-	if(game->Map().Terrain(x, y) == terrain_) {
-		return "c";
+	Map const& m = game->Map();
+
+	// central tile
+	if(m.Terrain(x, y) == terrain_) {
+		s.push_back("c");
+		return;
 	}
-	return "";
+
+	// corners
+	if(m.Terrain(x-1, y) == terrain_ && m.Terrain(x, y-1) == terrain_) {
+		s.push_back("corner_nw");
+	}
+	if(m.Terrain(x+1, y) == terrain_ && m.Terrain(x, y-1) == terrain_) {
+		s.push_back("corner_ne");
+	}
+	if(m.Terrain(x-1, y) == terrain_ && m.Terrain(x, y+1) == terrain_) {
+		s.push_back("corner_sw");
+	}
+	if(m.Terrain(x+1, y) == terrain_ && m.Terrain(x, y+1) == terrain_) {
+		s.push_back("corner_se");
+	}
 }
 
 

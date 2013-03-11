@@ -20,8 +20,10 @@ int main()
 	while(ui->Active()) {
 		ui->StartFrame();
 		ui->ProcessInputs();
-		ui->Render();
-		ui->WaitNextFrame();
+		if(ui->Active()) {
+			ui->Render();
+			ui->WaitNextFrame();
+		}
 	}
 
 	delete ui;

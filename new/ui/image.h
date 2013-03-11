@@ -2,7 +2,7 @@
 #define UI_IMAGE_H
 
 struct Color {
-	unsigned char r, g, b;
+	unsigned char r, g, b, a;
 };
 
 class Image {

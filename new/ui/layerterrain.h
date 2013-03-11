@@ -9,7 +9,7 @@ public:
 private:
 	void DrawTile(int x, int y) const;
 	string TerrainStr() const;
-	string TileSuffix(int x, int y) const;
+	void TileSuffixes(int x, int y, vector<string>& s) const;
 
 	Terrain terrain_;
 };

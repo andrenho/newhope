@@ -3,6 +3,7 @@
 
 class Layer {
 public:
+	virtual ~Layer() { }
 	virtual void Render() const = 0;
 };
 

@@ -134,10 +134,12 @@ Image::LoadPNG(string filename)
 	}
 	
 	// free stuff
-	if(png_ptr && info_ptr)
+	if(png_ptr && info_ptr) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-	for(y=0; y<h; y++)
+	}
+	for(y=0; y<h; y++) {
 		free(row_pointers[y]);
+	}
 	free(row_pointers);
 	fclose(f);
 

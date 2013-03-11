@@ -19,5 +19,5 @@ ImageRGB::SetPixel(int x, int y, Color c) {
 	data[p] = c.r;
 	data[p+1] = c.g;
 	data[p+2] = c.b;
-	data[p+3] = 0;
+	data[p+3] = 255 - c.a;
 }

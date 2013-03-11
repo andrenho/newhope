@@ -6,7 +6,7 @@ using namespace std;
 
 UI::UI()
 	: RelX(0), RelY(0), active_(true), time_(0), win_w_(0), win_h_(0),
-	  zoom_(4)
+	  zoom_(2)
 { 
 	// init GLFW
 	if(!glfwInit()) {
@@ -25,12 +25,15 @@ UI::UI()
 
 	// initialize layers
 	layers_.push_back(new LayerTerrain(t_GRASS));
-	layers_.push_back(new LayerTerrain(t_WATER));
+	//layers_.push_back(new LayerTerrain(t_WATER));
 }
 
 
 UI::~UI()
 {
+	for(auto& layer: layers_) {
+		delete layer;
+	}
 	glfwTerminate();
 }
 
@@ -61,16 +64,16 @@ UI::ProcessInputs()
 
 	// screen movement
 	if(glfwGetKey(GLFW_KEY_UP)) {
-		RelY += 0.2;
+		RelY += 0.3;
 	}
 	if(glfwGetKey(GLFW_KEY_DOWN)) {
-		RelY -= 0.2;
+		RelY -= 0.3;
 	}
 	if(glfwGetKey(GLFW_KEY_LEFT)) {
-		RelX -= 0.2;
+		RelX -= 0.3;
 	}
 	if(glfwGetKey(GLFW_KEY_RIGHT)) {
-		RelX += 0.2;
+		RelX += 0.3;
 	}
 
 	// zoom
