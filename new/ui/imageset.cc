@@ -101,8 +101,8 @@ Imageset::SetupFont(string name, int idx, int w, int h)
 		hash_[(name + "_").append(1, (char)c)] = { idx,
 			(c % 16) * w / sizes_[idx].w,
 			(c / 16) / (sizes_[idx].h / h),
-			1.0f / (float)w,
-			1.0f / (float)h };
+			1.0f / 16.0f,
+			1.0f / 16.0f };
 	}
 }
 

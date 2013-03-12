@@ -66,21 +66,20 @@ LayerDialog::DrawElement(Element const* e, int x, int y) const
 		ElementText const* et = dynamic_cast<ElementText const*>(e);
 		int i = 0;
 		for(char const& c: et->Text) {
-			Reference ch = ui->Imageset()[string("font_").append(1, c)];
-			float px = float(x) / 16.0f;
-			float py = -float(y) / 16.0f;
+			Reference rc = ui->Imageset()[string("font_").append(1, c)];
+			glBindTexture(GL_TEXTURE_2D, ui->Imageset().Texture()[rc.idx]);
+			float px = float(x) / 16.0f + (float(i) / (16.0f / 8.0f));
+			float py = -float(y) / 16.0f - (float(et->Y) / (16.0f / 12.0f));
 			glBegin(GL_QUADS);
 			  glTexCoord2f(rc.x, rc.y+rc.h); 
 			    glVertex3f(px, py, 0.0f);
 			  glTexCoord2f(rc.x+rc.w, rc.y+rc.h); 
-			    glVertex3f(px+1, py, 0.0f);
+			    glVertex3f(px+(8.0f/16.0f), py, 0.0f);
 			  glTexCoord2f(rc.x+rc.w, rc.y); 
-			    glVertex3f(px+1, py+1, 0.0f);
+			    glVertex3f(px+(8.0f/16.0f), py+(12.0f/16.0f), 0.0f);
 			  glTexCoord2f(rc.x, rc.y); 
-			    glVertex3f(px, py+1, 0.0f);
+			    glVertex3f(px, py+(12.0f/16.0f), 0.0f);
 			glEnd();
-			//Draw(ch, x + ((et->X + i) * 8), 
-			//		y + (et->Y * 12));
 			++i;
 		}
 	} else {

@@ -2,6 +2,11 @@
 
 #include <GL/glfw.h>
 
+static const string helptext =
+	"HELP\n"
+	"====\n"
+	"F1...This help";
+
 void 
 UIEditor::ProcessSpecificInputs()
 {
@@ -21,7 +26,7 @@ UIEditor::ProcessSpecificInputs()
 
 	// help
 	if(glfwGetKey(GLFW_KEY_F1)) {
-		setDialog(new TextWall("Help message", 20, 10));
+		setDialog(new TextWall(helptext, 30, 15));
 		return;
 	}
 }

@@ -64,6 +64,15 @@ UI::ProcessInputs()
 		return;
 	}
 
+	// dialog
+	if(dialog_) {
+		int ret = dialog_->ProcessEvents();
+		if(ret == -1) {
+			setDialog(nullptr);
+		}
+		return;
+	}
+
 	// zoom
 	if(glfwGetKey('=')) {
 		zoom_ *= 2.0f;

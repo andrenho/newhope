@@ -8,6 +8,7 @@ public:
 
 	virtual int W() const = 0;
 	virtual int H() const = 0;
+	virtual int ProcessEvents() const = 0;
 };
 
 #endif
