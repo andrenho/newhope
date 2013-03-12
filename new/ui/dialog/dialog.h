@@ -2,7 +2,12 @@
 #define UI_DIALOG_DIALOG_H
 
 class Dialog {
-	virtual void Elements(queue<Element>& e) = 0;
+public:
+	virtual ~Dialog() { }
+	virtual void Elements(vector<Element*>& e) = 0;
+
+	virtual int W() const = 0;
+	virtual int H() const = 0;
 };
 
 #endif

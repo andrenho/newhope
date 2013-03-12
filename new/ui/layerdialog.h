@@ -7,6 +7,9 @@ public:
 	void Render() const;
 
 private:
+	void DrawBackground(int& pos_x, int& pos_y) const;
+	void DrawElement(Element const* e, int x, int y) const;
+
 	Dialog** dialog_;
 };
 

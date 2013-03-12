@@ -98,11 +98,11 @@ void
 Imageset::SetupFont(string name, int idx, int w, int h)
 {
 	for(int c = 0; c <= 255; c++) {
-		hash_[name + "_" + (char)c] = { idx,
+		hash_[(name + "_").append(1, (char)c)] = { idx,
 			(c % 16) * w / sizes_[idx].w,
 			(c / 16) / (sizes_[idx].h / h),
-			1.0f / sizes_[idx].w * w,
-			1.0f / sizes_[idx].h * h };
+			1.0f / (float)w,
+			1.0f / (float)h };
 	}
 }
 

@@ -4,7 +4,14 @@
 class TextWall : public Dialog {
 public:
 	TextWall(string message, int w=0, int h=0);
-	void Elements(queue<Element>& e);
+	void Elements(vector<Element*>& e);
+	
+	int W() const { return _w; }
+	int H() const { return _h; }
+
+private:
+	int _w;
+	int _h;
 };
 
 #endif

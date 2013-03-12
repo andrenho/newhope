@@ -115,6 +115,6 @@ LayerTerrain::TerrainStr() const
 	{
 	case t_GRASS: return "grass";
 	case t_WATER: return "water";
-	default: throw new ui_error("Invalid terrain " + terrain_);
+	default: throw new ui_error("Invalid terrain");
 	}
 }

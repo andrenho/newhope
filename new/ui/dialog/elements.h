@@ -5,7 +5,8 @@ typedef enum ElementType { ELEMENT_TEXT } ElementType;
 
 class Element { 
 public:
-	virtual ElementType Type() = 0;
+	virtual ~Element() { }
+	virtual ElementType Type() const = 0;
 protected:
 	Element() { }
 };
@@ -14,7 +15,7 @@ protected:
 class ElementText : public Element {
 public:
 	ElementText(string text, int x, int y) : Text(text), X(x), Y(y) { }
-	ElementType Type() { return ELEMENT_TEXT; }
+	ElementType Type() const { return ELEMENT_TEXT; }
 
 	const string Text;
 	const int X, Y;

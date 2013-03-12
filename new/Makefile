@@ -13,6 +13,7 @@ SRC = main.cc 		 	\
       ui/image.cc	 	\
       ui/imageindexed.cc	\
       ui/imagergb.cc		\
+      ui/layer.cc		\
       ui/layerdialog.cc		\
       ui/layerterrain.cc	\
       ui/dialog/textwall.cc
