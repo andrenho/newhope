@@ -3,8 +3,11 @@
 
 class LayerDialog : public Layer {
 public:
-	LayerDialog() { }
+	LayerDialog(Dialog** dialog) : dialog_(dialog) { }
 	void Render() const;
+
+private:
+	Dialog** dialog_;
 };
 
 #endif

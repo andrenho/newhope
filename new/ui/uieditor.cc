@@ -18,4 +18,10 @@ UIEditor::ProcessSpecificInputs()
 	if(glfwGetKey(GLFW_KEY_RIGHT)) {
 		ui->RelX += 0.3;
 	}
+
+	// help
+	if(glfwGetKey(GLFW_KEY_F1)) {
+		setDialog(new TextWall("Help message", 20, 10));
+		return;
+	}
 }

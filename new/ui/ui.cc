@@ -4,7 +4,7 @@
 
 UI::UI()
 	: RelX(0), RelY(0), active_(true), time_(0), win_w_(0), win_h_(0),
-	  zoom_(2)
+	  zoom_(2), dialog_(nullptr)
 { 
 	// init GLFW
 	if(!glfwInit()) {
@@ -24,7 +24,7 @@ UI::UI()
 	// initialize layers
 	layers_.push_back(new LayerTerrain(t_GRASS));
 	layers_.push_back(new LayerTerrain(t_WATER));
-	layers_.push_back(new LayerDialog());
+	layers_.push_back(new LayerDialog(&dialog_));
 }
 
 
@@ -32,6 +32,9 @@ UI::~UI()
 {
 	for(auto& layer: layers_) {
 		delete layer;
+	}
+	if(dialog_) {
+		setDialog(nullptr);
 	}
 	glfwTerminate();
 }
@@ -128,4 +131,14 @@ UI::WindowResize(int w, int h)
 	gluOrtho2D(0.0f, win_w_/(zoom_*16.0), 0.0f, win_h_/(zoom_*16.0));
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+
+void 
+UI::setDialog(Dialog* d)
+{
+	if(dialog_) {
+		delete dialog_;
+	}
+	dialog_ = d;
 }

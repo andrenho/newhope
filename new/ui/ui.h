@@ -15,6 +15,8 @@ public:
 	void StartFrame();
 	void WaitNextFrame();
 
+	void setDialog(Dialog* d);
+
 	inline class Imageset const& Imageset() const { return *imageset_; }
 	inline int WindowW() const { return win_w_; }
 	inline int WindowH() const { return win_h_; }
@@ -35,6 +37,7 @@ private:
 	float zoom_;
 	class Imageset const* imageset_;
 	std::vector<Layer*> layers_;
+	Dialog* dialog_;
 };
 
 #endif
