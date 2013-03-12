@@ -5,8 +5,15 @@
 void
 Imageset::SetupImageMap()
 {
+	// terrains
 	SetupImageTerrain("grass", 1, 1, 2);
 	SetupImageTerrain("water", 1, 1, 6);
+
+	// setup dialog
+	SetupDialog("dialog", 0);
+
+	// font
+	SetupFont("font", 2, 8, 12);
 }
 
 
@@ -14,7 +21,7 @@ Imageset::Imageset()
 	: c_texture(0)
 {
 	// load images
-	static vector<string> images = { "dialog.png", "tiles.png" };
+	static vector<string> images = { "dialog.png", "tiles.png", "font.png" };
 	n_textures = images.size();
 	texture_ = new GLuint[n_textures];
 	glGenTextures(n_textures, &texture_[c_texture]);
@@ -75,6 +82,45 @@ Imageset::SetupImageTerrain(string name, int idx, float x, float y)
 		{ "corner_se",  3,  0 },
 		{ "dif_1", 2, 1 },
 		{ "dif_2", 3, 1 },
+	};
+
+	for(auto const& corner: corners) {
+		hash_[name + "_" + corner.suffix] = { idx,
+			(x + corner.x) / sizes_[idx].w * 16,
+			(y + corner.y) / sizes_[idx].h * 16,
+			1.0f / sizes_[idx].w * 16,
+			1.0f / sizes_[idx].h * 16 };
+	}
+}
+
+
+void 
+Imageset::SetupFont(string name, int idx, int w, int h)
+{
+	for(int c = 0; c <= 255; c++) {
+		hash_[name + "_" + (char)c] = { idx,
+			(c % 16) * w / sizes_[idx].w,
+			(c / 16) / (sizes_[idx].h / h),
+			1.0f / sizes_[idx].w * w,
+			1.0f / sizes_[idx].h * h };
+	}
+}
+
+
+void
+Imageset::SetupDialog(string name, int idx) 
+{
+	int x=1, y=1;
+	static const struct Corner { string suffix; int x, y; } corners[] = {
+		{ "nw", -1, -1 },
+		{ "n",   0, -1 },
+		{ "ne",  1, -1 },
+		{ "w",  -1,  0 },
+		{ "c",   0,  0 },
+		{ "e",   1,  0 },
+		{ "sw", -1,  1 },
+		{ "s",   0,  1 },
+		{ "se",  1,  1 },
 	};
 
 	for(auto const& corner: corners) {

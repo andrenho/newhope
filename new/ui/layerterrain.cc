@@ -10,7 +10,6 @@ LayerTerrain::Render() const
 		float(ui->WindowH())/(ui->Zoom()*16.0f) - 1.0f + ui->RelY, 
 		0.0f);
 
-	// TODO - only draw the part on the screen
 	int left = (int)(-ui->RelX-1)+(ui->WindowW()/ui->Zoom()/16.0f)+3;
 	int bottom = (int)(ui->RelY-1)+(ui->WindowH()/ui->Zoom()/16.0f)+3;
 	for(int x=(int)(-ui->RelX-1); x<left; x++) {

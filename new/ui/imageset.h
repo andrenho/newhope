@@ -23,6 +23,8 @@ private:
 	void LoadImage(string filename);
 	void SetupImageMap();
 	void SetupImageTerrain(string name, int idx, float x, float y);
+	void SetupFont(string name, int idx, int w, int h);
+	void SetupDialog(string name, int idx);
 
 	map<string, Reference> hash_;
 	map<int, ImageSize> sizes_;

@@ -20,9 +20,12 @@ using namespace std;
 #include "ui/imageset.h"
 #include "ui/layer.h"
 #include "ui/layerterrain.h"
+#include "ui/layerdialog.h"
 #include "ui/ui.h"
 #include "ui/uieditor.h"
 #include "ui/uigame.h"
+#include "ui/dialog/dialog.h"
+#include "ui/dialog/textwall.h"
 
 extern GameMode* game;
 extern UI*       ui;

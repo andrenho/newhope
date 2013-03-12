@@ -11,6 +11,8 @@ Image <|-- ImageIndexed
 Image <|-- ImageRGB
 UI --> Layer
 Layer <|-- LayerTerrain
+Layer <|-- LayerDialog
+LayerDialog .. Dialog
 LayerTerrain .. Map
 GameMode .. Options
 Dialog <|-- TextWall

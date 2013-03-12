@@ -13,7 +13,9 @@ SRC = main.cc 		 	\
       ui/image.cc	 	\
       ui/imageindexed.cc	\
       ui/imagergb.cc		\
-      ui/layerterrain.cc
+      ui/layerdialog.cc		\
+      ui/layerterrain.cc	\
+      ui/dialog/textwall.cc
 
 TRANSLATIONS = pt_BR
 	
