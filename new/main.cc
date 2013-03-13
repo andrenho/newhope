@@ -15,10 +15,10 @@ int main(int argc, char** argv)
 	try {
 		if(opt->Type == OPT_GAME) {
 			game = new Game(20, 20);
-			ui = new UIGame();
+			ui =   new UIGame();
 		} else if(opt->Type == OPT_EDITOR) {
 			game = new Editor();
-			ui = new UIEditor();
+			ui =   new UIEditor();
 		} else {
 			abort();
 		}

@@ -9,6 +9,7 @@ public:
 	virtual int W() const = 0;
 	virtual int H() const = 0;
 	virtual int ProcessEvents() const = 0;
+	virtual string Reply() const = 0;
 };
 
 #endif

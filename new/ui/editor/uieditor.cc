@@ -24,9 +24,15 @@ UIEditor::ProcessSpecificInputs()
 		ui->RelX += 0.3;
 	}
 
+	// new map
+	if(glfwGetKey(GLFW_KEY_LCTRL) && glfwGetKey('R')) {
+		Dialog(new DialogInput("Map width?", 0, 0, true));
+		return;
+	}
+
 	// help
 	if(glfwGetKey(GLFW_KEY_F1)) {
-		setDialog(new TextWall(helptext, 30, 15));
+		Dialog(new TextWall(helptext, 30, 15));
 		return;
 	}
 }

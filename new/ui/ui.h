@@ -15,7 +15,7 @@ public:
 	void StartFrame();
 	void WaitNextFrame();
 
-	void setDialog(Dialog* d);
+	string Dialog(class Dialog* d);
 
 	inline class Imageset const& Imageset() const { return *imageset_; }
 	inline int WindowW() const { return win_w_; }
@@ -26,6 +26,7 @@ public:
 
 protected:
 	UI();
+	virtual void ProcessBasicInputs();
 	virtual void ProcessSpecificInputs() = 0;
 
 private:
@@ -37,7 +38,7 @@ private:
 	float zoom_;
 	class Imageset const* imageset_;
 	std::vector<Layer*> layers_;
-	Dialog* dialog_;
+	class Dialog* dialog_;
 };
 
 #endif

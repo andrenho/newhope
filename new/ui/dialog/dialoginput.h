@@ -1,12 +1,23 @@
 #ifndef UI_DIALOG_DIALOGINPUT_H
 #define UI_DIALOG_DIALOGINPUT_H
 
-class DialogInput {
-	virtual void Elements(vector<Element*>& e) = 0;
+#include "defines.h"
 
-	virtual int W() const = 0;
-	virtual int H() const = 0;
-	virtual int ProcessEvents() const = 0;
+class DialogInput : public TextWall {
+public:
+	DialogInput(string message, int w=0, int h=0, bool numeric=false);
+	virtual void Elements(vector<Element*>& e);
+	virtual string Reply() const;
+	virtual int ProcessEvents() const;
+	static DialogInput* staticThis;
+
+private:
+	static void KeyCallback(int k, int action);
+	static void CharCallback(int k, int action);
+
+	string reply_;
+	bool numeric_;
+	bool accept_;
 };
 
 #endif

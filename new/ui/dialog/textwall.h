@@ -4,13 +4,14 @@
 class TextWall : public Dialog {
 public:
 	TextWall(string message, int w=0, int h=0);
-	void Elements(vector<Element*>& e);
+	virtual void Elements(vector<Element*>& e);
 	
 	int W() const { return w_; }
 	int H() const { return h_; }
-	int ProcessEvents() const;
+	virtual int ProcessEvents() const;
+	virtual string Reply() const { return ""; }
 
-private:
+protected:
 	void Wrap(string text, vector<string>& t, int cols=60);
 
 	string message_;

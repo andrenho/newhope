@@ -33,9 +33,6 @@ UI::~UI()
 	for(auto& layer: layers_) {
 		delete layer;
 	}
-	if(dialog_) {
-		setDialog(nullptr);
-	}
 	glfwTerminate();
 }
 
@@ -50,6 +47,14 @@ UI::Active()
 void 
 UI::ProcessInputs() 
 {
+	ProcessBasicInputs();
+	ProcessSpecificInputs();
+}
+
+
+void 
+UI::ProcessBasicInputs() 
+{
 	// quit
 	if(!glfwGetWindowParam(GLFW_OPENED) || glfwGetKey('Q')) {
 		active_ = false;
@@ -61,15 +66,6 @@ UI::ProcessInputs()
 	glfwGetWindowSize(&w, &h);
 	if(w != win_w_ || h != win_h_) {
 		WindowResize(w, h);
-		return;
-	}
-
-	// dialog
-	if(dialog_) {
-		int ret = dialog_->ProcessEvents();
-		if(ret == -1) {
-			setDialog(nullptr);
-		}
 		return;
 	}
 
@@ -87,9 +83,6 @@ UI::ProcessInputs()
 		glfwSleep(0.2);
 		return;
 	}
-
-	// game/editor events
-	ProcessSpecificInputs();
 }
 
 
@@ -143,11 +136,22 @@ UI::WindowResize(int w, int h)
 }
 
 
-void 
-UI::setDialog(Dialog* d)
+string
+UI::Dialog(class Dialog* d)
 {
-	if(dialog_) {
-		delete dialog_;
-	}
+	string s;
 	dialog_ = d;
+	while(1) {
+		StartFrame();
+		ProcessBasicInputs();
+		if(!d->ProcessEvents()) {
+			break;
+		}
+		Render();
+		WaitNextFrame();
+	}
+	s = dialog_->Reply();
+	delete dialog_;
+	dialog_ = nullptr;
+	return s;
 }

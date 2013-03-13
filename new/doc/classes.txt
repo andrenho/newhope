@@ -51,7 +51,7 @@ LayerDialog .. Dialog
 LayerTerrain .. Map
 GameMode .. Options
 Dialog <|-- TextWall
-Dialog <|-- DialogInput
+TextWall <|-- DialogInput
 Layer <|-- LayerEditor
 Dialog .. Elements
 

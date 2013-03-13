@@ -42,10 +42,10 @@ TextWall::ProcessEvents() const
 {
 	if(glfwGetKey(GLFW_KEY_SPACE) || glfwGetKey(GLFW_KEY_ENTER)
 	|| glfwGetKey(GLFW_KEY_ESC)   || glfwGetMouseButton(GLFW_MOUSE_BUTTON_1)) {
-		return -1;
+		return 0;
 	}
 
-	return 0;
+	return -1;
 }
 
 
