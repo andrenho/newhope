@@ -3,8 +3,10 @@
 #include <sstream>
 #include <GL/glfw.h>
 
+TextWall* TextWall::staticThis = nullptr;
+
 TextWall::TextWall(string message, int w, int h)
-	: message_(message)
+	: message_(message), accept_(false)
 {
 	w_ = w * 8;
 	h_ = h * 12;
@@ -22,6 +24,9 @@ TextWall::TextWall(string message, int w, int h)
 			}
 		}
 	}
+
+	TextWall::staticThis = this;
+	glfwSetKeyCallback(&TextWall::KeyCallback);
 }
 
 
@@ -37,14 +42,22 @@ TextWall::Elements(vector<Element*>& e)
 }
 
 
+void GLFWCALL 
+TextWall::KeyCallback(int k, int action)
+{
+	if(action == GLFW_PRESS && k == GLFW_KEY_ENTER) {
+		TextWall::staticThis->accept_ = true;
+	}
+}
+
+
 int
 TextWall::ProcessEvents() const
 {
-	if(glfwGetKey(GLFW_KEY_SPACE) || glfwGetKey(GLFW_KEY_ENTER)
-	|| glfwGetKey(GLFW_KEY_ESC)   || glfwGetMouseButton(GLFW_MOUSE_BUTTON_1)) {
+	if(accept_) {
+		glfwSetKeyCallback(nullptr);
 		return 0;
 	}
-
 	return -1;
 }
 

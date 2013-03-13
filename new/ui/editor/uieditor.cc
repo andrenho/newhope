@@ -26,7 +26,14 @@ UIEditor::ProcessSpecificInputs()
 
 	// new map
 	if(glfwGetKey(GLFW_KEY_LCTRL) && glfwGetKey('R')) {
-		Dialog(new DialogInput("Map width?", 0, 0, true));
+		int w, h;
+		try {
+			w = stoi(Dialog(new DialogInput("Map width?", 0, 0, true)));
+			h = stoi(Dialog(new DialogInput("Map height?", 0, 0, true)));
+		} catch(invalid_argument& e) {
+			Dialog(new TextWall("Invalid value."));
+		}
+		((MapEditor*)&game->Map())->Resize(w, h);
 		return;
 	}
 

@@ -5,17 +5,16 @@ typedef enum Terrain { t_GRASS, t_WATER } Terrain;
 
 class Map {
 public:
-	enum Terrain Terrain(int x, int y) const { 
-		if(x < 0 || y < 0 || x >= W() || y >= H()) {
-			return t_WATER;
-		} else if((x == 2) && (y == 2 || y == 3 || y == 4)) {
-			return t_WATER;
-		} else {
-			return t_GRASS; 
-		}
-	}
-	int W() const { return 5000; }
-	int H() const { return 5000; }
+	Map();
+	virtual ~Map() { }
+
+	virtual enum Terrain Terrain(int x, int y) const;
+
+	int W() const { return w_; }
+	int H() const { return h_; }
+
+protected:
+	int w_, h_;
 };
 
 #endif

@@ -9,11 +9,11 @@ public:
 	virtual void Elements(vector<Element*>& e);
 	virtual string Reply() const;
 	virtual int ProcessEvents() const;
-	static DialogInput* staticThis;
 
 private:
 	static void KeyCallback(int k, int action);
 	static void CharCallback(int k, int action);
+	static DialogInput* staticThis;
 
 	string reply_;
 	bool numeric_;

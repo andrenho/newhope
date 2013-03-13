@@ -3,8 +3,12 @@
 package game <<Frame>> {
   class GameMode
   class Game
-  class Editor
   class Map
+
+  package editor <<Frame>> {
+    class Editor
+    class MapEditor
+  }
 }
 
 package ui <<Frame>> {
@@ -28,7 +32,7 @@ package ui <<Frame>> {
     class ImageRGB
   }
 
-  package editor <<Frame>> {
+  package ui/editor <<Frame>> {
     class UIEditor
     class LayerEditor
   }
@@ -54,5 +58,6 @@ Dialog <|-- TextWall
 TextWall <|-- DialogInput
 Layer <|-- LayerEditor
 Dialog .. Elements
+Map <|-- MapEditor
 
 @enduml

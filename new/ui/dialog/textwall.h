@@ -14,9 +14,13 @@ public:
 protected:
 	void Wrap(string text, vector<string>& t, int cols=60);
 
+	static TextWall* staticThis;
+	static void KeyCallback(int k, int action);
+
 	string message_;
 	int w_;
 	int h_;
+	bool accept_;
 };
 
 #endif

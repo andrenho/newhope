@@ -3,8 +3,11 @@
 
 class GameMode {
 public:
-	virtual ~GameMode() { }
-	inline class Map const& Map() { return *map_; }
+	virtual ~GameMode() { 
+		delete map_;
+	}
+
+	inline class Map& Map() { return *map_; }
 
 protected:
 	class Map* map_;
