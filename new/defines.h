@@ -29,6 +29,7 @@ using namespace std;
 #include "ui/ui.h"
 #include "ui/uigame.h"
 #include "ui/editor/uieditor.h"
+#include "ui/editor/layereditor.h"
 
 extern Engine* game;
 extern UI*     ui;

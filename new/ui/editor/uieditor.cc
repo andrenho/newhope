@@ -5,7 +5,8 @@
 static const string helptext =
 	"HELP\n"
 	"====\n"
-	"F1...This help";
+	"F1........This help\n"
+	"CTRL+R....Resize map";
 
 void 
 UIEditor::ProcessSpecificInputs()

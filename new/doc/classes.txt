@@ -1,15 +1,25 @@
 @startuml
 
-package game <<Frame>> {
-  class GameMode
-  class Game
+package engine <<Frame>> {
+  class Engine
   class Map
+
+  package game <<Frame>> {
+    class Game
+    class GameMap
+  }
 
   package editor <<Frame>> {
     class Editor
     class MapEditor
   }
 }
+
+Engine <|-- Game
+Engine <|-- Editor
+Engine --> Map
+Map <|-- MapEditor
+Map <|-- GameMap
 
 package ui <<Frame>> {
   class Imageset
@@ -39,9 +49,6 @@ package ui <<Frame>> {
 
 }
 
-GameMode <|-- Game
-GameMode <|-- Editor
-GameMode --> Map
 UI <|-- UIGame
 UI <|-- UIEditor
 UI --> Imageset
@@ -53,11 +60,10 @@ Layer <|-- LayerTerrain
 Layer <|-- LayerDialog
 LayerDialog .. Dialog
 LayerTerrain .. Map
-GameMode .. Options
+Engine .. Options
 Dialog <|-- TextWall
 TextWall <|-- DialogInput
 Layer <|-- LayerEditor
 Dialog .. Elements
-Map <|-- MapEditor
 
 @enduml

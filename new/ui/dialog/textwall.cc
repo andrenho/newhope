@@ -19,7 +19,7 @@ TextWall::TextWall(string message, int w, int h)
 	if(w_ == 0 || h_ == 0) {
 		h_ = t.size() * 12;
 		for(string const& s: t) {
-			if(s.length() * 8 > w_) {
+			if(s.length() * 8 > (unsigned int)w_) {
 				w_ = s.length() * 8;
 			}
 		}
