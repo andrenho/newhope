@@ -1,9 +1,9 @@
-#ifndef GAME_GAMEMODE_H
-#define GAME_GAMEMODE_H
+#ifndef ENGINE_ENGINE_H
+#define ENGINE_ENGINE_H
 
-class GameMode {
+class Engine {
 public:
-	virtual ~GameMode() { 
+	virtual ~Engine() { 
 		delete map_;
 	}
 

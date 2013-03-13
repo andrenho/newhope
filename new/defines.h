@@ -30,7 +30,7 @@ using namespace std;
 #include "ui/uigame.h"
 #include "ui/editor/uieditor.h"
 
-extern GameMode* game;
-extern UI*       ui;
+extern Engine* game;
+extern UI*     ui;
 
 #endif

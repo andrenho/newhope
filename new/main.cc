@@ -4,9 +4,9 @@
 #include <iostream>
 using namespace std;
 
-GameMode* game;
-UI*       ui;
-Options*  opt;
+Engine*  game;
+UI*      ui;
+Options* opt;
 
 int main(int argc, char** argv)
 {
@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 	opt = new Options(argc, argv);
 	try {
 		if(opt->Type == OPT_GAME) {
-			game = new Game(20, 20);
+			game = new Game();
 			ui =   new UIGame();
 		} else if(opt->Type == OPT_EDITOR) {
 			game = new Editor();

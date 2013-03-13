@@ -3,7 +3,7 @@
 
 #include "defines.h"
 
-class Editor : public GameMode {
+class Editor : public Engine {
 public:
 	Editor() { 
 		map_ = new MapEditor();

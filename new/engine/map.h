@@ -5,7 +5,6 @@ typedef enum Terrain { t_GRASS, t_WATER } Terrain;
 
 class Map {
 public:
-	Map();
 	virtual ~Map() { }
 
 	virtual enum Terrain Terrain(int x, int y) const;

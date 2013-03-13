@@ -7,7 +7,7 @@ SRC = main.cc 		 	\
       options.cc		\
       engine/game/game.cc 	\
       engine/game/gamemap.cc	\
-      game/editor/mapeditor.cc  \
+      engine/editor/mapeditor.cc  \
       ui/image/image.cc	 	\
       ui/image/imageindexed.cc	\
       ui/image/imagergb.cc	\
