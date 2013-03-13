@@ -13,7 +13,6 @@ using namespace std;
 #include "game/map.h"
 #include "game/gamemode.h"
 #include "game/game.h"
-#include "game/editor.h"
 #include "ui/dialog/elements.h"
 #include "ui/dialog/dialog.h"
 #include "ui/dialog/textwall.h"
@@ -25,8 +24,9 @@ using namespace std;
 #include "ui/layerterrain.h"
 #include "ui/layerdialog.h"
 #include "ui/ui.h"
-#include "ui/uieditor.h"
 #include "ui/uigame.h"
+#include "editor/editor.h"
+#include "editor/uieditor.h"
 
 extern GameMode* game;
 extern UI*       ui;
