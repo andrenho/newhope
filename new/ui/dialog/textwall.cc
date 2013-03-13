@@ -9,6 +9,9 @@ TextWall::TextWall(string message, int w, int h)
 	w_ = w * 8;
 	h_ = h * 12;
 
+	w_ /= 16; w_ *= 16;
+	h_ /= 16; h_ *= 16;
+
 	vector<string> t;
 	Wrap(message, t, w);
 	if(w_ == 0 || h_ == 0) {
