@@ -5,8 +5,8 @@ include config.mk
 
 SRC = main.cc 		 	\
       options.cc		\
-      game/game.cc 	 	\
-      game/map.cc		\
+      engine/game/game.cc 	\
+      engine/game/gamemap.cc	\
       game/editor/mapeditor.cc  \
       ui/image/image.cc	 	\
       ui/image/imageindexed.cc	\

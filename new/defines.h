@@ -10,11 +10,11 @@
 using namespace std;
 
 #include "options.h"
-#include "game/map.h"
-#include "game/gamemode.h"
-#include "game/game.h"
-#include "game/editor/mapeditor.h"
-#include "game/editor/editor.h"
+#include "engine/map.h"
+#include "engine/engine.h"
+#include "engine/game/game.h"
+#include "engine/editor/mapeditor.h"
+#include "engine/editor/editor.h"
 #include "ui/dialog/elements.h"
 #include "ui/dialog/dialog.h"
 #include "ui/dialog/textwall.h"
