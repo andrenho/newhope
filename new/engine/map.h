@@ -7,7 +7,7 @@ class Map {
 public:
 	virtual ~Map() { }
 
-	virtual enum Terrain Terrain(int x, int y) const;
+	virtual enum Terrain Terrain(int x, int y) const = 0;
 
 	int W() const { return w_; }
 	int H() const { return h_; }
