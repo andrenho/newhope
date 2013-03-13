@@ -5,18 +5,19 @@ include config.mk
 
 SRC = main.cc 		 	\
       options.cc		\
-      editor/uieditor.cc	\
       game/game.cc 	 	\
+      ui/image/image.cc	 	\
+      ui/image/imageindexed.cc	\
+      ui/image/imagergb.cc	\
       ui/ui.cc		 	\
       ui/uigame.cc		\
       ui/imageset.cc	 	\
-      ui/image.cc	 	\
-      ui/imageindexed.cc	\
-      ui/imagergb.cc		\
       ui/layer.cc		\
       ui/layerdialog.cc		\
       ui/layerterrain.cc	\
-      ui/dialog/textwall.cc
+      ui/dialog/dialoginput.cc	\
+      ui/dialog/textwall.cc	\
+      ui/editor/uieditor.cc
 
 TRANSLATIONS = pt_BR
 	

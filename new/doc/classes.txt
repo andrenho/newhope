@@ -1,5 +1,40 @@
 @startuml
 
+package game <<Frame>> {
+  class GameMode
+  class Game
+  class Editor
+  class Map
+}
+
+package ui <<Frame>> {
+  class Imageset
+  class Layer
+  class LayerTerrain
+  class LayerDialog
+  class UI
+  class UIGame
+
+  package dialog <<Frame>> {
+    class Dialog
+    class Elements
+    class TextWall
+    class DialogInput
+  }
+
+  package image <<Frame>> {
+    class Image
+    class ImageIndexed
+    class ImageRGB
+  }
+
+  package editor <<Frame>> {
+    class UIEditor
+    class LayerEditor
+  }
+
+}
+
 GameMode <|-- Game
 GameMode <|-- Editor
 GameMode --> Map
@@ -16,5 +51,8 @@ LayerDialog .. Dialog
 LayerTerrain .. Map
 GameMode .. Options
 Dialog <|-- TextWall
+Dialog <|-- DialogInput
+Layer <|-- LayerEditor
+Dialog .. Elements
 
 @enduml
