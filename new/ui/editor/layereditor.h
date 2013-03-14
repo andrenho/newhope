@@ -3,9 +3,13 @@
 
 #include "defines.h"
 
-class LayerEditor : public Editor {
+class LayerEditor : public Layer {
 public:
-	virtual void Render() const = 0;
+	LayerEditor() : Layer(), option_('T') { }
+	virtual void Render() const;
+
+private:
+	char option_;
 };
 
 #endif

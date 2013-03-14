@@ -13,4 +13,6 @@ Layer::Draw(Reference rc, int x, int y) const
 	  glTexCoord2f(rc.x+rc.w, rc.y); glVertex3f(px+1, py+1, 0.0f);
 	  glTexCoord2f(rc.x, rc.y); glVertex3f(px, py+1, 0.0f);
 	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

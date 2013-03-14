@@ -42,6 +42,7 @@ LayerTerrain::DrawTile(int x, int y) const
 		  glTexCoord2f(rc.x, rc.y); glVertex3f(px, py+1, 0.0f);
 		glEnd();
 	}
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 

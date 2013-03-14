@@ -8,6 +8,13 @@ static const string helptext =
 	"F1........This help\n"
 	"CTRL+R....Resize map";
 
+UIEditor::UIEditor()
+	: UI()
+{
+	layers_.push_back(new LayerEditor());
+}
+
+
 void 
 UIEditor::ProcessSpecificInputs()
 {
@@ -31,10 +38,10 @@ UIEditor::ProcessSpecificInputs()
 		try {
 			w = stoi(Dialog(new DialogInput("Map width?", 0, 0, true)));
 			h = stoi(Dialog(new DialogInput("Map height?", 0, 0, true)));
+			((MapEditor*)&game->Map())->Resize(w, h);
 		} catch(invalid_argument& e) {
 			Dialog(new TextWall("Invalid value."));
 		}
-		((MapEditor*)&game->Map())->Resize(w, h);
 		return;
 	}
 

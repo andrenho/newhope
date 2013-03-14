@@ -85,4 +85,5 @@ LayerDialog::DrawElement(Element const* e, int x, int y) const
 	} else {
 		throw ui_error("Unsupported element type.");
 	}
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

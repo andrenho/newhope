@@ -20,6 +20,8 @@ public:
 	inline class Imageset const& Imageset() const { return *imageset_; }
 	inline int WindowW() const { return win_w_; }
 	inline int WindowH() const { return win_h_; }
+	inline float WindowZoomW() const { return win_w_/float(zoom_); }
+	inline float WindowZoomH() const { return win_h_/float(zoom_); }
 	inline int Zoom() const { return zoom_; }
 
 	float RelX, RelY;
@@ -29,6 +31,8 @@ protected:
 	virtual void ProcessBasicInputs();
 	virtual void ProcessSpecificInputs() = 0;
 
+	std::vector<Layer*> layers_;
+
 private:
 	void WindowResize(int w, int h);
 
@@ -37,7 +41,6 @@ private:
 	int win_w_, win_h_;
 	float zoom_;
 	class Imageset const* imageset_;
-	std::vector<Layer*> layers_;
 	class Dialog* dialog_;
 };
 
