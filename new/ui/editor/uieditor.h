@@ -4,9 +4,8 @@
 #include "defines.h"
 
 class UIEditor : public UI {
-public:
-	UIEditor();
 protected:
+	void AddSpecificLayers();
 	void ProcessSpecificInputs();
 };
 

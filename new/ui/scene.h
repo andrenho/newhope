@@ -13,7 +13,7 @@ public:
 	void setProportion(ProportionScene ps) const;
 
 	void DrawImage(string index, float x, float y) const;
-	void DrawRectangle(int x1, int y1, int x2, int y2, Color c) const;
+	void DrawRectangle(float x1, float y1, float x2, float y2, Color c) const;
 
 	void WindowTileBorders(int& x, int& y, int& w, int &h) const;
 

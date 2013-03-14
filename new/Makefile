@@ -15,7 +15,6 @@ SRC = main.cc 		 		\
       ui/ui.cc		 		\
       ui/uigame.cc			\
       ui/imageset.cc	 		\
-      ui/layer.cc			\
       ui/layerdialog.cc			\
       ui/layerterrain.cc		\
       ui/dialog/dialoginput.cc		\

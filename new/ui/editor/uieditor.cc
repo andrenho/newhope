@@ -8,13 +8,6 @@ static const string helptext =
 	"F1........This help\n"
 	"CTRL+R....Resize map";
 
-UIEditor::UIEditor()
-	: UI()
-{
-	layers_.push_back(new LayerEditor());
-}
-
-
 void 
 UIEditor::ProcessSpecificInputs()
 {
@@ -50,4 +43,21 @@ UIEditor::ProcessSpecificInputs()
 		Dialog(new TextWall(helptext, 30, 15));
 		return;
 	}
+
+	// mouse
+	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		int x, y;
+		glfwGetMousePos(&x, &y);
+		float rx = x / ui->Zoom(), ry = y / ui->Zoom();
+		if(rx >= ui->WindowZoomW() - 80) {
+			cout << rx << "," << ry << endl;
+		}
+	}
+}
+
+
+void
+UIEditor::AddSpecificLayers()
+{
+	layers_.push_back(new LayerEditor());
 }

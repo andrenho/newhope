@@ -10,7 +10,7 @@ Options* opt;
 
 int main(int argc, char** argv)
 {
-	// find execution type and initialize UI
+	// find execution type
 	opt = new Options(argc, argv);
 	try {
 		if(opt->Type == OPT_GAME) {
@@ -26,6 +26,9 @@ int main(int argc, char** argv)
 		cerr << "Error initializing UI: " << e.what() << endl;
 		exit(EXIT_FAILURE);
 	}
+
+	// initialize UI
+	ui->Initialize();
 
 	// main loop
 	while(ui->Active()) {

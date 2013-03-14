@@ -9,6 +9,7 @@ struct ui_error : public runtime_error {
 class UI {
 public:
 	virtual ~UI();
+	void Initialize();
 	bool Active();
 	void ProcessInputs();
 	void Render();
@@ -31,6 +32,7 @@ protected:
 	UI();
 	virtual void ProcessBasicInputs();
 	virtual void ProcessSpecificInputs() = 0;
+	virtual void AddSpecificLayers() = 0;
 
 	std::vector<Layer*> layers_;
 	class Scene scene_;

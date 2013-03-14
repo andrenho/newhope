@@ -4,6 +4,7 @@
 #include "defines.h"
 
 class UIGame : public UI {
+	void AddSpecificLayers() { }
 	void ProcessSpecificInputs() { }
 };
 

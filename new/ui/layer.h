@@ -5,9 +5,6 @@ class Layer {
 public:
 	virtual ~Layer() { }
 	virtual void Render() const = 0;
-
-protected:
-	virtual void Draw(Reference rc, int x, int y) const;
 };
 
 #endif

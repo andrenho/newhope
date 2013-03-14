@@ -6,6 +6,12 @@ UI::UI()
 	: RelX(0), RelY(0), active_(true), time_(0), win_w_(0), win_h_(0),
 	  zoom_(2), dialog_(nullptr)
 { 
+}
+
+
+void
+UI::Initialize()
+{
 	// init GLFW
 	if(!glfwInit()) {
 		throw ui_error("error initializing glfw");
@@ -14,6 +20,7 @@ UI::UI()
 		throw ui_error("error opening window");
 	}
 	glfwSetWindowTitle("New Hope " VERSION);
+	glfwSwapInterval(1);
 
 	// init OpenGL
 	imageset_ = new class Imageset();
@@ -24,6 +31,7 @@ UI::UI()
 	// initialize layers
 	layers_.push_back(new LayerTerrain(t_GRASS));
 	layers_.push_back(new LayerTerrain(t_WATER));
+	AddSpecificLayers();
 	layers_.push_back(new LayerDialog(&dialog_));
 }
 

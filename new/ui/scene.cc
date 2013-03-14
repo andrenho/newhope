@@ -69,7 +69,7 @@ Scene::DrawImage(string index, float x, float y) const
 
 
 void 
-Scene::DrawRectangle(int x1, int y1, int x2, int y2, Color c) const
+Scene::DrawRectangle(float x1, float y1, float x2, float y2, Color c) const
 {
 	glColor3f(float(c.r) / 255.0f, float(c.g) / 255.0f, float(c.b) / 255.0f);
 	glBegin(GL_QUADS);
