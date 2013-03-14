@@ -23,6 +23,7 @@ public:
 	inline float WindowZoomW() const { return win_w_/float(zoom_); }
 	inline float WindowZoomH() const { return win_h_/float(zoom_); }
 	inline int Zoom() const { return zoom_; }
+	inline class Scene const& Scene() { return scene_; }
 
 	float RelX, RelY;
 
@@ -32,6 +33,7 @@ protected:
 	virtual void ProcessSpecificInputs() = 0;
 
 	std::vector<Layer*> layers_;
+	class Scene scene_;
 
 private:
 	void WindowResize(int w, int h);

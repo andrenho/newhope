@@ -6,6 +6,7 @@
 typedef struct Reference { 
 	int idx;
 	float x, y, w, h;
+	int real_w, real_h;
 } Reference;
 
 

@@ -22,6 +22,7 @@ using namespace std;
 #include "ui/image/image.h"
 #include "ui/image/imageindexed.h"
 #include "ui/image/imagergb.h"
+#include "ui/scene.h"
 #include "ui/imageset.h"
 #include "ui/layer.h"
 #include "ui/layerterrain.h"

@@ -89,12 +89,13 @@ UI::ProcessBasicInputs()
 void 
 UI::Render() 
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Scene().Initialize();
 
 	for(auto const& layer: layers_) {
 		layer->Render();
 	}
-	glfwSwapBuffers();
+
+	Scene().Render();
 }
 
 

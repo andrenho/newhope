@@ -28,6 +28,7 @@ package ui <<Frame>> {
   class LayerDialog
   class UI
   class UIGame
+  class Scene
 
   package dialog <<Frame>> {
     class Dialog
@@ -65,5 +66,6 @@ Dialog <|-- TextWall
 TextWall <|-- DialogInput
 Layer <|-- LayerEditor
 Dialog .. Elements
+UI .. Scene
 
 @enduml

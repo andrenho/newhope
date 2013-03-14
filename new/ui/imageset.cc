@@ -89,7 +89,8 @@ Imageset::SetupImageTerrain(string name, int idx, float x, float y)
 			(x + corner.x) / sizes_[idx].w * 16,
 			(y + corner.y) / sizes_[idx].h * 16,
 			1.0f / sizes_[idx].w * 16,
-			1.0f / sizes_[idx].h * 16 };
+			1.0f / sizes_[idx].h * 16,
+			16, 16 };
 	}
 }
 
@@ -102,7 +103,8 @@ Imageset::SetupFont(string name, int idx, int w, int h)
 			(c % 16) * w / sizes_[idx].w,
 			(c / 16) / (sizes_[idx].h / h),
 			1.0f / 16.0f,
-			1.0f / 16.0f };
+			1.0f / 16.0f,
+			8, 12 };
 	}
 }
 
@@ -128,6 +130,7 @@ Imageset::SetupDialog(string name, int idx)
 			(x + corner.x) / sizes_[idx].w * 16,
 			(y + corner.y) / sizes_[idx].h * 16,
 			1.0f / sizes_[idx].w * 16,
-			1.0f / sizes_[idx].h * 16 };
+			1.0f / sizes_[idx].h * 16,
+			16, 16 };
 	}
 }

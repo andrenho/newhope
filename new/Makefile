@@ -11,6 +11,7 @@ SRC = main.cc 		 		\
       ui/image/image.cc	 		\
       ui/image/imageindexed.cc		\
       ui/image/imagergb.cc		\
+      ui/scene.cc			\
       ui/ui.cc		 		\
       ui/uigame.cc			\
       ui/imageset.cc	 		\

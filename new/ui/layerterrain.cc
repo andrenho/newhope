@@ -1,19 +1,14 @@
 #include "defines.h"
 
-#include <GL/gl.h>
-
 void
 LayerTerrain::Render() const
 {
-	glLoadIdentity();
-	glTranslatef(ui->RelX, 
-		float(ui->WindowH())/(ui->Zoom()*16.0f) - 1.0f + ui->RelY, 
-		0.0f);
+	ui->Scene().setProportion(PROP_TILES);
 
-	int left = (int)(-ui->RelX-1)+(ui->WindowW()/ui->Zoom()/16.0f)+3;
-	int bottom = (int)(ui->RelY-1)+(ui->WindowH()/ui->Zoom()/16.0f)+3;
-	for(int x=(int)(-ui->RelX-1); x<left; x++) {
-		for(int y=(int)(ui->RelY-1); y<bottom; y++) {
+	int x1, y1, x2, y2;
+	ui->Scene().WindowTileBorders(x1, y1, x2, y2);
+	for(int x=x1; x < x2; x++) {
+		for(int y=y1; y < y2; y++) {
 			DrawTile(x, y);
 		}
 	}
@@ -29,20 +24,8 @@ LayerTerrain::DrawTile(int x, int y) const
 	}
 
 	for(auto const& suffix: suffixes) {
-		Reference rc = ui->Imageset()[TerrainStr() + "_" + suffix];
-
-		glBindTexture(GL_TEXTURE_2D, ui->Imageset().Texture()[rc.idx]);
-
-		float px = float(x);
-		float py = -float(y);
-		glBegin(GL_QUADS);
-		  glTexCoord2f(rc.x, rc.y+rc.h); glVertex3f(px, py, 0.0f);
-		  glTexCoord2f(rc.x+rc.w, rc.y+rc.h); glVertex3f(px+1, py, 0.0f);
-		  glTexCoord2f(rc.x+rc.w, rc.y); glVertex3f(px+1, py+1, 0.0f);
-		  glTexCoord2f(rc.x, rc.y); glVertex3f(px, py+1, 0.0f);
-		glEnd();
+		ui->Scene().DrawImage(TerrainStr() + "_" + suffix, x, y);
 	}
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 

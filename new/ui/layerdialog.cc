@@ -7,10 +7,7 @@ LayerDialog::Render() const
 		return;
 	}
 
-	glLoadIdentity();
-	glTranslatef(0.0f, 
-		float(ui->WindowH())/(ui->Zoom()*16.0f) - 1.0f, 
-		0.0f);
+	ui->Scene().setProportion(PROP_WINDOW);
 
 	int x, y;
 	DrawBackground(x, y);
@@ -28,34 +25,29 @@ void
 LayerDialog::DrawBackground(int& x, int& y) const
 {
 	Dialog* d = *dialog_;
-	x = ((ui->WindowW() / 2) - (d->W() * ui->Zoom() / 2)) / ui->Zoom();
-	y = ((ui->WindowH() / 2) - (d->H() * ui->Zoom() / 2)) / ui->Zoom();
-	
-	Reference middle = ui->Imageset()["dialog_c"];
+	x = ((ui->WindowZoomW()/2) - (d->W() / 2));
+	y = ((ui->WindowZoomH()/2) - (d->H() / 2));
+
 	for(int xx=x; xx<x + d->W(); xx+=16) {
 		for(int yy=y; yy<y + d->H(); yy+=16) {
-			Draw(middle, xx, yy);
+			ui->Scene().DrawImage("dialog_c", xx, yy);
 		}
 	}
 
-	Reference n = ui->Imageset()["dialog_n"],
-	          s = ui->Imageset()["dialog_s"];
 	for(int xx=x; xx<x + d->W(); xx+=16) {
-		Draw(n, xx, y-16);
-		Draw(s, xx, y+d->H());
+		ui->Scene().DrawImage("dialog_n", xx, y-16);
+		ui->Scene().DrawImage("dialog_s", xx, y+d->H());
 	}
 
-	Reference e = ui->Imageset()["dialog_e"],
-	          w = ui->Imageset()["dialog_w"];
 	for(int yy=y; yy<y + d->H(); yy+=16) {
-		Draw(w, x-16, yy);
-		Draw(e, x+d->W(), yy);
+		ui->Scene().DrawImage("dialog_w", x-16, yy);
+		ui->Scene().DrawImage("dialog_e", x+d->W(), yy);
 	}
 
-	Draw(ui->Imageset()["dialog_nw"], x-16, y-16);
-	Draw(ui->Imageset()["dialog_ne"], x+d->W(), y-16);
-	Draw(ui->Imageset()["dialog_sw"], x-16, y+d->H());
-	Draw(ui->Imageset()["dialog_se"], x+d->W(), y+d->H());
+	ui->Scene().DrawImage("dialog_nw", x-16, y-16);
+	ui->Scene().DrawImage("dialog_ne", x+d->W(), y-16);
+	ui->Scene().DrawImage("dialog_sw", x-16, y+d->H());
+	ui->Scene().DrawImage("dialog_se", x+d->W(), y+d->H());
 }
 
 
@@ -66,24 +58,11 @@ LayerDialog::DrawElement(Element const* e, int x, int y) const
 		ElementText const* et = dynamic_cast<ElementText const*>(e);
 		int i = 0;
 		for(char const& c: et->Text) {
-			Reference rc = ui->Imageset()[string("font_").append(1, c)];
-			glBindTexture(GL_TEXTURE_2D, ui->Imageset().Texture()[rc.idx]);
-			float px = float(x) / 16.0f + (float(i) / (16.0f / 8.0f));
-			float py = -float(y) / 16.0f - (float(et->Y) / (16.0f / 12.0f));
-			glBegin(GL_QUADS);
-			  glTexCoord2f(rc.x, rc.y+rc.h); 
-			    glVertex3f(px, py, 0.0f);
-			  glTexCoord2f(rc.x+rc.w, rc.y+rc.h); 
-			    glVertex3f(px+(8.0f/16.0f), py, 0.0f);
-			  glTexCoord2f(rc.x+rc.w, rc.y); 
-			    glVertex3f(px+(8.0f/16.0f), py+(12.0f/16.0f), 0.0f);
-			  glTexCoord2f(rc.x, rc.y); 
-			    glVertex3f(px, py+(12.0f/16.0f), 0.0f);
-			glEnd();
+			ui->Scene().DrawImage(string("font_").append(1, c),
+					x + (i * 8), y + (et->Y * 12));
 			++i;
 		}
 	} else {
 		throw ui_error("Unsupported element type.");
 	}
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
