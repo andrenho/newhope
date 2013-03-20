@@ -13,16 +13,16 @@ UIEditor::ProcessSpecificInputs()
 {
 	// screen movement
 	if(glfwGetKey(GLFW_KEY_UP)) {
-		ui->RelY += 0.3;
+		ui->RelY += 0.6;
 	}
 	if(glfwGetKey(GLFW_KEY_DOWN)) {
-		ui->RelY -= 0.3;
+		ui->RelY -= 0.6;
 	}
 	if(glfwGetKey(GLFW_KEY_LEFT)) {
-		ui->RelX -= 0.3;
+		ui->RelX -= 0.6;
 	}
 	if(glfwGetKey(GLFW_KEY_RIGHT)) {
-		ui->RelX += 0.3;
+		ui->RelX += 0.6;
 	}
 
 	// new map
