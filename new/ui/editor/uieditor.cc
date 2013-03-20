@@ -9,6 +9,12 @@ static const string helptext =
 	"F1........This help\n"
 	"CTRL+R....Resize map";
 
+UIEditor::UIEditor()
+	: UI(), layer_editor_(new LayerEditor())
+{
+}
+
+
 void 
 UIEditor::ProcessSpecificInputs()
 {
@@ -64,11 +70,12 @@ UIEditor::ProcessSpecificInputs()
 void
 UIEditor::AddSpecificLayers()
 {
-	layers_.push_back(new LayerEditor());
+	layers_.push_back(layer_editor_);
 }
 
 
 void 
 UIEditor::SelectTile(int x, int y)
 {
+	layer_editor_->setSelected(x + (y * 3));
 }

@@ -22,16 +22,22 @@ LayerEditor::Render() const
 			Color { 0, 0, 0 });
 
 	// draw tiles
-	int x = 0, y = 0;
+	int x = 0, y = 0, i = 0;
 	try {
 		for(auto const& tile: layers.at(option_).tiles) {
-			ui->Scene().DrawImage(tile,
-					ui->WindowZoomW() - ((3-x) * 24),
-					8 + (y * 24));
-			x++;
-			if(x == 3) {
+			int px = ui->WindowZoomW() - ((3-x) * 24);
+			int py = 8 + (y * 24);
+			if(i == selected_) {
+				ui->Scene().DrawRectangle(px-4, py-4, 
+						px+20, py+20, { 255, 255, 255 });
+				ui->Scene().DrawRectangle(px-3, py-3, 
+						px+19, py+19, { 0, 0, 0 });
+			}
+			ui->Scene().DrawImage(tile, px, py);
+			if(++x == 3) {
 				x = 0; y++;
 			}
+			++i;
 		}
 	} catch(out_of_range& e) { 
 		abort();

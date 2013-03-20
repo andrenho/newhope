@@ -71,6 +71,11 @@ Scene::DrawImage(string index, float x, float y) const
 void 
 Scene::DrawRectangle(float x1, float y1, float x2, float y2, Color c) const
 {
+	if(ps_ == PROP_WINDOW) {
+		y1 = ui->WindowH() / ui->Zoom() - y1;
+		y2 = ui->WindowH() / ui->Zoom() - y2;
+	}
+
 	glColor3f(float(c.r) / 255.0f, float(c.g) / 255.0f, float(c.b) / 255.0f);
 	glBegin(GL_QUADS);
 	  glVertex3f(x1, y1, 0.0f);

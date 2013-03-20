@@ -18,12 +18,15 @@ Imageset::SetupImageMap()
 
 
 Imageset::Imageset()
-	: c_texture(0)
+	: texture_(nullptr), c_texture(0)
 {
 	// load images
 	static vector<string> images = { "dialog.png", "tiles.png", "font.png" };
 	n_textures = images.size();
 	texture_ = new GLuint[n_textures];
+	for(int n=0; n<n_textures; n++) {
+		texture_[n] = 0;
+	}
 	glGenTextures(n_textures, &texture_[c_texture]);
 	
 	for(string image: images) {
@@ -38,6 +41,7 @@ Imageset::Imageset()
 
 Imageset::~Imageset()
 {
+	hash_.clear();
 	delete[] texture_;
 }
 
