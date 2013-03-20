@@ -7,6 +7,9 @@ class UIEditor : public UI {
 protected:
 	void AddSpecificLayers();
 	void ProcessSpecificInputs();
+
+private:
+	void SelectTile(int x, int y);
 };
 
 #endif

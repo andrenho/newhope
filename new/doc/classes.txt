@@ -68,4 +68,13 @@ Layer <|-- LayerEditor
 Dialog .. Elements
 UI .. Scene
 
+class Scene {
+  +Initialize()
+  +Render()
+  +setProportion(ps)
+  +DrawImage(idx, x, y)
+  +DrawRectangle(x1, y1, x2, y2, c)
+  +WindowTileBorders(x, y, w, h)
+}
+
 @enduml

@@ -1,6 +1,7 @@
 #include "defines.h"
 
 #include <GL/glfw.h>
+#include <cmath>
 
 static const string helptext =
 	"HELP\n"
@@ -50,7 +51,11 @@ UIEditor::ProcessSpecificInputs()
 		glfwGetMousePos(&x, &y);
 		float rx = x / ui->Zoom(), ry = y / ui->Zoom();
 		if(rx >= ui->WindowZoomW() - 80) {
-			cout << rx << "," << ry << endl;
+			float bx = (rx - (ui->WindowZoomW()-80)) / 24;
+			float by = ry / 24;
+			if(fmod(bx, 1.0f) > .333f && fmod(by, 1.0f) > .333f) {
+				SelectTile(int(bx), int(by));
+			}
 		}
 	}
 }
@@ -60,4 +65,10 @@ void
 UIEditor::AddSpecificLayers()
 {
 	layers_.push_back(new LayerEditor());
+}
+
+
+void 
+UIEditor::SelectTile(int x, int y)
+{
 }
