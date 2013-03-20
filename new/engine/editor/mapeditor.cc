@@ -9,6 +9,15 @@ MapEditor::MapEditor()
 }
 
 
+MapEditor::~MapEditor()
+{
+	if(tiles_) {
+		delete[] tiles_;
+		tiles_ = nullptr;
+	}
+}
+
+
 enum Terrain 
 MapEditor::Terrain(int x, int y) const 
 { 
@@ -23,6 +32,11 @@ MapEditor::Terrain(int x, int y) const
 void
 MapEditor::Resize(int w, int h)
 {
+	if(tiles_) {
+		delete[] tiles_;
+		tiles_ = nullptr;
+	}
+
 	int old_w = w_, old_h = h_;
 	w_ = w;
 	h_ = h;
