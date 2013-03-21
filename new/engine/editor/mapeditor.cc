@@ -51,3 +51,22 @@ MapEditor::Resize(int w, int h)
 	}
 	tiles_ = t;
 }
+
+
+void 
+MapEditor::SetTile(Point<int> tile, string idx)
+{
+	if(tile.x < 0 || tile.y < 0 || tile.x >= w_ || tile.y >= h_) {
+		return; 
+	}
+
+	// check terrains
+	static const struct { string idx; enum Terrain t; } terrains[] = {
+		{ "grass_c", t_GRASS }, { "water_c", t_WATER }
+	};
+	for(auto const& terrain: terrains) {
+		if(idx == terrain.idx) {
+			tiles_[tile.x+(tile.y*w_)] = terrain.t;
+		}
+	}
+}

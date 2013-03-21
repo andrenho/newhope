@@ -15,6 +15,7 @@ private:
 	LayerEditor* layer_editor_;
 
 	void SelectTile(int x, int y);
+	void TileClicked(Point<int> t);
 };
 
 #endif

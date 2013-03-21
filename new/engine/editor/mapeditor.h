@@ -10,6 +10,7 @@ public:
 	~MapEditor();
 	virtual enum Terrain Terrain(int x, int y) const;
 	void Resize(int w, int h);
+	void SetTile(Point<int> tile, string idx);
 
 private:
 	enum Terrain* tiles_;

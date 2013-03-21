@@ -26,6 +26,10 @@ public:
 	inline int Zoom() const { return zoom_; }
 	inline class Scene const& Scene() { return scene_; }
 
+	template <typename T> Point<T> TranslateTile(int x, int y) {
+		return Point<T>(x / (16 * Zoom()) - RelX, y / (16 * Zoom()) - RelY);
+	}
+
 	float RelX, RelY;
 
 protected:

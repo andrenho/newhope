@@ -56,12 +56,15 @@ UIEditor::ProcessSpecificInputs()
 		int x, y;
 		glfwGetMousePos(&x, &y);
 		float rx = x / ui->Zoom(), ry = y / ui->Zoom();
-		if(rx >= ui->WindowZoomW() - 80) {
+		if(rx >= ui->WindowZoomW() - 80) { // select tile
 			float bx = (rx - (ui->WindowZoomW()-80)) / 24;
 			float by = ry / 24;
 			if(fmod(bx, 1.0f) > .333f && fmod(by, 1.0f) > .333f) {
 				SelectTile(int(bx), int(by));
 			}
+		} else {
+			Point<int> t = ui->TranslateTile<int>(x, y);
+			TileClicked(t);
 		}
 	}
 }
@@ -78,4 +81,12 @@ void
 UIEditor::SelectTile(int x, int y)
 {
 	layer_editor_->setSelected(x + (y * 3));
+}
+
+
+void 
+UIEditor::TileClicked(Point<int> t)
+{
+	MapEditor* me = dynamic_cast<MapEditor*>(&game->Map());
+	me->SetTile(t, layer_editor_->Selected());
 }

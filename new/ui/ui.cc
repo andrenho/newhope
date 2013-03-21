@@ -118,10 +118,10 @@ UI::StartFrame()
 void 
 UI::WaitNextFrame() 
 {
-	if(glfwGetTime() > time_ + 1/30.0f) {
+	if(glfwGetTime() > time_ + 1/60.0f) {
 		cout << "Frame delayed!" << endl;
 	}
-	while(glfwGetTime() < time_ + 1/30.0f) {
+	while(glfwGetTime() < time_ + 1/60.0f) {
 		glfwSleep(0.02);
 	}
 }
@@ -165,3 +165,5 @@ UI::Dialog(class Dialog* d)
 	dialog_ = nullptr;
 	return s;
 }
+
+

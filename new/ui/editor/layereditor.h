@@ -8,11 +8,8 @@ public:
 	LayerEditor() : Layer(), option_('T'), selected_(0) { }
 	virtual void Render() const;
 
-	int Selected() const { return selected_; }
-	void setSelected(int s) { 
-		// TODO
-		selected_ = s; 
-	}
+	string Selected() const;
+	void setSelected(int s);
 
 private:
 	char option_;

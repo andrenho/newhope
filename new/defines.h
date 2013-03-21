@@ -9,6 +9,7 @@
 #include <vector>
 using namespace std;
 
+#include "util/point.h"
 #include "options.h"
 #include "engine/map.h"
 #include "engine/engine.h"

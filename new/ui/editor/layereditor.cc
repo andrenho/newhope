@@ -43,3 +43,20 @@ LayerEditor::Render() const
 		abort();
 	}
 }
+
+
+void 
+LayerEditor::setSelected(int s)
+{
+	int c = layers.at(option_).tiles.size();
+	if(s < c) {
+		selected_ = s;
+	}
+}
+
+
+string 
+LayerEditor::Selected() const
+{
+	return layers.at(option_).tiles[selected_];
+}
