@@ -16,6 +16,9 @@ Imageset::SetupImageMap()
 	SetupImageTerrain("tundra",   1, 11, 6);
 	SetupImageTerrain("lavarock", 1, 16, 6);
 
+	// decoration
+	SetupDecoration("decor", 1);
+
 	// setup dialog
 	SetupDialog("dialog", 0);
 
@@ -140,6 +143,28 @@ Imageset::SetupDialog(string name, int idx)
 		hash_[name + "_" + corner.suffix] = { idx,
 			(x + corner.x) / sizes_[idx].w * 16,
 			(y + corner.y) / sizes_[idx].h * 16,
+			1.0f / sizes_[idx].w * 16,
+			1.0f / sizes_[idx].h * 16,
+			16, 16 };
+	}
+}
+
+
+void 
+Imageset::SetupDecoration(string prefix, int idx)
+{
+	static const struct { string suffix; int x, y; } decors[] = {
+		{ "flower_1", 0, 9 }, { "flower_2", 1, 9 },
+		{ "rock_1", 2, 9 }, { "rock_2", 3, 9 },
+		{ "rock_3", 4, 9 }, { "skull", 0, 10 },
+		{ "cactus", 1, 10 }, { "flower_3", 2, 10 },
+		{ "flower_3", 3, 10 },
+	};
+
+	for(auto const& decor: decors) {
+		hash_[prefix + "_" + decor.suffix] = { idx,
+			decor.x / sizes_[idx].w * 16,
+			decor.y / sizes_[idx].h * 16,
 			1.0f / sizes_[idx].w * 16,
 			1.0f / sizes_[idx].h * 16,
 			16, 16 };
