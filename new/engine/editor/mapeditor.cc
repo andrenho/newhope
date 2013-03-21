@@ -62,7 +62,11 @@ MapEditor::SetTile(Point<int> tile, string idx)
 
 	// check terrains
 	static const struct { string idx; enum Terrain t; } terrains[] = {
-		{ "grass_c", t_GRASS }, { "water_c", t_WATER }
+		{ "grass_c", t_GRASS }, { "water_c", t_WATER },
+		{ "desert_c", t_DESERT }, { "dirt_c", t_DIRT },
+		{ "dirt2_c", t_DIRT2 }, { "snow_c", t_SNOW },
+		{ "lava_c", t_LAVA }, { "tundra_c", t_TUNDRA },
+		{ "lavarock", t_LAVAROCK }
 	};
 	for(auto const& terrain: terrains) {
 		if(idx == terrain.idx) {

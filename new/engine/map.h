@@ -1,7 +1,8 @@
 #ifndef GAME_MAP_H
 #define GAME_MAP_H
 
-typedef enum Terrain { t_GRASS, t_WATER } Terrain;
+typedef enum Terrain { t_GRASS, t_WATER, t_DIRT, t_DIRT2, t_SNOW, t_LAVA,
+		       t_DESERT, t_TUNDRA, t_LAVAROCK } Terrain;
 
 class Map {
 public:

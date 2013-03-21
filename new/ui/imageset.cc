@@ -6,8 +6,15 @@ void
 Imageset::SetupImageMap()
 {
 	// terrains
-	SetupImageTerrain("grass", 1, 1, 2);
-	SetupImageTerrain("water", 1, 1, 6);
+	SetupImageTerrain("grass",    1,  1, 2);
+	SetupImageTerrain("desert",   1,  6, 2);
+	SetupImageTerrain("dirt",     1, 11, 2);
+	SetupImageTerrain("dirt2",    1, 16, 2);
+	SetupImageTerrain("snow",     1, 21, 2);
+	SetupImageTerrain("water",    1,  1, 6);
+	SetupImageTerrain("lava",     1,  6, 6);
+	SetupImageTerrain("tundra",   1, 11, 6);
+	SetupImageTerrain("lavarock", 1, 16, 6);
 
 	// setup dialog
 	SetupDialog("dialog", 0);

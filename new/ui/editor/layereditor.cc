@@ -7,7 +7,8 @@ struct LayerType {
 	vector<string> tiles;
 };
 static const map<char, LayerType> layers = {
-	{ 'T', { 1, { "grass_c", "water_c" } } },
+	{ 'T', { 1, { "grass_c", "desert_c", "dirt_c", "dirt2_c", "snow_c",
+		    "water_c", "lava_c", "tundra_c", "lavarock_c" } } },
 };
 
 void 

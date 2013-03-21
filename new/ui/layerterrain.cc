@@ -97,8 +97,15 @@ LayerTerrain::TerrainStr() const
 {
 	switch(terrain_)
 	{
-	case t_GRASS: return "grass";
-	case t_WATER: return "water";
+	case t_GRASS:  return "grass";
+	case t_DESERT: return "desert";
+	case t_DIRT:   return "dirt";
+	case t_DIRT2:  return "dirt2";
+	case t_WATER:  return "water";
+	case t_SNOW:   return "snow";
+	case t_LAVA:   return "lava";
+	case t_TUNDRA: return "tundra";
+	case t_LAVAROCK: return "lavarock";
 	default: throw new ui_error("Invalid terrain");
 	}
 }
