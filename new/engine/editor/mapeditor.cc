@@ -3,7 +3,7 @@
 #include <algorithm>
 
 MapEditor::MapEditor()
-	: tiles_(nullptr)
+	: Map(), tiles_(nullptr)
 {
 	Resize(50, 25);
 }
@@ -32,11 +32,6 @@ MapEditor::Terrain(int x, int y) const
 void
 MapEditor::Resize(int w, int h)
 {
-	if(tiles_) {
-		delete[] tiles_;
-		tiles_ = nullptr;
-	}
-
 	int old_w = w_, old_h = h_;
 	w_ = w;
 	h_ = h;
@@ -48,6 +43,11 @@ MapEditor::Resize(int w, int h)
 		for(int y=0; y<min(old_h, h_); y++) {
 			t[x+(y*w_)] = tiles_[x+(y*old_w)];
 		}
+	}
+
+	if(tiles_) {
+		delete[] tiles_;
+		tiles_ = nullptr;
 	}
 	tiles_ = t;
 }
@@ -66,7 +66,7 @@ MapEditor::SetTile(Point<int> tile, string idx)
 		{ "desert_c", t_DESERT }, { "dirt_c", t_DIRT },
 		{ "dirt2_c", t_DIRT2 }, { "snow_c", t_SNOW },
 		{ "lava_c", t_LAVA }, { "tundra_c", t_TUNDRA },
-		{ "lavarock", t_LAVAROCK }
+		{ "lavarock_c", t_LAVAROCK }
 	};
 	for(auto const& terrain: terrains) {
 		if(idx == terrain.idx) {

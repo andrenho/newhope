@@ -29,8 +29,8 @@ UI::Initialize()
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// initialize layers
-	for(auto const& t: (enum Terrain[]) { t_GRASS, t_WATER, t_DIRT, t_DIRT2, 
-			t_SNOW, t_LAVA, t_TUNDRA, t_LAVAROCK, t_DESERT }) {
+	for(auto const& t: (enum Terrain[]) { t_DESERT, t_GRASS, t_DIRT, t_DIRT2, 
+			t_SNOW, t_TUNDRA, t_LAVAROCK, t_LAVA, t_WATER }) {
 		layers_.push_back(new LayerTerrain(t));
 	}
 	AddSpecificLayers();
