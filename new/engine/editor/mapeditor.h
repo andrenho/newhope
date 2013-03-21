@@ -7,6 +7,7 @@ class MapEditor : public Map
 {
 public:
 	MapEditor();
+	~MapEditor();
 	virtual enum Terrain Terrain(int x, int y) const;
 	void Resize(int w, int h);
 

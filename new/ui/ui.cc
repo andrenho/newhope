@@ -38,6 +38,7 @@ UI::Initialize()
 
 UI::~UI()
 {
+	delete imageset_;
 	for(auto& layer: layers_) {
 		delete layer;
 	}
