@@ -81,3 +81,9 @@ MapEditor::Tree(Point<int> p) const
 {
 	return tt_NONE;
 }
+
+
+void 
+MapEditor::AddTree(Point<int> p, string idx)
+{
+}

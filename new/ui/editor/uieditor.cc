@@ -104,7 +104,7 @@ UIEditor::TileClicked(Point<int> t)
 			me->SetTile(t, layer_editor_->Selected());
 			break;
 		case 'R': // trees
-			cout << layer_editor_->Selected() << endl;
+			me->AddTree(t, layer_editor_->Selected());
 			break;
 	}
 }
