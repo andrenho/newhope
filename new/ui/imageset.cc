@@ -155,10 +155,10 @@ Imageset::SetupDecoration(string prefix, int idx)
 {
 	static const struct { string suffix; int x, y; } decors[] = {
 		{ "flower_1", 0, 9 }, { "flower_2", 1, 9 },
-		{ "rock_1", 2, 9 }, { "rock_2", 3, 9 },
-		{ "rock_3", 4, 9 }, { "skull", 0, 10 },
-		{ "cactus", 1, 10 }, { "flower_3", 2, 10 },
-		{ "flower_3", 3, 10 },
+		{ "rock_1", 2, 9 },   { "rock_2", 3, 9 },
+		{ "rock_3", 4, 9 },   { "skull", 0, 10 },
+		{ "cactus", 1, 10 },  { "flower_3", 2, 10 },
+		{ "flower_4", 3, 10 },
 	};
 
 	for(auto const& decor: decors) {

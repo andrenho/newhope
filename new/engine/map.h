@@ -6,16 +6,18 @@ typedef enum Terrain { t_GRASS, t_WATER, t_DIRT, t_DIRT2, t_SNOW, t_LAVA,
 
 class Map {
 public:
-	Map() : w_(0), h_(0) { }
+	Map();
 	virtual ~Map() { }
 
 	virtual enum Terrain Terrain(int x, int y) const = 0;
+	virtual int Special(int x, int y) const;
 
 	int W() const { return w_; }
 	int H() const { return h_; }
 
 protected:
 	int w_, h_;
+	int randspecial_[100][100];
 };
 
 #endif

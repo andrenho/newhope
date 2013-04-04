@@ -5,6 +5,7 @@ include config.mk
 
 SRC = main.cc 		 		\
       options.cc			\
+      engine/map.cc 			\
       engine/game/game.cc 		\
       engine/game/gamemap.cc		\
       engine/editor/mapeditor.cc  	\

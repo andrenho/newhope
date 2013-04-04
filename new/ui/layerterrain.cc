@@ -24,7 +24,11 @@ LayerTerrain::DrawTile(int x, int y) const
 	}
 
 	for(auto const& suffix: suffixes) {
-		ui->Scene().DrawImage(TerrainStr() + "_" + suffix, x, y);
+		try {
+			ui->Scene().DrawImage(TerrainStr() + "_" + suffix, x, y);
+		} catch(out_of_range& e) {
+			ui->Scene().DrawImage(suffix, x, y);
+		}
 	}
 }
 
@@ -37,6 +41,11 @@ LayerTerrain::TileSuffixes(int x, int y, vector<string>& s) const
 	// central tile
 	if(m.Terrain(x, y) == terrain_) {
 		s.push_back("c");
+
+		int special = m.Special(x, y);
+		if(special) {
+			SpecialSuffix(special, s);
+		}
 		return;
 	}
 
@@ -108,4 +117,35 @@ LayerTerrain::TerrainStr() const
 	case t_LAVAROCK: return "lavarock";
 	default: throw new ui_error("Invalid terrain");
 	}
+}
+
+
+void 
+LayerTerrain::SpecialSuffix(int special, vector<string>& s) const
+{
+	static map<Terrain, vector<string>> specials = {
+		{ t_GRASS,    { "decor_flower_1", "decor_flower_2", "decor_flower_3", 
+		                "decor_flower_4", "decor_rock_1", "decor_rock_2" } },
+		{ t_DESERT,   { "decor_rock_3", "decor_skull", "decor_cactus", 
+				"decor_rock_2", "" } },
+		{ t_DIRT,     { "dirt_dif_1", "dirt_dif_2", "decor_skull", 
+				"decor_cactus", "decor_rock_3" } },
+		{ t_DIRT2,    { "dirt2_dif_1", "dirt2_dif_2", "decor_skull", 
+				"decor_cactus", "decor_rock_3" } },
+		{ t_WATER,    { "", "", "", "", "" } },
+		{ t_SNOW,     { "decor_rock_1", "decor_rock_2", "decor_rock_3", 
+				"snow_dif_1", "snow_dif_2" } },
+		{ t_LAVA,     { "", "", "", "", "" } },
+		{ t_TUNDRA,   { "tundra_dif_1", "tundra_dif_2", "decor_rock_1", 
+				"decor_rock_2", "decor_rock_3" } },
+		{ t_LAVAROCK, { "lavarock_dif_1", "lavarock_dif_2", 
+				"decor_flower_4", "decor_flower_2", "" } },
+	};
+
+	try {
+		string sp = specials[terrain_][special-1];
+		if(sp != "") {
+			s.push_back(sp);
+		}
+	} catch(out_of_range& e) { }
 }
