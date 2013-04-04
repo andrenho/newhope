@@ -39,10 +39,10 @@ LayerTerrain::TileSuffixes(int x, int y, vector<string>& s) const
 	Map const& m = game->Map();
 
 	// central tile
-	if(m.Terrain(x, y) == terrain_) {
+	if(m.Terrain(Point<int>(x, y)) == terrain_) {
 		s.push_back("c");
 
-		int special = m.Special(x, y);
+		int special = m.Special(Point<int>(x, y));
 		if(special) {
 			SpecialSuffix(special, s);
 		}
@@ -50,52 +50,64 @@ LayerTerrain::TileSuffixes(int x, int y, vector<string>& s) const
 	}
 
 	// inner corners
-	if(m.Terrain(x-1, y) == terrain_ && m.Terrain(x, y-1) == terrain_) {
+	if(m.Terrain(Point<int>(x-1, y)) == terrain_ 
+	&& m.Terrain(Point<int>(x, y-1)) == terrain_) {
 		s.push_back("corner_nw");
 	}
-	if(m.Terrain(x+1, y) == terrain_ && m.Terrain(x, y-1) == terrain_) {
+	if(m.Terrain(Point<int>(x+1, y)) == terrain_ 
+	&& m.Terrain(Point<int>(x, y-1)) == terrain_) {
 		s.push_back("corner_ne");
 	}
-	if(m.Terrain(x-1, y) == terrain_ && m.Terrain(x, y+1) == terrain_) {
+	if(m.Terrain(Point<int>(x-1, y)) == terrain_ 
+	&& m.Terrain(Point<int>(x, y+1)) == terrain_) {
 		s.push_back("corner_sw");
 	}
-	if(m.Terrain(x+1, y) == terrain_ && m.Terrain(x, y+1) == terrain_) {
+	if(m.Terrain(Point<int>(x+1, y)) == terrain_ 
+	&& m.Terrain(Point<int>(x, y+1)) == terrain_) {
 		s.push_back("corner_se");
 	}
 
 	// outer corners
-	if(m.Terrain(x-1, y-1) == terrain_ 
-	&& m.Terrain(x, y-1) != terrain_ && m.Terrain(x-1, y) != terrain_) {
+	if(m.Terrain(Point<int>(x-1, y-1)) == terrain_ 
+	&& m.Terrain(Point<int>(x, y-1)) != terrain_
+	&& m.Terrain(Point<int>(x-1, y)) != terrain_) {
 		s.push_back("se");
 	}
-	if(m.Terrain(x+1, y-1) == terrain_ 
-	&& m.Terrain(x, y-1) != terrain_ && m.Terrain(x+1, y) != terrain_) {
+	if(m.Terrain(Point<int>(x+1, y-1)) == terrain_ 
+	&& m.Terrain(Point<int>(x, y-1)) != terrain_ 
+	&& m.Terrain(Point<int>(x+1, y)) != terrain_) {
 		s.push_back("sw");
 	}
-	if(m.Terrain(x-1, y+1) == terrain_ 
-	&& m.Terrain(x, y+1) != terrain_ && m.Terrain(x-1, y) != terrain_) {
+	if(m.Terrain(Point<int>(x-1, y+1)) == terrain_ 
+	&& m.Terrain(Point<int>(x, y+1)) != terrain_ 
+	&& m.Terrain(Point<int>(x-1, y)) != terrain_) {
 		s.push_back("ne");
 	}
-	if(m.Terrain(x+1, y+1) == terrain_ 
-	&& m.Terrain(x, y+1) != terrain_ && m.Terrain(x+1, y) != terrain_) {
+	if(m.Terrain(Point<int>(x+1, y+1)) == terrain_ 
+	&& m.Terrain(Point<int>(x, y+1)) != terrain_ 
+	&& m.Terrain(Point<int>(x+1, y)) != terrain_) {
 		s.push_back("nw");
 	}
 
 	// sides
-	if(m.Terrain(x-1, y) == terrain_
-	&& m.Terrain(x, y-1) != terrain_ && m.Terrain(x, y+1) != terrain_) {
+	if(m.Terrain(Point<int>(x-1, y)) == terrain_
+	&& m.Terrain(Point<int>(x, y-1)) != terrain_ 
+	&& m.Terrain(Point<int>(x, y+1)) != terrain_) {
 		s.push_back("e");
 	}
-	if(m.Terrain(x+1, y) == terrain_
-	&& m.Terrain(x, y-1) != terrain_ && m.Terrain(x, y+1) != terrain_) {
+	if(m.Terrain(Point<int>(x+1, y)) == terrain_
+	&& m.Terrain(Point<int>(x, y-1)) != terrain_ 
+	&& m.Terrain(Point<int>(x, y+1)) != terrain_) {
 		s.push_back("w");
 	}
-	if(m.Terrain(x, y-1) == terrain_
-	&& m.Terrain(x-1, y) != terrain_ && m.Terrain(x+1, y) != terrain_) {
+	if(m.Terrain(Point<int>(x, y-1)) == terrain_
+	&& m.Terrain(Point<int>(x-1, y)) != terrain_ 
+	&& m.Terrain(Point<int>(x+1, y)) != terrain_) {
 		s.push_back("s");
 	}
-	if(m.Terrain(x, y+1) == terrain_
-	&& m.Terrain(x-1, y) != terrain_ && m.Terrain(x+1, y) != terrain_) {
+	if(m.Terrain(Point<int>(x, y+1)) == terrain_
+	&& m.Terrain(Point<int>(x-1, y)) != terrain_ 
+	&& m.Terrain(Point<int>(x+1, y)) != terrain_) {
 		s.push_back("n");
 	}
 }

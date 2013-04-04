@@ -7,7 +7,10 @@ static const string helptext =
 	"HELP\n"
 	"====\n"
 	"F1........This help\n"
-	"CTRL+R....Resize map";
+	"CTRL+R....Resize map\n"
+	"\n"
+	"T.........Terrains\n"
+	"R.........Trees\n";
 
 UIEditor::UIEditor()
 	: UI(), layer_editor_(new LayerEditor())
@@ -67,6 +70,13 @@ UIEditor::ProcessSpecificInputs()
 			TileClicked(t);
 		}
 	}
+
+	// options
+	if(glfwGetKey('T')) {
+		layer_editor_->setOption('T');
+	} else if(glfwGetKey('R')) {
+		layer_editor_->setOption('R');
+	}
 }
 
 
@@ -88,5 +98,13 @@ void
 UIEditor::TileClicked(Point<int> t)
 {
 	MapEditor* me = dynamic_cast<MapEditor*>(&game->Map());
-	me->SetTile(t, layer_editor_->Selected());
+	switch(layer_editor_->Option())
+	{
+		case 'T': // terrain
+			me->SetTile(t, layer_editor_->Selected());
+			break;
+		case 'R': // trees
+			cout << layer_editor_->Selected() << endl;
+			break;
+	}
 }

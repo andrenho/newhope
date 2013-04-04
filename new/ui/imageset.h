@@ -27,6 +27,7 @@ private:
 	void SetupFont(string name, int idx, int w, int h);
 	void SetupDialog(string name, int idx);
 	void SetupDecoration(string prefix, int idx);
+	void SetupTrees(string prefix, int idx);
 
 	map<string, Reference> hash_;
 	map<int, ImageSize> sizes_;

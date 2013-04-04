@@ -16,8 +16,9 @@ Imageset::SetupImageMap()
 	SetupImageTerrain("tundra",   1, 11, 6);
 	SetupImageTerrain("lavarock", 1, 16, 6);
 
-	// decoration
+	// terrain features
 	SetupDecoration("decor", 1);
+	SetupTrees("tree", 1);
 
 	// setup dialog
 	SetupDialog("dialog", 0);
@@ -167,6 +168,27 @@ Imageset::SetupDecoration(string prefix, int idx)
 			decor.y / sizes_[idx].h * 16,
 			1.0f / sizes_[idx].w * 16,
 			1.0f / sizes_[idx].h * 16,
+			16, 16 };
+	}
+}
+
+
+void 
+Imageset::SetupTrees(string prefix, int idx)
+{
+	static const struct { string suffix; int x, y; float w, h; } trees[] = {
+		{ "trunk",      8, 10, 1, 2 },
+		{ "pine",       9,  9, 3, 3 },
+		{ "conifer",   12,  9, 3, 3 },
+		{ "broadleaf", 15,  9, 3, 3 },
+	};
+
+	for(auto const& tree: trees) {
+		hash_[prefix + "_" + tree.suffix] = { idx,
+			tree.x / sizes_[idx].w * 16,
+			tree.y / sizes_[idx].h * 16,
+			tree.w / sizes_[idx].w * 16,
+			tree.h / sizes_[idx].h * 16,
 			16, 16 };
 	}
 }

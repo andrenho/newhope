@@ -19,12 +19,12 @@ MapEditor::~MapEditor()
 
 
 enum Terrain 
-MapEditor::Terrain(int x, int y) const 
+MapEditor::Terrain(Point<int> p) const 
 { 
-	if(x < 0 || y < 0 || x >= W() || y >= H()) {
+	if(p.x < 0 || p.y < 0 || p.x >= W() || p.y >= H()) {
 		return t_WATER;
 	} else {
-		return tiles_[x+(y*w_)]; 
+		return tiles_[p.x+(p.y*w_)]; 
 	}
 }
 
@@ -73,4 +73,11 @@ MapEditor::SetTile(Point<int> tile, string idx)
 			tiles_[tile.x+(tile.y*w_)] = terrain.t;
 		}
 	}
+}
+
+
+TreeType 
+MapEditor::Tree(Point<int> p) const
+{
+	return tt_NONE;
 }

@@ -8,9 +8,10 @@ class MapEditor : public Map
 public:
 	MapEditor();
 	~MapEditor();
-	virtual enum Terrain Terrain(int x, int y) const;
+	virtual enum Terrain Terrain(Point<int> p) const;
 	void Resize(int w, int h);
 	void SetTile(Point<int> tile, string idx);
+	TreeType Tree(Point<int> p) const;
 
 private:
 	enum Terrain* tiles_;

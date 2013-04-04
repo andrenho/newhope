@@ -11,6 +11,9 @@ public:
 	string Selected() const;
 	void setSelected(int s);
 
+	int Option() const { return option_; }
+	void setOption(char opt) { option_ = opt; }
+
 private:
 	char option_;
 	int selected_;
