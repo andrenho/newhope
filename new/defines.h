@@ -27,6 +27,7 @@ using namespace std;
 #include "ui/imageset.h"
 #include "ui/layer.h"
 #include "ui/layerterrain.h"
+#include "ui/layerobject.h"
 #include "ui/layerdialog.h"
 #include "ui/ui.h"
 #include "ui/uigame.h"

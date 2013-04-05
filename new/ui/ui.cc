@@ -34,6 +34,7 @@ UI::Initialize()
 			t_LAVAROCK, t_SNOW, t_LAVA, t_WATER }) {
 		layers_.push_back(new LayerTerrain(t));
 	}
+	layers_.push_back(new LayerObject());
 	AddSpecificLayers();
 	layers_.push_back(new LayerDialog(&dialog_));
 }
