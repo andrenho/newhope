@@ -12,7 +12,7 @@ public:
 	void setSelected(int s);
 
 	int Option() const { return option_; }
-	void setOption(char opt) { option_ = opt; }
+	void setOption(char opt) { option_ = opt; setSelected(0); }
 
 private:
 	char option_;
