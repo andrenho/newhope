@@ -79,11 +79,26 @@ MapEditor::SetTile(Point<int> tile, string idx)
 TreeType 
 MapEditor::Tree(Point<int> p) const
 {
-	return tt_NONE;
+	try {
+		return trees.at(p);
+	} catch(out_of_range& e) {
+		return tt_NONE;
+	}
 }
 
 
 void 
 MapEditor::AddTree(Point<int> p, string idx)
 {
+	if(idx == "nothing") {
+		trees.erase(p);
+	} else if(idx == "tree_pine") {
+		trees[p] = tt_PINE;
+	} else if(idx == "tree_conifer") { 
+		trees[p] = tt_CONIFER;
+	} else if(idx == "tree_broadleaf") {
+		trees[p] = tt_BROADLEAF;
+	} else {
+		abort();
+	}
 }

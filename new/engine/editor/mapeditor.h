@@ -18,6 +18,7 @@ public:
 
 private:
 	enum Terrain* tiles_;
+	map<Point<int>, TreeType> trees;
 };
 
 #endif

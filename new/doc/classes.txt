@@ -25,6 +25,7 @@ package ui <<Frame>> {
   class Imageset
   class Layer
   class LayerTerrain
+  class LayerObject
   class LayerDialog
   class UI
   class UIGame
@@ -58,9 +59,11 @@ Image <|-- ImageIndexed
 Image <|-- ImageRGB
 UI --> Layer
 Layer <|-- LayerTerrain
+Layer <|-- LayerObject
 Layer <|-- LayerDialog
 LayerDialog .. Dialog
 LayerTerrain .. Map
+LayerObject .. Map
 Engine .. Options
 Dialog <|-- TextWall
 TextWall <|-- DialogInput

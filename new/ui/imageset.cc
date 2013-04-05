@@ -25,6 +25,9 @@ Imageset::SetupImageMap()
 
 	// font
 	SetupFont("font", 2, 8, 12);
+
+	// nothing
+	hash_["nothing"] = { 1, 0, 0, 0, 0, 16, 16 };
 }
 
 

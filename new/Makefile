@@ -18,6 +18,7 @@ SRC = main.cc 		 		\
       ui/imageset.cc	 		\
       ui/layerdialog.cc			\
       ui/layerterrain.cc		\
+      ui/layerobject.cc			\
       ui/dialog/dialoginput.cc		\
       ui/dialog/textwall.cc		\
       ui/editor/uieditor.cc		\

@@ -9,7 +9,7 @@ struct LayerType {
 static const map<char, LayerType> layers = {
 	{ 'T', { 1, { "grass_c", "desert_c", "dirt_c", "dirt2_c", "snow_c",
 		    "water_c", "lava_c", "tundra_c", "lavarock_c" } } },
-	{ 'R', { 1, { "tree_pine", "tree_conifer", "tree_broadleaf" } } },
+	{ 'R', { 1, { "nothing", "tree_pine", "tree_conifer", "tree_broadleaf" } } },
 };
 
 void 
