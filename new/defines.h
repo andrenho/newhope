@@ -1,9 +1,11 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <queue>
+#include <set>
 #include <stdexcept>
 #include <string>
 #include <vector>

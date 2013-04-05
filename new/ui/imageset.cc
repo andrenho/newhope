@@ -192,6 +192,6 @@ Imageset::SetupTrees(string prefix, int idx)
 			tree.y / sizes_[idx].h * 16,
 			tree.w / sizes_[idx].w * 16,
 			tree.h / sizes_[idx].h * 16,
-			16, 16 };
+			16*int(tree.w), 16*int(tree.h) };
 	}
 }

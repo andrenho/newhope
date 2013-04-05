@@ -44,16 +44,23 @@ Scene::setProportion(ProportionScene ps) const
 
 
 void 
-Scene::DrawImage(string index, float x, float y) const
+Scene::DrawImage(string index, float x, float y, float w, float h) const
 {
 	float px = float(x);
 	float py = -float(y);
 	Reference rc = ui->Imageset()[index];
 
-	float w = 1.0f, h = 1.0f;
+	if(w == -1 && h == -1) {
+		if(ps_ == PROP_WINDOW) {
+			w = rc.real_w; 
+			h = rc.real_h;
+		} else if(ps_ == PROP_TILES) {
+			w = rc.real_w / 16.0f;
+			h = rc.real_h / 16.0f;
+		}
+	}
+
 	if(ps_ == PROP_WINDOW) {
-		w = rc.real_w; 
-		h = rc.real_h;
 		py = ui->WindowH() / ui->Zoom() + py - 16;
 	}
 

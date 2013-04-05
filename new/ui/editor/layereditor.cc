@@ -35,7 +35,7 @@ LayerEditor::Render() const
 				ui->Scene().DrawRectangle(px-3, py-3, 
 						px+19, py+19, { 0, 0, 0 });
 			}
-			ui->Scene().DrawImage(tile, px, py);
+			ui->Scene().DrawImage(tile, px, py, 16, 16);
 			if(++x == 3) {
 				x = 0; y++;
 			}
