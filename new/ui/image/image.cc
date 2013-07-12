@@ -1,6 +1,7 @@
 #include "defines.h"
 
 #include <cstdio>
+#include <cstring>
 using namespace std;
 
 #include <png.h>
