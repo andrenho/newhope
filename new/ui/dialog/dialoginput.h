@@ -1,6 +1,8 @@
 #ifndef UI_DIALOG_DIALOGINPUT_H
 #define UI_DIALOG_DIALOGINPUT_H
 
+#include <GLFW/glfw3.h>
+
 #include "defines.h"
 
 class DialogInput : public TextWall {
@@ -11,8 +13,9 @@ public:
 	virtual int ProcessEvents() const;
 
 private:
-	static void KeyCallback(int k, int action);
-	static void CharCallback(int k, int action);
+	static void KeyCallback(GLFWwindow* w, int k, int scancode, 
+			int action, int mods);
+	static void CharCallback(GLFWwindow* w, unsigned int k);
 	static DialogInput* staticThis;
 
 	string reply_;

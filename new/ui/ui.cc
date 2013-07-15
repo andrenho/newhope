@@ -1,6 +1,9 @@
 #include "defines.h"
 
-#include <GL/glfw.h>
+#include <unistd.h>
+
+#include <GLFW/glfw3.h>
+#include <GL/glu.h>
 
 UI::UI()
 	: RelX(0), RelY(0), active_(true), time_(0), win_w_(0), win_h_(0),
@@ -16,10 +19,10 @@ UI::Initialize()
 	if(!glfwInit()) {
 		throw ui_error("error initializing glfw");
 	}
-	if(!glfwOpenWindow(0, 0, 0, 0, 0, 0, 0, 0, GLFW_WINDOW)) {
-		throw ui_error("error opening window");
+	if(!(window_ = glfwCreateWindow(800, 600, "New Hope " VERSION,
+					NULL, NULL))) {
+		throw ui_error("error creating window");
 	}
-	glfwSetWindowTitle("New Hope " VERSION);
 	glfwSwapInterval(1);
 
 	// init OpenGL
@@ -69,31 +72,31 @@ void
 UI::ProcessBasicInputs() 
 {
 	// quit
-	if(!glfwGetWindowParam(GLFW_OPENED) || glfwGetKey('Q')) {
+	if(glfwGetKey(ui->Window(), 'Q') || glfwWindowShouldClose(ui->Window())) {
 		active_ = false;
 		return;
 	}
 
 	// window resize
 	int w, h;
-	glfwGetWindowSize(&w, &h);
+	glfwGetWindowSize(ui->Window(), &w, &h);
 	if(w != win_w_ || h != win_h_) {
 		WindowResize(w, h);
 		return;
 	}
 
 	// zoom
-	if(glfwGetKey('=')) {
+	if(glfwGetKey(ui->Window(), '=')) {
 		zoom_ *= 2.0f;
 		WindowResize(0, 0);
 		Render();
-		glfwSleep(0.2);
+		usleep(200000);
 		return;
-	} else if(glfwGetKey('-')) {
+	} else if(glfwGetKey(ui->Window(), '-')) {
 		zoom_ /= 2.0f;
 		WindowResize(0, 0);
 		Render();
-		glfwSleep(0.2);
+		usleep(200000);
 		return;
 	}
 }
@@ -126,7 +129,7 @@ UI::WaitNextFrame()
 		cout << "Frame delayed!" << endl;
 	}
 	while(glfwGetTime() < time_ + 1/60.0f) {
-		glfwSleep(0.02);
+		usleep(20000);
 	}
 }
 

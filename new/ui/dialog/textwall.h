@@ -1,6 +1,8 @@
 #ifndef UI_DIALOG_TEXTWALL_H
 #define UI_DIALOG_TEXTWALL_H
 
+#include <GLFW/glfw3.h>
+
 class TextWall : public Dialog {
 public:
 	TextWall(string message, int w=0, int h=0);
@@ -15,7 +17,8 @@ protected:
 	void Wrap(string text, vector<string>& t, int cols=60);
 
 	static TextWall* staticThis;
-	static void KeyCallback(int k, int action);
+	static void KeyCallback(GLFWwindow* w, int k, int scancode, 
+			int action, int mods);
 
 	string message_;
 	int w_;

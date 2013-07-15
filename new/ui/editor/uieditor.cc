@@ -1,6 +1,6 @@
 #include "defines.h"
 
-#include <GL/glfw.h>
+#include <GLFW/glfw3.h>
 #include <cmath>
 
 static const string helptext =
@@ -22,21 +22,22 @@ void
 UIEditor::ProcessSpecificInputs()
 {
 	// screen movement
-	if(glfwGetKey(GLFW_KEY_UP)) {
+	if(glfwGetKey(ui->Window(), GLFW_KEY_UP)) {
 		ui->RelY += 0.6;
 	}
-	if(glfwGetKey(GLFW_KEY_DOWN)) {
+	if(glfwGetKey(ui->Window(), GLFW_KEY_DOWN)) {
 		ui->RelY -= 0.6;
 	}
-	if(glfwGetKey(GLFW_KEY_LEFT)) {
+	if(glfwGetKey(ui->Window(), GLFW_KEY_LEFT)) {
 		ui->RelX -= 0.6;
 	}
-	if(glfwGetKey(GLFW_KEY_RIGHT)) {
+	if(glfwGetKey(ui->Window(), GLFW_KEY_RIGHT)) {
 		ui->RelX += 0.6;
 	}
 
 	// new map
-	if(glfwGetKey(GLFW_KEY_LCTRL) && glfwGetKey('R')) {
+	if(glfwGetKey(ui->Window(), GLFW_KEY_LEFT_CONTROL) && 
+			glfwGetKey(ui->Window(), 'R')) {
 		int w, h;
 		try {
 			w = stoi(Dialog(new DialogInput("Map width?", 0, 0, true)));
@@ -49,15 +50,15 @@ UIEditor::ProcessSpecificInputs()
 	}
 
 	// help
-	if(glfwGetKey(GLFW_KEY_F1)) {
+	if(glfwGetKey(ui->Window(), GLFW_KEY_F1)) {
 		Dialog(new TextWall(helptext, 30, 15));
 		return;
 	}
 
 	// mouse
-	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-		int x, y;
-		glfwGetMousePos(&x, &y);
+	if(glfwGetMouseButton(ui->Window(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		double x, y;
+		glfwGetCursorPos(ui->Window(), &x, &y);
 		float rx = x / ui->Zoom(), ry = y / ui->Zoom();
 		if(rx >= ui->WindowZoomW() - 80) { // select tile
 			float bx = (rx - (ui->WindowZoomW()-80)) / 24;
@@ -72,9 +73,9 @@ UIEditor::ProcessSpecificInputs()
 	}
 
 	// options
-	if(glfwGetKey('T')) {
+	if(glfwGetKey(ui->Window(), 'T')) {
 		layer_editor_->setOption('T');
-	} else if(glfwGetKey('R')) {
+	} else if(glfwGetKey(ui->Window(), 'R')) {
 		layer_editor_->setOption('R');
 	}
 }

@@ -1,6 +1,8 @@
 #ifndef UI_UI_H
 #define UI_UI_H
 
+#include <GLFW/glfw3.h>
+
 struct ui_error : public runtime_error {
 	ui_error(string s) : runtime_error(s) { }
 };
@@ -25,6 +27,7 @@ public:
 	inline float WindowZoomH() const { return win_h_/float(zoom_); }
 	inline int Zoom() const { return zoom_; }
 	inline class Scene const& Scene() { return scene_; }
+	inline GLFWwindow* Window() { return window_; }
 
 	template <typename T> Point<T> TranslateTile(int x, int y) {
 		return Point<T>(x / (16 * Zoom()) - RelX, y / (16 * Zoom()) + RelY);
@@ -50,6 +53,7 @@ private:
 	float zoom_;
 	class Imageset const* imageset_;
 	class Dialog* dialog_;
+	GLFWwindow* window_;
 };
 
 #endif

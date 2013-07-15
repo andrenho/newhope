@@ -46,8 +46,8 @@ UNAME = $(shell uname -o)
 
 # GLFW library
 ifeq (${GLFW},yes)
-  CPPFLAGS += `pkg-config --cflags libglfw`
-  LDFLAGS  += `pkg-config --libs   libglfw`
+  CPPFLAGS += `pkg-config --cflags glfw3`
+  LDFLAGS  += `pkg-config --libs   glfw3`
 endif
 
 # OPENGL library

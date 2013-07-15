@@ -1,7 +1,7 @@
 #include "defines.h"
 
 #include <sstream>
-#include <GL/glfw.h>
+#include <GLFW/glfw3.h>
 
 TextWall* TextWall::staticThis = nullptr;
 
@@ -26,7 +26,7 @@ TextWall::TextWall(string message, int w, int h)
 	}
 
 	TextWall::staticThis = this;
-	glfwSetKeyCallback(&TextWall::KeyCallback);
+	glfwSetKeyCallback(ui->Window(), &TextWall::KeyCallback);
 }
 
 
@@ -42,8 +42,8 @@ TextWall::Elements(vector<Element*>& e)
 }
 
 
-void GLFWCALL 
-TextWall::KeyCallback(int k, int action)
+void
+TextWall::KeyCallback(GLFWwindow* w, int k, int scancode, int action, int mods)
 {
 	if(action == GLFW_PRESS && k == GLFW_KEY_ENTER) {
 		TextWall::staticThis->accept_ = true;
@@ -55,7 +55,7 @@ int
 TextWall::ProcessEvents() const
 {
 	if(accept_) {
-		glfwSetKeyCallback(nullptr);
+		glfwSetKeyCallback(ui->Window(), nullptr);
 		return 0;
 	}
 	return -1;

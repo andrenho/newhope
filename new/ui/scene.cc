@@ -1,7 +1,8 @@
 #include "defines.h"
 
 #include <GL/gl.h>
-#include <GL/glfw.h>
+#include <GL/glu.h>
+#include <GLFW/glfw3.h>
 
 void 
 Scene::Initialize() const
@@ -13,7 +14,8 @@ Scene::Initialize() const
 void 
 Scene::Render() const
 {
-	glfwSwapBuffers();
+	glfwSwapBuffers(ui->Window());
+	glfwPollEvents();
 }
 
 

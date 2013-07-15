@@ -1,6 +1,6 @@
 #include "defines.h"	
 
-#include <GL/glfw.h>
+#include <GLFW/glfw3.h>
 
 DialogInput* DialogInput::staticThis = nullptr;
 
@@ -9,8 +9,8 @@ DialogInput::DialogInput(string message, int w, int h, bool numeric)
 { 
 	h_ += 32;
 	DialogInput::staticThis = this;
-	glfwSetKeyCallback(&DialogInput::KeyCallback);
-	glfwSetCharCallback(&DialogInput::CharCallback);
+	glfwSetKeyCallback(ui->Window(), &DialogInput::KeyCallback);
+	glfwSetCharCallback(ui->Window(), &DialogInput::CharCallback);
 }
 	
 
@@ -18,8 +18,8 @@ int
 DialogInput::ProcessEvents() const
 {
 	if(accept_) {
-		glfwSetKeyCallback(nullptr);
-		glfwSetCharCallback(nullptr);
+		glfwSetKeyCallback(ui->Window(), nullptr);
+		glfwSetCharCallback(ui->Window(), nullptr);
 		return 0;
 	}
 	return -1;
@@ -44,8 +44,22 @@ DialogInput::Reply() const
 }
 
 
-void GLFWCALL 
-DialogInput::KeyCallback(int k, int action)
+void
+DialogInput::CharCallback(GLFWwindow* w, unsigned int k)
+{
+	if(k == '\n') {
+		return;
+	}
+	if(DialogInput::staticThis->numeric_ && (k < '0' || k > '9')) {
+		return;
+	}
+	DialogInput::staticThis->reply_.append(1, (char)k);
+}
+
+
+void
+DialogInput::KeyCallback(GLFWwindow* w, int k, int scancode, 
+		int action, int mods)
 {
 	if(action == GLFW_RELEASE) {
 		return;
@@ -55,17 +69,4 @@ DialogInput::KeyCallback(int k, int action)
 	} else if(k == GLFW_KEY_ENTER) {
 		DialogInput::staticThis->accept_ = true;
 	}
-}
-
-
-void GLFWCALL 
-DialogInput::CharCallback(int k, int action)
-{
-	if(k == '\n') {
-		return;
-	}
-	if(DialogInput::staticThis->numeric_ && (k < '0' || k > '9')) {
-		return;
-	}
-	DialogInput::staticThis->reply_.append(1, (char)k);
 }
