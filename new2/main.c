@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include <stdlib.h>
+
 World* world;
 UI*    ui;
 
@@ -9,7 +11,8 @@ int main()
 	// initialize everything
 	//
 	world = world_init();
-	ui = ui_init();
+	if(!(ui = ui_init()))
+		return EXIT_FAILURE;
 
 	//
 	// main loop
