@@ -8,10 +8,17 @@
 include config.mk
 include libraries.mk
 
-SRC = main.c
+SRC = main.c		\
+      engine/building.c	\
+      engine/car.c	\
+      engine/city.c	\
+      engine/person.c	\
+      engine/world.c	\
+      ui/resources.c	\
+      ui/ui.c
 
 OBJ = ${SRC:.c=.o}
-HEADERS = ${SRC:.c=.h} 
+HEADERS = ${SRC:.c=.h} global.h
 DIST = AUTHORS HACKING LICENSE NEWS
 DATA = 
 
