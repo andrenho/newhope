@@ -20,7 +20,7 @@ SRC = main.c		\
 OBJ = ${SRC:.c=.o}
 HEADERS = ${SRC:.c=.h} global.h
 DIST = AUTHORS HACKING LICENSE NEWS
-DATA = 
+DATA = data/sprites.png
 
 all: options newhope
 

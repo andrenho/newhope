@@ -17,9 +17,9 @@ int main()
 	//
 	// main loop
 	//
-	while(ui_active()) {
-		ui_do_events();
-		ui_render();
+	while(ui_active(ui)) {
+		ui_do_events(ui);
+		ui_render(ui);
 	}
 
 	//
