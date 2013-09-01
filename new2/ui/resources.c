@@ -5,14 +5,15 @@
 
 #include "SDL2/SDL_image.h"
 
-static bool resources_load(Resources* r);
+static bool resources_load(Resources* r, SDL_Renderer* ren);
+static int resources_count();
 
 
-Resources* resources_init()
+Resources* resources_init(SDL_Renderer* ren)
 {
 	Resources* r = malloc(sizeof(Resources));
 	IMG_Init(IMG_INIT_PNG);
-	if(!resources_load(r))
+	if(!resources_load(r, ren))
 		return NULL;
 	return r;
 }
@@ -20,9 +21,19 @@ Resources* resources_init()
 
 void resources_free(Resources** r)
 {
+	for(int i=0; i<resources_count(); i++) {
+		SDL_DestroyTexture((*r)->texture[i]);
+	}
+	free((*r)->texture);
 	IMG_Quit();
 	free(*r);
 	*r = NULL;
+}
+
+
+SDL_Texture* resources_terrain_texture(Resources* r, Terrain t)
+{
+	return r->texture[R_GRASS];
 }
 
 
@@ -40,7 +51,7 @@ static struct RES_Image {
 	{ R_GRASS, 0, 0, 16, 16 },
 };
 
-static bool resources_load(Resources* r)
+static bool resources_load(Resources* r, SDL_Renderer* ren)
 {
 	SDL_Surface* sf = IMG_Load("data/sprites.png");
 	if(!sf) {
@@ -49,15 +60,26 @@ static bool resources_load(Resources* r)
 		return false;
 	}
 
-	r->texture = calloc(sizeof(res_image) / sizeof(struct RES_Image), 
-			sizeof(SDL_Texture*));
+	r->texture = calloc(resources_count(), sizeof(SDL_Texture*));
 	
-	int i;
-	for(i=0; i<(sizeof(res_image)/sizeof(struct RES_Image)); i++) {
+	for(int i=0; i<resources_count(); i++) {
 		struct RES_Image ri = res_image[i];
-		//SDL_Surface* s = SDL_CreateRGBSurface(0, ri->w, ri->h,
+		SDL_Surface* s = SDL_CreateRGBSurface(0, ri.w, ri.h, 
+				sf->format->BitsPerPixel, sf->format->Rmask,
+				sf->format->Gmask, sf->format->Bmask,
+				sf->format->Amask);
+		SDL_Rect rect = { .x = ri.x, .y = ri.y, .w = ri.w, .h = ri.h };
+		SDL_BlitSurface(sf, &rect, s, NULL);
+		r->texture[i] = SDL_CreateTextureFromSurface(ren, s);
+		SDL_FreeSurface(s);
 	}
 
 	SDL_FreeSurface(sf);
 	return true;
+}
+
+
+static int resources_count()
+{
+	return sizeof(res_image)/sizeof(struct RES_Image);
 }

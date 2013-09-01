@@ -1,4 +1,5 @@
-#include "global.h"
+#include "engine/world.h"
+#include "ui/ui.h"
 
 #include <stdlib.h>
 
@@ -10,7 +11,7 @@ int main()
 	//
 	// initialize everything
 	//
-	world = world_init();
+	world = world_init(10, 10);
 	if(!(ui = ui_init()))
 		return EXIT_FAILURE;
 
@@ -18,8 +19,8 @@ int main()
 	// main loop
 	//
 	while(ui_active(ui)) {
-		ui_do_events(ui);
-		ui_render(ui);
+		ui_do_events(ui, world);
+		ui_render(ui, world);
 	}
 
 	//

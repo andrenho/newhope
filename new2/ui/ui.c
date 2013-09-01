@@ -5,9 +5,13 @@
 
 #include "SDL2/SDL.h"
 
+#include "engine/world.h"
 
-static bool sdl_init(UI* u);
-static void sdl_end(UI* u);
+
+static bool ui_sdl_init(UI* u);
+static void ui_sdl_end(UI* u);
+static void ui_draw_terrain(UI* u, World* w, int x, int y, Terrain t);
+static void ui_screen_limits(int* x1, int* y1, int* x2, int* y2);
 
 
 // create the UI object and initialize the user interface
@@ -15,13 +19,15 @@ UI* ui_init()
 {
 	UI* u = malloc(sizeof(UI));
 
-	if(!sdl_init(u))
+	if(!ui_sdl_init(u))
 		return NULL;
 
 	u->active = true;
-	u->res = resources_init();
+	u->res = resources_init(u->ren);
 	if(!u->res)
 		return NULL;
+	u->rx = 0;
+	u->ry = 0;
 	
 	return u;
 }
@@ -31,7 +37,7 @@ UI* ui_init()
 void ui_free(UI** u)
 {
 	resources_free(&(*u)->res);
-	sdl_end(*u);
+	ui_sdl_end(*u);
 	free(*u);
 	*u = NULL;
 }
@@ -45,7 +51,7 @@ bool ui_active(UI* u)
 
 
 // parse user input and send the events to the engine
-void ui_do_events(UI* u)
+void ui_do_events(UI* u, World* w)
 {
 	SDL_Event e;
 	while(SDL_PollEvent(&e)) {
@@ -59,8 +65,19 @@ void ui_do_events(UI* u)
 
 
 // present the image to the user
-void ui_render(UI* u)
+void ui_render(UI* u, World* w)
 {
+	int x1, y1, x2, y2;
+	ui_screen_limits(&x1, &y1, &x2, &y2);
+
+	for(int x=x1; x<=x2; x++) {
+		for(int y=y1; y<=y2; y++) {
+			Object obj;
+			Terrain t = world_xy(w, x, y, &obj);
+			ui_draw_terrain(u, w, x, y, t);
+		}
+	}
+	SDL_RenderPresent(u->ren);
 }
 
 
@@ -69,7 +86,7 @@ void ui_render(UI* u)
  * STATIC FUNCTIONS *
  *                  *
  ********************/
-static bool sdl_init(UI* u)
+static bool ui_sdl_init(UI* u)
 {
 	if(SDL_Init(SDL_INIT_VIDEO) != 0) {
 		fprintf(stderr, "error: unable to initialize SDL: %s\n", 
@@ -89,9 +106,24 @@ static bool sdl_init(UI* u)
 }
 
 
-static void sdl_end(UI* u)
+static void ui_sdl_end(UI* u)
 {
 	SDL_DestroyRenderer(u->ren);
 	SDL_DestroyWindow(u->win);
 	SDL_Quit();
+}
+
+
+static void ui_draw_terrain(UI* u, World* w, int x, int y, Terrain t)
+{
+	SDL_Rect r = { .x = (x*TILE_W) - u->rx, .y = (y*TILE_H) - u->ry,
+	               .w = TILE_W, .h = TILE_H };
+	SDL_RenderCopy(u->ren, resources_terrain_texture(u->res, t), NULL, &r);
+}
+
+
+static void ui_screen_limits(int* x1, int* y1, int* x2, int* y2)
+{
+	*x1 = *y1 = 0;
+	*x2 = *y2 = 10;
 }

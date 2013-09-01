@@ -18,7 +18,7 @@ SRC = main.c		\
       ui/ui.c
 
 OBJ = ${SRC:.c=.o}
-HEADERS = ${SRC:.c=.h} global.h
+HEADERS = ${SRC:.c=.h} engine/terrain.h
 DIST = AUTHORS HACKING LICENSE NEWS
 DATA = data/sprites.png
 

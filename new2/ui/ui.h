@@ -6,18 +6,24 @@
 
 #include "ui/resources.h"
 
+struct World;
+
+#define TILE_W 16
+#define TILE_H 16
+
 typedef struct UI {
 	SDL_Window* win;
 	SDL_Renderer* ren;
 	bool active;
 	Resources* res;
+	int rx, ry;
 } UI;
 
 UI* ui_init();
 void ui_free(UI** u);
 
 bool ui_active(UI* u);
-void ui_do_events(UI* u);
-void ui_render(UI* u);
+void ui_do_events(UI* u, struct World* w);
+void ui_render(UI* u, struct World* w);
 
 #endif
