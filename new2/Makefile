@@ -15,7 +15,8 @@ SRC = main.c		\
       engine/person.c	\
       engine/world.c	\
       ui/resources.c	\
-      ui/ui.c
+      ui/ui.c		\
+      util/array.c
 
 OBJ = ${SRC:.c=.o}
 HEADERS = ${SRC:.c=.h} engine/terrain.h
@@ -67,7 +68,6 @@ install: all
 	@mkdir -p ${DESTDIR}${VINTERMPREFIX}
 	@install -f ${DATA} ${DESTDIR}${VINTERMPREFIX}
 
-# TODO - check data
 uninstall:
 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
 	@rm -f ${DESTDIR}${PREFIX}/bin/st

@@ -31,8 +31,8 @@ static struct RES_Image {
 	enum Terrain terrain;
 	SDL_Rect r;
 } res_image[] = {
-	{ OUT_OF_BOUNDS, 	{ 0, 16, 16, 16 } },
-	{ GRASS, 		{ 0,  0, 16, 16 } },
+	{ OUT_OF_BOUNDS, 	{ 16,  0, 16, 16 } },
+	{ GRASS, 		{  0,  0, 16, 16 } },
 };
 
 SDL_Rect resources_terrain_rect(Resources* r, Terrain t)

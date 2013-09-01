@@ -118,7 +118,7 @@ static void ui_draw_terrain(UI* u, World* w, int x, int y, Terrain t)
 {
 	SDL_Rect rs = resources_terrain_rect(u->res, t);
 	SDL_Rect rd = { .x = (x*TILE_W) - u->rx, .y = (y*TILE_H) - u->ry,
-	               .w = TILE_W, .h = TILE_H };
+	                .w = TILE_W, .h = TILE_H };
 	SDL_RenderCopy(u->ren, u->res->sprites, &rs, &rd);
 }
 

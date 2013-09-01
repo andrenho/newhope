@@ -9,7 +9,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -43,7 +43,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
 }
 {
    <insert_a_suppression_name_here>
@@ -53,7 +53,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -71,7 +71,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
 }
 {
    <insert_a_suppression_name_here>
@@ -86,7 +86,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
 }
 {
@@ -103,7 +103,7 @@
    fun:SDL_CreateWindow
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
 }
 {
    <insert_a_suppression_name_here>
@@ -118,7 +118,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_CreateWindow
    fun:SDL_CreateWindowAndRenderer
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
 }
 {
@@ -197,7 +197,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -210,7 +210,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -225,7 +225,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -301,7 +301,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -313,7 +313,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -331,7 +331,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
 }
 {
    <insert_a_suppression_name_here>
@@ -440,7 +440,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -455,7 +455,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -470,7 +470,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -485,7 +485,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -500,7 +500,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -515,7 +515,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -530,7 +530,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -545,7 +545,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -560,7 +560,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -575,7 +575,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -590,23 +590,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
-   fun:ui_init
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:_XlcSetConverter
-   fun:_XlcAddUtf8Converters
-   fun:_XlcDefaultLoader
-   fun:_XOpenLC
-   fun:XOpenIM
-   obj:/usr/lib/libSDL2-2.0.so.0.0.0
-   fun:SDL_VideoInit
-   fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -622,7 +606,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -638,7 +622,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -654,7 +638,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -670,7 +654,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -686,7 +670,23 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
+   fun:ui_init
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcSetConverter
+   fun:_XlcAddUtf8Converters
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:XOpenIM
+   obj:/usr/lib/libSDL2-2.0.so.0.0.0
+   fun:SDL_VideoInit
+   fun:SDL_InitSubSystem
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -701,7 +701,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -714,7 +714,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_ClearError
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -748,7 +748,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
 }
 {
    <insert_a_suppression_name_here>
@@ -762,7 +762,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -778,7 +778,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -875,7 +875,7 @@
    fun:SDL_VideoQuit
    fun:SDL_QuitSubSystem
    fun:SDL_Quit
-   fun:sdl_end
+   fun:ui_sdl_end
    fun:ui_free
 }
 {
@@ -924,7 +924,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
 }
 {
    <insert_a_suppression_name_here>
@@ -981,7 +981,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_ClearError
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
@@ -1079,7 +1079,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
 }
 {
    <insert_a_suppression_name_here>
@@ -1204,7 +1204,7 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_VideoInit
    fun:SDL_InitSubSystem
-   fun:sdl_init
+   fun:ui_sdl_init
    fun:ui_init
    fun:main
 }
