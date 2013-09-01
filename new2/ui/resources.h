@@ -5,14 +5,12 @@
 
 #include "engine/terrain.h"
 
-enum Resource { R_GRASS, N_RESOURCES };
-
 typedef struct Resources {
-	SDL_Texture** texture;
+	SDL_Texture* sprites;
 } Resources;
 
 Resources* resources_init(SDL_Renderer* ren);
 void resources_free(Resources** r);
-SDL_Texture* resources_terrain_texture(Resources* r, Terrain t);
+SDL_Rect resources_terrain_rect(Resources* r, Terrain t);
 
 #endif

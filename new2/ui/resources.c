@@ -6,7 +6,6 @@
 #include "SDL2/SDL_image.h"
 
 static bool resources_load(Resources* r, SDL_Renderer* ren);
-static int resources_count();
 
 
 Resources* resources_init(SDL_Renderer* ren)
@@ -21,19 +20,28 @@ Resources* resources_init(SDL_Renderer* ren)
 
 void resources_free(Resources** r)
 {
-	for(int i=0; i<resources_count(); i++) {
-		SDL_DestroyTexture((*r)->texture[i]);
-	}
-	free((*r)->texture);
+	SDL_DestroyTexture((*r)->sprites);
 	IMG_Quit();
 	free(*r);
 	*r = NULL;
 }
 
 
-SDL_Texture* resources_terrain_texture(Resources* r, Terrain t)
+static struct RES_Image {
+	enum Terrain terrain;
+	SDL_Rect r;
+} res_image[] = {
+	{ OUT_OF_BOUNDS, 	{ 0, 16, 16, 16 } },
+	{ GRASS, 		{ 0,  0, 16, 16 } },
+};
+
+SDL_Rect resources_terrain_rect(Resources* r, Terrain t)
 {
-	return r->texture[R_GRASS];
+	for(int i=0; i<(sizeof(res_image)/sizeof(struct RES_Image)); i++) {
+		if(res_image[i].terrain == t)
+			return res_image[i].r;
+	}
+	return (SDL_Rect) { 0, 0, 0, 0 };
 }
 
 
@@ -44,13 +52,6 @@ SDL_Texture* resources_terrain_texture(Resources* r, Terrain t)
  ********************/
 
 
-static struct RES_Image {
-	enum Resource res_n;
-	int x, y, w, h;
-} res_image[] = {
-	{ R_GRASS, 0, 0, 16, 16 },
-};
-
 static bool resources_load(Resources* r, SDL_Renderer* ren)
 {
 	SDL_Surface* sf = IMG_Load("data/sprites.png");
@@ -59,27 +60,8 @@ static bool resources_load(Resources* r, SDL_Renderer* ren)
 				SDL_GetError());
 		return false;
 	}
-
-	r->texture = calloc(resources_count(), sizeof(SDL_Texture*));
-	
-	for(int i=0; i<resources_count(); i++) {
-		struct RES_Image ri = res_image[i];
-		SDL_Surface* s = SDL_CreateRGBSurface(0, ri.w, ri.h, 
-				sf->format->BitsPerPixel, sf->format->Rmask,
-				sf->format->Gmask, sf->format->Bmask,
-				sf->format->Amask);
-		SDL_Rect rect = { .x = ri.x, .y = ri.y, .w = ri.w, .h = ri.h };
-		SDL_BlitSurface(sf, &rect, s, NULL);
-		r->texture[i] = SDL_CreateTextureFromSurface(ren, s);
-		SDL_FreeSurface(s);
-	}
+	r->sprites = SDL_CreateTextureFromSurface(ren, sf);
 
 	SDL_FreeSurface(sf);
 	return true;
-}
-
-
-static int resources_count()
-{
-	return sizeof(res_image)/sizeof(struct RES_Image);
 }

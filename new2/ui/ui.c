@@ -116,14 +116,15 @@ static void ui_sdl_end(UI* u)
 
 static void ui_draw_terrain(UI* u, World* w, int x, int y, Terrain t)
 {
-	SDL_Rect r = { .x = (x*TILE_W) - u->rx, .y = (y*TILE_H) - u->ry,
+	SDL_Rect rs = resources_terrain_rect(u->res, t);
+	SDL_Rect rd = { .x = (x*TILE_W) - u->rx, .y = (y*TILE_H) - u->ry,
 	               .w = TILE_W, .h = TILE_H };
-	SDL_RenderCopy(u->ren, resources_terrain_texture(u->res, t), NULL, &r);
+	SDL_RenderCopy(u->ren, u->res->sprites, &rs, &rd);
 }
 
 
 static void ui_screen_limits(int* x1, int* y1, int* x2, int* y2)
 {
 	*x1 = *y1 = 0;
-	*x2 = *y2 = 10;
+	*x2 = *y2 = 11;
 }
