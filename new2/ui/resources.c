@@ -33,6 +33,7 @@ static struct TerrainImage {
 } res_image[] = {
 	{ OUT_OF_BOUNDS, 	{ 16,  0, 16, 16 } },
 	{ GRASS, 		{  0,  0, 16, 16 } },
+	{ OCEAN,                { 32,  0, 16, 16 } },
 };
 
 SDL_Rect resources_terrain_rect(Resources* r, Terrain t)

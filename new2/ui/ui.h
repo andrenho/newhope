@@ -9,10 +9,10 @@
 
 struct World;
 
-#define TILE_W 32
-#define TILE_H 32
+#define TILE_W 16
+#define TILE_H 16
 
-#define FPS 60
+#define FPS 50
 
 typedef struct UI {
 	SDL_Window* win;

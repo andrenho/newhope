@@ -10,6 +10,7 @@ VERSION = 0.0.1
 # add debugging info
 DEBUG = yes
 DUMA = no
+PROFILING = no
 
 # paths
 PREFIX = /usr/local
@@ -32,6 +33,11 @@ else
   # production flags
   CFLAGS += -Os
   LDFLAGS += -s
+endif
+
+ifeq (${PROFILING},yes)
+  CFLAGS += -pg
+  LDFLAGS += -pg
 endif
 
 # compiler and linker

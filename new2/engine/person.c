@@ -26,9 +26,9 @@ void person_step(Person* p, World* w)
 {
 	double fx = p->x, fy = p->y, step = 0.0;
 	if(p->speed == WALKING) {
-		step = .08;
+		step = .1;
 	} else if(p->speed == RUNNING) {
-		step = .15;
+		step = .2;
 	}
 
 	switch(p->direction) {

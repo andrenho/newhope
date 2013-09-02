@@ -10,9 +10,10 @@
 
 static bool ui_sdl_init(UI* u);
 static void ui_sdl_end(UI* u);
-static void ui_screen_limits(int* x1, int* y1, int* x2, int* y2);
+static void ui_screen_limits(UI* u, int* x1, int* y1, int* x2, int* y2);
 static void ui_draw_terrain(UI* u, World* w, int x, int y, Terrain t);
 static void ui_draw_person(UI* u, World* w, Person* p);
+static void ui_center_hero(UI* u, World* w);
 
 static void ui_keyboard_event(UI* u, World* w, SDL_KeyboardEvent k);
 
@@ -75,10 +76,12 @@ void ui_do_events(UI* u, World* w)
 // present the image to the user
 void ui_render(UI* u, World* w)
 {
-	int x1, y1, x2, y2;
-	ui_screen_limits(&x1, &y1, &x2, &y2);
+	ui_center_hero(u, w);
 
-	// things
+	int x1, y1, x2, y2;
+	ui_screen_limits(u, &x1, &y1, &x2, &y2);
+
+	// draw things
 	for(int x=x1; x<=x2; x++) {
 		for(int y=y1; y<=y2; y++) {
 			Object obj;
@@ -87,7 +90,7 @@ void ui_render(UI* u, World* w)
 		}
 	}
 
-	// people
+	// draw people
 	FOREACH(w->people, Person*, p) {
 		if(p->x >= (x1-1) && p->x <= x2 && p->y >= (y1-1) && p->y <= y2) {
 			ui_draw_person(u, w, p);
@@ -95,6 +98,21 @@ void ui_render(UI* u, World* w)
 	}
 
 	SDL_RenderPresent(u->ren);
+}
+
+
+void ui_wait_next_frame(UI* u)
+{
+	uint32_t next = u->last_frame + (1000/FPS);
+	uint32_t ticks = SDL_GetTicks();
+	if(next >= ticks) {
+		SDL_Delay(next - ticks);
+	} else {
+		if(ticks - next > 10) {
+			SDL_Log("frame lost: %d ms", ticks - next);
+		}
+	}
+	u->last_frame = SDL_GetTicks();
 }
 
 
@@ -111,13 +129,14 @@ static bool ui_sdl_init(UI* u)
 		return false;
 	}
 
-	if(SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_RESIZABLE, &u->win,
-				&u->ren) != 0) {
+	if((u->win = SDL_CreateWindow("New Hope " VERSION, SDL_WINDOWPOS_UNDEFINED,
+				SDL_WINDOWPOS_UNDEFINED, 800, 600, 
+				SDL_WINDOW_RESIZABLE|SDL_WINDOW_OPENGL)) == NULL) {
 		SDL_LogCritical(SDL_LOG_CATEGORY_VIDEO, "error initializing "
 				"window: %s\n", SDL_GetError());
 		return false;
 	}
-	SDL_SetWindowTitle(u->win, "New Hope " VERSION);
+	u->ren = SDL_CreateRenderer(u->win, -1, SDL_RENDERER_ACCELERATED);
 
 	return true;
 }
@@ -131,10 +150,24 @@ static void ui_sdl_end(UI* u)
 }
 
 
-static void ui_screen_limits(int* x1, int* y1, int* x2, int* y2)
+static void ui_screen_limits(UI* u, int* x1, int* y1, int* x2, int* y2)
 {
-	*x1 = *y1 = 0;
-	*x2 = *y2 = 11;
+	int w, h;
+	SDL_GetWindowSize(u->win, &w, &h);
+
+	*x1 = u->rx / TILE_W - TILE_W;
+	*y1 = u->ry / TILE_H - TILE_H;
+	*x2 = (u->rx + w) / TILE_W;
+	*y2 = (u->ry + h) / TILE_H;
+}
+
+
+static void ui_center_hero(UI* u, World* w)
+{
+	int _w, _h;
+	SDL_GetWindowSize(u->win, &_w, &_h);
+	u->rx = w->hero->x * TILE_W - (_w / 2);
+	u->ry = w->hero->y * TILE_H - (_h / 2);
 }
 
 
@@ -164,19 +197,12 @@ static void ui_draw_person(UI* u, World* w, Person* p)
 }
 
 
-void ui_wait_next_frame(UI* u)
-{
-	uint32_t next = u->last_frame + (1000/FPS);
-	uint32_t ticks = SDL_GetTicks();
-	if(next > ticks) {
-		SDL_Delay(next - ticks);
-	}
-	u->last_frame = SDL_GetTicks();
-}
-
-
 static void ui_keyboard_event(UI* u, World* w, SDL_KeyboardEvent k)
 {
+	if(k.repeat) {
+		return;
+	}
+
 	// check for moving keys
 	const uint8_t* s = SDL_GetKeyboardState(NULL);
 	if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {

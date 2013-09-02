@@ -11,7 +11,7 @@ int main()
 	//
 	// initialize everything
 	//
-	world = world_init(10, 10);
+	world = world_init(200, 200);
 	if(!(ui = ui_init()))
 		return EXIT_FAILURE;
 

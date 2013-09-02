@@ -35,7 +35,10 @@ Terrain world_xy(World* w, int x, int y, Object* obj)
 	*obj = NONE;
 
 	if(x < 0 || y < 0 || x >= w->w || y >= w->h)
-		return OUT_OF_BOUNDS;
+		return OCEAN;
+
+	if(x == 3 && y == 3)
+		return OCEAN;
 
 	return GRASS;
 }
