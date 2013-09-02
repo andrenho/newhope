@@ -4,9 +4,13 @@
 
 World* world_init(int _w, int _h)
 {
-	World* w = malloc(sizeof(World));
+	World* w = calloc(sizeof(World), 1);
 	w->w = _w;
 	w->h = _h;
+	w->hero = person_init(1, 1);
+	w->people = list();
+	add(&w->people, w->hero);
+
 	return w;
 }
 
@@ -15,6 +19,14 @@ void world_free(World** w)
 {
 	free(*w);
 	*w = NULL;
+}
+
+
+void world_step(World* w)
+{
+	FOREACH(w->people, Person*, p) {
+		person_step(p, w);
+	}
 }
 
 

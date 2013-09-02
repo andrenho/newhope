@@ -27,7 +27,7 @@ void resources_free(Resources** r)
 }
 
 
-static struct RES_Image {
+static struct TerrainImage {
 	enum Terrain terrain;
 	SDL_Rect r;
 } res_image[] = {
@@ -37,7 +37,7 @@ static struct RES_Image {
 
 SDL_Rect resources_terrain_rect(Resources* r, Terrain t)
 {
-	for(int i=0; i<(sizeof(res_image)/sizeof(struct RES_Image)); i++) {
+	for(int i=0; i<(sizeof(res_image)/sizeof(struct TerrainImage)); i++) {
 		if(res_image[i].terrain == t)
 			return res_image[i].r;
 	}

@@ -20,7 +20,9 @@ int main()
 	//
 	while(ui_active(ui)) {
 		ui_do_events(ui, world);
+		world_step(world);
 		ui_render(ui, world);
+		ui_wait_next_frame(ui);
 	}
 
 	//

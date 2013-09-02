@@ -16,7 +16,7 @@ SRC = main.c		\
       engine/world.c	\
       ui/resources.c	\
       ui/ui.c		\
-      util/array.c
+      util/list.c
 
 OBJ = ${SRC:.c=.o}
 HEADERS = ${SRC:.c=.h} engine/terrain.h
@@ -35,17 +35,19 @@ options:
 .c.o:
 	@echo CC $<
 	@${CC} -c ${CFLAGS} -o $@ $<
+	@${CC} -MM ${CFLAGS} $*.c > $*.d
 
 ${OBJ}: config.mk libraries.mk
 
-newhope: depend ${OBJ}
+-include ${OBJ:.o=.d}
+
+newhope: ${OBJ}
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
--include depend
 
 clean:
 	@echo cleaning
-	@rm -f newhope ${OBJ} newhope-${VERSION}.tar.gz depend
+	@rm -f newhope ${OBJ} newhope-${VERSION}.tar.gz ${OBJ:.o=.d}
 
 dist: clean
 	@echo creating dist tarball
@@ -54,10 +56,6 @@ dist: clean
 	@tar -cf newhope-${VERSION}.tar newhope-${VERSION}
 	@gzip newhope-${VERSION}.tar
 	@rm -rf newhope-${VERSION}
-
-depend: ${SRC}
-	@echo checking dependencies
-	@${CC} -MM ${CFLAGS} ${SRC} >depend
 
 install: all
 	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
