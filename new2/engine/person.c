@@ -32,7 +32,7 @@ void person_step(Person* p, World* w)
 	}
 
 	switch(p->direction) {
-	case   0: fx -= step; break;
+	case   0: fy -= step; break;
 	case  45: fx += step; fy -= step; break;
 	case  90: fx += step; break;
 	case 135: fx += step; fy += step; break;
