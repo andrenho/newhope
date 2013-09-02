@@ -14,6 +14,7 @@ static void ui_screen_limits(UI* u, int* x1, int* y1, int* x2, int* y2);
 static void ui_draw_terrain(UI* u, World* w, int x, int y, Terrain t);
 static void ui_draw_person(UI* u, World* w, Person* p);
 static void ui_center_hero(UI* u, World* w);
+static void ui_create_background(UI* u);
 
 static void ui_keyboard_event(UI* u, World* w, SDL_KeyboardEvent k);
 
@@ -33,6 +34,8 @@ UI* ui_init()
 	u->rx = 0;
 	u->ry = 0;
 	u->last_frame = SDL_GetTicks();
+
+	ui_create_background(u);
 	
 	return u;
 }
@@ -82,13 +85,16 @@ void ui_render(UI* u, World* w)
 	ui_screen_limits(u, &x1, &y1, &x2, &y2);
 
 	// draw things
+	/*
 	for(int x=x1; x<=x2; x++) {
 		for(int y=y1; y<=y2; y++) {
 			Object obj;
 			Terrain t = world_xy(w, x, y, &obj);
 			ui_draw_terrain(u, w, x, y, t);
 		}
-	}
+	}*/
+	SDL_Rect r1 = { 0, 0, 100, 100 };
+	SDL_RenderCopy(u->ren, u->bg, &r1, &r1);
 
 	// draw people
 	FOREACH(w->people, Person*, p) {
@@ -195,6 +201,22 @@ static void ui_draw_person(UI* u, World* w, Person* p)
 			.w = TILE_W, .h = TILE_H };
 	SDL_RenderCopyEx(u->ren, u->res->sprites, &rs2, &rd2, p->direction, NULL, 
 			SDL_FLIP_NONE);
+}
+
+
+static void ui_create_background(UI* u)
+{
+	int w, h;
+	SDL_GetWindowSize(u->win, &w, &h);
+
+	u->ren_bg = SDL_CreateRenderer(u->win, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_TARGETTEXTURE);
+	u->bg = SDL_CreateTexture(u->ren, SDL_PIXELFORMAT_ARGB8888,
+			SDL_TEXTUREACCESS_TARGET, w, h);
+	SDL_SetRenderTarget(u->ren_bg, u->bg);
+	SDL_SetRenderDrawColor(u->ren_bg, 200, 255, 255, 255);
+	SDL_RenderClear(u->ren_bg);
+	SDL_SetRenderDrawColor(u->ren_bg, 255, 255, 255, 0);
+	SDL_RenderDrawLine(u->ren_bg, 10, 10, 100, 100);
 }
 
 

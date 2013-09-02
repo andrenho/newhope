@@ -9,8 +9,8 @@
 
 struct World;
 
-#define TILE_W 32
-#define TILE_H 32
+#define TILE_W 16
+#define TILE_H 16
 
 #define FPS 50
 
@@ -21,6 +21,9 @@ typedef struct UI {
 	Resources* res;
 	int rx, ry;
 	uint32_t last_frame;
+
+	SDL_Texture* bg;
+	SDL_Renderer* ren_bg;
 } UI;
 
 UI* ui_init();
