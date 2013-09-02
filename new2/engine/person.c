@@ -24,7 +24,7 @@ void person_free(Person** p)
 
 void person_step(Person* p, World* w)
 {
-	double step = 0.0;
+	double fx = p->x, fy = p->y, step = 0.0;
 	if(p->speed == WALKING) {
 		step = .08;
 	} else if(p->speed == RUNNING) {
@@ -32,16 +32,19 @@ void person_step(Person* p, World* w)
 	}
 
 	switch(p->direction) {
-	case   0: p->y -= step; break;
-	case  45: p->x += step; p->y -= step; break;
-	case  90: p->x += step; break;
-	case 135: p->x += step; p->y += step; break;
-	case 180: p->y += step; break;
-	case 225: p->x -= step; p->y += step; break;
-	case 270: p->x -= step; break;
-	case 315: p->x -= step; p->y -= step; break;
+	case   0: fx -= step; break;
+	case  45: fx += step; fy -= step; break;
+	case  90: fx += step; break;
+	case 135: fx += step; fy += step; break;
+	case 180: fy += step; break;
+	case 225: fx -= step; fy += step; break;
+	case 270: fx -= step; break;
+	case 315: fx -= step; fy -= step; break;
 	default: abort();
 	}
+
+	p->x = fx;
+	p->y = fy;
 }
 
 
