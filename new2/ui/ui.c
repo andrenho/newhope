@@ -136,7 +136,8 @@ static bool ui_sdl_init(UI* u)
 				"window: %s\n", SDL_GetError());
 		return false;
 	}
-	u->ren = SDL_CreateRenderer(u->win, -1, SDL_RENDERER_ACCELERATED);
+	u->ren = SDL_CreateRenderer(u->win, -1, 
+			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 	return true;
 }
