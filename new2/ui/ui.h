@@ -23,10 +23,9 @@ typedef struct UI {
 	uint32_t last_frame;
 
 	SDL_Texture* bg;
-	SDL_Renderer* ren_bg;
 } UI;
 
-UI* ui_init();
+UI* ui_init(struct World* w);
 void ui_free(UI** u);
 
 bool ui_active(UI* u);
