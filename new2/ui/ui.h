@@ -21,6 +21,9 @@ typedef struct UI {
 	Resources* res;
 	int rx, ry;
 	uint32_t last_frame;
+
+	SDL_Texture* bg;
+	SDL_Renderer* ren_bg;
 } UI;
 
 UI* ui_init();
