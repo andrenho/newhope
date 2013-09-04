@@ -10,20 +10,17 @@
 
 static bool ui_sdl_init(UI* u);
 static void ui_sdl_end(UI* u);
-static void ui_screen_limits(UI* u, int* x1, int* y1, int* x2, int* y2);
-static void ui_draw_terrain(UI* u, World* w, int x, int y, Terrain t);
-static void ui_draw_person(UI* u, World* w, Person* p);
-static void ui_center_hero(UI* u, World* w);
-static void ui_create_background(UI* u, World* w);
-static void ui_draw_background(UI* u, World* w);
+static void ui_draw_person(UI* u, Person* p);
+static void ui_center_hero(UI* u);
 
-static void ui_keyboard_event(UI* u, World* w, SDL_KeyboardEvent k);
+static void ui_keyboard_event(UI* u, SDL_KeyboardEvent k);
 
 
 // create the UI object and initialize the user interface
 UI* ui_init(World* w)
 {
 	UI* u = malloc(sizeof(UI));
+	u->w = w;
 
 	if(!ui_sdl_init(u))
 		return NULL;
@@ -35,9 +32,7 @@ UI* ui_init(World* w)
 	u->rx = 0;
 	u->ry = 0;
 	u->last_frame = SDL_GetTicks();
-	u->bg = NULL;
-
-	ui_create_background(u, w);
+	u->bg = bg_init(u);
 	
 	return u;
 }
@@ -46,6 +41,7 @@ UI* ui_init(World* w)
 // free the UI object
 void ui_free(UI** u)
 {
+	bg_free(&(*u)->bg);
 	resources_free(&(*u)->res);
 	ui_sdl_end(*u);
 	free(*u);
@@ -61,7 +57,7 @@ bool ui_active(UI* u)
 
 
 // parse user input and send the events to the engine
-void ui_do_events(UI* u, World* w)
+void ui_do_events(UI* u)
 {
 	SDL_Event e;
 	while(SDL_PollEvent(&e)) {
@@ -71,11 +67,11 @@ void ui_do_events(UI* u, World* w)
 			break;
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
-			ui_keyboard_event(u, w, e.key);
+			ui_keyboard_event(u, e.key);
 			break;
 		case SDL_WINDOWEVENT:
 			if(e.window.event == SDL_WINDOWEVENT_RESIZED) {
-				ui_create_background(u, w);
+				bg_recreate(u->bg);
 			}
 			break;
 		}
@@ -84,32 +80,20 @@ void ui_do_events(UI* u, World* w)
 
 
 // present the image to the user
-void ui_render(UI* u, World* w)
+void ui_render(UI* u)
 {
-	ui_center_hero(u, w);
+	ui_center_hero(u);
 
 	int x1, y1, x2, y2;
 	ui_screen_limits(u, &x1, &y1, &x2, &y2);
 
-	// draw things
-	/*
-	for(int x=x1; x<=x2; x++) {
-		for(int y=y1; y<=y2; y++) {
-			Object obj;
-			Terrain t = world_xy(w, x, y, &obj);
-			ui_draw_terrain(u, w, x, y, t);
-		}
-	}*/
-	// TODO - check if needs to redraw the background
-	int _w, _h;
-	SDL_GetWindowSize(u->win, &_w, &_h);
-	SDL_Rect rd = { -TILE_W, -TILE_H, _w+TILE_W, _h+TILE_H };
-	SDL_RenderCopy(u->ren, u->bg, NULL, &rd);
+	// draw background
+	bg_render(u->bg);
 
 	// draw people
-	FOREACH(w->people, Person*, p) {
+	FOREACH(u->w->people, Person*, p) {
 		if(p->x >= (x1-1) && p->x <= x2 && p->y >= (y1-1) && p->y <= y2) {
-			ui_draw_person(u, w, p);
+			ui_draw_person(u, p);
 		}
 	}
 
@@ -129,6 +113,18 @@ void ui_wait_next_frame(UI* u)
 		//}
 	}
 	u->last_frame = SDL_GetTicks();
+}
+
+
+void ui_screen_limits(UI* u, int* x1, int* y1, int* x2, int* y2)
+{
+	int w, h;
+	SDL_GetWindowSize(u->win, &w, &h);
+
+	*x1 = u->rx / TILE_W - TILE_W;
+	*y1 = u->ry / TILE_H - TILE_H;
+	*x2 = (u->rx + w) / TILE_W;
+	*y2 = (u->ry + h) / TILE_H;
 }
 
 
@@ -161,47 +157,24 @@ static bool ui_sdl_init(UI* u)
 
 static void ui_sdl_end(UI* u)
 {
-	if(u->bg)
-		SDL_DestroyTexture(u->bg);
 	SDL_DestroyRenderer(u->ren);
 	SDL_DestroyWindow(u->win);
 	SDL_Quit();
 }
 
 
-static void ui_screen_limits(UI* u, int* x1, int* y1, int* x2, int* y2)
-{
-	int w, h;
-	SDL_GetWindowSize(u->win, &w, &h);
-
-	*x1 = u->rx / TILE_W - TILE_W;
-	*y1 = u->ry / TILE_H - TILE_H;
-	*x2 = (u->rx + w) / TILE_W;
-	*y2 = (u->ry + h) / TILE_H;
-}
-
-
-static void ui_center_hero(UI* u, World* w)
+static void ui_center_hero(UI* u)
 {
 	int _w, _h;
 	SDL_GetWindowSize(u->win, &_w, &_h);
 	if(_h % 2)
 		_h++;
-	u->rx = (w->hero->x * TILE_W) - (_w / 2.0);
-	u->ry = (w->hero->y * TILE_H) - (_h / 2.0);
+	u->rx = (u->w->hero->x * TILE_W) - (_w / 2.0);
+	u->ry = (u->w->hero->y * TILE_H) - (_h / 2.0);
 }
 
 
-static void ui_draw_terrain(UI* u, World* w, int x, int y, Terrain t)
-{
-	SDL_Rect rs = resources_terrain_rect(u->res, t);
-	SDL_Rect rd = { .x = (x*TILE_W) - u->rx, .y = (y*TILE_H) - u->ry,
-	                .w = TILE_W, .h = TILE_H };
-	SDL_RenderCopy(u->ren, u->res->sprites, &rs, &rd);
-}
-
-
-static void ui_draw_person(UI* u, World* w, Person* p)
+static void ui_draw_person(UI* u, Person* p)
 {
 	// body
 	SDL_Rect rs = { .x = 0, .y = 16, .w = 16, .h = 16 };
@@ -218,21 +191,7 @@ static void ui_draw_person(UI* u, World* w, Person* p)
 }
 
 
-static void ui_create_background(UI* u, World* w)
-{
-	int _w, _h;
-	SDL_GetWindowSize(u->win, &_w, &_h);
-
-	if(u->bg)
-		SDL_DestroyTexture(u->bg);
-	u->bg = SDL_CreateTexture(u->ren, SDL_PIXELFORMAT_ARGB8888,
-			SDL_TEXTUREACCESS_TARGET, _w+(2*TILE_W), _h+(2*TILE_H));
-
-	ui_draw_background(u, w);
-}
-
-
-static void ui_keyboard_event(UI* u, World* w, SDL_KeyboardEvent k)
+static void ui_keyboard_event(UI* u, SDL_KeyboardEvent k)
 {
 	if(k.repeat) {
 		return;
@@ -241,31 +200,22 @@ static void ui_keyboard_event(UI* u, World* w, SDL_KeyboardEvent k)
 	// check for moving keys
 	const uint8_t* s = SDL_GetKeyboardState(NULL);
 	if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {
-		person_start_running(w->hero, 315);
+		person_start_running(u->w->hero, 315);
 	} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_RIGHT]) {
-		person_start_running(w->hero, 45);
+		person_start_running(u->w->hero, 45);
 	} else if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_LEFT]) {
-		person_start_running(w->hero, 225);
+		person_start_running(u->w->hero, 225);
 	} else if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_RIGHT]) {
-		person_start_running(w->hero, 135);
+		person_start_running(u->w->hero, 135);
 	} else if(s[SDL_SCANCODE_UP]) {
-		person_start_running(w->hero, 0);
+		person_start_running(u->w->hero, 0);
 	} else if(s[SDL_SCANCODE_DOWN]) {
-		person_start_running(w->hero, 180);
+		person_start_running(u->w->hero, 180);
 	} else if(s[SDL_SCANCODE_LEFT]) {
-		person_start_running(w->hero, 270);
+		person_start_running(u->w->hero, 270);
 	} else if(s[SDL_SCANCODE_RIGHT]) {
-		person_start_running(w->hero, 90);
+		person_start_running(u->w->hero, 90);
 	} else {
-		person_stop_running(w->hero);
+		person_stop_running(u->w->hero);
 	}
-}
-
-
-static void ui_draw_background(UI* u, World* w)
-{
-	SDL_SetRenderTarget(u->ren, u->bg);
-	SDL_SetRenderDrawColor(u->ren, 100, 255, 255, 255);
-	SDL_RenderClear(u->ren);
-	SDL_SetRenderTarget(u->ren, NULL);
 }

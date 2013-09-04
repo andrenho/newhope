@@ -14,6 +14,7 @@ SRC = main.c		\
       engine/city.c	\
       engine/person.c	\
       engine/world.c	\
+      ui/background.c	\
       ui/resources.c	\
       ui/ui.c		\
       util/list.c

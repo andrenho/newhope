@@ -17,6 +17,7 @@ World* world_init(int _w, int _h)
 
 void world_free(World** w)
 {
+	free_all(&(*w)->people, person_free);
 	free(*w);
 	*w = NULL;
 }
