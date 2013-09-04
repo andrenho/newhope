@@ -117,25 +117,9 @@
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    obj:/usr/lib/libSDL2-2.0.so.0.0.0
    fun:SDL_CreateWindow
-   fun:SDL_CreateWindowAndRenderer
    fun:ui_sdl_init
    fun:ui_init
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:strdup
-   obj:/usr/lib/libX11.so.6.3.0
-   fun:_XimSetICValueData
-   fun:_XimLocalCreateIC
-   fun:XCreateIC
-   obj:/usr/lib/libSDL2-2.0.so.0.0.0
-   obj:/usr/lib/libSDL2-2.0.so.0.0.0
-   obj:/usr/lib/libSDL2-2.0.so.0.0.0
-   obj:/usr/lib/libSDL2-2.0.so.0.0.0
-   fun:SDL_CreateRenderer
-   fun:SDL_CreateWindowAndRenderer
+   fun:main
 }
 {
    <insert_a_suppression_name_here>
@@ -172,22 +156,6 @@
 {
    <insert_a_suppression_name_here>
    Memcheck:Leak
-   fun:malloc
-   fun:XextCreateExtension
-   obj:/usr/lib/mesa-libGL.so.1.2.0
-   obj:/usr/lib/mesa-libGL.so.1.2.0
-   obj:/usr/lib/mesa-libGL.so.1.2.0
-   obj:/usr/lib/mesa-libGL.so.1.2.0
-   obj:/usr/lib/mesa-libGL.so.1.2.0
-   fun:glXChooseVisual
-   obj:/usr/lib/libSDL2-2.0.so.0.0.0
-   obj:/usr/lib/libSDL2-2.0.so.0.0.0
-   fun:SDL_GL_LoadLibrary
-   fun:SDL_CreateWindow
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
    fun:calloc
    obj:/usr/lib/libX11.so.6.3.0
    fun:_XlcCreateLC
@@ -213,6 +181,22 @@
    fun:ui_sdl_init
    fun:ui_init
    fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XextCreateExtension
+   obj:/usr/lib/mesa-libGL.so.1.2.0
+   obj:/usr/lib/mesa-libGL.so.1.2.0
+   obj:/usr/lib/mesa-libGL.so.1.2.0
+   obj:/usr/lib/mesa-libGL.so.1.2.0
+   obj:/usr/lib/mesa-libGL.so.1.2.0
+   fun:glXChooseVisual
+   obj:/usr/lib/libSDL2-2.0.so.0.0.0
+   obj:/usr/lib/libSDL2-2.0.so.0.0.0
+   fun:SDL_GL_LoadLibrary
+   fun:SDL_CreateWindow
 }
 {
    <insert_a_suppression_name_here>

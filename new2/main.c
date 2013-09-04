@@ -3,15 +3,14 @@
 
 #include <stdlib.h>
 
-World* world;
-UI*    ui;
-
 int main()
 {
+	UI* ui;
+
 	//
 	// initialize everything
 	//
-	world = world_init(200, 200);
+	World* world = world_init(200, 200);
 	if(!(ui = ui_init(world)))
 		return EXIT_FAILURE;
 
@@ -19,9 +18,9 @@ int main()
 	// main loop
 	//
 	while(ui_active(ui)) {
-		ui_do_events(ui, world);
+		ui_do_events(ui);
 		world_step(world);
-		ui_render(ui, world);
+		ui_render(ui);
 		ui_wait_next_frame(ui);
 	}
 

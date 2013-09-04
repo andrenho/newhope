@@ -24,3 +24,16 @@ void add(List** ls, void* data)
 		lx->next = ln;
 	}
 }
+
+
+void free_all(List** ls, void(*f)(void** data))
+{
+	List* ln = *ls;
+	while(ln) {
+		f(&ln->data);
+		List* ll = ln;
+		ln = ln->next;
+		free(ll);
+	}
+	*ls = NULL;
+}
