@@ -4,6 +4,10 @@
 
 #include "engine/city.h"
 
+
+static Object world_object_xy(World* w, int x, int y);
+
+
 World* world_init(int _w, int _h)
 {
 	World* w = calloc(sizeof(World), 1);
@@ -40,11 +44,11 @@ void world_step(World* w)
 Terrain world_xy(World* w, int x, int y, Object* obj)
 {
 	if(obj)
-		*obj = NONE;
+		(*obj) = world_object_xy(w, x, y);
 
+	// tile
 	if(x < 0 || y < 0 || x >= w->w || y >= w->h)
 		return OCEAN;
-
 	if(x == 3 && y == 3)
 		return OCEAN;
 
@@ -58,4 +62,19 @@ bool world_tile_walkable(World* w, int x, int y)
 		return false;
 	}
 	return true;
+}
+
+
+/********************
+ *                  *
+ * STATIC FUNCTIONS *
+ *                  *
+ ********************/
+
+
+static Object world_object_xy(World* w, int x, int y)
+{
+	Object obj = { NONE, 0 };
+
+	return obj;
 }

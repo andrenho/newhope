@@ -7,8 +7,9 @@
 #include "engine/person.h"
 #include "util/list.h"
 
-typedef enum Object {
-	NONE,
+typedef struct Object {
+	enum { NONE } type;
+	int code;
 } Object;
 
 typedef struct World {

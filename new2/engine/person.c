@@ -83,7 +83,10 @@ void person_stop_running(Person* p)
 
 static bool person_can_move(Person* p, World* w, double x, double y)
 {
-	if(!world_tile_walkable(w, floor(x), floor(y))) {
+	if(!world_tile_walkable(w, floor(x-0.5), floor(y-0.5))
+	|| !world_tile_walkable(w, floor(x+0.5), floor(y-0.5))
+	|| !world_tile_walkable(w, floor(x-0.5), floor(y+0.5))
+	|| !world_tile_walkable(w, floor(x+0.5), floor(y+0.5))) {
 		return false;
 	}
 

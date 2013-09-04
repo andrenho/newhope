@@ -10,6 +10,7 @@ include libraries.mk
 
 SRC = main.c		\
       engine/building.c	\
+      engine/buildingtype.c \
       engine/car.c	\
       engine/city.c	\
       engine/person.c	\
@@ -17,6 +18,7 @@ SRC = main.c		\
       ui/background.c	\
       ui/resources.c	\
       ui/ui.c		\
+      util/geometry.c	\
       util/list.c
 
 OBJ = ${SRC:.c=.o}
