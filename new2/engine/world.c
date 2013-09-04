@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+#include "engine/city.h"
+
 World* world_init(int _w, int _h)
 {
 	World* w = calloc(sizeof(World), 1);
@@ -9,7 +11,10 @@ World* world_init(int _w, int _h)
 	w->h = _h;
 	w->hero = person_init(1, 1);
 	w->people = list();
+	w->cities = list();
+
 	add(&w->people, w->hero);
+	add(&w->cities, city_init("Test", 10, 10, 10, 10));
 
 	return w;
 }
@@ -17,6 +22,7 @@ World* world_init(int _w, int _h)
 
 void world_free(World** w)
 {
+	free_all(&(*w)->cities, city_free);
 	free_all(&(*w)->people, person_free);
 	free(*w);
 	*w = NULL;
@@ -33,7 +39,8 @@ void world_step(World* w)
 
 Terrain world_xy(World* w, int x, int y, Object* obj)
 {
-	*obj = NONE;
+	if(obj)
+		*obj = NONE;
 
 	if(x < 0 || y < 0 || x >= w->w || y >= w->h)
 		return OCEAN;
@@ -42,4 +49,13 @@ Terrain world_xy(World* w, int x, int y, Object* obj)
 		return OCEAN;
 
 	return GRASS;
+}
+
+
+bool world_tile_walkable(World* w, int x, int y)
+{
+	if(world_xy(w, x, y, NULL) == OCEAN) {
+		return false;
+	}
+	return true;
 }

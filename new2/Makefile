@@ -20,7 +20,7 @@ SRC = main.c		\
       util/list.c
 
 OBJ = ${SRC:.c=.o}
-HEADERS = ${SRC:.c=.h} engine/terrain.h
+HEADERS = ${SRC:.c=.h} engine/terrain.h engine/buildingtype.h
 DIST = AUTHORS HACKING LICENSE NEWS
 DATA = data/sprites.png
 

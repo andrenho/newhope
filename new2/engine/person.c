@@ -1,8 +1,14 @@
 #include "engine/person.h"
 
 #include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
 
 #include "engine/world.h"
+
+
+static bool person_can_move(Person* p, World* w, double x, double y);
+
 
 Person* person_init(double x, double y)
 {
@@ -24,13 +30,17 @@ void person_free(Person** p)
 
 void person_step(Person* p, World* w)
 {
+	// set speed
 	double fx = p->x, fy = p->y, step = 0.0;
 	if(p->speed == WALKING) {
-		step = .1;
+		step = .08;
 	} else if(p->speed == RUNNING) {
-		step = .2;
+		step = .15;
+	} else {
+		return;
 	}
 
+	// set direction
 	switch(p->direction) {
 	case   0: fy -= step; break;
 	case  45: fx += step; fy -= step; break;
@@ -43,8 +53,11 @@ void person_step(Person* p, World* w)
 	default: abort();
 	}
 
-	p->x = fx;
-	p->y = fy;
+	// check if the person can move
+	if(person_can_move(p, w, fx, fy)) {
+		p->x = fx;
+		p->y = fy;
+	}
 }
 
 
@@ -58,4 +71,21 @@ void person_start_running(Person* p, int direction)
 void person_stop_running(Person* p)
 {
 	p->speed = STOPPED;
+}
+
+
+/********************
+ *                  *
+ * STATIC FUNCTIONS *
+ *                  *
+ ********************/
+
+
+static bool person_can_move(Person* p, World* w, double x, double y)
+{
+	if(!world_tile_walkable(w, floor(x), floor(y))) {
+		return false;
+	}
+
+	return true;
 }

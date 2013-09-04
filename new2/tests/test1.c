@@ -30,10 +30,9 @@ int main()
 				SDL_RenderCopy(ren, tx, &src, &dst);
 			}
 		}
-		Uint32 t1 = SDL_GetTicks();
+		SDL_Delay(5);
 		SDL_RenderPresent(ren);
 		Uint32 t2 = SDL_GetTicks();
-		printf("a. %ld\n", t1 - t);
 		printf("b. %ld\n", t2 - t);
 	}
 }

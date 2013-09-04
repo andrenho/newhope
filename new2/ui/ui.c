@@ -10,7 +10,6 @@
 
 static bool ui_sdl_init(UI* u);
 static void ui_sdl_end(UI* u);
-static void ui_draw_person(UI* u, Person* p);
 static void ui_center_hero(UI* u);
 
 static void ui_keyboard_event(UI* u, SDL_KeyboardEvent k);
@@ -82,6 +81,8 @@ void ui_do_events(UI* u)
 // present the image to the user
 void ui_render(UI* u)
 {
+	Uint32 t = SDL_GetTicks();
+
 	ui_center_hero(u);
 
 	int x1, y1, x2, y2;
@@ -90,14 +91,10 @@ void ui_render(UI* u)
 	// draw background
 	bg_render(u->bg);
 
-	// draw people
-	FOREACH(u->w->people, Person*, p) {
-		if(p->x >= (x1-1) && p->x <= x2 && p->y >= (y1-1) && p->y <= y2) {
-			ui_draw_person(u, p);
-		}
-	}
-
 	SDL_RenderPresent(u->ren);
+
+	if(SDL_GetTicks() - t > (1000/FPS)+5)
+		printf("frame lost: %zu ms\n", SDL_GetTicks() - t);
 }
 
 
@@ -108,9 +105,9 @@ void ui_wait_next_frame(UI* u)
 	if(next >= ticks) {
 		SDL_Delay(next - ticks);
 	} else {
-		//if(ticks - next > 10) {
+		if(ticks - next > 5) {
 			SDL_Log("frame lost: %d ms", ticks - next);
-		//}
+		}
 	}
 	u->last_frame = SDL_GetTicks();
 }
@@ -133,6 +130,8 @@ void ui_screen_limits(UI* u, int* x1, int* y1, int* x2, int* y2)
  * STATIC FUNCTIONS *
  *                  *
  ********************/
+
+
 static bool ui_sdl_init(UI* u)
 {
 	if(SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -149,7 +148,7 @@ static bool ui_sdl_init(UI* u)
 		return false;
 	}
 	u->ren = SDL_CreateRenderer(u->win, -1, 
-			SDL_RENDERER_ACCELERATED /*| SDL_RENDERER_PRESENTVSYNC*/);
+			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 	return true;
 }
@@ -171,23 +170,8 @@ static void ui_center_hero(UI* u)
 		_h++;
 	u->rx = (u->w->hero->x * TILE_W) - (_w / 2.0);
 	u->ry = (u->w->hero->y * TILE_H) - (_h / 2.0);
-}
 
-
-static void ui_draw_person(UI* u, Person* p)
-{
-	// body
-	SDL_Rect rs = { .x = 0, .y = 16, .w = 16, .h = 16 };
-	SDL_Rect rd = { .x = (p->x * TILE_W) - u->rx, .y = (p->y * TILE_H) - u->ry,
-			.w = TILE_W, .h = TILE_H };
-	SDL_RenderCopy(u->ren, u->res->sprites, &rs, &rd);
-
-	// direction
-	SDL_Rect rs2 = { .x = 16, .y = 16, .w = 16, .h = 16 };
-	SDL_Rect rd2 = { .x = (p->x * TILE_W) - u->rx, .y = (p->y * TILE_H) - u->ry,
-			.w = TILE_W, .h = TILE_H };
-	SDL_RenderCopyEx(u->ren, u->res->sprites, &rs2, &rd2, p->direction, NULL, 
-			SDL_FLIP_NONE);
+	bg_redraw(u->bg);
 }
 
 

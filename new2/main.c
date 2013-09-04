@@ -21,7 +21,7 @@ int main()
 		ui_do_events(ui);
 		world_step(world);
 		ui_render(ui);
-		ui_wait_next_frame(ui);
+		//ui_wait_next_frame(ui);
 	}
 
 	//

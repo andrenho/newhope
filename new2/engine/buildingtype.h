@@ -1,0 +1,6 @@
+#ifndef ENGINE_BUILDINGTYPE_H
+#define ENGINE_BUILDINGTYPE_H
+
+
+
+#endif

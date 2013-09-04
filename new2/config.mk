@@ -18,7 +18,7 @@ DATAPREFIX = ${PREFIX}/share/newhope
 
 # basic flags
 CFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${VINTERMPREFIX}\" -pedantic -Wall -I. -I/usr/include -std=c99
-LDFLAGS = -L/usr/lib
+LDFLAGS = -L/usr/lib -lm
 
 # Duma libraries
 ifeq (${DUMA}, yes)
