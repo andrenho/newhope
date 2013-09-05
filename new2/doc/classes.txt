@@ -1,0 +1,9 @@
+@startuml
+
+package engine <<Frame>>
+  World *-- Person : people
+  World *-- City   : cities
+end package
+
+
+@enduml

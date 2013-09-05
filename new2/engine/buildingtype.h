@@ -5,12 +5,14 @@ typedef enum BuildingClass {
 	HOUSE,
 } BuildingClass;
 
+typedef struct BuildingLayout {
+	int w, h;
+	int door_x, door_y;
+} BuildingLayout;
+
 typedef struct BuildingType {
 	BuildingClass type;
-	struct T {
-		int w, h;
-		int door_x, door_y;
-	} *layout;
+	BuildingLayout *layout;
 } BuildingType; 
 
 extern BuildingType bd_type[];

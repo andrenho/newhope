@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "engine/city.h"
+#include "util/geometry.h"
 
 
 static Object world_object_xy(World* w, int x, int y);
@@ -75,6 +76,15 @@ bool world_tile_walkable(World* w, int x, int y)
 static Object world_object_xy(World* w, int x, int y)
 {
 	Object obj = { NONE, 0 };
+
+	// check for buildings
+	FOREACH(w->cities, City*, c) {
+		Rect r = { c->x, c->y, c->w, c->h };
+		Point p = { x, y };
+		if(intersect_point(r, p)) {
+			return city_object_xy(c, x, y);
+		}
+	}
 
 	return obj;
 }

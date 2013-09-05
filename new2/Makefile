@@ -22,7 +22,7 @@ SRC = main.c		\
       util/list.c
 
 OBJ = ${SRC:.c=.o}
-HEADERS = ${SRC:.c=.h} engine/terrain.h engine/buildingtype.h
+HEADERS = ${SRC:.c=.h} engine/terrain.h engine/buildingtype.h engine/object.h
 DIST = AUTHORS HACKING LICENSE NEWS
 DATA = data/sprites.png
 
@@ -47,6 +47,10 @@ ${OBJ}: config.mk libraries.mk
 newhope: ${OBJ}
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
+
+docs: doc/classes.txt
+	@echo plantuml $<
+	@java -jar doc/plantuml.jar $<
 
 clean:
 	@echo cleaning

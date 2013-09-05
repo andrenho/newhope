@@ -5,12 +5,8 @@
 
 #include "engine/terrain.h"
 #include "engine/person.h"
+#include "engine/object.h"
 #include "util/list.h"
-
-typedef struct Object {
-	enum { NONE } type;
-	int code;
-} Object;
 
 typedef struct World {
 	int w, h;

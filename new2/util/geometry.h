@@ -3,8 +3,10 @@
 
 #include <stdbool.h>
 
-typedef struct Rect { int x, y, w, x; } Rect;
+typedef struct Rect { int x, y, w, h; } Rect;
+typedef struct Point { int x, y; } Point;
 
-bool intersect(Rect r1, Rect r2);
+bool intersect_rect(Rect r1, Rect r2);
+bool intersect_point(Rect r, Point p);
 
 #endif
