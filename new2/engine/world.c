@@ -21,6 +21,10 @@ World* world_init(int _w, int _h)
 	add(&w->people, w->hero);
 	add(&w->cities, city_init("Test", 10, 10, 10, 10));
 
+	Object o;
+	world_xy(w, 12, 12, &o);
+	printf("%d %d\n", o.type, o.code);
+
 	return w;
 }
 
@@ -50,7 +54,7 @@ Terrain world_xy(World* w, int x, int y, Object* obj)
 	// tile
 	if(x < 0 || y < 0 || x >= w->w || y >= w->h)
 		return OCEAN;
-	if(x == 3 && y == 3)
+	if(x == 10 && y == 10)
 		return OCEAN;
 
 	return GRASS;
