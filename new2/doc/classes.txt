@@ -2,8 +2,91 @@
 
 package engine <<Frame>>
   World *-- Person : people
+  World --> Person : hero
   World *-- City   : cities
+  World *-- Car    : cars
+  City *-- Building : buildings
+  World .. Object
+  Building .. BuildingType
+  BuildingType *-- BuildingLayout : layout
 end package
+
+class World {
+  int w, h
+  void step(w)
+  Terrain xy(w, x, y, *obj)
+  bool tile_walkable(w, x, y)
+}
+
+class Person {
+  int x, y
+  int direction
+  void step(p, w)
+  void start_running(p, dir)
+  void stop_running(p)
+}
+
+class Car {
+  int x, y
+}
+
+class City {
+  const char* name
+  int x, y, w, h
+  Object object_xy(c, x, y)
+}
+
+class Building {
+  int x, y
+  BuildingClass class
+  int layout
+  BuildingLayout layout(b)
+  Object object_xy(b, x, y)
+}
+
+class Object << (S,#FF7700) >> {
+  enum type
+  int code
+}
+
+class BuildingType << (S,#FF7700) >> {
+  enum BuildingClass type
+}
+
+class BuildingLayout << (S,#FF7700) >> {
+  int w, h
+  int door_x, door_y
+}
+
+
+package ui <<Frame>>
+  UI --> Background : bg
+  UI --> Resources : res
+end package
+
+class UI {
+  bool active
+  int rx, ry
+  bool active(u)
+  void do_events(u)
+  void render(u)
+  void wait_next_frame(u)
+}
+
+class Resources {
+  SDL_Rect terrain_rect(r, t)
+  SDL_Rect obj_rect(r, t)
+}
+
+class Background {
+  void recreate(b)
+  void render(b)
+  void redraw(b)
+}
+
+
+UI .. World
+
 
 
 @enduml

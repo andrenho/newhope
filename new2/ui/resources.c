@@ -39,8 +39,34 @@ static struct TerrainImage {
 SDL_Rect resources_terrain_rect(Resources* r, Terrain t)
 {
 	for(int i=0; i<(sizeof(res_image)/sizeof(struct TerrainImage)); i++) {
-		if(res_image[i].terrain == t)
+		if(res_image[i].terrain == t) {
 			return res_image[i].r;
+		}
+	}
+	return (SDL_Rect) { 0, 0, 0, 0 };
+}
+
+
+static struct ObjectImage {
+	enum ObjectType type;
+	int code;
+	SDL_Rect r;
+} res_obj[] = {
+	{ WALL, WALL_NE, {  0, 32, 16, 16 } },
+	{ WALL, WALL_N,  { 16, 32, 16, 16 } },
+	{ WALL, WALL_NW, { 32, 32, 16, 16 } },
+	{ WALL, WALL_E,  {  0, 48, 16, 16 } },
+	{ WALL, WALL_W,  { 32, 48, 16, 16 } },
+	{ WALL, WALL_SE, {  0, 64, 16, 16 } },
+	{ WALL, WALL_S,  { 16, 64, 16, 16 } },
+	{ WALL, WALL_SW, { 32, 64, 16, 16 } },
+};
+SDL_Rect resources_obj_rect(Resources* r, Object obj)
+{
+	for(int i=0; i<(sizeof(res_image)/sizeof(struct ObjectImage)); i++) {
+		if(res_obj[i].type == obj.type && res_obj[i].code == obj.code) {
+			return res_obj[i].r;
+		}
 	}
 	return (SDL_Rect) { 0, 0, 0, 0 };
 }

@@ -2,7 +2,7 @@
 #define ENGINE_OBJECT_H
 
 typedef struct Object {
-	enum { NONE, WALL, DOOR } type;
+	enum ObjectType { NONE, WALL, DOOR } type;
 	int code;
 } Object;
 

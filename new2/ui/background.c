@@ -88,10 +88,16 @@ static void bg_draw_tile(Background* b, int x, int y)
 {
 	Object obj;
 	Terrain t = world_xy(b->ui->w, x, y, &obj);
+
+	// draw terrain
 	SDL_Rect rs = resources_terrain_rect(b->ui->res, t);
 	SDL_Rect rd = { .x = (x*TILE_W) - b->ui->rx, .y = (y*TILE_H) - b->ui->ry,
 	                .w = TILE_W, .h = TILE_H };
 	SDL_RenderCopy(b->ren, b->ui->res->sprites, &rs, &rd);
+
+	// draw object
+	SDL_Rect rso = resources_obj_rect(b->ui->res, obj);
+	SDL_RenderCopy(b->ren, b->ui->res->sprites, &rso, &rd);
 }
 
 
