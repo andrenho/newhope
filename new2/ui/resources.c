@@ -52,18 +52,20 @@ static struct ObjectImage {
 	int code;
 	SDL_Rect r;
 } res_obj[] = {
-	{ WALL, WALL_NE, {  0, 32, 16, 16 } },
-/*	{ WALL, WALL_N,  { 16, 32, 16, 16 } },
-	{ WALL, WALL_NW, { 32, 32, 16, 16 } },
-	{ WALL, WALL_E,  {  0, 48, 16, 16 } },
-	{ WALL, WALL_W,  { 32, 48, 16, 16 } },
-	{ WALL, WALL_SE, {  0, 64, 16, 16 } },
+	{ WALL, WALL_NW, {  0, 32, 16, 16 } },
+	{ WALL, WALL_N,  { 16, 32, 16, 16 } },
+	{ WALL, WALL_NE, { 32, 32, 16, 16 } },
+	{ WALL, WALL_W,  {  0, 48, 16, 16 } },
+	{ WALL, WALL_E,  { 32, 48, 16, 16 } },
+	{ WALL, WALL_SW, {  0, 64, 16, 16 } },
 	{ WALL, WALL_S,  { 16, 64, 16, 16 } },
-	{ WALL, WALL_SW, { 32, 64, 16, 16 } }, */
+	{ WALL, WALL_SE, { 32, 64, 16, 16 } },
+	{ WALL, FLOOR,   { 16, 48, 16, 16 } },
+	{ DOOR, 0,       { 32, 16, 16, 16 } },
 };
 SDL_Rect resources_obj_rect(Resources* r, Object obj)
 {
-	for(int i=0; i<(sizeof(res_image)/sizeof(struct ObjectImage)); i++) {
+	for(int i=0; i<(sizeof(res_obj)/sizeof(struct ObjectImage)); i++) {
 		if(res_obj[i].type == obj.type && res_obj[i].code == obj.code) {
 			return res_obj[i].r;
 		}

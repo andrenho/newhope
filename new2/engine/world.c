@@ -21,9 +21,11 @@ World* world_init(int _w, int _h)
 	add(&w->people, w->hero);
 	add(&w->cities, city_init("Test", 10, 10, 10, 10));
 
-	Object o;
-	world_xy(w, 12, 12, &o);
-	printf("%d %d\n", o.type, o.code);
+	/* Object o;
+	for(int i=12; i<=16; i++) {
+		world_xy(w, i, 12, &o);
+		printf("%d %d\n", o.type, o.code);
+	} */
 
 	return w;
 }
@@ -63,9 +65,19 @@ Terrain world_xy(World* w, int x, int y, Object* obj)
 
 bool world_tile_walkable(World* w, int x, int y)
 {
-	if(world_xy(w, x, y, NULL) == OCEAN) {
+	Object obj;
+	Terrain t = world_xy(w, x, y, &obj);
+
+	// tiles
+	if(t == OCEAN) {
 		return false;
 	}
+
+	// objects
+	if(obj.type == WALL) {
+		return false;
+	}
+
 	return true;
 }
 

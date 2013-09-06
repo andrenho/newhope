@@ -30,7 +30,7 @@ Object city_object_xy(City* c, int x, int y)
 {
 	FOREACH(c->buildings, Building*, b) {
 		BuildingLayout bl = building_layout(b);
-		Rect r = { (c->x+b->x), (c->y+b->y), bl.w, bl.h };
+		Rect r = { (c->x+b->x), (c->y+b->y), bl.w-1, bl.h-1 };
 		Point p = { x, y };
 		if(intersect_point(r, p)) {
 			return building_object_xy(b, x-(c->x+b->x), y-(c->y+b->y));

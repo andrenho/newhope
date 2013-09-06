@@ -30,7 +30,9 @@ Object building_object_xy(Building* b, int x, int y)
 {
 	BuildingLayout bl = building_layout(b);
 
-	// TODO - doors
+	if(x == bl.door_x && y == bl.door_y) {
+		return (Object) { DOOR, 0 };
+	}
 
 	// building walls
 	if(x == 0) {
@@ -53,6 +55,11 @@ Object building_object_xy(Building* b, int x, int y)
 		return (Object) { WALL, WALL_N };
 	} else if(y == bl.h-1) {
 		return (Object) { WALL, WALL_S };
+	}
+
+	// floor?
+	if(x >= 0 && x < bl.w && y >= 0 && y < bl.h) {
+		return (Object) { WALL, FLOOR };
 	}
 
 	return (Object){ NONE, 0 };

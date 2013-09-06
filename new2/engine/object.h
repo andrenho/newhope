@@ -11,6 +11,7 @@ typedef struct Object {
 //
 
 // WALL
-enum { WALL_N, WALL_S, WALL_E, WALL_W, WALL_NW, WALL_NE, WALL_SW, WALL_SE };
+enum { WALL_N=1, WALL_S, WALL_E, WALL_W, WALL_NW, WALL_NE, WALL_SW, WALL_SE, 
+	FLOOR };
 
 #endif
