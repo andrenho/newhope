@@ -59,7 +59,7 @@ Object building_object_xy(Building* b, int x, int y)
 
 	// floor?
 	if(x >= 0 && x < bl.w && y >= 0 && y < bl.h) {
-		return (Object) { WALL, FLOOR };
+		return (Object) { FLOOR, 0 };
 	}
 
 	return (Object){ NONE, 0 };
