@@ -53,6 +53,15 @@ void person_step(Person* p, World* w)
 	default: abort();
 	}
 
+	// if the person can't move diagonally, try moving horizontal/vertical
+	if(fx != 0 && fy != 0 && !person_can_move(p, w, fx, fy)) {
+		if(person_can_move(p, w, fx, p->y)) {
+			fy = p->y;
+		} else if(person_can_move(p, w, p->x, fy)) {
+			fx = p->x;
+		}
+	}
+
 	// check if the person can move
 	if(person_can_move(p, w, fx, fy)) {
 		p->x = fx;
@@ -83,13 +92,6 @@ void person_stop_running(Person* p)
 
 static bool person_can_move(Person* p, World* w, double x, double y)
 {
-	Object obj1, obj2;
-	world_xy(w, floor(x-0.3), floor(y-0.5), &obj1);
-	world_xy(w, floor(x+0.3), floor(y-0.5), &obj2);
-	if(obj1.type == DOOR || obj2.type == DOOR) {
-		return true;
-	}
-
 	if(!world_tile_walkable(w, floor(x-0.5), floor(y-0.5))
 	|| !world_tile_walkable(w, floor(x+0.5), floor(y-0.5))
 	|| !world_tile_walkable(w, floor(x-0.5), floor(y+0.5))

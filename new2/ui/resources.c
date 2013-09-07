@@ -61,7 +61,8 @@ static struct ObjectImage {
 	{ WALL, WALL_S,  { 16, 64, 16, 16 } },
 	{ WALL, WALL_SE, { 32, 64, 16, 16 } },
 	{ FLOOR, 0,      { 16, 48, 16, 16 } },
-	{ DOOR, 0,       { 32, 16, 16, 16 } },
+	{ DOOR, 0,       {  0, 80, 16, 16 } },
+	{ DOOR, 1,       { 16, 80, 16, 16 } },
 };
 SDL_Rect resources_obj_rect(Resources* r, Object obj)
 {

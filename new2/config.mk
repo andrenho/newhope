@@ -31,7 +31,7 @@ ifeq (${DEBUG},yes)
   LDFLAGS += -g
 else
   # production flags
-  CFLAGS += -Os
+  CFLAGS += -Os -DNDEBUG
   LDFLAGS += -s
 endif
 

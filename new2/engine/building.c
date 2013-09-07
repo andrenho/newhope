@@ -32,6 +32,8 @@ Object building_object_xy(Building* b, int x, int y)
 
 	if(x == bl.door_x && y == bl.door_y) {
 		return (Object) { DOOR, 0 };
+	} else if(x == bl.door_x+1 && y == bl.door_y) {
+		return (Object) { DOOR, 1 };
 	}
 
 	// building walls
