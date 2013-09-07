@@ -17,6 +17,7 @@ Person* person_init(double x, double y)
 	p->y = y;
 	p->direction = 90;
 	p->speed = STOPPED;
+	p->image = (rand() % MAX_IMAGES) + 1;
 	return p;
 }
 
@@ -25,6 +26,12 @@ void person_free(Person** p)
 {
 	free(*p);
 	*p = NULL;
+}
+
+
+void person_set_as_hero(Person* p)
+{
+	p->image = 0;
 }
 
 

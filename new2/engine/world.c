@@ -21,6 +21,8 @@ World* world_init(int _w, int _h)
 	add(&w->people, w->hero);
 	add(&w->cities, city_init("Test", 10, 10, 10, 10));
 
+	person_set_as_hero(w->hero);
+
 	return w;
 }
 
