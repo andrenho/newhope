@@ -104,17 +104,12 @@ static void bg_draw_tile(Background* b, int x, int y)
 static void bg_draw_person(Background* b, Person* p)
 {
 	// body
-	SDL_Rect rs = { .x = 0, .y = 16, .w = 16, .h = 16 };
+	SDL_Rect rp, ra;
+	resources_person_rect(b->ui->res, p, &rp, &ra);
 	SDL_Rect rd = { .x = (p->x * TILE_W) - b->ui->rx - TILE_W/2, 
 		        .y = (p->y * TILE_H) - b->ui->ry - TILE_H/2,
 			.w = TILE_W, .h = TILE_H };
-	SDL_RenderCopy(b->ren, b->ui->res->sprites, &rs, &rd);
-
-	// direction
-	SDL_Rect rs2 = { .x = 16, .y = 16, .w = 16, .h = 16 };
-	SDL_Rect rd2 = { .x = (p->x * TILE_W) - b->ui->rx - TILE_W/2, 
-			 .y = (p->y * TILE_H) - b->ui->ry - TILE_H/2,
-			 .w = TILE_W, .h = TILE_H };
-	SDL_RenderCopyEx(b->ren, b->ui->res->sprites, &rs2, &rd2, p->direction, NULL, 
-			SDL_FLIP_NONE);
+	SDL_RenderCopy(b->ren, b->ui->res->sprites, &rp, &rd);
+	SDL_RenderCopyEx(b->ren, b->ui->res->sprites, &ra, &rd, p->direction, 
+			NULL, SDL_FLIP_NONE);
 }

@@ -17,6 +17,7 @@ Person* person_init(double x, double y)
 	p->y = y;
 	p->direction = 90;
 	p->speed = STOPPED;
+	p->image = (rand() % MAX_IMAGES) + 1;
 	return p;
 }
 
@@ -25,6 +26,12 @@ void person_free(Person** p)
 {
 	free(*p);
 	*p = NULL;
+}
+
+
+void person_set_as_hero(Person* p)
+{
+	p->image = 0;
 }
 
 
@@ -51,6 +58,15 @@ void person_step(Person* p, World* w)
 	case 270: fx -= step; break;
 	case 315: fx -= step; fy -= step; break;
 	default: abort();
+	}
+
+	// if the person can't move diagonally, try moving horizontal/vertical
+	if(fx != 0 && fy != 0 && !person_can_move(p, w, fx, fy)) {
+		if(person_can_move(p, w, fx, p->y)) {
+			fy = p->y;
+		} else if(person_can_move(p, w, p->x, fy)) {
+			fx = p->x;
+		}
 	}
 
 	// check if the person can move
@@ -83,13 +99,6 @@ void person_stop_running(Person* p)
 
 static bool person_can_move(Person* p, World* w, double x, double y)
 {
-	Object obj1, obj2;
-	world_xy(w, floor(x-0.3), floor(y-0.5), &obj1);
-	world_xy(w, floor(x+0.3), floor(y-0.5), &obj2);
-	if(obj1.type == DOOR || obj2.type == DOOR) {
-		return true;
-	}
-
 	if(!world_tile_walkable(w, floor(x-0.5), floor(y-0.5))
 	|| !world_tile_walkable(w, floor(x+0.5), floor(y-0.5))
 	|| !world_tile_walkable(w, floor(x-0.5), floor(y+0.5))

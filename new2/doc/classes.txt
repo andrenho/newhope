@@ -21,6 +21,7 @@ class World {
 class Person {
   int x, y
   int direction
+  void set_as_hero(p, w)
   void step(p, w)
   void start_running(p, dir)
   void stop_running(p)
@@ -76,6 +77,7 @@ class UI {
 class Resources {
   SDL_Rect terrain_rect(r, t)
   SDL_Rect obj_rect(r, t)
+  void person_rect(r, p, person, arrow)
 }
 
 class Background {

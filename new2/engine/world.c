@@ -21,11 +21,7 @@ World* world_init(int _w, int _h)
 	add(&w->people, w->hero);
 	add(&w->cities, city_init("Test", 10, 10, 10, 10));
 
-	/* Object o;
-	for(int i=12; i<=16; i++) {
-		world_xy(w, i, 12, &o);
-		printf("%d %d\n", o.type, o.code);
-	} */
+	person_set_as_hero(w->hero);
 
 	return w;
 }
