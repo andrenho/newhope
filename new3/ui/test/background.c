@@ -1,12 +1,13 @@
 #include "background.h"
 
+#include <assert.h>
 #include <stdlib.h>
 
 #include "ui.h"
 
 static Background bg;
 
-//static void bg_draw_tile(int x, int y);
+static void bg_draw_tile(int x, int y);
 //static void bg_draw_person(Person* p);
 
 
@@ -56,12 +57,11 @@ void bg_redraw()
 	ui_screen_limits(&x1, &y1, &x2, &y2);
 
 	// draw tiles
-	/* TODO
 	for(int x=x1-1; x<=x2+2; x++) {
 		for(int y=y1-1; y<=y2+2; y++) {
 			bg_draw_tile(x, y);
 		}
-	} */
+	}
 
 	// draw people
 	/* TODO
@@ -81,24 +81,24 @@ void bg_redraw()
  *                  *
  ********************/
 
-/*
+extern UI ui;
 static void bg_draw_tile(int x, int y)
 {
-	Object obj;
-	Terrain t = world_xy(bg.ui->w, x, y, &obj);
+	BLOCK stack[10];
+	uint8_t n = if_world_tile_stack(x, y, stack);
+	assert(n > 0);
 
-	// draw terrain
-	SDL_Rect rs = resources_terrain_rect(bg.ui->res, t);
-	SDL_Rect rd = { .x = (x*TILE_W) - bg.ui->rx, .y = (y*TILE_H) - bg.ui->ry,
+	// draw block
+	SDL_Rect rs = resources_terrain_rect(stack[n-1]);
+	SDL_Rect rd = { .x = (x*TILE_W) - ui.rx, .y = (y*TILE_H) - ui.ry,
 	                .w = TILE_W, .h = TILE_H };
-	SDL_RenderCopy(bg.ren, bg.ui->res->sprites, &rs, &rd);
+	SDL_RenderCopy(bg.ren, sprites, &rs, &rd);
 
-	// draw object
-	SDL_Rect rso = resources_obj_rect(bg.ui->res, obj);
-	SDL_RenderCopy(bg.ren, bg.ui->res->sprites, &rso, &rd);
+	// TODO draw object - ?
 }
 
 
+/*
 static void bg_draw_person(Background* b, Person* p)
 {
 	// body

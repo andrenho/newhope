@@ -5,11 +5,14 @@
 #include <stdbool.h>
 
 #include "SDL2/SDL.h"
+#include "interface.h"
 #include "block.h"
+
+SDL_Texture* sprites;
 
 bool resources_init(SDL_Renderer* ren);
 void resources_free();
 
-SDL_Rect resources_terrain_rect(uint16_t t);
+SDL_Rect resources_terrain_rect(BLOCK t);
 
 #endif

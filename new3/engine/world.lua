@@ -9,7 +9,11 @@ end
 
 -- return the stack of tiles (max 10)
 function world:tile_stack(x, y)
-  return { block.GRASS }
+  if x == 2 and y == 2 then
+    return { block.WATER }
+  else
+    return { block.GRASS }
+  end
 end
 
 return world

@@ -4,8 +4,9 @@
 #include <stdio.h>
 
 #include "SDL2/SDL_timer.h"
+#include "interface.h"
 
-static UI ui;
+UI ui;
 
 static bool ui_sdl_init();
 static void ui_sdl_end();
@@ -156,16 +157,17 @@ static void ui_sdl_end()
 
 static void ui_center_hero()
 {
-	/*
 	int _w, _h;
 	SDL_GetWindowSize(ui.win, &_w, &_h);
 	if(_h % 2)
 		_h++;
-	ui.rx = (ui.w->hero->x * TILE_W) - (_w / 2.0);
-	ui.ry = (ui.w->hero->y * TILE_H) - (_h / 2.0);
+
+	double hero_x, hero_y;
+	if_hero_position(&hero_x, &hero_y);
+	ui.rx = (hero_x * TILE_W) - (_w / 2.0);
+	ui.ry = (hero_y * TILE_H) - (_h / 2.0);
 
 	bg_redraw();
-	*/
 }
 
 

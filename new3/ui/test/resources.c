@@ -4,8 +4,6 @@
 
 #include "SDL2/SDL_image.h"
 
-static SDL_Texture* sprites;
-
 static bool resources_load(SDL_Renderer* ren);
 
 bool resources_init(SDL_Renderer* ren)
@@ -24,10 +22,10 @@ void resources_free()
 }
 
 
-SDL_Rect resources_terrain_rect(uint16_t t)
+SDL_Rect resources_terrain_rect(BLOCK t)
 {
 	static struct TerrainImage {
-		uint16_t terrain;
+		BLOCK terrain;
 		SDL_Rect r;
 	} res_image[] = {
 		{ NOTHING,	{ 16,  0, 16, 16 } },
