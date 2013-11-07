@@ -14,4 +14,7 @@ int main()
 	for(int i=0; i<n; i++) {
 		printf("%d\n", stack[i]);
 	}
+
+	// finish interface
+	if_finish();
 }
