@@ -8,11 +8,14 @@
 include config.mk
 include libraries.mk
 
-SRC = main.c		\
+SRC = main.c	   \
+      ui.c	   \
+      resources.c  \
+      background.c \
       ../interface/interface.c
 
-OBJ = ${SRC:.c=.o}
-HEADERS = ${SRC:.c=.h}   # add .h only...
+OBJ = ${SRC:.c=.o} block.h
+HEADERS = ${SRC:.c=.h}
 DIST = ../AUTHORS ../HACKING ../LICENSE ../NEWS
 DATA = # TODO
 
@@ -37,6 +40,10 @@ ${OBJ}: config.mk libraries.mk
 newhope: ${OBJ}
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
+
+block.h: ../../engine/block.lua
+	@echo SH -o $@
+	./parse_blocks < $< > $@
 
 docs: doc/classes.txt
 	@echo plantuml $<

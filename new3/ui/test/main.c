@@ -1,20 +1,23 @@
 #include "interface.h"
+#include "ui.h"
 
 #include <stdint.h>
 #include <stdio.h>
 
 int main()
 {
-	// initialize interface
+	// initialize everything
 	if_init();
+	ui_init();
 
-	// get tile stack
-	uint16_t stack[10];
-	int n = if_world_tile_stack(0, 0, stack);
-	for(int i=0; i<n; i++) {
-		printf("%d\n", stack[i]);
+	// main loop
+	while(ui_active()) {
+		ui_do_events();
+		if_next_frame();
+		ui_render();
 	}
 
-	// finish interface
+	// finish everything
+	ui_finish();
 	if_finish();
 }

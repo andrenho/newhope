@@ -1,4 +1,6 @@
 return {
+  NOTHING = 0x00,
+
   -- terrains
   GRASS = 0x01,
   WATER = 0x02,
