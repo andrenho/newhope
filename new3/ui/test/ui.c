@@ -86,8 +86,8 @@ void ui_render()
 
 	SDL_RenderPresent(ui.ren);
 
-	if(SDL_GetTicks() - t > (1000/FPS)+5)
-		printf("frame lost: %zu ms\n", SDL_GetTicks() - t);
+	//if(SDL_GetTicks() - t > (1000/FPS)+5)
+	//	printf("frame lost: %zu ms\n", SDL_GetTicks() - t);
 }
 
 
@@ -177,8 +177,10 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 		return;
 	}
 
-	if(k.keysym.sym == SDLK_r && k.keysym.mod & KMOD_CTRL) {
+	if(k.type == SDL_KEYDOWN && k.keysym.sym == SDLK_r && 
+			k.keysym.mod & KMOD_CTRL) {
 		if_init();
+		fprintf(stderr, "Engine reloaded.\n");
 	}
 
 	// check for moving keys
