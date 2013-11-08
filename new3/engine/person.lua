@@ -24,6 +24,9 @@ function Person:change_speed(speed)
   self.__speed = speed
 end
 
+function Person:step()
+end
+
 return Person
 
 -- vim: ts=2:sw=2:sts=2:expandtab

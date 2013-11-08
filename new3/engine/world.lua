@@ -25,7 +25,9 @@ end
 -- one step in the world
 --
 function World:step()
-  self.hero.x = self.hero.x + 0.1
+  for _,person in ipairs(self.people) do
+    person:step()
+  end
 end
 
 --
