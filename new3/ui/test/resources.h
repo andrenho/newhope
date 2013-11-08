@@ -14,5 +14,6 @@ bool resources_init(SDL_Renderer* ren);
 void resources_free();
 
 SDL_Rect resources_terrain_rect(BLOCK t);
+void resources_person_rect(Person* p, SDL_Rect* person, SDL_Rect* arrow);
 
 #endif

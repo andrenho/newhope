@@ -8,7 +8,7 @@
 static Background bg;
 
 static void bg_draw_tile(int x, int y);
-//static void bg_draw_person(Person* p);
+static void bg_draw_person(Person* p);
 
 
 void bg_init(UI* ui)
@@ -64,12 +64,13 @@ void bg_redraw()
 	}
 
 	// draw people
-	/* TODO
-	FOREACH(bg.ui->w->people, Person*, p) {
-		if(p->x >= (x1-1) && p->x <= x2 && p->y >= (y1-1) && p->y <= y2) {
-			bg_draw_person(p);
-		}
-	} */
+	Person* people = NULL;
+	int n = if_people_visible(x1, y1, x2, y2, &people);
+	for(int i=0; i<n; i++) {
+		bg_draw_person(&people[i]);
+	}
+	if(people)
+		free(people);
 
 	SDL_SetRenderTarget(bg.ren, NULL);
 }
@@ -98,16 +99,15 @@ static void bg_draw_tile(int x, int y)
 }
 
 
-/*
-static void bg_draw_person(Background* b, Person* p)
+static void bg_draw_person(Person* p)
 {
 	// body
 	SDL_Rect rp, ra;
-	resources_person_rect(bg.ui->res, p, &rp, &ra);
-	SDL_Rect rd = { .x = (p->x * TILE_W) - bg.ui->rx - TILE_W/2, 
-		        .y = (p->y * TILE_H) - bg.ui->ry - TILE_H/2,
+	resources_person_rect(p, &rp, &ra);
+	SDL_Rect rd = { .x = (p->x * TILE_W) - ui.rx - TILE_W/2, 
+		        .y = (p->y * TILE_H) - ui.ry - TILE_H/2,
 			.w = TILE_W, .h = TILE_H };
-	SDL_RenderCopy(bg.ren, bg.ui->res->sprites, &rp, &rd);
-	SDL_RenderCopyEx(bg.ren, bg.ui->res->sprites, &ra, &rd, p->direction, 
+	SDL_RenderCopy(bg.ren, sprites, &rp, &rd);
+	SDL_RenderCopyEx(bg.ren, sprites, &ra, &rd, p->direction, 
 			NULL, SDL_FLIP_NONE);
-}*/
+}

@@ -74,7 +74,7 @@ void ui_do_events()
 // present the image to the user
 void ui_render()
 {
-	Uint32 t = SDL_GetTicks();
+	//Uint32 t = SDL_GetTicks();
 
 	ui_center_hero();
 
@@ -184,26 +184,24 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 	}
 
 	// check for moving keys
-	/*
 	const uint8_t* s = SDL_GetKeyboardState(NULL);
 	if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {
-		person_start_running(ui.w->hero, 315);
+		if_hero_move(2, 315);
 	} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_RIGHT]) {
-		person_start_running(ui.w->hero, 45);
+		if_hero_move(2, 45);
 	} else if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_LEFT]) {
-		person_start_running(ui.w->hero, 225);
+		if_hero_move(2, 225);
 	} else if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_RIGHT]) {
-		person_start_running(ui.w->hero, 135);
+		if_hero_move(2, 135);
 	} else if(s[SDL_SCANCODE_UP]) {
-		person_start_running(ui.w->hero, 0);
+		if_hero_move(2, 0);
 	} else if(s[SDL_SCANCODE_DOWN]) {
-		person_start_running(ui.w->hero, 180);
+		if_hero_move(2, 180);
 	} else if(s[SDL_SCANCODE_LEFT]) {
-		person_start_running(ui.w->hero, 270);
+		if_hero_move(2, 270);
 	} else if(s[SDL_SCANCODE_RIGHT]) {
-		person_start_running(ui.w->hero, 90);
+		if_hero_move(2, 90);
 	} else {
-		person_stop_running(ui.w->hero);
+		if_hero_move(0, 0);
 	}
-	*/
 }

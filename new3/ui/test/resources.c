@@ -69,10 +69,9 @@ SDL_Rect resources_obj_rect(Resources* r, Object obj)
 	}
 	return (SDL_Rect) { 0, 0, 0, 0 };
 }
+*/
 
-
-void resources_person_rect(Resources* r, Person* p, SDL_Rect* person, 
-		SDL_Rect* arrow)
+void resources_person_rect(Person* p, SDL_Rect* person, SDL_Rect* arrow)
 {
 	static struct PersonImage {
 		int image;
@@ -93,7 +92,7 @@ void resources_person_rect(Resources* r, Person* p, SDL_Rect* person,
 	*person = (SDL_Rect) { 0, 0, 0, 0 };
 	*arrow  = (SDL_Rect) { 0, 0, 0, 0 };
 }
-*/
+
 
 /********************
  *                  *

@@ -16,6 +16,10 @@ function $1:new()
   return self
 end
 
+function $1:__tostring()
+  return '[$1]'
+end
+
 return $1
 
 -- vim: ts=2:sw=2:sts=2:expandtab
