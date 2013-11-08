@@ -173,12 +173,16 @@ static void ui_center_hero()
 
 static void ui_keyboard_event(SDL_KeyboardEvent k)
 {
-	/*
 	if(k.repeat) {
 		return;
 	}
 
+	if(k.keysym.sym == SDLK_r && k.keysym.mod & KMOD_CTRL) {
+		if_init();
+	}
+
 	// check for moving keys
+	/*
 	const uint8_t* s = SDL_GetKeyboardState(NULL);
 	if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {
 		person_start_running(ui.w->hero, 315);
