@@ -86,8 +86,8 @@ void ui_render()
 
 	SDL_RenderPresent(ui.ren);
 
-	if(SDL_GetTicks() - t > (1000/FPS)+5)
-		printf("frame lost: %zu ms\n", SDL_GetTicks() - t);
+	//if(SDL_GetTicks() - t > (1000/FPS)+5)
+	//	printf("frame lost: %zu ms\n", SDL_GetTicks() - t);
 }
 
 
@@ -173,12 +173,18 @@ static void ui_center_hero()
 
 static void ui_keyboard_event(SDL_KeyboardEvent k)
 {
-	/*
 	if(k.repeat) {
 		return;
 	}
 
+	if(k.type == SDL_KEYDOWN && k.keysym.sym == SDLK_r && 
+			k.keysym.mod & KMOD_CTRL) {
+		if_init();
+		fprintf(stderr, "Engine reloaded.\n");
+	}
+
 	// check for moving keys
+	/*
 	const uint8_t* s = SDL_GetKeyboardState(NULL);
 	if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {
 		person_start_running(ui.w->hero, 315);
