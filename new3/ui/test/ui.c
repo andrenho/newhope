@@ -79,6 +79,14 @@ void ui_do_events()
 void ui_render()
 {
 	//Uint32 t = SDL_GetTicks();
+	if(if_in_error)
+	{
+		// in case of error, clear the screen and returns
+		SDL_SetRenderDrawColor(ui.ren, 255, 255, 255, 255);
+		SDL_RenderClear(ui.ren);
+		SDL_RenderPresent(ui.ren);
+		return;
+	}
 
 	ui_center_hero();
 
@@ -181,11 +189,16 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 		return;
 	}
 
+	// CTRL+R - reload engine
 	if(k.type == SDL_KEYDOWN && k.keysym.sym == SDLK_r && 
 			k.keysym.mod & KMOD_CTRL) {
 		if_init();
 		fprintf(stderr, "Engine reloaded.\n");
 	}
+
+	// if is in error, only CTRL+R is allowed
+	if(if_in_error)
+		return;
 
 	// check for moving keys
 	const uint8_t* s = SDL_GetKeyboardState(NULL);

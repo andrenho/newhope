@@ -1,7 +1,18 @@
+--
+-- packages
+--
+
+-- clean up modules (for reloading)
+function reload(str) 
+  package.loaded[str] = nil
+  return require(str)
+end
+
+-- load modules
 require('strict')
-local Block  = require('block')
-local Person = require('person')
-local funct  = require('util/funct')
+local Block  = reload('block')
+local Person = reload('person')
+local funct  = reload('util.funct')
 
 local World = {}
 World.__index = World

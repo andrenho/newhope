@@ -1,6 +1,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 typedef uint16_t BLOCK;
@@ -10,6 +11,8 @@ typedef struct Person {
 	double direction;
 	int image;
 } Person;
+
+extern bool if_in_error;
 
 //
 // initialization

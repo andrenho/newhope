@@ -44,6 +44,10 @@ end
 
 
 function Person:__can_move(fx, fy)
+  if fx < 0.5 or fy < 0.5 or fx > (world.w-0.5) or fy > (world.h-0.5) then
+    return false
+  end
+
   local tiles = {
     [world:unique_tile_id(math.floor(fx-0.5), math.floor(fy-0.5))] = true,
     [world:unique_tile_id(math.floor(fx+0.5), math.floor(fy-0.5))] = true,
