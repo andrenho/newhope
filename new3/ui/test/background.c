@@ -5,6 +5,10 @@
 
 #include "ui.h"
 
+#ifndef M_PI
+#  define M_PI 3.14159265358979323846
+#endif
+
 static Background bg;
 
 static void bg_draw_tile(int x, int y);
@@ -108,6 +112,6 @@ static void bg_draw_person(Person* p)
 		        .y = (p->y * TILE_H) - ui.ry - TILE_H/2,
 			.w = TILE_W, .h = TILE_H };
 	SDL_RenderCopy(bg.ren, sprites, &rp, &rd);
-	SDL_RenderCopyEx(bg.ren, sprites, &ra, &rd, p->direction, 
+	SDL_RenderCopyEx(bg.ren, sprites, &ra, &rd, p->direction * 180 / M_PI + 90,
 			NULL, SDL_FLIP_NONE);
 }

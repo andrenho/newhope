@@ -1,5 +1,9 @@
 #include "ui.h"
 
+#ifndef M_PI
+#  define M_PI 3.14159265358979323846
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -185,22 +189,22 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 
 	// check for moving keys
 	const uint8_t* s = SDL_GetKeyboardState(NULL);
-	if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {
-		if_hero_move(2, 315);
-	} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_RIGHT]) {
-		if_hero_move(2, 45);
-	} else if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_LEFT]) {
-		if_hero_move(2, 225);
+	if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_LEFT]) {
+		if_hero_move(2, 3*M_PI/4.0);
 	} else if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_RIGHT]) {
-		if_hero_move(2, 135);
-	} else if(s[SDL_SCANCODE_UP]) {
-		if_hero_move(2, 0);
+		if_hero_move(2, M_PI/3.0);
+	} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {
+		if_hero_move(2, 5*M_PI/4.0);
+	} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_RIGHT]) {
+		if_hero_move(2, 7*M_PI/4.0);
 	} else if(s[SDL_SCANCODE_DOWN]) {
-		if_hero_move(2, 180);
+		if_hero_move(2, M_PI/2.0);
+	} else if(s[SDL_SCANCODE_UP]) {
+		if_hero_move(2, 3*M_PI/2.0);
 	} else if(s[SDL_SCANCODE_LEFT]) {
-		if_hero_move(2, 270);
+		if_hero_move(2, M_PI);
 	} else if(s[SDL_SCANCODE_RIGHT]) {
-		if_hero_move(2, 90);
+		if_hero_move(2, 2*M_PI);
 	} else {
 		if_hero_move(0, 0);
 	}

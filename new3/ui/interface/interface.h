@@ -7,7 +7,7 @@ typedef uint16_t BLOCK;
 
 typedef struct Person {
 	double x, y;
-	int direction;
+	double direction;
 	int image;
 } Person;
 
@@ -21,7 +21,7 @@ void if_finish();
 // requests
 //
 void if_next_frame();
-void if_hero_move(int speed, int direction);
+void if_hero_move(int speed, double direction);
 
 //
 // queries

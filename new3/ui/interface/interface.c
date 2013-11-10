@@ -63,7 +63,7 @@ void if_next_frame()
 }
 
 
-void if_hero_move(int speed, int direction)
+void if_hero_move(int speed, double direction)
 {
 	check_stack();
 
@@ -72,7 +72,7 @@ void if_hero_move(int speed, int direction)
 	// set speed
 	if(speed != 0) {
 		LUA_PUSH_METHOD("turn_to");
-		lua_pushinteger(L, direction);
+		lua_pushnumber(L, direction);
 		LUA_CALL(2, 0);
 	}
 
@@ -166,7 +166,7 @@ static void if_person_on_stack(Person* person)
 	LUA_FIELD(person->x, x,      number);
 	LUA_FIELD(person->y, y,      number);
 	LUA_FIELD(person->image,     image, integer);
-	LUA_FIELD(person->direction, direction, integer);
+	LUA_FIELD(person->direction, direction, number);
 }
 
 

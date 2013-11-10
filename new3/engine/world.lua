@@ -1,3 +1,4 @@
+require('strict')
 local Block  = require('block')
 local Person = require('person')
 local funct  = require('util/funct')
@@ -12,7 +13,7 @@ function World:new(w, h)
   local self = setmetatable({}, World)
   self.w = w
   self.h = h
-  self.hero = Person:new(50, 50)
+  self.hero = Person:new(5, 5)
   self.people = { self.hero }
   return self
 end
@@ -47,10 +48,32 @@ end
 -- return a list of people among the tiles
 --
 function World:people_in_area(x1, y1, x2, y2)
-  cond = function(p) return (p.x >= x1 and p.x < x2 and p.y >= y1 and p.y < y2) end
+  local cond = function(p) return (p.x >= x1 and p.x < x2 and p.y >= y1 and p.y < y2) end
   return funct.filter(self.people, cond)
 end
 
-return World:new(300, 300)
+-- 
+-- return a unique identifier for a tile, and revert the value
+--
+function World:unique_tile_id(x, y)
+  return x + (y * self.w)
+end
+function World:revert_unique_tile(id)
+  return (id % self.w), math.floor(id / self.w)
+end
+
+--
+-- return if this tile can be walked by a person
+--
+function World:tile_walkable(x, y)
+  local st = self:tile_stack(x, y)
+  if st[1] == Block.WATER or st[1] == Block.NOTHING then
+    return false
+  end
+  return true
+end
+
+world = World:new(30, 30) -- global!!
+return world
 
 -- vim: ts=2:sw=2:sts=2:expandtab
