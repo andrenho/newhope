@@ -1,16 +1,25 @@
 #!/bin/sh
 
-SESSIONNAME="newhope"
-tmux has-session -t $SESSIONNAME &> /dev/null
+SN="newhope"
+tmux has-session -t $SN &> /dev/null
 
 if [ $? != 0 ]
 then
-  tmux new-session -s $SESSIONNAME -n engine -d
-  tmux send-keys -t engine "cd ~/projects/newhope/engine" C-m
+  cd ~/projects/newhope/engine
+  tmux new-session -s $SN -n engine -d
 
-  tmux new-window -n ui -c "~/projects/newhope/temp/ui"
+  cd ~/projects/newhope/ui/test
+  tmux new-window -t "$SN" -n ui
+
+  cd ~/projects/newhope/ui/test
+  tmux new-window -t "$SN" -n shell
+
+  cd ~/projects/newhope_old/new2
+  tmux new-window -t "$SN" -n old
+
+  tmux select-window -t $SN:1
 fi
 
-tmux attach -t $SESSIONNAME
+tmux attach -t $SN
   
 # vim: ts=2:sw=2:sts=2:expandtab
