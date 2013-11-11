@@ -6,10 +6,10 @@ tmux has-session -t $SN &> /dev/null
 if [ $? != 0 ]
 then
   cd ~/projects/newhope/engine
-  tmux new-session -s $SN -n engine -d
+  tmux new-session -s $SN -n engine -d 'vim -p world.lua person.lua'
 
   cd ~/projects/newhope/ui/test
-  tmux new-window -t "$SN" -n ui
+  tmux new-window -t "$SN" -n ui 'vim -p ../interface/interface.h ../interface/interface.c'
 
   cd ~/projects/newhope/ui/test
   tmux new-window -t "$SN" -n shell
