@@ -132,6 +132,7 @@ void ui_screen_limits(int* x1, int* y1, int* x2, int* y2)
 
 void ui_show_message(Message* msg)
 {
+	
 }
 
 
@@ -165,6 +166,15 @@ static bool ui_sdl_init()
 	}
 	ui.ren = SDL_CreateRenderer(ui.win, -1, 
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+	if(TTF_Init() == -1) {
+		fprintf(stderr, "TTF_Init: %s\n", TTF_GetError());
+		return false;
+	}
+	if((ui.font = TTF_OpenFont("PressStart2P.ttf", 6)) == NULL) {
+		fprintf(stderr, "TTF_OpenFont: %s\n", TTF_GetError());
+		return false;
+	}
 
 	return true;
 }

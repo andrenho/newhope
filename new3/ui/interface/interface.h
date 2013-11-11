@@ -14,6 +14,7 @@ typedef struct Person {
 
 typedef struct Message {
 	enum { MESSAGE, INPUT } type;
+	int person_id;
 	char* text;
 	char* options[10];
 } Message;

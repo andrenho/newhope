@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_ttf.h"
 
 #include "resources.h"
 #include "background.h"
@@ -21,6 +22,7 @@ typedef struct UI {
 	bool active;
 	int rx, ry;
 	uint32_t last_frame;
+	TTF_Font* font;
 } UI;
 
 bool ui_init();

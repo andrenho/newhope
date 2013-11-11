@@ -201,8 +201,9 @@ Message* if_message_pending()
 {
 	// TODO
 	if(fst) {
-		Message* msg = calloc(sizeof(MESSAGE), 1);
+		Message* msg = calloc(1, sizeof(MESSAGE));
 		msg->type = MESSAGE;
+		msg->person_id = 0;
 		msg->text = "Sample message";
 		msg->options[0] = NULL;
 		return msg;
@@ -219,8 +220,8 @@ void if_respond_message(MessageResponse r)
 
 void if_free_message(Message** msg)
 {
+	free(*msg); // TODO
 	fst = false;
-	free(msg); // TODO
 }
 
 /*
