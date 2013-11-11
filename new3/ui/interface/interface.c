@@ -34,6 +34,11 @@ static void if_error(const char *fmt, ...);
 static void stack_dump();
 static void if_person_on_stack(Person* person);
 
+/*
+ * INITIALIZATION
+ */
+
+
 void if_init()
 {
 	if_in_error = false;
@@ -60,6 +65,11 @@ void if_finish()
 {
 	lua_close(L);
 }
+
+
+/*
+ * REQUESTS
+ */
 
 
 void if_next_frame()
@@ -101,6 +111,11 @@ void if_hero_move(int speed, double direction)
 
 	check_stack();
 }
+
+
+/*
+ * QUERIES
+ */
 
 
 void if_hero_position(double* x, double* y)
@@ -180,6 +195,33 @@ int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 	return n;
 }
 
+
+static bool fst = true;
+Message* if_message_pending()
+{
+	// TODO
+	if(fst) {
+		Message* msg = calloc(sizeof(MESSAGE), 1);
+		msg->type = MESSAGE;
+		msg->text = "Sample message";
+		msg->options[0] = NULL;
+		return msg;
+	} else {
+		return NULL;
+	}
+}
+
+
+void if_respond_message(MessageResponse r)
+{
+	// TODO
+}
+
+void if_free_message(Message** msg)
+{
+	fst = false;
+	free(msg); // TODO
+}
 
 /*
  *

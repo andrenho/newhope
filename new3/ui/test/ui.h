@@ -31,6 +31,9 @@ void ui_do_events();
 void ui_render();
 void ui_wait_next_frame();
 
+void ui_show_message(Message* msg);
+MessageResponse ui_respond_message(Message* msg);
+
 void ui_screen_limits(int* x1, int* y1, int* x2, int* y2);
 
 #endif

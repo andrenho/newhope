@@ -130,6 +130,17 @@ void ui_screen_limits(int* x1, int* y1, int* x2, int* y2)
 }
 
 
+void ui_show_message(Message* msg)
+{
+}
+
+
+MessageResponse ui_respond_message(Message* msg)
+{
+	return (MessageResponse){ .option = 0 };
+}
+
+
 /********************
  *                  *
  * STATIC FUNCTIONS *

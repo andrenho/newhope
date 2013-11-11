@@ -2,18 +2,19 @@
 -- packages
 --
 
--- clean up modules (for reloading)
-function reload(str) 
-  package.loaded[str] = nil
-  return require(str)
-end
+-- load modules (globals!!!)
+require('util.strict')
+mod   = require('util.modules') -- global!!
+funct = mod.require('util.funct')
+msg   = mod.require('msg')
 
--- load modules
-require('strict')
-local Block  = reload('block')
-local Person = reload('person')
-local funct  = reload('util.funct')
+-- load classes
+local Block  = mod.require('block')
+local Person = mod.require('person')
 
+--
+-- class World
+-- 
 local World = {}
 World.__index = World
 

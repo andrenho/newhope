@@ -12,9 +12,17 @@ int main()
 
 	// main loop
 	while(ui_active()) {
-		ui_do_events();
-		if_next_frame();
-		ui_render();
+		Message* msg = if_message_pending();
+		if(msg) {
+			ui_show_message(msg);
+			MessageResponse r = ui_respond_message(msg);
+			if_respond_message(r);
+			if_free_message(&msg);
+		} else {
+			ui_do_events();
+			if_next_frame();
+			ui_render();
+		}
 	}
 
 	// finish everything
