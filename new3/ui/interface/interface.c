@@ -13,6 +13,7 @@
 
 // global variables
 static lua_State *L = NULL;
+bool if_in_error = true;
 
 // preprocessor
 #define LUA_FIELD(c_field, field, type) { 	\
@@ -24,22 +25,31 @@ static lua_State *L = NULL;
 #define LUA_PUSH_HERO() { lua_pushstring(L, "hero"); lua_gettable(L, -2); }
 #define LUA_PUSH_FUNCTION(f) { lua_pushstring(L, f); lua_gettable(L, -2); }
 #define LUA_PUSH_METHOD(f) { LUA_PUSH_FUNCTION(f); lua_pushvalue(L, -2); }
-#define LUA_CALL(narg, nres) { if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { error("%s\n", lua_tostring(L, -1)); } }
+#define LUA_CALL(narg, nres) { if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { if_error("%s\n", lua_tostring(L, -1)); } }
 
 // function prototypes
 extern int setenv (const char *, const char *, int);
 static void check_stack();
-static void error(const char *fmt, ...);
+static void if_error(const char *fmt, ...);
 static void stack_dump();
 static void if_person_on_stack(Person* person);
 
 void if_init()
 {
+	if_in_error = false;
 	setenv("LUA_PATH_5_2", "../../engine/?.lua;;", 0);
-	L = luaL_newstate();
-	luaL_openlibs(L);
+
+	if(!L) {
+		// first run
+		L = luaL_newstate();
+		luaL_openlibs(L);
+	} else {
+		// engine was reloaded, clear stack
+		lua_settop(L, 0);
+	}
+
 	if(luaL_loadfile(L, "../../engine/world.lua") || lua_pcall(L, 0, 1, 0)) {
-		error("can't load file: %s\n", lua_tostring(L, -1));
+		if_error("can't load file: %s\n", lua_tostring(L, -1));
 	}
 
 	(void) stack_dump;
@@ -54,6 +64,9 @@ void if_finish()
 
 void if_next_frame()
 {
+	if(if_in_error)
+		return;
+
 	check_stack();
 
 	LUA_PUSH_METHOD("step");
@@ -63,8 +76,11 @@ void if_next_frame()
 }
 
 
-void if_hero_move(int speed, int direction)
+void if_hero_move(int speed, double direction)
 {
+	if(if_in_error)
+		return;
+
 	check_stack();
 
 	LUA_PUSH_HERO();
@@ -72,7 +88,7 @@ void if_hero_move(int speed, int direction)
 	// set speed
 	if(speed != 0) {
 		LUA_PUSH_METHOD("turn_to");
-		lua_pushinteger(L, direction);
+		lua_pushnumber(L, direction);
 		LUA_CALL(2, 0);
 	}
 
@@ -89,6 +105,11 @@ void if_hero_move(int speed, int direction)
 
 void if_hero_position(double* x, double* y)
 {
+	if(if_in_error) {
+		*x = *y = 0;
+		return;
+	}
+
 	check_stack();
 
 	LUA_PUSH_HERO();
@@ -105,24 +126,18 @@ void if_hero_position(double* x, double* y)
 
 uint8_t if_world_tile_stack(int x, int y, BLOCK stack[10])
 {
+	if(if_in_error)
+		return 0;
+
 	check_stack();
 
-	// get function
-	lua_pushstring(L, "tile_stack");
-	lua_gettable(L, -2);
-
-	// push parameters
-	lua_pushvalue(L, 1); // self (world)
+	// call function
+	LUA_PUSH_METHOD("tile_stack");
 	lua_pushinteger(L, x);
 	lua_pushinteger(L, y);
+	LUA_CALL(3, 1);
 
-	// call function
-	if(lua_pcall(L, 3, 1, 0) != LUA_OK) {
-		error("error running 'world.tile_stack': %s\n", 
-				lua_tostring(L, -1));
-	}
-
-	// fill stack
+	// get response
 	int n = luaL_len(L, -1);
 	for(int i=0; i<n; i++) {
 		lua_rawgeti(L, -1, i+1);
@@ -138,26 +153,20 @@ uint8_t if_world_tile_stack(int x, int y, BLOCK stack[10])
 
 int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 {
+	if(if_in_error)
+		return 0;
+
 	check_stack();
 
-	// get function
-	lua_pushstring(L, "people_in_area");
-	lua_gettable(L, -2);
-
-	// push parameters
-	lua_pushvalue(L, 1); // self (world)
+	// call function
+	LUA_PUSH_METHOD("people_in_area");
 	lua_pushinteger(L, x1);
 	lua_pushinteger(L, y1);
 	lua_pushinteger(L, x2);
 	lua_pushinteger(L, y2);
+	LUA_CALL(5, 1);
 
-	// call function
-	if(lua_pcall(L, 5, 1, 0) != LUA_OK) {
-		error("error running 'world.people_in_area': %s\n", 
-				lua_tostring(L, -1));
-	}
-
-	// full stack
+	// get response
 	int n = luaL_len(L, -1);
 	*people = calloc(n, sizeof(Person));
 	for(int i=0; i<n; i++) {
@@ -184,24 +193,29 @@ static void if_person_on_stack(Person* person)
 	LUA_FIELD(person->x, x,      number);
 	LUA_FIELD(person->y, y,      number);
 	LUA_FIELD(person->image,     image, integer);
-	LUA_FIELD(person->direction, direction, integer);
+	LUA_FIELD(person->direction, direction, number);
 }
 
 
 static void check_stack()
 {
+	// don't check stack in case of error, as it'll certainly be invalid
+	if(if_in_error)
+		return;
+
 	assert(lua_istable(L, -1));
 	assert(lua_gettop(L) == 1);
 }
 
-static void error(const char *fmt, ...) 
+static void if_error(const char *fmt, ...) 
 {
 	va_list argp;
 	va_start(argp, fmt);
 	vfprintf(stderr, fmt, argp);
 	va_end(argp);
-	lua_close(L);
-	exit(EXIT_FAILURE);
+	if_in_error = true;
+	//lua_close(L);
+	//exit(EXIT_FAILURE)
 }
 
 static void stack_dump() 
