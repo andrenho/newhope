@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "SDL2/SDL_timer.h"
 #include "interface.h"
@@ -132,12 +133,43 @@ void ui_screen_limits(int* x1, int* y1, int* x2, int* y2)
 
 void ui_show_message(Message* msg)
 {
-	
+	char **str = NULL;
+	int n = if_wrap("If you were growing up in or around the 90s, you probably loved The Mighty Ducks. Sure, it was poorly acted, full of ridiculous plot points and implausible scenarios, but I bet you have fond memories of this hockey team.",
+			40, &str);
+	int adv;
+	TTF_GlyphMetrics(ui.font, 'a', NULL, NULL, NULL, NULL, &adv);
+	SDL_SetRenderDrawColor(ui.ren, 0, 0, 0, 255);
+	SDL_RenderFillRect(ui.ren, &(SDL_Rect) { 0, 0, (adv*40) + 20, (TTF_FontLineSkip(ui.font)*n) + 20 });
+	int y = 10;
+	for(int i=0; i<n; i++)
+	{
+		SDL_Surface* txt = TTF_RenderUTF8_Solid(ui.font, str[i], (SDL_Color){ 255, 255, 255 });
+		SDL_Texture* tt = SDL_CreateTextureFromSurface(ui.ren, txt);
+
+		SDL_Rect r = { 10, y, txt->w, txt->h };
+		y += TTF_FontLineSkip(ui.font);
+
+		SDL_FreeSurface(txt);
+
+		SDL_RenderCopy(ui.ren, tt, NULL, &r);
+
+		SDL_DestroyTexture(tt);
+	}
+	SDL_RenderPresent(ui.ren);
 }
 
 
 MessageResponse ui_respond_message(Message* msg)
 {
+	SDL_Event e;
+	while(SDL_WaitEvent(&e)) {
+		switch(e.type) {
+		case SDL_QUIT:
+			ui.active = false;
+			return (MessageResponse){ .option = 0 };
+		}
+	}
+
 	return (MessageResponse){ .option = 0 };
 }
 
@@ -171,7 +203,7 @@ static bool ui_sdl_init()
 		fprintf(stderr, "TTF_Init: %s\n", TTF_GetError());
 		return false;
 	}
-	if((ui.font = TTF_OpenFont("PressStart2P.ttf", 6)) == NULL) {
+	if((ui.font = TTF_OpenFont("PressStart2P.ttf", 8)) == NULL) {
 		fprintf(stderr, "TTF_OpenFont: %s\n", TTF_GetError());
 		return false;
 	}

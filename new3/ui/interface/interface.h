@@ -50,6 +50,7 @@ uint8_t if_world_tile_stack(int x, int y, BLOCK stack[10]);
 //
 Message* if_message_pending();
 void if_respond_message(MessageResponse r);
+int if_wrap(char* str, int columns, char*** ret);
 void if_free_message(Message** msg);
 
 #endif

@@ -6,6 +6,7 @@
 require('util.strict')
 mod   = require('util.modules') -- global!!
 funct = mod.require('util.funct')
+str   = mod.require('util.str')
 msg   = mod.require('msg')
 
 -- load classes

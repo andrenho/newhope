@@ -204,12 +204,42 @@ Message* if_message_pending()
 		Message* msg = calloc(1, sizeof(Message));
 		msg->type = MESSAGE;
 		msg->person_id = 0;
-		msg->text = "Sample message";
+		msg->text = "Calculate the resulting surface size of the UTF8 encoded text rendered using font. No actual rendering is done, however correct kerning is done to get the actual width. The height returned in h is the same as you can get using 3.3.10 TTF_FontHeight.";
 		msg->options[0] = NULL;
 		return msg;
 	} else {
 		return NULL;
 	}
+}
+
+
+int if_wrap(char* str, int columns, char*** ret)
+{
+	if(if_in_error)
+		return 0;
+
+	check_stack();
+
+	// call function
+	lua_getglobal(L, "str");
+	LUA_PUSH_FUNCTION("wrap");
+	lua_pushstring(L, str);
+	lua_pushinteger(L, columns);
+	LUA_CALL(2, 1);
+
+	// get results
+	int n = luaL_len(L, -1);
+	*ret = calloc(sizeof(char*), n);
+	for(int i=0; i<n; i++) {
+		lua_rawgeti(L, -1, i+1);
+		(*ret)[i] = strdup(lua_tostring(L, -1));
+		lua_pop(L, 1);
+	}
+
+	lua_pop(L, 2);
+	check_stack();
+
+	return n;
 }
 
 
