@@ -201,7 +201,7 @@ Message* if_message_pending()
 {
 	// TODO
 	if(fst) {
-		Message* msg = calloc(1, sizeof(MESSAGE));
+		Message* msg = calloc(1, sizeof(Message));
 		msg->type = MESSAGE;
 		msg->person_id = 0;
 		msg->text = "Sample message";

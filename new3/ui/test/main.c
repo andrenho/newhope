@@ -12,13 +12,13 @@ int main()
 
 	// main loop
 	while(ui_active()) {
-		Message* msg = if_message_pending();
+		//Message* msg = if_message_pending();
+		Message* msg = NULL;
 		if(msg) {
 			ui_show_message(msg);
 			MessageResponse r = ui_respond_message(msg);
 			if_respond_message(r);
 			if_free_message(&msg);
-			exit(2);
 		} else {
 			ui_do_events();
 			if_next_frame();
