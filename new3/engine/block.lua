@@ -10,14 +10,7 @@ return {
   --
   
   -- walls
-  WALL_NW     = 0x40,
-  WALL_N      = 0x41,
-  WALL_NE     = 0x42,
-  WALL_W      = 0x43,
-  WALL_E      = 0x44,
-  WALL_SW     = 0x45,
-  WALL_S      = 0x46,
-  WALL_SE     = 0x47,
+  WOODEN_WALL = 0x20,
 
   -- house features
   FLOOR       = 0x47,

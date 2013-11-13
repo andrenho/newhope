@@ -1,6 +1,5 @@
 local Person = {}
 Person.__index = Person
-Person.__tostring = function() return 'Person' end
 
 
 function Person:new(x, y)
