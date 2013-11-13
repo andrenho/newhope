@@ -4,10 +4,11 @@
 
 -- load modules (globals!!!)
 require('util.strict')
-mod   = require('util.modules') -- global!!
-funct = mod.require('util.funct')
-str   = mod.require('util.str')
-msg   = mod.require('msg')
+mod    = require('util.modules')
+funct  = mod.require('util.funct')
+table  = mod.require('util.table')
+string = mod.require('util.string')
+msg    = mod.require('msg')
 
 -- load classes
 local Block  = mod.require('block')
@@ -28,6 +29,7 @@ function World:new(w, h)
   self.h = h
   self.hero = Person:new(5, 5)
   self.people = { self.hero }
+  self.__TODO = false
   return self
 end
 
@@ -87,6 +89,6 @@ function World:tile_walkable(x, y)
 end
 
 world = World:new(30, 30) -- global!!
-return world
+--return world
 
 -- vim: ts=2:sw=2:sts=2:expandtab

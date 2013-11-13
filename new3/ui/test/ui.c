@@ -4,6 +4,7 @@
 #  define M_PI 3.14159265358979323846
 #endif
 
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -131,11 +132,30 @@ void ui_screen_limits(int* x1, int* y1, int* x2, int* y2)
 }
 
 
-void ui_show_message(Message* msg)
+MessageResponse ui_show_message(Message* msg)
 {
+	char text[2048] = "\0";
+
+	if(msg->type == MESSAGE) {
+		if(msg->options[0] == NULL) {
+			msg->options[0] = "OK";
+			msg->options[1] = NULL;
+		}
+		strcat(text, msg->text);
+		strcat(text, "\n");
+		int i = 0;
+		while(msg->options[i]) {
+			char* t = strdup(text);
+			snprintf(text, 2048, "%s\n%c. %s", t, i+'a', msg->options[i]);
+			free(t);
+			i++;
+		}
+	} else {
+		abort();
+	}
+
 	char **str = NULL;
-	int n = if_wrap("If you were growing up in or around the 90s, you probably loved The Mighty Ducks. Sure, it was poorly acted, full of ridiculous plot points and implausible scenarios, but I bet you have fond memories of this hockey team.",
-			40, &str);
+	int n = if_wrap(text, 40, &str);
 	int adv;
 	TTF_GlyphMetrics(ui.font, 'a', NULL, NULL, NULL, NULL, &adv);
 	SDL_SetRenderDrawColor(ui.ren, 0, 0, 0, 255);
@@ -143,31 +163,47 @@ void ui_show_message(Message* msg)
 	int y = 10;
 	for(int i=0; i<n; i++)
 	{
-		SDL_Surface* txt = TTF_RenderUTF8_Solid(ui.font, str[i], (SDL_Color){ 255, 255, 255 });
-		SDL_Texture* tt = SDL_CreateTextureFromSurface(ui.ren, txt);
+		if(strlen(str[i]) > 0) {
+			SDL_Surface* txt = TTF_RenderUTF8_Solid(ui.font, str[i], (SDL_Color){ 255, 255, 255 });
+			SDL_Texture* tt = SDL_CreateTextureFromSurface(ui.ren, txt);
 
-		SDL_Rect r = { 10, y, txt->w, txt->h };
-		y += TTF_FontLineSkip(ui.font);
+			SDL_Rect r = { 10, y, txt->w, txt->h };
+			y += TTF_FontLineSkip(ui.font) + 1;
 
-		SDL_FreeSurface(txt);
+			SDL_FreeSurface(txt);
 
-		SDL_RenderCopy(ui.ren, tt, NULL, &r);
+			SDL_RenderCopy(ui.ren, tt, NULL, &r);
 
-		SDL_DestroyTexture(tt);
+			SDL_DestroyTexture(tt);
+			free(str[i]);
+		} else {
+			y += TTF_FontLineSkip(ui.font) + 1;
+		}
 	}
+	free(str);
 	SDL_RenderPresent(ui.ren);
-}
+ 
+	int max_n = 0;
+	while(msg->options[++max_n]) ;
+	if(max_n == 1)
+		++max_n;
 
-
-MessageResponse ui_respond_message(Message* msg)
-{
 	SDL_Event e;
 	while(SDL_WaitEvent(&e)) {
 		switch(e.type) {
 		case SDL_QUIT:
 			ui.active = false;
 			return (MessageResponse){ .option = 0 };
+		case SDL_KEYDOWN:
+			{
+				int opt = e.key.keysym.sym - 'a';
+				if(opt >= 0 && opt < max_n-1) {
+					return (MessageResponse){ .option = opt+1 };
+				}
+			}
+			break;
 		}
+
 	}
 
 	return (MessageResponse){ .option = 0 };

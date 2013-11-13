@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "lua.h"
 #include "lauxlib.h"
@@ -13,6 +14,7 @@
 
 // global variables
 static lua_State *L = NULL;
+static MessageResponse (*message_callback)(Message*);
 bool if_in_error = true;
 
 // preprocessor
@@ -22,7 +24,8 @@ bool if_in_error = true;
 	(c_field) = lua_to ## type(L, -1); \
 	lua_pop(L, 1); }
 
-#define LUA_PUSH_HERO() { lua_pushstring(L, "hero"); lua_gettable(L, -2); }
+#define LUA_PUSH_WORLD() { lua_getglobal(L, "world"); }
+#define LUA_PUSH_HERO() { LUA_PUSH_WORLD(); lua_pushstring(L, "hero"); lua_gettable(L, -2); lua_remove(L, -2); }
 #define LUA_PUSH_FUNCTION(f) { lua_pushstring(L, f); lua_gettable(L, -2); }
 #define LUA_PUSH_METHOD(f) { LUA_PUSH_FUNCTION(f); lua_pushvalue(L, -2); }
 #define LUA_CALL(narg, nres) { if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { if_error("%s\n", lua_tostring(L, -1)); } }
@@ -53,7 +56,7 @@ void if_init()
 		lua_settop(L, 0);
 	}
 
-	if(luaL_loadfile(L, "../../engine/world.lua") || lua_pcall(L, 0, 1, 0)) {
+	if(luaL_loadfile(L, "../../engine/world.lua") || lua_pcall(L, 0, 0, 0)) {
 		if_error("can't load file: %s\n", lua_tostring(L, -1));
 	}
 
@@ -79,8 +82,10 @@ void if_next_frame()
 
 	check_stack();
 
+	LUA_PUSH_WORLD();
 	LUA_PUSH_METHOD("step");
 	LUA_CALL(1, 0);
+	lua_pop(L, 1);
 
 	check_stack();
 }
@@ -147,6 +152,7 @@ uint8_t if_world_tile_stack(int x, int y, BLOCK stack[10])
 	check_stack();
 
 	// call function
+	LUA_PUSH_WORLD();
 	LUA_PUSH_METHOD("tile_stack");
 	lua_pushinteger(L, x);
 	lua_pushinteger(L, y);
@@ -159,7 +165,7 @@ uint8_t if_world_tile_stack(int x, int y, BLOCK stack[10])
 		stack[i] = lua_tonumber(L, -1);
 		lua_pop(L, 1);
 	}
-	lua_pop(L, 1);
+	lua_pop(L, 2);
 
 	check_stack();
 	return n;
@@ -174,6 +180,7 @@ int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 	check_stack();
 
 	// call function
+	LUA_PUSH_WORLD();
 	LUA_PUSH_METHOD("people_in_area");
 	lua_pushinteger(L, x1);
 	lua_pushinteger(L, y1);
@@ -189,29 +196,56 @@ int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 		if_person_on_stack(&*people[i]);
 		lua_pop(L, 1);
 	}
-	lua_pop(L, 1);
+	lua_pop(L, 2);
 
 	check_stack();
 	return n;
 }
 
 
-static bool fst = true;
-Message* if_message_pending()
-{
-	// TODO
-	if(fst) {
-		Message* msg = calloc(1, sizeof(Message));
-		msg->type = MESSAGE;
-		msg->person_id = 0;
-		msg->text = "Calculate the resulting surface size of the UTF8 encoded text rendered using font. No actual rendering is done, however correct kerning is done to get the actual width. The height returned in h is the same as you can get using 3.3.10 TTF_FontHeight.";
-		msg->options[0] = NULL;
-		return msg;
-	} else {
-		return NULL;
-	}
+/*
+ * MESSAGE MANAGEMENT
+ */
+static int if_lua_message_callback(lua_State *L) {
+	// check parameters
+	Message msg;
+	msg.text = luaL_checkstring(L, 1);
+	msg.type = luaL_checkint(L, 2);
+	if(lua_type(L, 3) != LUA_TNIL)
+		luaL_checktype(L, 3, LUA_TTABLE);
+	if(lua_type(L, 4) != LUA_TNIL)
+		msg.image = luaL_checkint(L, 4);
+	if(lua_type(L, 5) != LUA_TNIL)
+		msg.person_id = luaL_checkint(L, 5);
+	lua_pop(L, 5);
+
+	// find options
+	msg.options[0] = NULL;
+
+	// call callback
+	MessageResponse r = message_callback(&msg);
+	if(msg.type == MESSAGE)
+		lua_pushinteger(L, r.option);
+	else
+		lua_pushstring(L, r.input);
+	return 1;
 }
 
+void if_register_dialog_callback(MessageResponse (*callback)(Message*))
+{
+	message_callback = callback;
+
+	stack_dump();
+	check_stack();
+
+	lua_getglobal(L, "msg");
+	lua_pushstring(L, "callback");
+	lua_pushcfunction(L, if_lua_message_callback);
+	lua_settable(L, -3);
+	lua_pop(L, 1);
+
+	check_stack();
+}
 
 int if_wrap(char* str, int columns, char*** ret)
 {
@@ -221,7 +255,7 @@ int if_wrap(char* str, int columns, char*** ret)
 	check_stack();
 
 	// call function
-	lua_getglobal(L, "str");
+	lua_getglobal(L, "string");
 	LUA_PUSH_FUNCTION("wrap");
 	lua_pushstring(L, str);
 	lua_pushinteger(L, columns);
@@ -243,16 +277,6 @@ int if_wrap(char* str, int columns, char*** ret)
 }
 
 
-void if_respond_message(MessageResponse r)
-{
-	// TODO
-}
-
-void if_free_message(Message** msg)
-{
-	free(*msg); // TODO
-	fst = false;
-}
 
 /*
  *
@@ -272,12 +296,10 @@ static void if_person_on_stack(Person* person)
 
 static void check_stack()
 {
-	// don't check stack in case of error, as it'll certainly be invalid
-	if(if_in_error)
-		return;
-
-	assert(lua_istable(L, -1));
-	assert(lua_gettop(L) == 1);
+	if(lua_gettop(L) != 0) {
+		stack_dump();
+		abort();
+	}
 }
 
 static void if_error(const char *fmt, ...) 

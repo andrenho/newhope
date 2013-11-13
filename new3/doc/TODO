@@ -65,7 +65,7 @@ II. UI
 x   1.1 Basic application
 x   1.2 Reload engine
     1.3 User interaction
-       1.3.1 Messagebox
+x      1.3.1 Messagebox
        1.3.2 Inputbox
   2. PC version
     2.1 ...

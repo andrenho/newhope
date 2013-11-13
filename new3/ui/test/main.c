@@ -8,22 +8,14 @@ int main()
 {
 	// initialize everything
 	if_init();
+	if_register_dialog_callback(ui_show_message);
 	ui_init();
 
 	// main loop
 	while(ui_active()) {
-		Message* msg = if_message_pending();
-		if(msg) {
-			ui_do_events();
-			ui_show_message(msg);
-			MessageResponse r = ui_respond_message(msg);
-			if_respond_message(r);
-			if_free_message(&msg);
-		} else {
-			ui_do_events();
-			if_next_frame();
-			ui_render();
-		}
+		ui_do_events();
+		if_next_frame();
+		ui_render();
 	}
 
 	// finish everything

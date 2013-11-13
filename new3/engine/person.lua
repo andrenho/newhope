@@ -43,11 +43,12 @@ function Person:step()
 end
 
 
-function Person:__can_move(fx, fy)
-  if fx < 0.5 then
-    msg.msgbox('Short message')
-  end
+function Person:id()
+  error('Not implemented')
+end
 
+
+function Person:__can_move(fx, fy)
   if fx < 0.5 or fy < 0.5 or fx > (world.w-0.5) or fy > (world.h-0.5) then
     return false
   end

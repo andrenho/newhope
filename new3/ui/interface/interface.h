@@ -13,10 +13,11 @@ typedef struct Person {
 } Person;
 
 typedef struct Message {
-	enum { MESSAGE, INPUT } type;
+	enum { MESSAGE=1, INPUT } type;
 	int person_id;
-	char* text;
-	char* options[10];
+	int image;
+	const char* text;
+	const char* options[10];
 } Message;
 
 typedef union MessageResponse {
@@ -48,9 +49,7 @@ uint8_t if_world_tile_stack(int x, int y, BLOCK stack[10]);
 //
 // messages
 //
-Message* if_message_pending();
-void if_respond_message(MessageResponse r);
+void if_register_dialog_callback(MessageResponse (*callback)(Message*));
 int if_wrap(char* str, int columns, char*** ret);
-void if_free_message(Message** msg);
 
 #endif
