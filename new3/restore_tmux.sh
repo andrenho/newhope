@@ -14,9 +14,6 @@ then
   cd ~/projects/newhope/ui/test
   tmux new-window -t "$SN" -n shell
 
-  cd ~/projects/newhope_old/new2
-  tmux new-window -t "$SN" -n old
-
   tmux select-window -t $SN:1
 fi
 
