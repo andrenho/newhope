@@ -11,8 +11,10 @@ string = mod.require('util.string')
 msg    = mod.require('msg')
 
 -- load classes
-local Block  = mod.require('block')
-local Person = mod.require('person')
+local Block    = mod.require('block')
+local Person   = mod.require('person')
+local City     = mod.require('city')
+local Building = mod.require('building')
 
 --
 -- class World
@@ -53,7 +55,7 @@ function World:tile_stack(x, y)
   if x < 0 or y < 0 or x > (self.w-1) or y > (self.h-1) then
     return { Block.NOTHING }
   elseif x == 2 and y == 2 then
-    return { Block.WATER }
+    return { Block.GRASS, Block.WOODEN_WALL }
   else
     return { Block.GRASS }
   end
