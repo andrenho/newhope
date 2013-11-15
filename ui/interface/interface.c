@@ -204,7 +204,7 @@ int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 	*people = calloc(n, sizeof(Person));
 	for(int i=0; i<n; i++) {
 		lua_rawgeti(L, -1, i+1);
-		if_person_on_stack(&*people[i]);
+		if_person_on_stack(&(*people)[i]);
 		lua_pop(L, 1);
 	}
 	lua_pop(L, 2);

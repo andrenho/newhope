@@ -3,7 +3,7 @@ Person.__index = Person
 
 
 function Person:new(x, y)
-  local self = setmetatable({ }, Person)
+  local self = setmetatable({}, Person)
   self.x = x
   self.y = y
   self.image = 0
@@ -15,11 +15,21 @@ end
 
 function Person:turn_to(dir)
   self.direction = dir
+  return self
 end
 
 
 function Person:change_speed(speed)
   self.__speed = speed
+  return self
+end
+
+
+function Person:set_as_hero()
+  self.image = 0
+  if Person.hero then error('There is already a hero.') end
+  Person.hero = self
+  return self
 end
 
 
@@ -41,6 +51,7 @@ function Person:step()
   if self:__can_move(fx, fy) then
     self.x, self.y = fx, fy
   end
+  return self
 end
 
 

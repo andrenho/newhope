@@ -8,8 +8,8 @@ function World:new(w, h)
   local self = setmetatable({}, World)
   self.w = w
   self.h = h
-  self.hero = Person:new(8, 8)
-  self.people = { self.hero }
+  self.hero = Person:new(8, 8):set_as_hero()
+  self.people = { self.hero, Person:new(10, 10) }
   self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
   return self
 end
@@ -60,10 +60,15 @@ end
 --
 -- return if this tile can be walked by a person
 --
+crossable = { Block.NOTHING, Block.DOOR_OPEN }
 function World:tile_walkable(x, y)
   local st = self:tiles(x, y)
   if st[1] == Block.WATER or st[1] == Block.NOTHING then
     return false
+  end
+  for _, cblock in ipairs(crossable) do
+    if #st >= 2 and st[2] == cblock then st[2] = Block.NOTHING end
+    if #st >= 3 and st[3] == cblock then st[3] = Block.NOTHING end
   end
   if #st > 1 and (st[2] ~= Block.NOTHING or st[3] ~= Block.NOTHING) then
     return false
