@@ -44,7 +44,7 @@ void if_hero_move(int speed, double direction);
 //
 void if_hero_position(double* x, double* y);
 int if_people_visible(int x1, int y1, int x2, int y2, Person** people);
-uint8_t if_world_tile_stack(int x, int y, BLOCK stack[10]);
+uint8_t if_world_tiles(int x, int y, BLOCK stack[10]);
 
 //
 // messages

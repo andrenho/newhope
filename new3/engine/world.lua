@@ -1,25 +1,3 @@
---
--- packages
---
-
--- load modules (globals!!!)
-require('util.strict')
-mod    = require('util.modules')
-funct  = mod.require('util.funct')
-table  = mod.require('util.table')
-string = mod.require('util.string')
-msg    = mod.require('msg')
-
--- load classes
-local Block        = mod.require('block')
-local Person       = mod.require('person')
-local City         = mod.require('city')
-local Building     = mod.require('building')
-local BuildingType = mod.require('buildingtype')
-
---
--- class World
--- 
 local World = {}
 World.__index = World
 
@@ -30,14 +8,10 @@ function World:new(w, h)
   local self = setmetatable({}, World)
   self.w = w
   self.h = h
-  self.hero = Person:new(5, 5)
+  self.hero = Person:new(8, 8)
   self.people = { self.hero }
-  self.cities = { City:new(1, 0, 0) }
+  self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
   return self
-end
-
-function World:__tostring()
-  return '[World w:' .. self.w .. ' h:' .. self.h .. ']'
 end
 
 --
@@ -52,13 +26,16 @@ end
 --
 -- return the stack of tiles (max 10)
 --
-function World:tile_stack(x, y)
+function World:tiles(x, y)
   if x < 0 or y < 0 or x > (self.w-1) or y > (self.h-1) then
     return { Block.NOTHING }
-  elseif x == 2 and y == 2 then
-    return { Block.GRASS, Block.WOODEN_WALL }
   else
-    return { Block.GRASS }
+    for _, city in ipairs(self.cities) do
+      if x >= city.x and x < (city.x+city.w) and y >= city.y and y < (city.y+city.h) then
+        return city:tiles(x-city.x, y-city.y)
+      end
+    end
+    return { Block.GRASS } -- TODO
   end
 end
 
@@ -84,7 +61,7 @@ end
 -- return if this tile can be walked by a person
 --
 function World:tile_walkable(x, y)
-  local st = self:tile_stack(x, y)
+  local st = self:tiles(x, y)
   if st[1] == Block.WATER or st[1] == Block.NOTHING then
     return false
   end
@@ -94,7 +71,15 @@ function World:tile_walkable(x, y)
   return true
 end
 
-world = World:new(30, 30) -- global!!
---return world
+-------------
+-- PRIVATE --
+-------------
+
+function World:__tostring()
+  return '[World w:' .. self.w .. ' h:' .. self.h .. ']'
+end
+
+--world = World:new(30, 30) -- global!!
+return World
 
 -- vim: ts=2:sw=2:sts=2:expandtab

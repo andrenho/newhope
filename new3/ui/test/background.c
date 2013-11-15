@@ -90,16 +90,21 @@ extern UI ui;
 static void bg_draw_tile(int x, int y)
 {
 	BLOCK stack[10];
-	uint8_t n = if_world_tile_stack(x, y, stack);
+	uint8_t n = if_world_tiles(x, y, stack);
 	assert(n > 0);
 
+	// find level
+	int i = 2;
+	if(i > n-1 || stack[i] == NOTHING)
+		i--;
+	if(i > n-1 || stack[i] == NOTHING)
+		i--;
+
 	// draw block
-	SDL_Rect rs = resources_terrain_rect(stack[n-1]);
+	SDL_Rect rs = resources_terrain_rect(stack[i]);
 	SDL_Rect rd = { .x = (x*TILE_W) - ui.rx, .y = (y*TILE_H) - ui.ry,
 	                .w = TILE_W, .h = TILE_H };
 	SDL_RenderCopy(bg.ren, sprites, &rs, &rd);
-
-	// TODO draw object - ?
 }
 
 

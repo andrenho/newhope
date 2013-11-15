@@ -47,6 +47,7 @@ void if_init()
 	if_in_error = false;
 	setenv("LUA_PATH_5_2", "../../engine/?.lua;;", 0);
 
+	// initialize LUA
 	if(!L) {
 		// first run
 		L = luaL_newstate();
@@ -56,9 +57,19 @@ void if_init()
 		lua_settop(L, 0);
 	}
 
-	if(luaL_loadfile(L, "../../engine/world.lua") || lua_pcall(L, 0, 0, 0)) {
+	// load classes
+	if(luaL_loadfile(L, "../../engine/newhope.lua") || lua_pcall(L, 0, 0, 0)) {
 		if_error("can't load file: %s\n", lua_tostring(L, -1));
 	}
+
+	// initialize world
+	lua_getglobal(L, "World");
+	LUA_PUSH_METHOD("new");
+	lua_pushinteger(L, 30); // x
+	lua_pushinteger(L, 30); // y
+	LUA_CALL(3, 1);
+	lua_setglobal(L, "world");
+	lua_pop(L, 1);
 
 	(void) stack_dump;
 }
@@ -144,7 +155,7 @@ void if_hero_position(double* x, double* y)
 }
 
 
-uint8_t if_world_tile_stack(int x, int y, BLOCK stack[10])
+uint8_t if_world_tiles(int x, int y, BLOCK stack[10])
 {
 	if(if_in_error)
 		return 0;
@@ -153,7 +164,7 @@ uint8_t if_world_tile_stack(int x, int y, BLOCK stack[10])
 
 	// call function
 	LUA_PUSH_WORLD();
-	LUA_PUSH_METHOD("tile_stack");
+	LUA_PUSH_METHOD("tiles");
 	lua_pushinteger(L, x);
 	lua_pushinteger(L, y);
 	LUA_CALL(3, 1);

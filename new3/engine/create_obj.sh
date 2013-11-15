@@ -16,6 +16,10 @@ function $1:new()
   return self
 end
 
+-------------
+-- PRIVATE --
+-------------
+
 function $1:__tostring()
   return '[$1]'
 end

@@ -13,11 +13,6 @@ function Person:new(x, y)
 end
 
 
-function Person:__tostring()
-  return '[Person x:' .. self.x .. ' y:' .. self.y .. ']'
-end
-
-
 function Person:turn_to(dir)
   self.direction = dir
 end
@@ -51,6 +46,15 @@ end
 
 function Person:id()
   error('Not implemented')
+end
+
+
+-------------
+-- PRIVATE --
+-------------
+
+function Person:__tostring()
+  return '[Person x:' .. self.x .. ' y:' .. self.y .. ']'
 end
 
 
