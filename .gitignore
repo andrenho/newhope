@@ -1,4 +1,5 @@
 depend
 *.o
+*.d
 newhope
 *.swp
