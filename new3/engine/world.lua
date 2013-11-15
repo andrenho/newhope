@@ -11,10 +11,11 @@ string = mod.require('util.string')
 msg    = mod.require('msg')
 
 -- load classes
-local Block    = mod.require('block')
-local Person   = mod.require('person')
-local City     = mod.require('city')
-local Building = mod.require('building')
+local Block        = mod.require('block')
+local Person       = mod.require('person')
+local City         = mod.require('city')
+local Building     = mod.require('building')
+local BuildingType = mod.require('buildingtype')
 
 --
 -- class World
@@ -31,7 +32,7 @@ function World:new(w, h)
   self.h = h
   self.hero = Person:new(5, 5)
   self.people = { self.hero }
-  self.__TODO = false
+  self.cities = { City:new(1, 0, 0) }
   return self
 end
 
@@ -85,6 +86,9 @@ end
 function World:tile_walkable(x, y)
   local st = self:tile_stack(x, y)
   if st[1] == Block.WATER or st[1] == Block.NOTHING then
+    return false
+  end
+  if #st > 1 and (st[2] ~= Block.NOTHING or st[3] ~= Block.NOTHING) then
     return false
   end
   return true

@@ -31,17 +31,10 @@ SDL_Rect resources_terrain_rect(BLOCK t)
 		{ NOTHING,	{ 16,  0, 16, 16 } },
 		{ GRASS, 	{  0,  0, 16, 16 } },
 		{ WATER,        { 32,  0, 16, 16 } },
-		{ WALL_NW,      {  0, 32, 16, 16 } },
-		{ WALL_N,       { 16, 32, 16, 16 } },
-		{ WALL_NE,      { 32, 32, 16, 16 } },
-		{ WALL_W,       {  0, 48, 16, 16 } },
-		{ WALL_E,       { 32, 48, 16, 16 } },
-		{ WALL_SW,      {  0, 64, 16, 16 } },
-		{ WALL_S,       { 16, 64, 16, 16 } },
-		{ WALL_SE,      { 32, 64, 16, 16 } },
-		{ FLOOR,        { 16, 48, 16, 16 } },
-		{ DOOR_OPEN,    {  0, 80, 16, 16 } },
-		{ DOOR_CLOSED,  { 16, 80, 16, 16 } },
+		{ WOODEN_WALL,  {  0, 32, 16, 16 } },
+		{ DOOR_CLOSED,  { 16, 32, 16, 16 } },
+		{ DOOR_OPEN,    { 32, 32, 16, 16 } },
+		{ FLOOR,        { 48, 32, 16, 16 } },
 	};
 
 	for(int i=0; i<(sizeof(res_image)/sizeof(struct TerrainImage)); i++) {

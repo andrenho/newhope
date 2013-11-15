@@ -1,8 +1,10 @@
 local Building = {}
 Building.__index = Building
 
-function Building:new()
+function Building:new(btype, layout, x, y)
   local self = setmetatable({}, Building)
+  self.x, self.y = x, y
+  -- TODO load layout
   return self
 end
 

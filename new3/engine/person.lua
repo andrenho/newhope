@@ -34,7 +34,14 @@ function Person:step()
   local step_size = 0.08 * self.__speed
   local fx = self.x + step_size * math.cos(self.direction)
   local fy = self.y + step_size * math.sin(self.direction)
-  -- TODO - if it can't move, try changing the direction
+  -- if it can't move, try changing the direction
+  if fx ~= self.x and fy ~= self.y and not self:__can_move(fx, fy) then
+    if self:__can_move(fx, self.y) then
+      fy = self.y
+    elseif self:__can_move(self.x, fy) then
+      fx = self.x
+    end
+  end
   -- move
   if self:__can_move(fx, fy) then
     self.x, self.y = fx, fy
