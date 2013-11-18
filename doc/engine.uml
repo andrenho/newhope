@@ -1,0 +1,118 @@
+@startuml
+
+'
+' classes relationships
+'
+World  -->  "*" Person : people
+World  -->  "1" Hero : hero
+World  -->  "*" City : cities
+City   -->  "*" Building : __buildings
+Building -- enum BuildingType
+Person <|-- Hero
+
+package buildinglayout <<Rect>> {
+  enum 0_1
+}
+Building -- buildinglayout
+
+package citylayout <<Rect>> {
+  enum layout_1
+}
+City -- citylayout
+citylayout .. enum BuildingType
+
+World *-- enum Block
+
+package util {
+  class funct << (M,orchid) >>
+  class modules << (M,orchid) >>
+  class strict << (M,orchid) >>
+  class string << (M,orchid) >>
+  class table << (M,orchid) >>
+}
+
+'
+' classes definitions
+'
+class World {
+  +w, h
+  -- Action --
+  +new(w, h)
+  +step()
+  .. Information ..
+  +tiles(x,y)
+  +person_in_position(x,y)
+  +people_in_area(x1,y1,x2,y2)
+  +unique_tile_id(x,y)
+  +revert_unique_tile(id)
+  +tile_walkable(x,y)
+}
+
+class Person {
+  +x, y
+  +image
+  +direction
+  -speed
+  +new(x,y)
+  +step()
+  +turn_to(dir)
+  +change_speed(sp)
+  +id()
+}
+
+class Hero {
+  +new(x,y)
+  +step()
+}
+
+class City {
+  +x, y
+  +basic_block
+  +new(layout,x,y,w,h,basic_block)
+  +tiles(x,y)
+}
+
+class Building {
+  +x, y, w, h
+  +new(btype,layout,x,y)
+  +tiles(x,y)
+}
+
+enum Block {
+  WATER
+  GRASS
+  WOODEN_WALL
+  FLOOR
+  . . .
+}
+hide enum Block methods
+
+enum BuildingType {
+  HOUSE
+  . . .
+}
+hide enum BuildingType methods
+
+hide enum layout_1 members
+hide enum layout_1 methods
+hide enum 0_1 members
+hide enum 0_1 methods
+
+class funct {
+  +filter(table,func)
+  +map(table,func)
+}
+
+class modules {
+  +require(mod)
+}
+
+class string {
+  +wrap(columns)
+}
+
+class table {
+  +find(element)
+}
+
+@enduml

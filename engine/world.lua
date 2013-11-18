@@ -39,6 +39,13 @@ function World:tiles(x, y)
   end
 end
 
+--
+-- Return the person in a given position. If no person is there, return nil.
+--
+function World:person_in_position(x, y)
+  return nil
+end
+
 -- 
 -- return a list of people among the tiles
 --
@@ -60,13 +67,13 @@ end
 --
 -- return if this tile can be walked by a person
 --
-crossable = { Block.NOTHING, Block.DOOR_OPEN }
+World.crossable = { Block.NOTHING, Block.DOOR_OPEN }
 function World:tile_walkable(x, y)
   local st = self:tiles(x, y)
   if st[1] == Block.WATER or st[1] == Block.NOTHING then
     return false
   end
-  for _, cblock in ipairs(crossable) do
+  for _, cblock in ipairs(World.crossable) do
     if #st >= 2 and st[2] == cblock then st[2] = Block.NOTHING end
     if #st >= 3 and st[3] == cblock then st[3] = Block.NOTHING end
   end
