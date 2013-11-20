@@ -27,7 +27,6 @@ function Person:change_speed(speed)
 end
 
 
-
 function Person:id()
   error('Not implemented')
 end

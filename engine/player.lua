@@ -93,12 +93,8 @@ end
 --
 Player.S_HELLO = 'Hello!'
 function Player:__interact_with(p)
-  local message = Player.S_HELLO
-  print(self, message)
-  local response = p:respond_to(self, message)
-  print(p, response)
+  world.talk_queue:enqueue(self, p, Player.HELLO)
 end
-
 
 return Player
 
