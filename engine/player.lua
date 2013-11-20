@@ -1,4 +1,4 @@
-local Player = Person:new()
+local Player = setmetatable({}, Person)
 Player.__index = Player
 
 --
@@ -6,11 +6,8 @@ Player.__index = Player
 --
 function Player:new(x, y)
   local self = setmetatable({}, Player)
-  self.x = x
-  self.y = y
+  self:__init(x, y)
   self.image = 0
-  self.direction = 0
-  self.__speed = 0
   return self
 end
 
@@ -44,7 +41,7 @@ function Player:__move()
   local fy = self.y + step_size * math.sin(self.direction)
 
   -- check if there's a unit to interact in that position
-  local p = World:person_in_position(fx, fy)
+  local p = world:person_in_position(fx, fy, self)
   if p then
     self:__interact_with(p)
   end
@@ -95,7 +92,7 @@ end
 -- Interact with another unit
 --
 function Player:__interact_with(p)
-  print('Interact with ' .. p .. '.')
+  print('Interact with ' .. tostring(p) .. '.')
 end
 
 

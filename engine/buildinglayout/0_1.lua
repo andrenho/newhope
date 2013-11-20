@@ -24,6 +24,10 @@ return {
   ['f'] = Block.FLOOR,
   ['w'] = Block.WOODEN_WALL,
   ['d'] = Block.DOOR_OPEN,
+
+  people = {
+    { type = 'Shopkeeper', x = 1, y = 1 },
+  }
 }
 
 -- vim: ts=2:sw=2:sts=2:expandtab

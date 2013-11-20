@@ -5,13 +5,13 @@ function City:new(layout, x, y, w, h, basic_block)
   local self = setmetatable({}, City)
   self.x, self.y, self.w, self.h = x, y, w, h
   self.basic_block = basic_block
-  self.__buildings = {}
+  self.buildings = {}
   self:__load_layout(layout)
   return self
 end
 
 function City:tiles(x, y)
-  for _, bd in ipairs(self.__buildings) do
+  for _, bd in ipairs(self.buildings) do
     if x >= bd.x and x < (bd.x+bd.w) and y >= bd.y and y < (bd.y+bd.h) then
       return bd:tiles(x-bd.x, y-bd.y, self.basic_block)
     end
@@ -36,7 +36,7 @@ function City:__load_layout(layout)
     if building.x+building.w > self.w or building.y+building.h > self.h then
       error('Building outside city.')
     end
-    self.__buildings[#self.__buildings+1] = building
+    self.buildings[#self.buildings+1] = building
   end
 end
 

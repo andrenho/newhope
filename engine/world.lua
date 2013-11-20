@@ -9,8 +9,9 @@ function World:new(w, h)
   self.w = w
   self.h = h
   self.hero = Player:new(8, 8)
-  self.people = { self.hero, Person:new(10, 10) }
+  self.people = { self.hero }
   self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
+  self:__add_people_to_cities()
   return self
 end
 
@@ -42,15 +43,20 @@ end
 --
 -- Return the person in a given position. If no person is there, return nil.
 --
-function World:person_in_position(x, y)
-  return nil
+function World:person_in_position(x, y, except)
+  local people = self:people_in_area(x-1, y-1, x+1, y+1)
+  if people[1] == except then
+    return people[2]
+  else
+    return people[1]
+  end
 end
 
 -- 
 -- return a list of people among the tiles
 --
 function World:people_in_area(x1, y1, x2, y2)
-  local cond = function(p) return (p.x >= x1 and p.x < x2 and p.y >= y1 and p.y < y2) end
+  local cond = function(p) return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2) end
   return funct.filter(self.people, cond)
 end
 
@@ -91,7 +97,26 @@ function World:__tostring()
   return '[World w:' .. self.w .. ' h:' .. self.h .. ']'
 end
 
---world = World:new(30, 30) -- global!!
+function World:__add_people_to_cities()
+  for _,city in ipairs(self.cities) do
+    for _,building in ipairs(city.buildings) do
+      if building.layout.people then
+        for _,p in ipairs(building.layout.people) do
+          -- create person
+          local person = nil
+          local x = p.x + city.x + building.x + 0.5
+          local y = p.y + city.y + building.y + 0.5
+          if p.type == 'Shopkeeper' then
+            person = Shopkeeper:new(x, y)
+          end
+          assert(person, 'Invalid person type: ' .. p.type)
+          self.people[#self.people+1] = person
+        end
+      end
+    end
+  end
+end
+
 return World
 
 -- vim: ts=2:sw=2:sts=2:expandtab

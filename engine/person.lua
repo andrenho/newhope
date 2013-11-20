@@ -2,8 +2,7 @@ local Person = {}
 Person.__index = Person
 
 
-function Person:new(x, y)
-  local self = setmetatable({}, Person)
+function Person:__init(x, y)
   self.x = x
   self.y = y
   self.image = 1
@@ -26,12 +25,17 @@ end
 
 
 function Person:step()
-  -- TODO - implement
+  error('abstract method')
 end
 
 
 function Person:id()
   error('Not implemented')
+end
+
+
+function Person:interact_with(person)
+  error('abstract method')
 end
 
 
