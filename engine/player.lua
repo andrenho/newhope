@@ -91,8 +91,12 @@ end
 --
 -- Interact with another unit
 --
+Player.S_HELLO = 'Hello!'
 function Player:__interact_with(p)
-  print('Interact with ' .. tostring(p) .. '.')
+  local message = Player.S_HELLO
+  print(self, message)
+  local response = p:respond_to(self, message)
+  print(p, response)
 end
 
 

@@ -1,6 +1,9 @@
 local Person = {}
 Person.__index = Person
 
+-- abstract methods
+function Person:step() error('abstract method') end
+function Person:respond_to(person, msg, parameters) error('abstract method') end
 
 function Person:__init(x, y)
   self.x = x
@@ -24,20 +27,10 @@ function Person:change_speed(speed)
 end
 
 
-function Person:step()
-  error('abstract method')
-end
-
 
 function Person:id()
   error('Not implemented')
 end
-
-
-function Person:interact_with(person)
-  error('abstract method')
-end
-
 
 -------------
 -- PRIVATE --

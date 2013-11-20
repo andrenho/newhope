@@ -8,6 +8,7 @@ function World:new(w, h)
   local self = setmetatable({}, World)
   self.w = w
   self.h = h
+  self.talk_queue = TalkQueue:new()
   self.hero = Player:new(8, 8)
   self.people = { self.hero }
   self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }

@@ -11,6 +11,16 @@ function Shopkeeper:step()
   -- TODO
 end
 
+--
+-- Interaction with player
+--
+Shopkeeper.S_GOOD_MORNING = 'Good morning!'
+function Shopkeeper:respond_to(p, message, parameters)
+  if message == Player.S_HELLO then
+    return Shopkeeper.S_GOOD_MORNING
+  end
+end
+
 -------------
 -- PRIVATE --
 -------------

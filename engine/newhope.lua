@@ -18,6 +18,7 @@ Shopkeeper   = mod.require('shopkeeper')
 City         = mod.require('city')
 Building     = mod.require('building')
 BuildingType = mod.require('buildingtype')
+TalkQueue    = mod.require('talkqueue')
 World        = mod.require('world')
 
 -- instances
