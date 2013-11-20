@@ -1,11 +1,11 @@
-local Hero = Person:new()
-Hero.__index = Hero
+local Player = Person:new()
+Player.__index = Player
 
 --
 -- Create a new hero (player)
 --
-function Hero:new(x, y)
-  local self = setmetatable({}, Hero)
+function Player:new(x, y)
+  local self = setmetatable({}, Player)
   self.x = x
   self.y = y
   self.image = 0
@@ -17,7 +17,7 @@ end
 --
 -- One frame of the game. Will move if speed != 0.
 --
-function Hero:step()
+function Player:step()
   if self.__speed ~= 0 then 
     self:__move() 
   end
@@ -30,14 +30,14 @@ end
 -- PRIVATE --
 -------------
 
-function Hero:__tostring()
-  return '[Hero x:' .. self.x .. ' y:' .. self.y .. ']'
+function Player:__tostring()
+  return '[Player x:' .. self.x .. ' y:' .. self.y .. ']'
 end
 
 --
 -- Move the unit.
 --
-function Hero:__move()
+function Player:__move()
   -- discover future positon
   local step_size = 0.08 * self.__speed
   local fx = self.x + step_size * math.cos(self.direction)
@@ -67,7 +67,7 @@ end
 --
 -- Check if the hero can move over a tile.
 --
-function Hero:__can_move(fx, fy)
+function Player:__can_move(fx, fy)
   -- check if going out of bounds
   if fx < 0.5 or fy < 0.5 or fx > (world.w-0.5) or fy > (world.h-0.5) then
     return false
@@ -94,11 +94,11 @@ end
 --
 -- Interact with another unit
 --
-function Hero:__interact_with(p)
+function Player:__interact_with(p)
   print('Interact with ' .. p .. '.')
 end
 
 
-return Hero
+return Player
 
 -- vim: ts=2:sw=2:sts=2:expandtab

@@ -8,7 +8,7 @@ function World:new(w, h)
   local self = setmetatable({}, World)
   self.w = w
   self.h = h
-  self.hero = Hero:new(8, 8)
+  self.hero = Player:new(8, 8)
   self.people = { self.hero, Person:new(10, 10) }
   self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
   return self

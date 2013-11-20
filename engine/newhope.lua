@@ -13,7 +13,7 @@ msg    = mod.require('msg')
 -- load classes
 Block        = mod.require('block')
 Person       = mod.require('person')
-Hero         = mod.require('hero')
+Player       = mod.require('player')
 City         = mod.require('city')
 Building     = mod.require('building')
 BuildingType = mod.require('buildingtype')

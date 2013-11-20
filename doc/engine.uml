@@ -4,11 +4,11 @@
 ' classes relationships
 '
 World  -->  "*" Person : people
-World  -->  "1" Hero : hero
 World  -->  "*" City : cities
 City   -->  "*" Building : __buildings
 Building -- enum BuildingType
-Person <|-- Hero
+Person <|-- Player
+Person <|-- Shopkeeper
 
 package buildinglayout <<Rect>> {
   enum 0_1
@@ -48,21 +48,29 @@ class World {
   +tile_walkable(x,y)
 }
 
-class Person {
+abstract class Person {
   +x, y
   +image
   +direction
-  -speed
-  +new(x,y)
-  +step()
+  #speed
+  {abstract} +new(x,y)
+  {abstract} +step()
   +turn_to(dir)
   +change_speed(sp)
   +id()
+  {abstract} +interact_with(person)
 }
 
-class Hero {
+class Player {
   +new(x,y)
   +step()
+  +interact_with(person)
+}
+
+class Shopkeeper {
+  +new(x,y)
+  +step()
+  +interact_with(person)
 }
 
 class City {
