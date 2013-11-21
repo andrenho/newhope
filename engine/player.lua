@@ -50,6 +50,7 @@ Player.Talk = {
 }
 
 function Player:__interact_with(p)
+  print(msg.msgbox 'Hello')
   --[[
   if not world.talk_queue:peek_from(self) then
     world.talk_queue:enqueue(self, p, Player.Talk.GREETING)

@@ -4,16 +4,24 @@
 #include <stdint.h>
 #include <stdio.h>
 
+bool reload = false;
+
 int main()
 {
 	// initialize everything
-	if_init();
-	if_register_dialog_callback(ui_show_message);
 	ui_init();
+load_lua:
+	if_init();
+	if_install_callbacks(ui_show_message);
+	if_init_world(30, 30);
 
 	// main loop
 	while(ui_active()) {
 		ui_do_events();
+		if(reload) {
+			reload = false;
+			goto load_lua;
+		}
 		if_next_frame();
 		ui_render();
 	}

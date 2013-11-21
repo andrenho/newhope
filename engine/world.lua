@@ -5,8 +5,8 @@ World.__index = World
 -- create a new world map
 -- 
 function World:new(w, h)
-  if not callback:all_installed() then
-    error('Not all callbacks were installed! Missing: ' .. callback:missing())
+  if #callback.missing > 0 then 
+    error('Not all callbacks were installed! Missing: ' .. table.concat(callback.missing, ', '))
   end
   local self = setmetatable({}, World)
   self.w = w

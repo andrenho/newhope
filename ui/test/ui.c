@@ -13,6 +13,7 @@
 #include "interface.h"
 
 UI ui;
+extern bool reload;
 
 static bool ui_sdl_init();
 static void ui_sdl_end();
@@ -281,8 +282,8 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 	// CTRL+R - reload engine
 	if(k.type == SDL_KEYDOWN && k.keysym.sym == SDLK_r && 
 			k.keysym.mod & KMOD_CTRL) {
-		if_init();
-		fprintf(stderr, "Engine reloaded.\n");
+		fprintf(stderr, "Reloading engine...\n");
+		reload = true;
 	}
 
 	// if is in error, only CTRL+R is allowed

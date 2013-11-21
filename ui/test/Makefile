@@ -12,7 +12,8 @@ SRC = main.c	   \
       ui.c	   \
       resources.c  \
       background.c \
-      ../interface/interface.c
+      ../interface/interface.c \
+      ../interface/callbacks.c
 
 OBJ = ${SRC:.c=.o} block.h
 HEADERS = ${SRC:.c=.h}

@@ -11,7 +11,7 @@ msg.INPUT  = 2
 function msg.msgbox(message, options, image, person)
   local id = nil
   if person then id = person:id() end
-  return msg.callback(message, msg.MSGBOX, options, image, id)
+  return callback.message(message, msg.MSGBOX, options, image, id)
 end
 
 --
@@ -20,7 +20,7 @@ end
 function msg.input(message, image, person)
   local id = nil
   if person then id = person:id() end
-  return msg.callback(message, msg.INPUT, nil, image, id)
+  return callback.message(message, msg.INPUT, nil, image, id)
 end
 
 return msg

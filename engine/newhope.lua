@@ -27,4 +27,4 @@ World        = mod.require('world')
 
 -- instances
 callback = Callback:new()
-world = nil -- allow setting global in C
+world = nil -- will be set by C

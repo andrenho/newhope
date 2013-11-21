@@ -1,26 +1,19 @@
 local Callback = {}
 Callback.__index = Callback
 
+Callback.missing = { 
+  message = true,
+}
+
 function Callback:new()
   local self = setmetatable({}, Callback)
-  self.called = false
   return self
 end
 
-function Callback:missing()
-  return "" -- TODO
-end
-
-function Callback:all_installed()
-  return false -- TODO
-end
 
 function Callback:install(name, fct)
-  -- TODO
-end
-
-function Callback:run()
-  -- TODO
+  self[name] = fct
+  self.missing[name] = nil
 end
 
 -------------

@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "callbacks.h"
+
 typedef uint16_t BLOCK;
 
 typedef struct Person {
@@ -12,25 +14,15 @@ typedef struct Person {
 	int image;
 } Person;
 
-typedef struct Message {
-	enum { MESSAGE=1, INPUT } type;
-	int person_id;
-	int image;
-	const char* text;
-	const char* options[10];
-} Message;
-
-typedef union MessageResponse {
-	int option;
-	char* input;
-} MessageResponse;
-
 extern bool if_in_error;
 
 //
 // initialization
 //
 void if_init();
+void if_init_world(int w, int h);
+void if_install_callbacks(
+		MessageResponse (*callback)(Message*));
 void if_finish();
 
 //
@@ -38,6 +30,7 @@ void if_finish();
 //
 void if_next_frame();
 void if_hero_move(int speed, double direction);
+void check_stack();
 
 //
 // queries
@@ -47,9 +40,21 @@ int if_people_visible(int x1, int y1, int x2, int y2, Person** people);
 uint8_t if_world_tiles(int x, int y, BLOCK stack[10]);
 
 //
-// messages
+// lua helper methods
 //
-void if_register_dialog_callback(MessageResponse (*callback)(Message*));
 int if_wrap(char* str, int columns, char*** ret);
+void if_error(const char *fmt, ...);
+
+#define LUA_FIELD(c_field, field, type) { 	\
+	lua_pushstring(L, #field);	\
+	lua_gettable(L, -2);		\
+	(c_field) = lua_to ## type(L, -1); \
+	lua_pop(L, 1); }
+
+#define LUA_PUSH_WORLD() { lua_getglobal(L, "world"); }
+#define LUA_PUSH_HERO() { LUA_PUSH_WORLD(); lua_pushstring(L, "hero"); lua_gettable(L, -2); lua_remove(L, -2); }
+#define LUA_PUSH_FUNCTION(f) { lua_pushstring(L, f); lua_gettable(L, -2); }
+#define LUA_PUSH_METHOD(f) { LUA_PUSH_FUNCTION(f); lua_pushvalue(L, -2); }
+#define LUA_CALL(narg, nres) { if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { if_error("%s\n", lua_tostring(L, -1)); } }
 
 #endif

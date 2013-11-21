@@ -13,27 +13,11 @@
 // IMPORTANT: always leave a copy of 'world' in the stack
 
 // global variables
-static lua_State *L = NULL;
-static MessageResponse (*message_callback)(Message*);
+lua_State *L = NULL;
 bool if_in_error = true;
-
-// preprocessor
-#define LUA_FIELD(c_field, field, type) { 	\
-	lua_pushstring(L, #field);	\
-	lua_gettable(L, -2);		\
-	(c_field) = lua_to ## type(L, -1); \
-	lua_pop(L, 1); }
-
-#define LUA_PUSH_WORLD() { lua_getglobal(L, "world"); }
-#define LUA_PUSH_HERO() { LUA_PUSH_WORLD(); lua_pushstring(L, "hero"); lua_gettable(L, -2); lua_remove(L, -2); }
-#define LUA_PUSH_FUNCTION(f) { lua_pushstring(L, f); lua_gettable(L, -2); }
-#define LUA_PUSH_METHOD(f) { LUA_PUSH_FUNCTION(f); lua_pushvalue(L, -2); }
-#define LUA_CALL(narg, nres) { if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { if_error("%s\n", lua_tostring(L, -1)); } }
 
 // function prototypes
 extern int setenv (const char *, const char *, int);
-static void check_stack();
-static void if_error(const char *fmt, ...);
 static void stack_dump();
 static void if_person_on_stack(Person* person);
 
@@ -46,7 +30,7 @@ void if_init()
 {
 	if_in_error = false;
 	setenv("LUA_PATH_5_2", "../../engine/?.lua;;", 0);
-
+	
 	// initialize LUA
 	if(!L) {
 		// first run
@@ -62,18 +46,22 @@ void if_init()
 		if_error("can't load file: %s\n", lua_tostring(L, -1));
 	}
 
-	// initialize world
-	lua_getglobal(L, "World");
-	LUA_PUSH_METHOD("new");
-	lua_pushinteger(L, 30); // x
-	lua_pushinteger(L, 30); // y
-	LUA_CALL(3, 1);
-	lua_setglobal(L, "world");
-	lua_pop(L, 1);
-
 	(void) stack_dump;
 }
 
+
+void if_init_world(int w, int h)
+{
+	// initialize world
+	lua_getglobal(L, "World");
+	LUA_PUSH_METHOD("new");
+	lua_pushinteger(L, w);
+	lua_pushinteger(L, h);
+	LUA_CALL(3, 1);
+	lua_setglobal(L, "world");
+	lua_pop(L, 1);
+	stack_dump();
+}
 
 void if_finish()
 {
@@ -214,50 +202,6 @@ int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 }
 
 
-/*
- * MESSAGE MANAGEMENT
- */
-static int if_lua_message_callback(lua_State *L) {
-	// check parameters
-	Message msg;
-	msg.text = luaL_checkstring(L, 1);
-	msg.type = luaL_checkint(L, 2);
-	if(lua_type(L, 3) != LUA_TNIL)
-		luaL_checktype(L, 3, LUA_TTABLE);
-	if(lua_type(L, 4) != LUA_TNIL)
-		msg.image = luaL_checkint(L, 4);
-	if(lua_type(L, 5) != LUA_TNIL)
-		msg.person_id = luaL_checkint(L, 5);
-	lua_pop(L, 5);
-
-	// find options
-	msg.options[0] = NULL;
-
-	// call callback
-	MessageResponse r = message_callback(&msg);
-	if(msg.type == MESSAGE)
-		lua_pushinteger(L, r.option);
-	else
-		lua_pushstring(L, r.input);
-	return 1;
-}
-
-void if_register_dialog_callback(MessageResponse (*callback)(Message*))
-{
-	message_callback = callback;
-
-	stack_dump();
-	check_stack();
-
-	lua_getglobal(L, "msg");
-	lua_pushstring(L, "callback");
-	lua_pushcfunction(L, if_lua_message_callback);
-	lua_settable(L, -3);
-	lua_pop(L, 1);
-
-	check_stack();
-}
-
 int if_wrap(char* str, int columns, char*** ret)
 {
 	if(if_in_error)
@@ -288,6 +232,26 @@ int if_wrap(char* str, int columns, char*** ret)
 }
 
 
+void check_stack()
+{
+	if(lua_gettop(L) != 0) {
+		stack_dump();
+		abort();
+	}
+}
+
+
+void if_error(const char *fmt, ...) 
+{
+	va_list argp;
+	va_start(argp, fmt);
+	vfprintf(stderr, fmt, argp);
+	va_end(argp);
+	if_in_error = true;
+	//lua_close(L);
+	//exit(EXIT_FAILURE)
+}
+
 
 /*
  *
@@ -304,25 +268,6 @@ static void if_person_on_stack(Person* person)
 	LUA_FIELD(person->direction, direction, number);
 }
 
-
-static void check_stack()
-{
-	if(lua_gettop(L) != 0) {
-		stack_dump();
-		abort();
-	}
-}
-
-static void if_error(const char *fmt, ...) 
-{
-	va_list argp;
-	va_start(argp, fmt);
-	vfprintf(stderr, fmt, argp);
-	va_end(argp);
-	if_in_error = true;
-	//lua_close(L);
-	//exit(EXIT_FAILURE)
-}
 
 static void stack_dump() 
 {
