@@ -8,6 +8,7 @@ function TalkQueue:new()
   return self
 end
 
+
 function TalkQueue:enqueue(from, to, message, parameters)
   print(tostring(from), tostring(to), message)
   local pack = { from=from, to=to, message=message, parameters=parameters, prev=nil, next=nil }

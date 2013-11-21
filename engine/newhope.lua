@@ -22,7 +22,9 @@ City         = mod.require('city')
 Building     = mod.require('building')
 BuildingType = mod.require('buildingtype')
 TalkQueue    = mod.require('talkqueue')
+Callback     = mod.require('callback')
 World        = mod.require('world')
 
 -- instances
+callback = Callback:new()
 world = nil -- allow setting global in C

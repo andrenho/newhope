@@ -46,19 +46,21 @@ end
 -- Interact with another unit
 --
 Player.Talk = {
-  HELLO = 'Hello!'
+  GREETING = 'Hi.',
 }
+
 function Player:__interact_with(p)
+  --[[
   if not world.talk_queue:peek_from(self) then
-    world.talk_queue:enqueue(self, p, Player.Talk.HELLO)
+    world.talk_queue:enqueue(self, p, Player.Talk.GREETING)
   end
+  ]]
 end
 
 --
 -- Respond to interaction
 --
 function Player:__respond_to_interaction(p)
-  -- TODO - only for multiplayer
 end
 
 return Player

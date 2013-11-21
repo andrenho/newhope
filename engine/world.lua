@@ -5,6 +5,9 @@ World.__index = World
 -- create a new world map
 -- 
 function World:new(w, h)
+  if not callback:all_installed() then
+    error('Not all callbacks were installed! Missing: ' .. callback:missing())
+  end
   local self = setmetatable({}, World)
   self.w = w
   self.h = h
@@ -20,6 +23,10 @@ end
 -- one step in the world
 --
 function World:step()
+  if callback.called then
+    callback:run()
+    return 
+  end
   for _,person in ipairs(self.people) do
     person:step()
   end
