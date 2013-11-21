@@ -7,20 +7,6 @@ function Shopkeeper:new(x, y)
   return self
 end
 
-function Shopkeeper:step()
-  -- TODO
-end
-
---
--- Interaction with player
---
-Shopkeeper.S_GOOD_MORNING = 'Good morning!'
-function Shopkeeper:respond_to(p, message, parameters)
-  if message == Player.S_HELLO then
-    return Shopkeeper.S_GOOD_MORNING
-  end
-end
-
 -------------
 -- PRIVATE --
 -------------
@@ -28,6 +14,25 @@ end
 function Shopkeeper:__tostring()
   return '[Shopkeeper]'
 end
+
+--
+-- Interaction with player
+--
+Shopkeeper.Talk = {
+  GOOD_MORNING = 'Good morning!'
+}
+function Shopkeeper:__respond_to_interaction()
+  local question = world.talk_queue:dequeue(self)
+  if question ~= nil then
+    if question.message == Player.Talk.HELLO then
+      world.talk_queue:enqueue(self, question.from, Shopkeeper.Talk.GOOD_MORNING, {})
+    else
+      error('Invalid message: ', tostring(question))
+    end
+  end
+  return self
+end
+
 
 return Shopkeeper
 

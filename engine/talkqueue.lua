@@ -9,6 +9,7 @@ function TalkQueue:new()
 end
 
 function TalkQueue:enqueue(from, to, message, parameters)
+  print(tostring(from), tostring(to), message)
   local pack = { from=from, to=to, message=message, parameters=parameters, prev=nil, next=nil }
   if self.__first then -- not empty
     pack.prev = self.__last
@@ -20,7 +21,17 @@ function TalkQueue:enqueue(from, to, message, parameters)
 end
 
 
-function TalkQueue:peek(to_filter)
+function TalkQueue:peek_from(from_filter)
+  local q = self.__first
+  while q do
+    if q.from == from_filter then return q end
+    q = q.next
+  end
+  return nil
+end
+
+
+function TalkQueue:peek_to(to_filter)
   local q = self.__first
   while q do
     if q.to == to_filter then return q end

@@ -5,6 +5,7 @@
 '
 World  -->  "*" Person : people
 World  -->  "*" City : cities
+World  -->  "1" TalkQueue: talk_queue
 City   -->  "*" Building : __buildings
 Building -- enum BuildingType
 Person <|-- Player
@@ -52,25 +53,24 @@ abstract class Person {
   +x, y
   +image
   +direction
-  #speed
-  {abstract} +new(x,y)
-  {abstract} +step()
+  #__speed
   +turn_to(dir)
   +change_speed(sp)
   +id()
-  {abstract} +interact_with(person)
+  +step()
+  #__init(x,y)
+  #__move()
+  #__can_move(fx,fy)
 }
 
 class Player {
   +new(x,y)
-  +step()
-  +interact_with(person)
+  #__move()
+  {abstract} #__respond_to_interaction()
 }
 
 class Shopkeeper {
   +new(x,y)
-  +step()
-  +interact_with(person)
 }
 
 class City {
@@ -84,6 +84,13 @@ class Building {
   +x, y, w, h
   +new(btype,layout,x,y)
   +tiles(x,y)
+}
+
+class TalkQueue {
+  +enqueue(from,to,message,parameters)
+  +dequeue(to_filter)
+  +peek_to(to_filter)
+  +peek_from(from_filter)
 }
 
 enum Block {

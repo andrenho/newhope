@@ -2,6 +2,9 @@
 -- packages
 --
 
+-- OO support
+function ABSTRACT() error('Abstract method!', 2) end
+
 -- load modules (globals!!!)
 require('util.strict')
 mod    = require('util.modules')
