@@ -12,6 +12,11 @@ function Player:new(x, y)
 end
 
 
+function Player:type()
+  return 'Player'
+end
+
+
 -------------
 -- PRIVATE --
 -------------
@@ -50,18 +55,17 @@ Player.Talk = {
 }
 
 function Player:__interact_with(p)
-  print(msg.msgbox 'Hello')
-  --[[
-  if not world.talk_queue:peek_from(self) then
-    world.talk_queue:enqueue(self, p, Player.Talk.GREETING)
+  callback.message(Player.Talk.GREETING, msg.MSGBOX, {}, 0, self:id())
+  if p:type() == 'Shopkeeper' then
+    local msg, par = p:__respond_to_interaction(self, Person.Talk.GREETING)
+    callback.message(msg, msg.MSGBOX, {}, 0, p:id())
   end
-  ]]
 end
 
 --
 -- Respond to interaction
 --
-function Player:__respond_to_interaction(p)
+function Player:__respond_to_interaction(person, message, parameters)
 end
 
 return Player

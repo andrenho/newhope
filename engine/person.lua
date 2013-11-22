@@ -1,5 +1,6 @@
 local Person = {}
 Person.__index = Person
+Person.counter = 0
 
 
 --
@@ -24,7 +25,7 @@ end
 -- Return a unique ID for the unit.
 --
 function Person:id()
-  error('Not implemented')
+  return self.__id
 end
 
 
@@ -46,7 +47,11 @@ end
 ----------------------
 
 
-function Person:__respond_to_interaction()
+function Person:__respond_to_interaction(person, message, parameters)
+  ABSTRACT()
+end
+
+function Person:type()
   ABSTRACT()
 end
 
@@ -65,6 +70,8 @@ function Person:__init(x, y)
   self.image = 1
   self.direction = 0
   self.__speed = 0
+  self.__id = Person.counter
+  Person.counter = Person.counter + 1
   return self
 end
 

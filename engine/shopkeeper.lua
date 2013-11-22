@@ -7,6 +7,11 @@ function Shopkeeper:new(x, y)
   return self
 end
 
+function Shopkeeper:type()
+  return 'Shopkeeper'
+end
+
+
 -------------
 -- PRIVATE --
 -------------
@@ -22,7 +27,8 @@ Shopkeeper.Talk = {
   GREETING = "Welcome sir, please take a look at our merchandises.",
 }
 
-function Shopkeeper:__respond_to_interaction()
+function Shopkeeper:__respond_to_interaction(person, message, parameters)
+  return Shopkeeper.Talk.GREETING, {}
   --[[
   local question = world.talk_queue:dequeue(self)
   if question ~= nil then

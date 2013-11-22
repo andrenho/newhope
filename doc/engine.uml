@@ -58,19 +58,23 @@ abstract class Person {
   +change_speed(sp)
   +id()
   +step()
+  {abstract} #type()
   #__init(x,y)
   #__move()
   #__can_move(fx,fy)
+  {abstract} #__respond_to_interaction()
 }
 
 class Player {
   +new(x,y)
+  #type()
   #__move()
-  {abstract} #__respond_to_interaction()
 }
 
 class Shopkeeper {
   +new(x,y)
+  #type()
+  #__respond_to_interaction()
 }
 
 class City {
@@ -84,13 +88,6 @@ class Building {
   +x, y, w, h
   +new(btype,layout,x,y)
   +tiles(x,y)
-}
-
-class TalkQueue {
-  +enqueue(from,to,message,parameters)
-  +dequeue(to_filter)
-  +peek_to(to_filter)
-  +peek_from(from_filter)
 }
 
 enum Block {
