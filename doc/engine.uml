@@ -58,11 +58,12 @@ abstract class Person {
   +change_speed(sp)
   +id()
   +step()
-  {abstract} #type()
+  +can_talk()
+  #{abstract} type()
+  #{abstract} __respond()
   #__init(x,y)
   #__move()
   #__can_move(fx,fy)
-  {abstract} #__respond_to_interaction()
 }
 
 class Player {
@@ -74,7 +75,7 @@ class Player {
 class Shopkeeper {
   +new(x,y)
   #type()
-  #__respond_to_interaction()
+  #__respond()
 }
 
 class City {
@@ -109,6 +110,13 @@ hide enum layout_1 members
 hide enum layout_1 methods
 hide enum 0_1 members
 hide enum 0_1 methods
+
+class Callback {
+  +[fct_name](parameters)
+  +new()
+  +install(name, fct)
+  +{static} missing
+}
 
 class funct {
   +filter(table,func)

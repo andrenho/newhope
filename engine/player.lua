@@ -46,7 +46,6 @@ function Player:__move()
 end
  
 
-
 --
 -- Interact with another unit
 --
@@ -55,18 +54,21 @@ Player.Talk = {
 }
 
 function Player:__interact_with(p)
-  callback.message(Player.Talk.GREETING, msg.MSGBOX, {}, 0, self:id())
+  if not p:can_talk() then return end
+
   if p:type() == 'Shopkeeper' then
-    local msg, par = p:__respond_to_interaction(self, Person.Talk.GREETING)
-    callback.message(msg, msg.MSGBOX, {}, 0, p:id())
+    local mesg, par = p:__talk(self, Person.Talk.GREETING)
   end
 end
+
 
 --
 -- Respond to interaction
 --
-function Player:__respond_to_interaction(person, message, parameters)
+function Player:__respond(person, message, parameters)
+  -- TODO - only for multiplayer
 end
+
 
 return Player
 

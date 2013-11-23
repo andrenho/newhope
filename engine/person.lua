@@ -33,12 +33,24 @@ end
 -- One frame of the game. Will move if speed != 0.
 --
 function Person:step()
+  if self.__incommunicable > 0 then 
+    self.__incommunicable = self.__incommunicable - 1 
+  end
+
   if self.__speed ~= 0 then 
     self:__move() 
   end
-  self:__respond_to_interaction()
 
   return self
+end
+
+
+--
+-- Return if the unit can be interacted with. This is used mainly to avoid 
+-- that the unit comunicates again with the same person just by "bumping" into it.
+--
+function Person:can_talk()
+  return (self.__incommunicable == 0)
 end
 
 
@@ -47,7 +59,7 @@ end
 ----------------------
 
 
-function Person:__respond_to_interaction(person, message, parameters)
+function Person:__respond(person, message, parameters)
   ABSTRACT()
 end
 
@@ -62,6 +74,16 @@ end
 
 
 -- 
+-- Talk back to a player
+--
+function Person:__talk(person, message, parameters)
+  self.__incommunicable = 30
+  local mesg, par = self:__respond(person, message, parameters)
+  callback.message(mesg, msg.MSGBOX, {}, 0, person:id())
+  return mesg, par
+end
+
+-- 
 -- Initialize unit (called by implementers)
 --
 function Person:__init(x, y)
@@ -71,6 +93,7 @@ function Person:__init(x, y)
   self.direction = 0
   self.__speed = 0
   self.__id = Person.counter
+  self.__incommunicable = 0
   Person.counter = Person.counter + 1
   return self
 end

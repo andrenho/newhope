@@ -27,19 +27,8 @@ Shopkeeper.Talk = {
   GREETING = "Welcome sir, please take a look at our merchandises.",
 }
 
-function Shopkeeper:__respond_to_interaction(person, message, parameters)
+function Shopkeeper:__respond(person, message, parameters)
   return Shopkeeper.Talk.GREETING, {}
-  --[[
-  local question = world.talk_queue:dequeue(self)
-  if question ~= nil then
-    if question.message == Player.Talk.GREETING then
-      world.talk_queue:enqueue(self, question.from, Shopkeeper.Talk.GREETING, {})
-    else
-      error('Don\'t know how to respond to message: ', tostring(question))
-    end
-  end
-  return self
-  ]]
 end
 
 
