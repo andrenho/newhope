@@ -20,6 +20,7 @@ bool if_in_error = true;
 extern int setenv (const char *, const char *, int);
 static void stack_dump();
 static void if_person_on_stack(Person* person);
+static void if_car_on_stack(Car* car);
 
 /*
  * INITIALIZATION
@@ -202,6 +203,37 @@ int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 }
 
 
+int if_cars_visible(int x1, int y1, int x2, int y2, Car** cars)
+{
+	if(if_in_error)
+		return 0;
+
+	check_stack();
+
+	// call function
+	LUA_PUSH_WORLD();
+	LUA_PUSH_METHOD("cars_in_area");
+	lua_pushinteger(L, x1);
+	lua_pushinteger(L, y1);
+	lua_pushinteger(L, x2);
+	lua_pushinteger(L, y2);
+	LUA_CALL(5, 1);
+
+	// get response
+	int n = luaL_len(L, -1);
+	*cars = calloc(n, sizeof(Car));
+	for(int i=0; i<n; i++) {
+		lua_rawgeti(L, -1, i+1);
+		if_car_on_stack(&(*cars)[i]);
+		lua_pop(L, 1);
+	}
+	lua_pop(L, 2);
+
+	check_stack();
+	return n;
+}
+
+
 int if_wrap(char* str, int columns, char*** ret)
 {
 	if(if_in_error)
@@ -266,6 +298,15 @@ static void if_person_on_stack(Person* person)
 	LUA_FIELD(person->y, y,      number);
 	LUA_FIELD(person->image,     image, integer);
 	LUA_FIELD(person->direction, direction, number);
+}
+
+
+// return data of the car who is in the top of the stack
+static void if_car_on_stack(Car* car)
+{
+	LUA_FIELD(car->x, x, number);
+	LUA_FIELD(car->y, y, number);
+	// TODO - model
 }
 
 

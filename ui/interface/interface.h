@@ -14,6 +14,11 @@ typedef struct Person {
 	int image;
 } Person;
 
+typedef struct Car {
+	double x, y;
+	int model;
+} Car;
+
 extern bool if_in_error;
 
 //
@@ -37,6 +42,7 @@ void check_stack();
 //
 void if_hero_position(double* x, double* y);
 int if_people_visible(int x1, int y1, int x2, int y2, Person** people);
+int if_cars_visible(int x1, int y1, int x2, int y2, Car** car);
 uint8_t if_world_tiles(int x, int y, BLOCK stack[10]);
 
 //

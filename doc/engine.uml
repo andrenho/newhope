@@ -5,6 +5,7 @@
 '
 World  -->  "*" Person : people
 World  -->  "*" City : cities
+World  -->  "*" Car : cars
 World  -->  "1" TalkQueue: talk_queue
 City   -->  "*" Building : __buildings
 Building -- enum BuildingType
@@ -21,6 +22,8 @@ package citylayout <<Rect>> {
 }
 City -- citylayout
 citylayout .. enum BuildingType
+
+Car *-- CarModel
 
 World *-- enum Block
 
@@ -44,6 +47,7 @@ class World {
   +tiles(x,y)
   +person_in_position(x,y)
   +people_in_area(x1,y1,x2,y2)
+  +cars_in_area(x1,y1,x2,y2)
   +unique_tile_id(x,y)
   +revert_unique_tile(id)
   +tile_walkable(x,y)
@@ -76,6 +80,15 @@ class Shopkeeper {
   +new(x,y)
   #type()
   #__respond()
+}
+
+class Car {
+  +new(x,y,model)
+  +step()
+}
+
+enum CarModel {
+  . . .
 }
 
 class City {

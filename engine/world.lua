@@ -14,6 +14,7 @@ function World:new(w, h)
   self.talk_queue = TalkQueue:new()
   self.hero = Player:new(8, 8)
   self.people = { self.hero }
+  self.cars = { Car:new(10, 10, CarModel.REGULAR) }
   self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
   self:__add_people_to_cities()
   return self
@@ -23,12 +24,11 @@ end
 -- one step in the world
 --
 function World:step()
-  if callback.called then
-    callback:run()
-    return 
-  end
   for _,person in ipairs(self.people) do
     person:step()
+  end
+  for _,car in ipairs(self.cars) do
+    car:step()
   end
 end
 
@@ -66,6 +66,14 @@ end
 function World:people_in_area(x1, y1, x2, y2)
   local cond = function(p) return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2) end
   return funct.filter(self.people, cond)
+end
+
+-- 
+-- return a list of cars among the tiles
+--
+function World:cars_in_area(x1, y1, x2, y2)
+  local cond = function(p) return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2) end
+  return funct.filter(self.cars, cond)
 end
 
 -- 

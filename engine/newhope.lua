@@ -15,9 +15,11 @@ msg    = mod.require('msg')
 
 -- load classes
 Block        = mod.require('block')
+CarModel     = mod.require('carmodel')
 Person       = mod.require('person')
 Player       = mod.require('player')
 Shopkeeper   = mod.require('shopkeeper')
+Car          = mod.require('car')
 City         = mod.require('city')
 Building     = mod.require('building')
 BuildingType = mod.require('buildingtype')
