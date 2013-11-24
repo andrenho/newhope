@@ -12,6 +12,7 @@ SRC = main.c	   \
       ui.c	   \
       resources.c  \
       background.c \
+      timer.c      \
       ../interface/interface.c \
       ../interface/callbacks.c
 

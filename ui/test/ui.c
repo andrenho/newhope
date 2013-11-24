@@ -63,7 +63,7 @@ void ui_do_events()
 		switch(e.type) {
 		case SDL_QUIT:
 			ui.active = false;
-			break;
+			return;
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			ui_keyboard_event(e.key);

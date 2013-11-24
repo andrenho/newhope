@@ -35,7 +35,6 @@ void if_finish();
 //
 void if_next_frame();
 void if_hero_move(int speed, double direction);
-void check_stack();
 
 //
 // queries
@@ -50,6 +49,7 @@ uint8_t if_world_tiles(int x, int y, BLOCK stack[10]);
 //
 int if_wrap(char* str, int columns, char*** ret);
 void if_error(const char *fmt, ...);
+void check_stack();
 
 #define LUA_FIELD(c_field, field, type) { 	\
 	lua_pushstring(L, #field);	\

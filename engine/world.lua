@@ -20,6 +20,7 @@ function World:new(w, h)
   return self
 end
 
+
 --
 -- one step in the world
 --
@@ -31,6 +32,7 @@ function World:step()
     car:step()
   end
 end
+
 
 --
 -- return the stack of tiles (max 10)
@@ -47,6 +49,7 @@ function World:tiles(x, y)
     return { Block.GRASS } -- TODO
   end
 end
+
 
 --
 -- Return the person in a given position. If no person is there, return nil.
@@ -68,6 +71,7 @@ function World:people_in_area(x1, y1, x2, y2)
   return funct.filter(self.people, cond)
 end
 
+
 -- 
 -- return a list of cars among the tiles
 --
@@ -75,6 +79,7 @@ function World:cars_in_area(x1, y1, x2, y2)
   local cond = function(p) return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2) end
   return funct.filter(self.cars, cond)
 end
+
 
 -- 
 -- return a unique identifier for a tile, and revert the value
@@ -85,6 +90,7 @@ end
 function World:revert_unique_tile(id)
   return (id % self.w), math.floor(id / self.w)
 end
+
 
 --
 -- return if this tile can be walked by a person
@@ -104,6 +110,7 @@ function World:tile_walkable(x, y)
   end
   return true
 end
+
 
 -------------
 -- PRIVATE --

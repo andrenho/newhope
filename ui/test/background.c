@@ -13,6 +13,7 @@ static Background bg;
 
 static void bg_draw_tile(int x, int y);
 static void bg_draw_person(Person* p);
+static void bg_draw_car(Car* c);
 
 
 void bg_init(UI* ui)
@@ -76,6 +77,15 @@ void bg_redraw()
 	if(people)
 		free(people);
 
+	// draw cars
+	Car* cars = NULL;
+	n = if_cars_visible(x1, y1, x2, y2, &cars);
+	for(int i=0; i<n; i++) {
+		bg_draw_car(&cars[i]);
+	}
+	if(cars)
+		free(cars);
+
 	SDL_SetRenderTarget(bg.ren, NULL);
 }
 
@@ -119,4 +129,10 @@ static void bg_draw_person(Person* p)
 	SDL_RenderCopy(bg.ren, sprites, &rp, &rd);
 	SDL_RenderCopyEx(bg.ren, sprites, &ra, &rd, p->direction * 180 / M_PI + 90,
 			NULL, SDL_FLIP_NONE);
+}
+
+
+static void bg_draw_car(Car* c)
+{
+	// TODO
 }

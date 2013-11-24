@@ -306,7 +306,12 @@ static void if_car_on_stack(Car* car)
 {
 	LUA_FIELD(car->x, x, number);
 	LUA_FIELD(car->y, y, number);
-	// TODO - model
+
+	// get model
+	lua_pushstring(L, "model");
+	lua_gettable(L, -2);
+	LUA_FIELD(car->model, id, integer);
+	lua_pop(L, 1);
 }
 
 
