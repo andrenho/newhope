@@ -5,6 +5,7 @@ function Car:new(x, y, model)
   local self = setmetatable({}, Car)
   self.x, self.y = x, y
   self.model = model
+  self.direction = 0
   return self
 end
 

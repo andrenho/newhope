@@ -97,6 +97,23 @@ void resources_person_rect(Person* p, SDL_Rect* person, SDL_Rect* arrow)
 	*arrow  = (SDL_Rect) { 0, 0, 0, 0 };
 }
 
+void resources_car_rect(Car* c, SDL_Rect* car)
+{
+	static struct CarImage {
+		int id;
+		SDL_Rect rp;
+	} res_c[] = {
+		{ 1, { 0, 48, 16, 16} },
+	};
+	for(int i=0; i<(sizeof(res_c)/sizeof(struct CarImage)); i++) {
+		if(res_c[i].id == c->model) {
+			*car = res_c[i].rp;
+			return;
+		}
+	}
+	*car = (SDL_Rect) { 0, 0, 0, 0 };
+}
+
 
 /********************
  *                  *

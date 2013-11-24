@@ -134,5 +134,12 @@ static void bg_draw_person(Person* p)
 
 static void bg_draw_car(Car* c)
 {
-	// TODO
+	// body
+	SDL_Rect rp;
+	resources_car_rect(c, &rp);
+	SDL_Rect rd = { .x = (c->x * TILE_W) - ui.rx - TILE_W/2, 
+		        .y = (c->y * TILE_H) - ui.ry - TILE_H/2,
+			.w = TILE_W * c->w, .h = TILE_H * c->h };
+	SDL_RenderCopyEx(bg.ren, sprites, &rp, &rd, c->direction * 180 / M_PI + 90,
+			NULL, SDL_FLIP_NONE);
 }

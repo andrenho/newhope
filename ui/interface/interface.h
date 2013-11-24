@@ -17,6 +17,8 @@ typedef struct Person {
 typedef struct Car {
 	double x, y;
 	int model;
+	double direction;
+	double w, h;
 } Car;
 
 extern bool if_in_error;
@@ -52,7 +54,7 @@ void if_error(const char *fmt, ...);
 void check_stack();
 
 #define LUA_FIELD(c_field, field, type) { 	\
-	lua_pushstring(L, #field);	\
+	lua_pushstring(L, field);	\
 	lua_gettable(L, -2);		\
 	(c_field) = lua_to ## type(L, -1); \
 	lua_pop(L, 1); }

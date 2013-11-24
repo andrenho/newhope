@@ -135,8 +135,8 @@ void if_hero_position(double* x, double* y)
 	LUA_PUSH_HERO();
 
 	// get x
-	LUA_FIELD(*x, x, number);
-	LUA_FIELD(*y, y, number);
+	LUA_FIELD(*x, "x", number);
+	LUA_FIELD(*y, "y", number);
 
 	lua_pop(L, 1);
 
@@ -294,23 +294,26 @@ void if_error(const char *fmt, ...)
 // return data of the person who is in the top of the stack
 static void if_person_on_stack(Person* person)
 {
-	LUA_FIELD(person->x, x,      number);
-	LUA_FIELD(person->y, y,      number);
-	LUA_FIELD(person->image,     image, integer);
-	LUA_FIELD(person->direction, direction, number);
+	LUA_FIELD(person->x, "x",      number);
+	LUA_FIELD(person->y, "y",      number);
+	LUA_FIELD(person->image,     "image", integer);
+	LUA_FIELD(person->direction, "direction", number);
 }
 
 
 // return data of the car who is in the top of the stack
 static void if_car_on_stack(Car* car)
 {
-	LUA_FIELD(car->x, x, number);
-	LUA_FIELD(car->y, y, number);
+	LUA_FIELD(car->x, "x", number);
+	LUA_FIELD(car->y, "y", number);
+	LUA_FIELD(car->direction, "direction", number);
 
 	// get model
 	lua_pushstring(L, "model");
 	lua_gettable(L, -2);
-	LUA_FIELD(car->model, id, integer);
+	LUA_FIELD(car->model, "id", integer);
+	LUA_FIELD(car->w, "w", number);
+	LUA_FIELD(car->h, "h", number);
 	lua_pop(L, 1);
 }
 
