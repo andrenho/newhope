@@ -28,8 +28,6 @@ extern bool if_in_error;
 //
 void if_init();
 void if_init_world(int w, int h);
-void if_install_callbacks(
-		MessageResponse (*callback)(Message*));
 void if_finish();
 
 //

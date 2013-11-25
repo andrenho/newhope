@@ -1,3 +1,5 @@
+#!/usr/bin/env lua
+
 -- assert functions
 function assert_error(expr)
   assert(not pcall(expr), "expression should have raised error")

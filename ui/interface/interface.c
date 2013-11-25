@@ -10,8 +10,6 @@
 #include "lauxlib.h"
 #include "lualib.h"
 
-// IMPORTANT: always leave a copy of 'world' in the stack
-
 // global variables
 lua_State *L = NULL;
 bool if_in_error = true;
@@ -21,6 +19,7 @@ extern int setenv (const char *, const char *, int);
 static void stack_dump();
 static void if_person_on_stack(Person* person);
 static void if_car_on_stack(Car* car);
+extern CALLBACK callbacks;
 
 /*
  * INITIALIZATION
@@ -61,7 +60,6 @@ void if_init_world(int w, int h)
 	LUA_CALL(3, 1);
 	lua_setglobal(L, "world");
 	lua_pop(L, 1);
-	stack_dump();
 }
 
 void if_finish()
@@ -275,10 +273,16 @@ void check_stack()
 
 void if_error(const char *fmt, ...) 
 {
+	lua_settop(L, 0);
+
 	va_list argp;
+	char s[512];
+
 	va_start(argp, fmt);
-	vfprintf(stderr, fmt, argp);
+	vsnprintf(s, 511, fmt, argp);
+	fprintf(stderr, "%s", s);
 	va_end(argp);
+	callbacks.lua_error(s);
 	if_in_error = true;
 	//lua_close(L);
 	//exit(EXIT_FAILURE)

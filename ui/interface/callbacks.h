@@ -14,6 +14,12 @@ typedef union MessageResponse {
 	char* input;
 } MessageResponse;
 
-void if_install_callbacks(MessageResponse (*callback)(Message*));
+typedef struct {
+	MessageResponse (*message)(Message*);
+	void (*lua_error)(const char*);
+} CALLBACK;
+
+void if_install_callbacks(MessageResponse (*message_cb)(Message*),
+		void (*lua_error_cb)(const char*));
 
 #endif

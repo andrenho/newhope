@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 load_lua:
 	// initialize interface with LUA
 	if_init();
-	if_install_callbacks(ui_show_message);
+	if_install_callbacks(ui_show_message, ui_lua_error);
 	if_init_world(30, 30);
 
 	// initialize timer

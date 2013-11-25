@@ -211,6 +211,19 @@ MessageResponse ui_show_message(Message* msg)
 }
 
 
+void ui_lua_error(const char* msg)
+{
+	Message m = {
+		.type = MESSAGE,
+		.person_id = 0,
+		.image = 0,
+		.text = msg,
+		.options = { NULL },
+	};
+	ui_show_message(&m);
+}
+
+
 /********************
  *                  *
  * STATIC FUNCTIONS *

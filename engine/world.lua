@@ -26,6 +26,7 @@ end
 -- one step in the world
 --
 function World:step()
+  local a = "a" + 1
   for _,person in ipairs(self.people) do
     person:step()
   end

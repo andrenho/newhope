@@ -32,6 +32,7 @@ bool ui_active();
 void ui_do_events();
 void ui_render();
 void ui_wait_next_frame();
+void ui_lua_error(const char* msg);
 
 MessageResponse ui_show_message(Message* msg);
 

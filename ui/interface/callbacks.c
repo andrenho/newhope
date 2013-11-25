@@ -6,10 +6,7 @@
 #include "lauxlib.h"
 #include "lualib.h"
 
-typedef struct {
-	MessageResponse (*message)(Message*);
-} CALLBACK;
-static CALLBACK callbacks;
+CALLBACK callbacks;
 
 extern lua_State *L;
 
@@ -39,9 +36,11 @@ static int if_lua_message_callback(lua_State *L) {
 }
 
 
-void if_install_callbacks(MessageResponse (*callback)(Message*))
+void if_install_callbacks(MessageResponse (*message_cb)(Message*),
+		void (*lua_error_cb)(const char*))
 {
-	callbacks.message = callback;
+	callbacks.message = message_cb;
+	callbacks.lua_error = lua_error_cb;
 
 	check_stack();
 
