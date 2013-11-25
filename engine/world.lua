@@ -12,10 +12,11 @@ function World:new(w, h)
   self.w = w
   self.h = h
   self.talk_queue = TalkQueue:new()
-  self.hero = Player:new(8, 8)
-  self.people = { self.hero }
+  self.player = Player:new(8, 8)
+  self.people = { self.player }
   self.cars = { Car:new(10, 10, CarModel.REGULAR) }
   self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
+  self.predefined_tiles = {}
   self:__add_people_to_cities()
   return self
 end
@@ -38,8 +39,11 @@ end
 -- return the stack of tiles (max 10)
 --
 function World:tiles(x, y)
+  local predef = self.predefined_tiles[world:unique_tile_id(x,y)]
   if x < 0 or y < 0 or x > (self.w-1) or y > (self.h-1) then
-    return { Block.NOTHING }
+    return { Block.WATER }
+  elseif predef then
+    return predef
   else
     for _, city in ipairs(self.cities) do
       if x >= city.x and x < (city.x+city.w) and y >= city.y and y < (city.y+city.h) then

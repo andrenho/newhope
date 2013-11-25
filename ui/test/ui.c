@@ -17,7 +17,7 @@ extern bool reload;
 
 static bool ui_sdl_init();
 static void ui_sdl_end();
-static void ui_center_hero();
+static void ui_center_player();
 static void ui_keyboard_event(SDL_KeyboardEvent k);
 
 // create the UI object and initialize the user interface
@@ -91,7 +91,7 @@ void ui_render()
 		return;
 	}
 
-	ui_center_hero();
+	ui_center_player();
 
 	int x1, y1, x2, y2;
 	ui_screen_limits(&x1, &y1, &x2, &y2);
@@ -257,17 +257,17 @@ static void ui_sdl_end()
 }
 
 
-static void ui_center_hero()
+static void ui_center_player()
 {
 	int _w, _h;
 	SDL_GetWindowSize(ui.win, &_w, &_h);
 	if(_h % 2)
 		_h++;
 
-	double hero_x, hero_y;
-	if_hero_position(&hero_x, &hero_y);
-	ui.rx = (hero_x * TILE_W) - (_w / 2.0);
-	ui.ry = (hero_y * TILE_H) - (_h / 2.0);
+	double player_x, player_y;
+	if_player_position(&player_x, &player_y);
+	ui.rx = (player_x * TILE_W) - (_w / 2.0);
+	ui.ry = (player_y * TILE_H) - (_h / 2.0);
 
 	bg_redraw();
 }
@@ -293,22 +293,22 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 	// check for moving keys
 	const uint8_t* s = SDL_GetKeyboardState(NULL);
 	if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_LEFT]) {
-		if_hero_move(2, 3*M_PI/4.0);
+		if_player_move(2, 225);
 	} else if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_RIGHT]) {
-		if_hero_move(2, M_PI/3.0);
+		if_player_move(2, 315);
 	} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {
-		if_hero_move(2, 5*M_PI/4.0);
+		if_player_move(2, 135);
 	} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_RIGHT]) {
-		if_hero_move(2, 7*M_PI/4.0);
+		if_player_move(2, 45);
 	} else if(s[SDL_SCANCODE_DOWN]) {
-		if_hero_move(2, M_PI/2.0);
+		if_player_move(2, 270);
 	} else if(s[SDL_SCANCODE_UP]) {
-		if_hero_move(2, 3*M_PI/2.0);
+		if_player_move(2, 90);
 	} else if(s[SDL_SCANCODE_LEFT]) {
-		if_hero_move(2, M_PI);
+		if_player_move(2, 180);
 	} else if(s[SDL_SCANCODE_RIGHT]) {
-		if_hero_move(2, 2*M_PI);
+		if_player_move(2, 0);
 	} else {
-		if_hero_move(0, 0);
+		if_player_move(0, 0);
 	}
 }

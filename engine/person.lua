@@ -103,10 +103,13 @@ end
 -- Move the person.
 --
 function Person:__move()
+  -- convert direction to radians
+  local dir_rad = self.direction * math.pi / 180.0
+
   -- discover future positon
   local step_size = 0.08 * self.__speed
-  local fx = self.x + step_size * math.cos(self.direction)
-  local fy = self.y + step_size * math.sin(self.direction)
+  local fx = self.x + step_size * math.cos(dir_rad)
+  local fy = self.y - step_size * math.sin(dir_rad)
 
   -- if it can't move diagonally, try turning 45º
   if fx ~= self.x and fy ~= self.y and not self:__can_move(fx, fy) then

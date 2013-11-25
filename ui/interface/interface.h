@@ -36,12 +36,12 @@ void if_finish();
 // requests
 //
 void if_next_frame();
-void if_hero_move(int speed, double direction);
+void if_player_move(int speed, double direction);
 
 //
 // queries
 //
-void if_hero_position(double* x, double* y);
+void if_player_position(double* x, double* y);
 int if_people_visible(int x1, int y1, int x2, int y2, Person** people);
 int if_cars_visible(int x1, int y1, int x2, int y2, Car** car);
 uint8_t if_world_tiles(int x, int y, BLOCK stack[10]);
@@ -60,7 +60,7 @@ void check_stack();
 	lua_pop(L, 1); }
 
 #define LUA_PUSH_WORLD() { lua_getglobal(L, "world"); }
-#define LUA_PUSH_HERO() { LUA_PUSH_WORLD(); lua_pushstring(L, "hero"); lua_gettable(L, -2); lua_remove(L, -2); }
+#define LUA_PUSH_PLAYER() { LUA_PUSH_WORLD(); lua_pushstring(L, "player"); lua_gettable(L, -2); lua_remove(L, -2); }
 #define LUA_PUSH_FUNCTION(f) { lua_pushstring(L, f); lua_gettable(L, -2); }
 #define LUA_PUSH_METHOD(f) { LUA_PUSH_FUNCTION(f); lua_pushvalue(L, -2); }
 #define LUA_CALL(narg, nres) { if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { if_error("%s\n", lua_tostring(L, -1)); } }

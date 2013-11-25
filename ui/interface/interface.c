@@ -91,14 +91,14 @@ void if_next_frame()
 }
 
 
-void if_hero_move(int speed, double direction)
+void if_player_move(int speed, double direction)
 {
 	if(if_in_error)
 		return;
 
 	check_stack();
 
-	LUA_PUSH_HERO();
+	LUA_PUSH_PLAYER();
 
 	// set speed
 	if(speed != 0) {
@@ -123,7 +123,7 @@ void if_hero_move(int speed, double direction)
  */
 
 
-void if_hero_position(double* x, double* y)
+void if_player_position(double* x, double* y)
 {
 	if(if_in_error) {
 		*x = *y = 0;
@@ -132,7 +132,7 @@ void if_hero_position(double* x, double* y)
 
 	check_stack();
 
-	LUA_PUSH_HERO();
+	LUA_PUSH_PLAYER();
 
 	// get x
 	LUA_FIELD(*x, "x", number);
