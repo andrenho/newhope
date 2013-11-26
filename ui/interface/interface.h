@@ -35,6 +35,8 @@ void if_finish();
 //
 void if_next_frame();
 void if_player_move(int speed, double direction);
+bool if_call(int narg, int nres);
+
 
 //
 // queries

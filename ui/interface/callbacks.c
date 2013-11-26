@@ -52,7 +52,8 @@ void if_install_callbacks(MessageResponse (*message_cb)(Message*),
 	LUA_PUSH_METHOD("install");
 	lua_pushstring(L, "message");
 	lua_pushcfunction(L, if_lua_message_callback);
-	LUA_CALL(3, 0);
+	if(!if_call(3, 0))
+		return;
 
 	lua_pop(L, 1);
 
