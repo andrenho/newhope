@@ -5,8 +5,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-bool reload = false;
-
 int main(int argc, char** argv)
 {
 	// initialize UI
@@ -23,15 +21,15 @@ load_lua:
 	// main loop
 	while(ui_active()) {
 		ui_do_events();
-		if(!ui_active())
+		if(!ui_active()) {
 			break;
-		if(reload) {
-			reload = false;
-			goto load_lua;
 		}
 		timer_start(t);
-		  if_next_frame();
+		    if_next_frame();
 		timer_stop(t);
+		if(if_reload_engine) {
+			goto load_lua;
+		}
 		ui_render();
 	}
 

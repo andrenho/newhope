@@ -21,7 +21,7 @@ typedef struct Car {
 	double w, h;
 } Car;
 
-extern bool if_in_error;
+extern bool if_reload_engine;
 
 //
 // initialization
@@ -61,6 +61,5 @@ void check_stack();
 #define LUA_PUSH_PLAYER() { LUA_PUSH_WORLD(); lua_pushstring(L, "player"); lua_gettable(L, -2); lua_remove(L, -2); }
 #define LUA_PUSH_FUNCTION(f) { lua_pushstring(L, f); lua_gettable(L, -2); }
 #define LUA_PUSH_METHOD(f) { LUA_PUSH_FUNCTION(f); lua_pushvalue(L, -2); }
-#define LUA_CALL(narg, nres) { if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { if_error("%s\n", lua_tostring(L, -1)); } }
 
 #endif

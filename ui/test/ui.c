@@ -81,16 +81,6 @@ void ui_do_events()
 // present the image to the user
 void ui_render()
 {
-	//Uint32 t = SDL_GetTicks();
-	if(if_in_error)
-	{
-		// in case of error, clear the screen and returns
-		SDL_SetRenderDrawColor(ui.ren, 255, 255, 255, 255);
-		SDL_RenderClear(ui.ren);
-		SDL_RenderPresent(ui.ren);
-		return;
-	}
-
 	ui_center_player();
 
 	int x1, y1, x2, y2;
@@ -296,12 +286,8 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 	if(k.type == SDL_KEYDOWN && k.keysym.sym == SDLK_r && 
 			k.keysym.mod & KMOD_CTRL) {
 		fprintf(stderr, "Reloading engine...\n");
-		reload = true;
+		if_reload_engine = true;
 	}
-
-	// if is in error, only CTRL+R is allowed
-	if(if_in_error)
-		return;
 
 	// check for moving keys
 	const uint8_t* s = SDL_GetKeyboardState(NULL);

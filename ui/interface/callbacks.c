@@ -1,5 +1,7 @@
 #include "callbacks.h"
 
+#include <stdbool.h>
+
 #include "interface.h"
 
 #include "lua.h"

@@ -12,14 +12,16 @@
 
 // global variables
 lua_State *L = NULL;
-bool if_in_error = true;
 
 // function prototypes
 extern int setenv (const char *, const char *, int);
+static bool if_call(int narg, int nres);
 static void stack_dump();
 static void if_person_on_stack(Person* person);
 static void if_car_on_stack(Car* car);
 extern CALLBACK callbacks;
+
+bool if_reload_engine;
 
 /*
  * INITIALIZATION
@@ -28,7 +30,8 @@ extern CALLBACK callbacks;
 
 void if_init()
 {
-	if_in_error = false;
+	if_reload_engine = false;
+
 	setenv("LUA_PATH_5_2", "../../engine/?.lua;;", 0);
 	
 	// initialize LUA
@@ -57,7 +60,8 @@ void if_init_world(int w, int h)
 	LUA_PUSH_METHOD("new");
 	lua_pushinteger(L, w);
 	lua_pushinteger(L, h);
-	LUA_CALL(3, 1);
+	if(!if_call(3, 1))
+		return;
 	lua_setglobal(L, "world");
 	lua_pop(L, 1);
 }
@@ -75,14 +79,12 @@ void if_finish()
 
 void if_next_frame()
 {
-	if(if_in_error)
-		return;
-
 	check_stack();
 
 	LUA_PUSH_WORLD();
 	LUA_PUSH_METHOD("step");
-	LUA_CALL(1, 0);
+	if(!if_call(1, 0))
+		return;
 	lua_pop(L, 1);
 
 	check_stack();
@@ -91,9 +93,6 @@ void if_next_frame()
 
 void if_player_move(int speed, double direction)
 {
-	if(if_in_error)
-		return;
-
 	check_stack();
 
 	LUA_PUSH_PLAYER();
@@ -102,13 +101,15 @@ void if_player_move(int speed, double direction)
 	if(speed != 0) {
 		LUA_PUSH_METHOD("turn_to");
 		lua_pushnumber(L, direction);
-		LUA_CALL(2, 0);
+		if(!if_call(2, 0))
+		return;
 	}
 
 	// set direction
 	LUA_PUSH_METHOD("change_speed");
 	lua_pushinteger(L, speed);
-	LUA_CALL(2, 0);
+	if(!if_call(2, 0))
+		return;
 
 	lua_pop(L, 1);
 
@@ -123,11 +124,6 @@ void if_player_move(int speed, double direction)
 
 void if_player_position(double* x, double* y)
 {
-	if(if_in_error) {
-		*x = *y = 0;
-		return;
-	}
-
 	check_stack();
 
 	LUA_PUSH_PLAYER();
@@ -144,9 +140,6 @@ void if_player_position(double* x, double* y)
 
 uint8_t if_world_tiles(int x, int y, BLOCK stack[10])
 {
-	if(if_in_error)
-		return 0;
-
 	check_stack();
 
 	// call function
@@ -154,7 +147,8 @@ uint8_t if_world_tiles(int x, int y, BLOCK stack[10])
 	LUA_PUSH_METHOD("tiles");
 	lua_pushinteger(L, x);
 	lua_pushinteger(L, y);
-	LUA_CALL(3, 1);
+	if(!if_call(3, 1))
+		return 0;
 
 	// get response
 	int n = luaL_len(L, -1);
@@ -172,9 +166,6 @@ uint8_t if_world_tiles(int x, int y, BLOCK stack[10])
 
 int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 {
-	if(if_in_error)
-		return 0;
-
 	check_stack();
 
 	// call function
@@ -184,7 +175,8 @@ int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 	lua_pushinteger(L, y1);
 	lua_pushinteger(L, x2);
 	lua_pushinteger(L, y2);
-	LUA_CALL(5, 1);
+	if(!if_call(5, 1))
+		return 0;
 
 	// get response
 	int n = luaL_len(L, -1);
@@ -203,9 +195,6 @@ int if_people_visible(int x1, int y1, int x2, int y2, Person** people)
 
 int if_cars_visible(int x1, int y1, int x2, int y2, Car** cars)
 {
-	if(if_in_error)
-		return 0;
-
 	check_stack();
 
 	// call function
@@ -215,7 +204,8 @@ int if_cars_visible(int x1, int y1, int x2, int y2, Car** cars)
 	lua_pushinteger(L, y1);
 	lua_pushinteger(L, x2);
 	lua_pushinteger(L, y2);
-	LUA_CALL(5, 1);
+	if(!if_call(5, 1))
+		return 0;
 
 	// get response
 	int n = luaL_len(L, -1);
@@ -234,9 +224,6 @@ int if_cars_visible(int x1, int y1, int x2, int y2, Car** cars)
 
 int if_wrap(char* str, int columns, char*** ret)
 {
-	if(if_in_error)
-		return 0;
-
 	check_stack();
 
 	// call function
@@ -244,7 +231,8 @@ int if_wrap(char* str, int columns, char*** ret)
 	LUA_PUSH_FUNCTION("wrap");
 	lua_pushstring(L, str);
 	lua_pushinteger(L, columns);
-	LUA_CALL(2, 1);
+	if(!if_call(2, 1))
+		return 0;
 
 	// get results
 	int n = luaL_len(L, -1);
@@ -264,6 +252,8 @@ int if_wrap(char* str, int columns, char*** ret)
 
 void check_stack()
 {
+	if(if_reload_engine)
+		return;
 	if(lua_gettop(L) != 0) {
 		stack_dump();
 		abort();
@@ -283,7 +273,8 @@ void if_error(const char *fmt, ...)
 	fprintf(stderr, "%s", s);
 	va_end(argp);
 	callbacks.lua_error(s);
-	if_in_error = true;
+	stack_dump();
+	if_reload_engine = true;
 	//lua_close(L);
 	//exit(EXIT_FAILURE)
 }
@@ -294,6 +285,18 @@ void if_error(const char *fmt, ...)
  * STATIC FUNCTIONS
  *
  */
+
+static bool if_call(int narg, int nres)
+{
+	if(if_reload_engine)
+		return false; 
+	if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { 
+		if_error("%s\n", lua_tostring(L, -1)); 
+		return false; 
+	} 
+	return true;
+}
+
 
 // return data of the person who is in the top of the stack
 static void if_person_on_stack(Person* person)
