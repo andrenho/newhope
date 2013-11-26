@@ -263,6 +263,18 @@ void check_stack()
 
 void if_error(const char *fmt, ...) 
 {
+	//lua_settop(L, 0);
+
+	/*
+	lua_getglobal(L, "debug");
+	LUA_PUSH_FUNCTION("traceback");
+	lua_pushvalue(L, 2);
+	lua_pushinteger(L, 0);
+	lua_call(L, 2, 1);
+	stack_dump();
+	fprintf(stderr, "%s\n----\n", lua_tostring(L, -1));
+	*/
+
 	lua_settop(L, 0);
 
 	va_list argp;
@@ -289,8 +301,11 @@ void if_error(const char *fmt, ...)
 static bool if_call(int narg, int nres)
 {
 	if(if_reload_engine)
-		return false; 
-	if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { 
+		return false;
+	//lua_pushcfunction(L, if_error);
+	//int handler_index = -1 - narg;
+	//lua_insert(L, handler_index);
+	if(lua_pcall(L, (narg), (nres), 0 /*handler_index*/) != LUA_OK) { 
 		if_error("%s\n", lua_tostring(L, -1)); 
 		return false; 
 	} 
