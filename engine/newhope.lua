@@ -9,6 +9,7 @@ function ABSTRACT() error('Abstract method!', 2) end
 require('util.strict')
 mod    = require('util.modules')
 funct  = mod.require('util.funct')
+geo    = mod.require('util.geo')
 table  = mod.require('util.table')
 string = mod.require('util.string')
 msg    = mod.require('msg')
@@ -30,3 +31,5 @@ World        = mod.require('world')
 -- instances
 callback = Callback:new()
 world = nil -- will be set by C
+
+-- vim: ts=2:sw=2:sts=2:expandtab

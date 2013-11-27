@@ -33,6 +33,13 @@ package util {
   class strict << (M,orchid) >>
   class string << (M,orchid) >>
   class table << (M,orchid) >>
+  package geo {
+    class Point
+    class Line
+    class Polygon
+    Line --> "2" Point: p1, p2
+    Polygon --> "*" Line: lines
+  }
 }
 
 '
@@ -146,6 +153,20 @@ class string {
 
 class table {
   +find(element)
+}
+
+class Point {
+  +x,y
+  +new(x,y)
+}
+
+class Line {
+  +new(p1,p2)
+}
+
+class Polygon {
+  +new(lines)
+  +collides()
 }
 
 @enduml

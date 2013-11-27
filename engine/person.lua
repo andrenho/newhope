@@ -33,7 +33,6 @@ end
 -- One frame of the game. Will move if speed != 0.
 --
 function Person:step()
-  local a = "a" + 1
   if self.__incommunicable > 0 then 
     self.__incommunicable = self.__incommunicable - 1 
   end
