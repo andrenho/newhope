@@ -276,15 +276,33 @@ void if_error(const char *fmt, ...)
 	if_reload_engine = true;
 }
 
+static int traceback(lua_State *L)
+{
+	const char *msg = lua_tostring(L, 1);
+	if(msg) {
+		luaL_traceback(L, L, msg, 1);
+	} else if(!lua_isnoneornil(L, 1)) {
+		if(!luaL_callmeta(L, 1, "__tostring")) {
+			lua_pushliteral(L, "(no error message)");
+		}
+	}
+	return 1;
+}
+
 
 bool if_call(int narg, int nres)
 {
+	int base = lua_gettop(L) - narg;
+	lua_pushcfunction(L, traceback);
+	lua_insert(L, base);
 	if(if_reload_engine)
 		return false;
-	if(lua_pcall(L, (narg), (nres), 0) != LUA_OK) { 
+	if(lua_pcall(L, (narg), (nres), base) != LUA_OK) { 
 		if_error("%s\n", lua_tostring(L, -1)); 
+		lua_remove(L, base);
 		return false; 
 	} 
+	lua_remove(L, base);
 	return true;
 }
 
