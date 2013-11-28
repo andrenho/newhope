@@ -37,6 +37,7 @@ Polygon.__index = Polygon
 function Polygon:new(lines)
   local self = setmetatable({}, Polygon)
   self.lines = lines
+  -- TODO - create rectangle
   return self
 end
 
@@ -53,7 +54,9 @@ function Polygon:intersect(polygon)
 end
 
 function Polygon:__rect_intersect(polygon)
-
+  local a, b = self:rect(), polygon:rect()
+  return (math.abs(a.x - b.x) * 2 < (a.w + b.w)) and
+         (math.abs(a.y - b.y) * 2 < (a.h + b.h))
 end
 
 function Polygon:__tostring()
