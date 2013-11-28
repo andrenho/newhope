@@ -27,7 +27,7 @@ function test_PolygonColision()
   }
   local polygon1 = geo.Polygon:new { line1[1], line1[2], line1[3], line1[4] }
   local polygon2 = geo.Polygon:new { line2[1], line2[2], line2[3], line2[4] }
-  assert(polygon1:collides(polygon2))
+  assert(polygon1:intersect(polygon2))
 end
 
 -- vim: ts=2:sw=2:sts=2:expandtab

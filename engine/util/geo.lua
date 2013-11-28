@@ -40,8 +40,20 @@ function Polygon:new(lines)
   return self
 end
 
-function Polygon:collides(polygon)
-  return false -- TODO
+function Polygon:intersect(polygon)
+  if self:__rect_intersect(polygon) then
+    return true -- TODO
+    --[[for line_a in self.lines do
+      for line_b in polygon.lines do
+        if line_a:intersect(line_b) then return true end
+      end
+    end]]
+  end
+  return false
+end
+
+function Polygon:__rect_intersect(polygon)
+
 end
 
 function Polygon:__tostring()
