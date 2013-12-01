@@ -11,7 +11,7 @@ require('newhope')
 
 -- load tests
 require('setup')
-for filename in io.popen('ls *.lua'):lines() do
+for filename in io.popen('ls '..(arg[1] or '')..'*.lua'):lines() do
   if filename ~= 'unittest.lua' then
     require(filename:sub(1, #filename-4))
   end

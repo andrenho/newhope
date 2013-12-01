@@ -141,6 +141,8 @@ class Callback {
 class funct {
   +filter(table,func)
   +map(table,func)
+  +min(table,func)
+  +max(table,func)
 }
 
 class modules {
@@ -153,6 +155,7 @@ class string {
 
 class table {
   +find(element)
+  +shallow_copy(tbl)
 }
 
 class Point {

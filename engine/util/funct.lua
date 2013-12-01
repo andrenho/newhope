@@ -14,9 +14,31 @@ function map(table, func)
   return new_table
 end
 
+function min(tbl, func)
+  local t = table.shallow_copy(tbl)
+  if func then
+    table.sort(t, func)
+  else
+    table.sort(t)
+  end
+  return t[1]
+end
+
+function max(tbl, func)
+  local t = table.shallow_copy(tbl)
+  if func then
+    table.sort(t, func)
+  else
+    table.sort(t)
+  end
+  return t[#t]
+end
+
 return {
   map=map,
   filter=filter,
+  min=min,
+  max=max,
 }
 
 -- vim: ts=2:sw=2:sts=2:expandtab
