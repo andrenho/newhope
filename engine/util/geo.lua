@@ -85,7 +85,6 @@ Polygon.__index = Polygon
 function Polygon:new(lines)
   local self = setmetatable({}, Polygon)
   self.lines = lines
-  -- TODO - create rectangle
   return self
 end
 
