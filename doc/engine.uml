@@ -35,10 +35,10 @@ package util {
   class table << (M,orchid) >>
   package geo {
     class Point
-    class Line
+    class Segment
     class Polygon
-    Line --> "2" Point: p1, p2
-    Polygon --> "*" Line: lines
+    Segment --> "2" Point: p1, p2
+    Polygon --> "*" Segment: lines
   }
 }
 
@@ -70,6 +70,7 @@ abstract class Person {
   +id()
   +step()
   +can_talk()
+  +polygon()
   #{abstract} type()
   #{abstract} __respond()
   #__init(x,y)
@@ -92,6 +93,7 @@ class Shopkeeper {
 class Car {
   +new(x,y,model)
   +step()
+  +polygon()
 }
 
 enum CarModel {
@@ -161,15 +163,20 @@ class table {
 class Point {
   +x,y
   +new(x,y)
+  -__eq(other)
 }
 
-class Line {
+class Segment {
   +new(p1,p2)
+  +intersect(other)
+  -__eq(other)
 }
 
 class Polygon {
   +new(lines)
-  +collides()
+  +intersect(other)
+  +outer_rectangle()
+  +points()
 }
 
 @enduml

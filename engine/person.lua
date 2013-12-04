@@ -53,6 +53,22 @@ function Person:can_talk()
   return (self.__incommunicable == 0)
 end
 
+--
+-- Return the unit polygon.
+-- 
+function Person:polygon()
+  local p1 = geo.Point:new(self.x - 0.5, self.y - 0.5)
+  local p2 = geo.Point:new(self.x + 0.5, self.y - 0.5)
+  local p3 = geo.Point:new(self.x + 0.5, self.y + 0.5)
+  local p4 = geo.Point:new(self.x - 0.5, self.y + 0.5)
+  return geo.Polygon:new {
+    geo.Segment:new(p1, p2),
+    geo.Segment:new(p2, p3),
+    geo.Segment:new(p3, p4),
+    geo.Segment:new(p4, p1)
+  }
+end
+
 
 ----------------------
 -- ABSTRACT METHODS --

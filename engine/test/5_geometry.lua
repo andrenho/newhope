@@ -1,5 +1,5 @@
 --
--- Chunk 5
+-- Chunk 5 - Geometry
 --
 
 local function __create_shapes()
@@ -64,6 +64,7 @@ end
 
 function test_PolygonIntersect()
   local p, line1, line2, polygon1, polygon2 = __create_shapes()
+  assert(polygon1:intersect(polygon1))
   assert(polygon1:intersect(polygon2))
 end
 
