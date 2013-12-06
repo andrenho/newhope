@@ -13,21 +13,21 @@ end
 -- Return the car polygon
 -- 
 function Car:polygon()
-  local dir_rad = self.direction * math.pi / 180.0
+  local dir_rad = (self.direction+90) * math.pi / 180.0
   local sw = self.model.w/2
   local sh = self.model.h/2
   local p1 = geo.Point:new(
-      (-sw/2 * math.cos(dir_rad)) - (-sh/2 * math.sin(dir_rad)) + self.x,
-      (-sw/2 * math.sin(dir_rad)) + (-sh/2 * math.cos(dir_rad)) + self.y)
+      (-sw * math.cos(dir_rad)) - (-sh * math.sin(dir_rad)) + self.x,
+      (-sw * math.sin(dir_rad)) + (-sh * math.cos(dir_rad)) + self.y)
   local p2 = geo.Point:new(
-      ( sw/2 * math.cos(dir_rad)) - (-sh/2 * math.sin(dir_rad)) + self.x,
-      ( sw/2 * math.sin(dir_rad)) + (-sh/2 * math.cos(dir_rad)) + self.y)
+      ( sw * math.cos(dir_rad)) - (-sh * math.sin(dir_rad)) + self.x,
+      ( sw * math.sin(dir_rad)) + (-sh * math.cos(dir_rad)) + self.y)
   local p3 = geo.Point:new(
-      ( sw/2 * math.cos(dir_rad)) - ( sh/2 * math.sin(dir_rad)) + self.x,
-      ( sw/2 * math.sin(dir_rad)) + ( sh/2 * math.cos(dir_rad)) + self.y)
+      ( sw * math.cos(dir_rad)) - ( sh * math.sin(dir_rad)) + self.x,
+      ( sw * math.sin(dir_rad)) + ( sh * math.cos(dir_rad)) + self.y)
   local p4 = geo.Point:new(
-      (-sw/2 * math.cos(dir_rad)) - ( sh/2 * math.sin(dir_rad)) + self.x,
-      (-sw/2 * math.sin(dir_rad)) + ( sh/2 * math.cos(dir_rad)) + self.y)
+      (-sw * math.cos(dir_rad)) - ( sh * math.sin(dir_rad)) + self.x,
+      (-sw * math.sin(dir_rad)) + ( sh * math.cos(dir_rad)) + self.y)
   return geo.Polygon:new {
     geo.Segment:new(p1, p2),
     geo.Segment:new(p2, p3),

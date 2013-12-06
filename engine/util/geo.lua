@@ -89,9 +89,12 @@ function Polygon:new(lines)
 end
 
 function Polygon:intersect(polygon)
+  print(self:outer_rectangle())
+  print(polygon:outer_rectangle())
   if self:__rect_intersect(polygon) then
     for _,line_a in ipairs(self.lines) do
       for _,line_b in ipairs(polygon.lines) do
+        print(line_a, '--', line_b)
         if line_a:intersect(line_b) then return true end
       end
     end

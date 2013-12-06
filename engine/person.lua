@@ -166,8 +166,37 @@ function Person:__can_move(fx, fy)
     end
   end
 
+  -- check if there's a car on the way
+  if self:__intersect_car(fx, fy) then
+    return false
+    -- TODO - enter in the car
+  end
+
   -- ok, can move
   return true
+end
+
+
+-- 
+-- Check if the person intersects with a car
+--
+function Person:__intersect_car(fx, fy)
+  local p1 = geo.Point:new(fx - 0.5, fy - 0.5)
+  local p2 = geo.Point:new(fx + 0.5, fy - 0.5)
+  local p3 = geo.Point:new(fx + 0.5, fy + 0.5)
+  local p4 = geo.Point:new(fx - 0.5, fy + 0.5)
+  local mypoly = geo.Polygon:new {
+    geo.Segment:new(p1, p2),
+    geo.Segment:new(p2, p3),
+    geo.Segment:new(p3, p4),
+    geo.Segment:new(p4, p1)
+  }
+  for _,car in ipairs(world:cars_in_area(fx-20, fy-20, fx+20, fy+20)) do
+    if car:polygon():intersect(mypoly) then 
+      return car
+    end
+  end
+  return nil
 end
 
 

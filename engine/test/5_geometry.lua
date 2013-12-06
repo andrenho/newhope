@@ -62,10 +62,27 @@ function test_SegmentIntersect()
   assert(not l1:intersect(l3))
 end
 
+function test_SegmentIntersect2()
+  local p1, p2, p3, p4 = geo.Point:new(8,11), geo.Point:new(12,11),
+                         geo.Point:new(9,10.5), geo.Point:new(9,11.5)
+  assert(geo.Segment:new(p1,p2):intersect(geo.Segment:new(p3,p4)))
+end
+
 function test_PolygonIntersect()
   local p, line1, line2, polygon1, polygon2 = __create_shapes()
   assert(polygon1:intersect(polygon1))
   assert(polygon1:intersect(polygon2))
+end
+
+function test_PolygonIntersect2()
+  local pa1, pa2, pa3, pa4 = geo.Point:new(12,9), geo.Point:new(12,11),
+                             geo.Point:new(8,11), geo.Point:new(8,9)
+  local pb1, pb2, pb3, pb4 = geo.Point:new(9,10.5), geo.Point:new(10,10.5),
+                             geo.Point:new(10,11.5), geo.Point:new(9,11.5)
+  local p1 = geo.Polygon:new { geo.Segment:new(pa1, pa2), geo.Segment:new(pa2, pa3), geo.Segment:new(pa3, pa4), geo.Segment:new(pa4, pa1) }
+  local p2 = geo.Polygon:new { geo.Segment:new(pb1, pb2), geo.Segment:new(pb2, pb3), geo.Segment:new(pb3, pb4), geo.Segment:new(pb4, pb1) }
+  assert(p1:intersect(p2))
+  assert(p2:intersect(p1))
 end
 
 -- vim: ts=2:sw=2:sts=2:expandtab

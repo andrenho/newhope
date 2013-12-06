@@ -21,16 +21,18 @@ end
 local errors, count = {}, 0
 for name,fct in pairs(_G) do
   if name:sub(1, 5) == 'test_' then
-    count = count + 1
-    setup()
-    local ok, msg = pcall(fct)
-    if ok then
-      io.write('.')
-    else
-      errors[#errors+1] = '[' .. name .. '] ' .. msg
-      if msg:find('assertion failed') then io.write('F') else io.write('E') end
+    if not arg[2] or name == 'test_'..arg[2] then
+      count = count + 1
+      setup()
+      local ok, msg = pcall(fct)
+      if ok then
+        io.write('.')
+      else
+        errors[#errors+1] = '[' .. name .. '] ' .. msg
+        if msg:find('assertion failed') then io.write('F') else io.write('E') end
+      end
+      teardown()
     end
-    teardown()
   end
 end
 

@@ -12,7 +12,7 @@ function World:new(w, h)
   self.w = w
   self.h = h
   self.talk_queue = TalkQueue:new()
-  self.player = Player:new(8, 8)
+  self.player = Player:new(7, 7)
   self.people = { self.player }
   self.cars = { Car:new(10, 10, CarModel.REGULAR) }
   self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }

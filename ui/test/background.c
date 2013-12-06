@@ -137,9 +137,12 @@ static void bg_draw_car(Car* c)
 	// body
 	SDL_Rect rp;
 	resources_car_rect(c, &rp);
-	SDL_Rect rd = { .x = (c->x * TILE_W) - ui.rx - TILE_W/2, 
-		        .y = (c->y * TILE_H) - ui.ry - TILE_H/2,
+	//printf("[%f %f %f %f]\n", c->x, c->y, c->w, c->h);
+	SDL_Rect rd = { .x = ((c->x - c->w/2) * TILE_W) - ui.rx,
+		        .y = ((c->y - c->h/2) * TILE_H) - ui.ry,
 			.w = TILE_W * c->w, .h = TILE_H * c->h };
+	//printf("--> %f %f %f %f\n", (double)rd.x/TILE_W, (double)rd.y/TILE_H, 
+	//		(double)rd.w/TILE_W, (double)rd.h/TILE_H);
 	SDL_RenderCopyEx(bg.ren, sprites, &rp, &rd, c->direction * 180 / M_PI + 90,
 			NULL, SDL_FLIP_NONE);
 }

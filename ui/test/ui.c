@@ -19,6 +19,7 @@ static bool ui_sdl_init();
 static void ui_sdl_end();
 static void ui_center_player();
 static void ui_keyboard_event(SDL_KeyboardEvent k);
+static void ui_mouse_press(SDL_MouseButtonEvent m);
 
 // create the UI object and initialize the user interface
 bool ui_init()
@@ -67,6 +68,9 @@ void ui_do_events()
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			ui_keyboard_event(e.key);
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			ui_mouse_press(e.button);
 			break;
 		case SDL_WINDOWEVENT:
 			if(e.window.event == SDL_WINDOWEVENT_RESIZED) {
@@ -310,4 +314,10 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 	} else {
 		if_player_move(0, 0);
 	}
+}
+
+
+static void ui_mouse_press(SDL_MouseButtonEvent m)
+{
+	printf("%f %f\n", ((double)m.x + ui.rx) / TILE_W, ((double)m.y + ui.ry) / TILE_H);
 }
