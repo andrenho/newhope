@@ -37,8 +37,10 @@ package util {
     class Point
     class Segment
     class Polygon
+    class Rectangle
     Segment --> "2" Point: p1, p2
     Polygon --> "*" Segment: lines
+    Polygon --> "1" Rectangle: outer_rectangle()
   }
 }
 
@@ -175,8 +177,13 @@ class Segment {
 class Polygon {
   +new(lines)
   +intersect(other)
-  +outer_rectangle()
   +points()
+}
+
+class Rectangle {
+  +x,y,w,h
+  +new(x,y,w,h)
+  +intersect(other)
 }
 
 @enduml

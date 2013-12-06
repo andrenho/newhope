@@ -6,7 +6,7 @@ World.__index = World
 -- 
 function World:new(w, h)
   if #callback.missing > 0 then 
-    error('Not all callbacks were installed! Missing: ' .. table.concat(callback.missing, ', '))
+    error('Not all callbacks were installed! Missing: '..table.concat(callback.missing, ', '))
   end
   local self = setmetatable({}, World)
   self.w = w

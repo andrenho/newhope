@@ -77,6 +77,40 @@ function Segment:__tostring()
   return ('[Segment %s %s]'):format(self.p1, self.p2)
 end
 
+---------------------- RECTANGLE ----------------------
+local Rectangle = {}
+Rectangle.__index = Rectangle
+
+function Rectangle:new(x, y, w, h)
+  local self = setmetatable({}, Rectangle)
+  self.x, self.y, self.w, self.h = x, y, w, h
+  return self
+end
+
+function Rectangle:intersect(other, reverse)
+  local points = {
+    geo.Point:new(self.x, self.y), geo.Point:new(self.x+self.w, self.y),
+    geo.Point:new(self.x+self.w, self.y+self.h), geo.Point:new(self.x+self.w, self.y+self.h)
+  }
+  for _,pt in ipairs(points) do
+    if other:contains_point(pt) then return true end
+  end
+  if not reverse then 
+    return other:intersect(self, true)
+  else
+    return false
+  end
+end
+
+function Rectangle:contains_point(p)
+  return (p.x >= self.x and p.x < self.x+self.w) and 
+         (p.y >= self.y and p.y < self.y+self.h)
+end
+
+function Rectangle:__tostring()
+  return ('[Rect %0.2f %0.2f %0.2f %0.2f]'):format(self.x, self.y, self.w, self.h)
+end
+
 ---------------------- POLYGON ------------------------
 
 local Polygon = {}
@@ -89,12 +123,9 @@ function Polygon:new(lines)
 end
 
 function Polygon:intersect(polygon)
-  print(self:outer_rectangle())
-  print(polygon:outer_rectangle())
-  if self:__rect_intersect(polygon) then
+  if self:outer_rectangle():intersect(polygon:outer_rectangle()) then
     for _,line_a in ipairs(self.lines) do
       for _,line_b in ipairs(polygon.lines) do
-        print(line_a, '--', line_b)
         if line_a:intersect(line_b) then return true end
       end
     end
@@ -102,17 +133,12 @@ function Polygon:intersect(polygon)
   return false
 end
 
-function Polygon:__rect_intersect(polygon)
-  local a, b = self:outer_rectangle(), polygon:outer_rectangle()
-  return (math.abs(a.x - b.x) * 2 < (a.w + b.w)) and
-         (math.abs(a.y - b.y) * 2 < (a.h + b.h))
-end
-
 function Polygon:outer_rectangle()
-  local rect = {
-    x = funct.min(funct.map(self:points(), function(p) return p.x end)),
-    y = funct.min(funct.map(self:points(), function(p) return p.y end)),
-  }
+  local rect = Rectangle:new(
+    funct.min(funct.map(self:points(), function(p) return p.x end)),
+    funct.min(funct.map(self:points(), function(p) return p.y end)),
+    0, 0
+  )
   rect.w = funct.max(funct.map(self:points(), function(p) return p.x end)) - rect.x
   rect.h = funct.max(funct.map(self:points(), function(p) return p.y end)) - rect.y
   return rect
