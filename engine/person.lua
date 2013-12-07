@@ -33,10 +33,17 @@ end
 -- One frame of the game. Will move if speed != 0.
 --
 function Person:step()
+  -- if it's in a car, do nothing
+  if self.in_car then
+    return
+  end
+
+  -- decrease 'incommunicable' by 1 (avoid repeatedly bumping and talking)
   if self.__incommunicable > 0 then 
     self.__incommunicable = self.__incommunicable - 1 
   end
 
+  -- move
   if self.__speed ~= 0 then 
     self:__move() 
   end
@@ -68,6 +75,25 @@ function Person:polygon()
     geo.Segment:new(p4, p1)
   }
 end
+
+-- 
+-- Get ownership of a car
+--
+function Person:acquire_car(car)
+  car.owner = self
+  self.car = car
+end
+
+--
+-- Exit car
+-- 
+function Person:exit_car()
+  self.in_car = false
+  local fx = self.x + funct.max{self.car.model.w/2, self.car.model.h/2} + 0.5
+  while not world:tile_walkable(fx, self.y) do fx = fx + 1 end
+  self.x = fx
+end
+
 
 
 ----------------------
@@ -110,6 +136,8 @@ function Person:__init(x, y)
   self.__speed = 0
   self.__id = Person.counter
   self.__incommunicable = 0
+  self.car = nil
+  self.in_car = false
   Person.counter = Person.counter + 1
   return self
 end
@@ -167,9 +195,11 @@ function Person:__can_move(fx, fy)
   end
 
   -- check if there's a car on the way
-  if self:__intersect_car(fx, fy) then
-    return false
-    -- TODO - enter in the car
+  local car = self:__intersect_car(fx, fy)
+  if car then
+    -- check for my car
+    if self.car == car then self:__enter_car() end
+    return false -- don't move
   end
 
   -- ok, can move
@@ -197,6 +227,18 @@ function Person:__intersect_car(fx, fy)
     end
   end
   return nil
+end
+
+
+-- 
+-- Enter in a car
+--
+function Person:__enter_car()
+  assert(self.car)
+  self.in_car = true
+  self.x = self.car.x
+  self.y = self.car.y
+  self.direction = self.car.direction
 end
 
 

@@ -21,6 +21,7 @@ static void if_car_on_stack(Car* car);
 extern CALLBACK callbacks;
 
 bool if_reload_engine;
+CarMovement last_mov;
 
 /*
  * INITIALIZATION
@@ -111,6 +112,52 @@ void if_player_move(int speed, double direction)
 		return;
 
 	lua_pop(L, 1);
+
+	check_stack();
+}
+
+
+void if_player_exit_car()
+{
+	check_stack();
+
+	LUA_PUSH_PLAYER();
+	LUA_PUSH_METHOD("exit_car");
+	if_call(1, 0);
+	lua_pop(L, 1);
+
+	check_stack();
+}
+
+
+void if_player_car_movement(bool accelerate, bool brk, bool left, bool right)
+{
+	// check if there's a difference between current and last
+	if(accelerate == last_mov.accelerate &&
+	   brk == last_mov.brk &&
+	   left == last_mov.brk &&
+	   right == last_mov.brk) {
+		return;
+	}
+
+	// prepare last movement structure
+	last_mov.accelerate = accelerate;
+	last_mov.brk = brk;
+	last_mov.left = left;
+	last_mov.right = right;
+
+	// sanity check
+	check_stack();
+
+	// change the movement structure
+	LUA_PUSH_PLAYER();
+	LUA_PUSH_MEMBER("car");
+	LUA_PUSH_MEMBER("movement");
+	LUA_SET_FIELD(accelerate, "accelerate", boolean);
+	LUA_SET_FIELD(brk, "breaking", boolean);
+	LUA_SET_FIELD(left, "left", boolean);
+	LUA_SET_FIELD(right, "right", boolean);
+	lua_pop(L, 3);
 
 	check_stack();
 }
@@ -221,6 +268,23 @@ int if_cars_visible(int x1, int y1, int x2, int y2, Car** cars)
 }
 
 
+bool if_player_in_car()
+{
+	bool in_car = false;
+
+	check_stack();
+
+	LUA_PUSH_PLAYER();
+	LUA_FIELD(in_car, "in_car", boolean);
+	lua_pop(L, 1);
+
+	check_stack();
+	return in_car;
+}
+
+/*
+ * LUA helper methods
+ */
 int if_wrap(char* str, int columns, char*** ret)
 {
 	check_stack();

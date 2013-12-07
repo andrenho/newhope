@@ -12,6 +12,9 @@ Building -- enum BuildingType
 Person <|-- Player
 Person <|-- Shopkeeper
 
+Person --> "1" Car : car
+Car --> "1" Person : owner
+
 package buildinglayout <<Rect>> {
   enum 0_1
 }
@@ -66,6 +69,7 @@ abstract class Person {
   +x, y
   +image
   +direction
+  +in_car
   #__speed
   +turn_to(dir)
   +change_speed(sp)
@@ -73,6 +77,8 @@ abstract class Person {
   +step()
   +can_talk()
   +polygon()
+  +acquire_car(car)
+  +exit_car()
   #{abstract} type()
   #{abstract} __respond()
   #__init(x,y)
@@ -93,6 +99,7 @@ class Shopkeeper {
 }
 
 class Car {
+  +x,y
   +new(x,y,model)
   +step()
   +polygon()

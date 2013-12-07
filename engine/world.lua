@@ -15,6 +15,7 @@ function World:new(w, h)
   self.player = Player:new(7, 7)
   self.people = { self.player }
   self.cars = { Car:new(10, 10, CarModel.REGULAR) }
+  self.player:acquire_car(self.cars[1])
   self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
   self.predefined_tiles = {}
   self:__add_people_to_cities()
@@ -71,7 +72,10 @@ end
 -- return a list of people among the tiles
 --
 function World:people_in_area(x1, y1, x2, y2)
-  local cond = function(p) return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2) end
+  local cond = function(p) 
+                 return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2 
+                         and not p.in_car)
+               end
   return funct.filter(self.people, cond)
 end
 

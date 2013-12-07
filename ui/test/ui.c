@@ -295,24 +295,38 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 
 	// check for moving keys
 	const uint8_t* s = SDL_GetKeyboardState(NULL);
-	if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_LEFT]) {
-		if_player_move(2, 225);
-	} else if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_RIGHT]) {
-		if_player_move(2, 315);
-	} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {
-		if_player_move(2, 135);
-	} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_RIGHT]) {
-		if_player_move(2, 45);
-	} else if(s[SDL_SCANCODE_DOWN]) {
-		if_player_move(2, 270);
-	} else if(s[SDL_SCANCODE_UP]) {
-		if_player_move(2, 90);
-	} else if(s[SDL_SCANCODE_LEFT]) {
-		if_player_move(2, 180);
-	} else if(s[SDL_SCANCODE_RIGHT]) {
-		if_player_move(2, 0);
+	
+	// person without a car
+	if(!if_player_in_car())
+	{
+		if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_LEFT]) {
+			if_player_move(2, 225);
+		} else if(s[SDL_SCANCODE_DOWN] && s[SDL_SCANCODE_RIGHT]) {
+			if_player_move(2, 315);
+		} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_LEFT]) {
+			if_player_move(2, 135);
+		} else if(s[SDL_SCANCODE_UP] && s[SDL_SCANCODE_RIGHT]) {
+			if_player_move(2, 45);
+		} else if(s[SDL_SCANCODE_DOWN]) {
+			if_player_move(2, 270);
+		} else if(s[SDL_SCANCODE_UP]) {
+			if_player_move(2, 90);
+		} else if(s[SDL_SCANCODE_LEFT]) {
+			if_player_move(2, 180);
+		} else if(s[SDL_SCANCODE_RIGHT]) {
+			if_player_move(2, 0);
+		} else {
+			if_player_move(0, 0);
+		}
 	} else {
-		if_player_move(0, 0);
+		if(s[SDL_SCANCODE_E]) {
+			if_player_exit_car();
+		}
+		if_player_car_movement(
+				s[SDL_SCANCODE_UP],
+				s[SDL_SCANCODE_DOWN],
+				s[SDL_SCANCODE_LEFT],
+				s[SDL_SCANCODE_RIGHT]);
 	}
 }
 

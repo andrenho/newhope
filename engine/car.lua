@@ -6,6 +6,13 @@ function Car:new(x, y, model)
   self.x, self.y = x, y
   self.model = model
   self.direction = 0
+  self.owner = nil
+  self.movement = {
+    accelerate = false,
+    breaking = false,
+    left = false,
+    right = false
+  }
   return self
 end
 
@@ -37,6 +44,7 @@ function Car:polygon()
 end
 
 function Car:step()
+  print(self.movement.accelerate)
   -- TODO
 end
 
@@ -45,7 +53,6 @@ end
 -------------
 
 function Car:__tostring()
-  return '[Car]'
 end
 
 return Car
