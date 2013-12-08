@@ -293,6 +293,12 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 		if_reload_engine = true;
 	}
 
+	// CTRL+D - output debug information
+	if(k.type == SDL_KEYDOWN && k.keysym.sym == SDLK_d && 
+			k.keysym.mod & KMOD_CTRL) {
+		if_debug();
+	}
+
 	// check for moving keys
 	const uint8_t* s = SDL_GetKeyboardState(NULL);
 	

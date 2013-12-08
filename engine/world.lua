@@ -120,6 +120,14 @@ function World:tile_walkable(x, y)
 end
 
 
+--
+-- Print some debug information
+function World:debug()
+  print(self.player:polygon())
+  print(self.cars[1]:polygon())
+end
+
+
 -------------
 -- PRIVATE --
 -------------

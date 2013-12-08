@@ -163,6 +163,19 @@ void if_player_car_controls(bool accelerate, bool brk, double left, double right
 }
 
 
+void if_debug()
+{
+	check_stack();
+
+	LUA_PUSH_WORLD();
+	LUA_PUSH_METHOD("debug");
+	if_call(1, 0);
+	lua_pop(L, 1);
+
+	check_stack();
+}
+
+
 /*
  * QUERIES
  */

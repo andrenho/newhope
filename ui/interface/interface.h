@@ -38,12 +38,13 @@ void if_init_world(int w, int h);
 void if_finish();
 
 //
-// requests (player)
+// requests
 //
 void if_next_frame();
 void if_player_move(int speed, double direction);
 void if_player_exit_car();
 void if_player_car_controls(bool accelerate, bool brk, double left, double right);
+void if_debug();
 
 //
 // queries
