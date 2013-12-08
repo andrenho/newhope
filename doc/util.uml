@@ -1,0 +1,72 @@
+@startuml
+
+package util {
+  class funct << (M,orchid) >>
+  class modules << (M,orchid) >>
+  class strict << (M,orchid) >>
+  class string << (M,orchid) >>
+  class table << (M,orchid) >>
+}
+
+package geo {
+  class Point
+  class Segment
+  class Polygon
+  class Rectangle
+  Segment --> "2" Point: p1, p2
+  Polygon --> "*" Segment: lines
+  Polygon --> "1" Rectangle: outer_rectangle()
+}
+
+class Callback {
+  +[fct_name](parameters)
+  +new()
+  +install(name, fct)
+  +{static} missing
+}
+
+class funct {
+  +filter(table,func)
+  +map(table,func)
+  +min(table,func)
+  +max(table,func)
+}
+
+class modules {
+  +require(mod)
+}
+
+class string {
+  +wrap(columns)
+}
+
+class table {
+  +find(element)
+  +shallow_copy(tbl)
+}
+
+class Point {
+  +x,y
+  +new(x,y)
+  -__eq(other)
+}
+
+class Segment {
+  +new(p1,p2)
+  +intersect(other)
+  -__eq(other)
+}
+
+class Polygon {
+  +new(lines)
+  +intersect(other)
+  +points()
+}
+
+class Rectangle {
+  +x,y,w,h
+  +new(x,y,w,h)
+  +intersect(other)
+}
+
+@enduml

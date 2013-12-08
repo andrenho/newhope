@@ -130,7 +130,7 @@ void if_player_exit_car()
 }
 
 
-void if_player_car_movement(bool accelerate, bool brk, bool left, bool right)
+void if_player_car_controls(bool accelerate, bool brk, double left, double right)
 {
 	// check if there's a difference between current and last
 	if(accelerate == last_mov.accelerate &&
@@ -152,11 +152,11 @@ void if_player_car_movement(bool accelerate, bool brk, bool left, bool right)
 	// change the movement structure
 	LUA_PUSH_PLAYER();
 	LUA_PUSH_MEMBER("car");
-	LUA_PUSH_MEMBER("movement");
+	LUA_PUSH_MEMBER("controls");
 	LUA_SET_FIELD(accelerate, "accelerate", boolean);
 	LUA_SET_FIELD(brk, "breaking", boolean);
-	LUA_SET_FIELD(left, "left", boolean);
-	LUA_SET_FIELD(right, "right", boolean);
+	LUA_SET_FIELD(left, "left", number);
+	LUA_SET_FIELD(right, "right", number);
 	lua_pop(L, 3);
 
 	check_stack();
@@ -394,8 +394,8 @@ static void if_car_on_stack(Car* car)
 	LUA_FIELD(car->y, "y", number);
 	LUA_FIELD(car->direction, "direction", number);
 
-	// get model
-	lua_pushstring(L, "model");
+	// get car attributes
+	lua_pushstring(L, "attrib");
 	lua_gettable(L, -2);
 	LUA_FIELD(car->model, "id", integer);
 	LUA_FIELD(car->w, "w", number);

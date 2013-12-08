@@ -88,10 +88,14 @@ end
 -- Exit car
 -- 
 function Person:exit_car()
+  local fx = self.x + funct.max{self.car.attrib.w/2, self.car.attrib.h/2} + 0.5
+  while not world:tile_walkable(fx, self.y) do 
+    fx = fx + 1 
+    if fx > 5 then return false end
+  end
   self.in_car = false
-  local fx = self.x + funct.max{self.car.model.w/2, self.car.model.h/2} + 0.5
-  while not world:tile_walkable(fx, self.y) do fx = fx + 1 end
   self.x = fx
+  return true
 end
 
 

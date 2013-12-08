@@ -24,8 +24,8 @@ typedef struct Car {
 typedef struct CarMovement {
 	bool accelerate;
 	bool brk;
-	bool left;
-	bool right;
+	double left;
+	double right;
 } CarMovement;
 
 extern bool if_reload_engine;
@@ -43,7 +43,7 @@ void if_finish();
 void if_next_frame();
 void if_player_move(int speed, double direction);
 void if_player_exit_car();
-void if_player_car_movement(bool accelerate, bool brk, bool left, bool right);
+void if_player_car_controls(bool accelerate, bool brk, double left, double right);
 
 //
 // queries

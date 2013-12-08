@@ -322,11 +322,11 @@ static void ui_keyboard_event(SDL_KeyboardEvent k)
 		if(s[SDL_SCANCODE_E]) {
 			if_player_exit_car();
 		}
-		if_player_car_movement(
+		if_player_car_controls(
 				s[SDL_SCANCODE_UP],
 				s[SDL_SCANCODE_DOWN],
-				s[SDL_SCANCODE_LEFT],
-				s[SDL_SCANCODE_RIGHT]);
+				s[SDL_SCANCODE_LEFT] ? 1.0 : 0.0,
+				s[SDL_SCANCODE_RIGHT] ? 1.0 : 0.0);
 	}
 }
 

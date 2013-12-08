@@ -6,7 +6,6 @@
 World  -->  "*" Person : people
 World  -->  "*" City : cities
 World  -->  "*" Car : cars
-World  -->  "1" TalkQueue: talk_queue
 City   -->  "*" Building : __buildings
 Building -- enum BuildingType
 Person <|-- Player
@@ -16,36 +15,21 @@ Person --> "1" Car : car
 Car --> "1" Person : owner
 
 package buildinglayout <<Rect>> {
-  enum 0_1
+  class 0_1 << (S,lavender) >>
 }
-Building -- buildinglayout
+Building --> buildinglayout
 
 package citylayout <<Rect>> {
-  enum layout_1
+  class layout_1 << (S,lavender) >>
 }
-City -- citylayout
+City --> citylayout
 citylayout .. enum BuildingType
 
-Car *-- CarModel
+Car *-- CarModel : __model
+Car *-- CarControls : controls
+Car *-- CarPhysics : physics
 
 World *-- enum Block
-
-package util {
-  class funct << (M,orchid) >>
-  class modules << (M,orchid) >>
-  class strict << (M,orchid) >>
-  class string << (M,orchid) >>
-  class table << (M,orchid) >>
-  package geo {
-    class Point
-    class Segment
-    class Polygon
-    class Rectangle
-    Segment --> "2" Point: p1, p2
-    Polygon --> "*" Segment: lines
-    Polygon --> "1" Rectangle: outer_rectangle()
-  }
-}
 
 '
 ' classes definitions
@@ -100,14 +84,37 @@ class Shopkeeper {
 
 class Car {
   +x,y
+  +attrib
+  +direction
   +new(x,y,model)
   +step()
   +polygon()
 }
 
-enum CarModel {
-  . . .
+class CarControls << (S,lavender) >> {
+  +accelerate
+  +breaking
+  +left
+  +right
 }
+hide CarControls methods
+
+class CarPhysics << (S,lavender) >> {
+  +speed
+  +front_wheel_angle
+  +rear_wheel_angle
+  +traction
+}
+hide CarPhysics methods
+
+class CarModel << (S,lavender) >> {
+  +id
+  +w,h
+  +gears
+  +max_speed_gears
+  +max_steering_angle
+}
+hide CarModel methods
 
 class City {
   +x, y
@@ -141,56 +148,5 @@ hide enum layout_1 members
 hide enum layout_1 methods
 hide enum 0_1 members
 hide enum 0_1 methods
-
-class Callback {
-  +[fct_name](parameters)
-  +new()
-  +install(name, fct)
-  +{static} missing
-}
-
-class funct {
-  +filter(table,func)
-  +map(table,func)
-  +min(table,func)
-  +max(table,func)
-}
-
-class modules {
-  +require(mod)
-}
-
-class string {
-  +wrap(columns)
-}
-
-class table {
-  +find(element)
-  +shallow_copy(tbl)
-}
-
-class Point {
-  +x,y
-  +new(x,y)
-  -__eq(other)
-}
-
-class Segment {
-  +new(p1,p2)
-  +intersect(other)
-  -__eq(other)
-}
-
-class Polygon {
-  +new(lines)
-  +intersect(other)
-  +points()
-}
-
-class Rectangle {
-  +x,y,w,h
-  +new(x,y,w,h)
-  +intersect(other)
-}
 
 @enduml
