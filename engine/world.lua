@@ -103,17 +103,10 @@ end
 --
 -- return if this tile can be walked by a person
 --
-World.crossable = { Block.NOTHING, Block.DOOR_OPEN }
 function World:tile_walkable(x, y)
   local st = self:tiles(x, y)
-  if st[1] == Block.WATER or st[1] == Block.NOTHING then
-    return false
-  end
-  for _, cblock in ipairs(World.crossable) do
-    if #st >= 2 and st[2] == cblock then st[2] = Block.NOTHING end
-    if #st >= 3 and st[3] == cblock then st[3] = Block.NOTHING end
-  end
-  if #st > 1 and (st[2] ~= Block.NOTHING or st[3] ~= Block.NOTHING) then
+  if st[1].friction == math.huge 
+        or (st[2] and not st[2].immaterial) or (st[3] and not st[3].immaterial) then
     return false
   end
   return true

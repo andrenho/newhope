@@ -45,7 +45,7 @@ newhope: ${OBJ}
 
 block.h: ../../engine/block.lua
 	@echo SH -o $@
-	./parse_blocks < $< > $@
+	./parse_blocks > $@
 
 docs: doc/classes.txt
 	@echo plantuml $<

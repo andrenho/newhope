@@ -213,8 +213,11 @@ uint8_t if_world_tiles(int x, int y, BLOCK stack[10])
 	int n = luaL_len(L, -1);
 	for(int i=0; i<n; i++) {
 		lua_rawgeti(L, -1, i+1);
-		stack[i] = lua_tonumber(L, -1);
+		LUA_FIELD(stack[i], "id", number);
 		lua_pop(L, 1);
+		if(n == 9) {
+			break;
+		}
 	}
 	lua_pop(L, 2);
 

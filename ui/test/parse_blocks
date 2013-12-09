@@ -1,20 +1,7 @@
 #!/usr/bin/env lua
 
-print('#ifndef BLOCKS_H')
-print('#define BLOCKS_H')
-print('')
-
-while true do
-  local line = io.read("*l")
-  if line == '}' then break end
-  
-  if line:find('=') then
-    local df, value = line:match("(%S+)%s+=%s(%S+)")
-    print('#define ' .. df .. ' ' .. value:sub(0, -2))
-  end
-end
-
-print('')
-print('#endif')
+package.path = ';;../../engine/?.lua'
+require 'block'
+block_output_c()
 
 -- vim: ts=2:sw=2:sts=2:expandtab

@@ -14,11 +14,9 @@ function Car:new(x, y, model)
     gear = 1,
   }
   self.physics = {
-    rpm = 0,
     speed = 0,
     front_wheel_angle = 0,
     rear_wheel_angle = 0,
-    traction = true,
   }
   self.direction = 0
   self:__calculate_attributes()
@@ -81,14 +79,15 @@ function Car:__prepare_physics()
   local angle_perc = (self.controls.left - self.controls.right) * self.attrib.max_steering_angle
   self.physics.front_wheel_angle = self.direction + angle_perc
   self.physics.rear_wheel_angle = self.direction
-  if self.accelerate and self.physics.rpm < 5 then
-    self.physics.rpm = self.physics.rpm + 0.1
+  local traction = 0
+  if self.controls.accelerate then
+    traction = self.speed * 1 -- TODO (engineforce?)
   end
   self.speed = self:__calculate_speed()
 end
 
 function Car:__calculate_speed()
-  -- TODO - simple formula, make it sophisticated
+  local traction = self.speed * 
   error('TODO')
 end
 
