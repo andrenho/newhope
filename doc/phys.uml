@@ -3,6 +3,7 @@
 package "geo" {
 	Shape --> "*" Point : points
 	Shape <|-- Rectangle
+	Segment --> "2" Point: p1, p2
 }
 
 package "phys" {
@@ -22,11 +23,18 @@ class Point {
 	-__eq(other)
 }
 
+class Segment {
+	+new(p1,p2)
+	+intersect(other)
+	-__eq(other)
+}
+
 class Shape {
 	+anchor
 	+new(anchor, points)
 	+contains_point(p)
 	+intersect(other)
+	+segments()
 	+outer_rectangle()
 	-__eq(other)
 }

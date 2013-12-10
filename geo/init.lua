@@ -2,6 +2,7 @@ package.path = ';;?.lua;./geo/?.lua;../geo/?.lua'
 
 geo = {
   Point = require('point'),
+  Segment = require('segment'),
   Shape = require('shape'),
   Rectangle = require('rectangle'),
 }
