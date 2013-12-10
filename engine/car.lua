@@ -13,13 +13,8 @@ function Car:new(x, y, model)
     right = 0,
     gear = 1,
   }
-  self.physics = {
-    speed = 0,
-    front_wheel_angle = 0,
-    rear_wheel_angle = 0,
-  }
-  self.direction = 0
   self:__calculate_attributes()
+  self.__physics = CarPhysics:new(self.controls, self.attrib)
   return self
 end
 
@@ -27,7 +22,7 @@ end
 -- Return the car polygon
 -- 
 function Car:polygon()
-  local dir_rad = self.direction * math.pi / 180.0
+  local dir_rad = self.__physics.direction * math.pi / 180.0
   local sw = self.attrib.w/2
   local sh = self.attrib.h/2
   local p1 = geo.Point:new(
@@ -51,15 +46,17 @@ function Car:polygon()
 end
 
 function Car:step()
-  -- speed 0
-  if self.physics.speed == 0 and not self.controls.accelerate then return end
-
-  local fx, fy = self:__next_moving_point()
-  -- TODO - check for collision
-  self.x, self.y = fx, fy
+  -- ask to the physics module calcluate step size and direction, then move
+  local movement_vector = self.__physics:next_frame()
+  local fp = movement_vector:terminal_point(geo.Point:new(self.x, self.y))
+  self.x, self.y = fp.x, fp.y
   if self.owner.in_car then
     self.owner.x, self.owner.y = self.x, self.y
   end
+end
+
+function Car:direction() 
+  return self.__physics.direction 
 end
 
 -------------
@@ -68,27 +65,6 @@ end
 
 function Car:__tostring()
   return '[Car x:' .. self.x .. ' y:' .. self.y .. ']'
-end
-
-function Car:__next_moving_point()
-  self:__prepare_physics()
-  return self.x+0.1, self.y -- TODO
-end
-
-function Car:__prepare_physics()
-  local angle_perc = (self.controls.left - self.controls.right) * self.attrib.max_steering_angle
-  self.physics.front_wheel_angle = self.direction + angle_perc
-  self.physics.rear_wheel_angle = self.direction
-  local traction = 0
-  if self.controls.accelerate then
-    traction = self.speed * 1 -- TODO (engineforce?)
-  end
-  self.speed = self:__calculate_speed()
-end
-
-function Car:__calculate_speed()
-  local traction = self.speed * 
-  error('TODO')
 end
 
 function Car:__calculate_attributes()

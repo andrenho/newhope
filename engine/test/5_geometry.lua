@@ -85,4 +85,16 @@ function test_PolygonIntersect2()
   assert(p2:intersect(p1))
 end
 
+function test_Vector()
+  local p1 = geo.Vector:new(1, 90):terminal_point()
+  print(math.sqrt(2), math.pi/4, p1)
+  assert(p1.x == math.sqrt(2))
+  assert(p1.y == math.pi/4)
+  --[[assert(geo.Vector:new(1, 0) == geo.Vector:new_from_xy(1, 0))
+  print(geo.Vector:new(1, 0) + geo.Vector:new(1, math.pi/2))
+  print(math.sqrt(2), math.pi/4)
+  assert(geo.Vector:new(1, 0) + geo.Vector:new(0, 1) == geo.Vector:new(math.sqrt(2), math.pi/4))
+  ]]
+end
+
 -- vim: ts=2:sw=2:sts=2:expandtab

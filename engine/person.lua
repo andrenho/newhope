@@ -242,7 +242,7 @@ function Person:__enter_car()
   self.in_car = true
   self.x = self.car.x
   self.y = self.car.y
-  self.direction = self.car.direction
+  self.direction = self.car:direction()
 end
 
 

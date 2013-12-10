@@ -27,7 +27,7 @@ citylayout .. enum BuildingType
 
 Car *-- CarModel : __model
 Car *-- CarControls : controls
-Car *-- CarPhysics : physics
+Car *-- CarPhysics : __physics
 
 World -- enum Block
 
@@ -89,6 +89,7 @@ class Car {
   +new(x,y,model)
   +step()
   +polygon()
+  +direction()
 }
 
 class CarControls << (S,lavender) >> {
@@ -99,13 +100,11 @@ class CarControls << (S,lavender) >> {
 }
 hide CarControls methods
 
-class CarPhysics << (S,lavender) >> {
-  +speed
-  +front_wheel_angle
-  +rear_wheel_angle
-  +traction
+class CarPhysics {
+  +direction
+  +new(controls, attributes)
+  +next_frame()
 }
-hide CarPhysics methods
 
 class CarModel << (S,lavender) >> {
   +id
