@@ -1,0 +1,46 @@
+@startuml
+
+package "geo" {
+	Shape --> "*" Point : points
+	Shape <|-- Rectangle
+}
+
+package "phys" {
+	Engine --> Body : bodies
+	Body <-- Shape : shape
+	Vector .. Point
+}
+
+class Point {
+	+x
+	+y
+	+new(x, y)
+	-__eq(other)
+}
+
+class Shape {
+	+anchor
+	+new(anchor, points)
+	+contains_point(p)
+	+intersect(other)
+	+outer_rectangle()
+	-__eq(other)
+}
+
+class Engine {
+	+new()
+	+step()
+	+add_body(body)
+	+remove_body(body)
+}
+
+class Body {
+	+shape
+	+pos
+	+new(pos, shape, mass)
+	+set_forces(forces)
+	+collisions()
+	+step()
+}
+
+@enduml
