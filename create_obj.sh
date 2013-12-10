@@ -17,7 +17,7 @@ function $1:new()
 end
 
 function $1:type()
-  return $1
+  return '$1'
 end
 
 -------------

@@ -6,11 +6,11 @@ function assert_error(expr)
 end
 
 -- load classes
-package.path = ";;../?.lua;./?.lua"
-require('newhope')
+package.path = ";;../?/init.lua;../?.lua;./?.lua"
 
 -- load tests
-require('setup')
+function setup() end ; function teardown() end
+pcall(require, 'setup')
 for filename in io.popen('ls '..(arg[1] or '')..'*.lua'):lines() do
   if filename ~= 'unittest.lua' then
     require(filename:sub(1, #filename-4))

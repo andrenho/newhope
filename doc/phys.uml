@@ -15,6 +15,10 @@ class Point {
 	+x
 	+y
 	+new(x, y)
+	+distance(other)
+	+distance_manhattan(other)
+	+translate(other)
+	+rotate(angle)
 	-__eq(other)
 }
 

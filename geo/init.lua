@@ -1,4 +1,4 @@
-package.path = ';;?.lua;./geo/?.lua'
+package.path = ';;?.lua;./geo/?.lua;../geo/?.lua'
 
 geo = {
   Point = require('point'),
