@@ -47,7 +47,7 @@ int main()
 	add_object(100, 100, 10, 10);
 
 	// initialize physics
-	cpVect gravity = cpv(0, 100);
+	cpVect gravity = cpv(1, 100);
 	cpSpace *space = cpSpaceNew();
 	cpSpaceSetGravity(space, gravity);
 
@@ -63,6 +63,11 @@ int main()
 		cpShapeSetFriction(obj[i]->shape, 0.7);
 		i++;
 	}
+
+	// add obstacles
+	cpShape* obst = cpSegmentShapeNew(space->staticBody, cpv(104, 200), cpv(120, 210), 0);
+	cpShapeSetFriction(obst, 1);
+	cpSpaceAddShape(space, obst);
 
 	// main loop
 	SDL_Event e;
@@ -84,7 +89,7 @@ int main()
 			obj[i]->angle = cpBodyGetAngle(obj[i]->body);
 
 			if(obj[i]->y > 300 && !ok) {
-				cpBodyApplyForce(obj[0]->body, cpv(10, 0), cpv(2, 2));
+				cpBodyApplyImpulse(obj[0]->body, cpv(2, 0), cpv(2, 2));
 				ok = 1;
 			}
 
@@ -99,22 +104,34 @@ int main()
 		SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
 		i = 0;
 		while(obj[i]) {
-			int x1 = -obj[i]->w/2;
-			int y1 = -obj[i]->h/2;
-			int x2 = obj[i]->w/2;
-			int y2 = obj[i]->h/2;
-			int x1h = x1 * cos(obj[i]->angle) - y1 * sin(obj[i]->angle);
-			int y1h = x1 * sin(obj[i]->angle) + y1 * cos(obj[i]->angle);
-			int x2h = x2 * cos(obj[i]->angle) - y2 * sin(obj[i]->angle);
-			int y2h = x2 * sin(obj[i]->angle) + y2 * cos(obj[i]->angle);
+			double sw = obj[i]->w/2;
+			double sh = obj[i]->h/2;
+			double dir_rad = -obj[i]->angle;
+			int p1x = (-sw * sin(dir_rad)) + (-sh * cos(dir_rad)) + obj[i]->x;
+			int p1y = (-sw * cos(dir_rad)) - (-sh * sin(dir_rad)) + obj[i]->y;
+			int p2x = ( sw * sin(dir_rad)) + (-sh * cos(dir_rad)) + obj[i]->x;
+			int p2y = ( sw * cos(dir_rad)) - (-sh * sin(dir_rad)) + obj[i]->y;
+			int p3x = ( sw * sin(dir_rad)) + ( sh * cos(dir_rad)) + obj[i]->x;
+			int p3y = ( sw * cos(dir_rad)) - ( sh * sin(dir_rad)) + obj[i]->y;
+			int p4x = (-sw * sin(dir_rad)) + ( sh * cos(dir_rad)) + obj[i]->x;
+			int p4y = (-sw * cos(dir_rad)) - ( sh * sin(dir_rad)) + obj[i]->y;
 			const SDL_Point pts[] = {
-				(SDL_Point){ obj[i]->x + x1h, obj[i]->y + y1h },
-				(SDL_Point){ obj[i]->x + x2h, obj[i]->y + y1h },
-				(SDL_Point){ obj[i]->x + x2h, obj[i]->y + y2h },
-				(SDL_Point){ obj[i]->x + x1h, obj[i]->y + y2h },
-				(SDL_Point){ obj[i]->x + x1h, obj[i]->y + y1h },
+				(SDL_Point){ p1x, p1y },
+				(SDL_Point){ p2x, p2y },
+				(SDL_Point){ p3x, p3y },
+				(SDL_Point){ p4x, p4y },
+				(SDL_Point){ p1x, p1y },
 			};
 			SDL_RenderDrawLines(ren, &pts, 5);
+
+			const SDL_Point pt2[] = {
+				(SDL_Point){ 104, 200 },
+				(SDL_Point){ 120, 200 },
+				(SDL_Point){ 120, 210 },
+				(SDL_Point){ 104, 210 },
+				(SDL_Point){ 104, 200 },
+			};
+			SDL_RenderDrawLines(ren, &pt2, 5);
 			i++;
 		}
 		SDL_RenderPresent(ren);
