@@ -2,14 +2,9 @@
 
 package "geo" {
 	Shape --> "*" Point : points
-	Shape <|-- Rectangle
 	Segment --> "2" Point: p1, p2
-}
-
-package "phys" {
-	Engine --> Body : bodies
-	Body <-- Shape : shape
 	Vector .. Point
+	Shape --> Rectangle : outer_rectangle()
 }
 
 class Point {
@@ -35,26 +30,41 @@ class Shape {
 	+contains_point(p)
 	+intersect(other)
 	+segments()
-	+outer_rectangle()
 	+translate()
 	+rotate()
 	-__eq(other)
 }
 
-class PhysicsEngine {
-	+new()
-	+step()
-	+add_body(body)
-	+remove_body(body)
+class Rectangle {
+	+x,y,w,h
+	+new(x,y,w,h)
+	+intersect(other)
+	+contains_point(p)
 }
 
-class Body {
-	+shape
-	+pos
-	+new(pos, shape)
-	+add_forces(force, point)
-	+collisions()
-	+step()
+class Vector {
+	+x, y
+	+magnitude, angle
+	+new_mag(magnitude, angle)
+	+new_xy(x, y)
+	-__eq(other)
+	-__add(other)
+}
+
+class funct {
+	+filter(table,func)
+	+map(table,func)
+	+min(table,func)
+	+max(table,func)
+}
+
+class string {
+	+wrap(columns)
+}
+
+class table {
+	+find(element)
+	+shallow_copy(tbl)
 }
 
 @enduml

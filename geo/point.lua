@@ -23,7 +23,11 @@ function Point:distance_manhattan(other)
 end
 
 function Point:translate(other)
-  return geo.Point:new(self.x+other.x, self.y+other.y)
+  if other:type() == 'Point' or other:type() == 'Vector' then
+    return geo.Point:new(self.x+other.x, self.y+other.y)
+  else
+    error('Invalid parameter')
+  end
 end
 
 function Point:rotate(angle)

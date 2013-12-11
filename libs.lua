@@ -1,13 +1,23 @@
 package.path = ';;./?/init.lua;./?.lua;../?/init.lua;../?.lua'
 
-require 'util.strict'
+local loaded = {}
+function my_require(module)
+  if loaded[module] then
+    package.loaded[module] = nil
+  end
+  loaded[module] = true
+  return require(module)
+end
+
+require 'util.strict' -- forbids declaring globals in functions
 
 -- modules
-table = require('util.table')
-funct = require('util.funct')
+table  = my_require('util.table')
+funct  = my_require('util.funct')
+string = my_require('util.string')
 
 -- libraries
-geo = require('geo')
+geo = my_require('geo')
 
 -- classes
 

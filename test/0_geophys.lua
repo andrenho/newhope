@@ -68,4 +68,18 @@ function test_ShapeIntersect2()
   assert(p2:intersect(p1))
 end
 
+function test_Vector()
+  local v1 = geo.Vector:new_mag(1, math.pi/4)
+  local v2 = geo.Vector:new_xy(v1.x, v1.y)
+  assert(v1 == v2)
+  local v3 = geo.Vector:new_xy(5, 5)
+  local v4 = geo.Vector:new_mag(v3.magnitude, v3.angle)
+  assert(v3 == v4)
+  local p = geo.Point:new(1,1)
+  local v = geo.Vector:new_xy(1,1)
+  local p2 = p:translate(v)
+  assert(p2.x == 2)
+  assert(p2.y == 2)
+end
+
 -- vim: ts=2:sw=2:sts=2:expandtab
