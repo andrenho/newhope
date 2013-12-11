@@ -1,10 +1,19 @@
 #!/usr/bin/env lua
 
-package.path = '../../?/init.lua;../../?.lua;;'
+package.path = '../../?/init.lua;../../?.lua;?.lua;;'
 require 'libs'
+local ui = require 'ui'
 
 local world = World:new(20,20)
-local callbacks = {}
+local callbacks = {
+  initialize_ui   = ui.initialize_ui,
+  active          = ui.active,
+  current_time_us = ui.current_time_us,
+  sleep_us        = ui.sleep_us,
+  get_commands    = ui.get_commands,
+  render          = ui.render,
+  window_tiles    = ui.window_tiles,
+}
 local g = game.Game:new(world, callbacks)
 
 g:start()
