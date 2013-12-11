@@ -6,7 +6,8 @@ function assert_error(expr)
 end
 
 -- load classes
-package.path = ";;../?/init.lua;../?.lua;./?.lua"
+package.path = ';;../?.lua;'
+require 'libs'
 
 -- load tests
 function setup() end ; function teardown() end

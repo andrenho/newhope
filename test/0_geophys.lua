@@ -1,5 +1,3 @@
-require 'geo'
-
 function test_PointEquality()
   local p1 = geo.Point:new(3, 4)
   local p2 = geo.Point:new(3, 4)
@@ -37,6 +35,37 @@ function test_ShapeOuterRect()
   assert(rect.y == 0)
   assert(rect.w == 3)
   assert(rect.h == 3)
+end
+
+function test_SegmentIntersect()
+  local p, line1, line2, shape1, shape2 = __create_shapes()
+  local l1, l2, l3 = geo.Segment:new(p[1], p[8]), geo.Segment:new(p[8], p[1]),
+                     geo.Segment:new(p[2], p[6])
+  assert(l1:intersect(l2))
+  assert(not l1:intersect(l3))
+end
+
+function test_SegmentIntersect2()
+  local p1, p2, p3, p4 = geo.Point:new(8,11), geo.Point:new(12,11),
+                         geo.Point:new(9,10.5), geo.Point:new(9,11.5)
+  assert(geo.Segment:new(p1,p2):intersect(geo.Segment:new(p3,p4)))
+end
+
+function test_ShapeIntersect()
+  local p, shape1, shape2 = __create_shapes()
+  assert(shape1:intersect(shape1))
+  assert(shape1:intersect(shape2))
+end
+
+function test_ShapeIntersect2()
+  local pa1, pa2, pa3, pa4 = geo.Point:new(12,9), geo.Point:new(12,11),
+                             geo.Point:new(8,11), geo.Point:new(8,9)
+  local pb1, pb2, pb3, pb4 = geo.Point:new(9,10.5), geo.Point:new(10,10.5),
+                             geo.Point:new(10,11.5), geo.Point:new(9,11.5)
+  local p1 = geo.Shape:new { pa1, pa2, pa3, pa4 }
+  local p2 = geo.Shape:new { pb1, pb2, pb3, pb4 }
+  assert(p1:intersect(p2))
+  assert(p2:intersect(p1))
 end
 
 -- vim: ts=2:sw=2:sts=2:expandtab

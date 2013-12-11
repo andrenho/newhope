@@ -31,15 +31,17 @@ class Segment {
 
 class Shape {
 	+anchor
-	+new(anchor, points)
+	+new(points, anchor)
 	+contains_point(p)
 	+intersect(other)
 	+segments()
 	+outer_rectangle()
+	+translate()
+	+rotate()
 	-__eq(other)
 }
 
-class Engine {
+class PhysicsEngine {
 	+new()
 	+step()
 	+add_body(body)
@@ -49,8 +51,8 @@ class Engine {
 class Body {
 	+shape
 	+pos
-	+new(pos, shape, mass)
-	+set_forces(forces)
+	+new(pos, shape)
+	+add_forces(force, point)
 	+collisions()
 	+step()
 }
