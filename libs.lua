@@ -1,4 +1,4 @@
-package.path = ';;./?/init.lua;./?.lua;../?/init.lua;../?.lua'
+package.path = ';;./?/init.lua;./?.lua;../?/init.lua;../?.lua;../../?/init.lua;../../?.lua'
 
 local loaded = {}
 function my_require(module)
