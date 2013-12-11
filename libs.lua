@@ -1,4 +1,4 @@
-package.path = ';;./?/init.lua;./?.lua;../?/init.lua;../?.lua;../../?/init.lua;../../?.lua'
+--package.path = './?/init.lua;./?.lua;;'
 
 local loaded = {}
 function my_require(module)
@@ -17,8 +17,10 @@ funct  = my_require('util.funct')
 string = my_require('util.string')
 
 -- libraries
-geo = my_require('geo')
+geo  = my_require('geo')
+game = my_require('game')
 
 -- classes
+World   = my_require('world.world')
 
 -- vim: ts=2:sw=2:sts=2:expandtab
