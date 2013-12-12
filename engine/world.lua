@@ -8,16 +8,11 @@ World.W = 100000 -- used for calculations
 -- 
 function World:new()
   local self = setmetatable({}, World)
-  --self.people = { self.player }
-  --self.cars = { Car:new(10, 10, CarModel.REGULAR) }
-  --self.player:acquire_car(self.cars[1])
-  --self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
 
-  --self.people = {}
-  --self.cars = {}
   self.player = Player:new(0, 0)
   self.dynamic_objects = { self.player, }
-  self.cities = {}
+  --self.cities = {}
+  self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
 
   self.predefined_tiles = {}
   self:__add_people_to_cities()

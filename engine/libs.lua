@@ -21,9 +21,14 @@ geo  = my_require('geo')
 game = my_require('game')
 
 -- classes
+Block         = my_require('block')
 World         = my_require('world')
 DynamicObject = my_require('dynamicobject')
 Person        = my_require('person')
 Player        = my_require('player')
+Shopkeeper    = my_require('shopkeeper')
+City          = my_require('city')
+Building      = my_require('building')
+BuildingType  = my_require('buildingtype')
 
 -- vim: ts=2:sw=2:sts=2:expandtab

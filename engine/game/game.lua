@@ -2,6 +2,7 @@ local Game = {}
 Game.__index = Game
 
 world = nil -- global variable world
+callbacks = nil
 
 Game.__required_callbacks = {
   'active',
@@ -19,34 +20,34 @@ Game.__required_callbacks = {
   'window_tiles',
 }
 
-function Game:new(w, callbacks)
+function Game:new(w, cb)
   assert(w:type() == 'World')
   world = w
   local self = setmetatable({}, Game)
-  self.callbacks = self:__check_callbacks(callbacks)
+  callbacks = self:__check_callbacks(cb)
   return self
 end
 
 function Game:start()
-  self.callbacks.initialize_ui()
-  self.callbacks.add_dynamic_objects(world.dynamic_objects)
-  while self.callbacks.active() do
+  callbacks.initialize_ui()
+  callbacks.add_dynamic_objects(world.dynamic_objects)
+  while callbacks.active() do
     -- get current time
-    local nxt = self.callbacks.current_time_ms() + 1000/60
+    local nxt = callbacks.current_time_ms() + 1000/60
     -- advance frame
-    local collisions = self.callbacks.do_physics(world.dynamic_objects)
+    local collisions = callbacks.do_physics(world.dynamic_objects)
     world:step(collisions)
     -- draw screen
-    local objects = world:objects_in_area(self.callbacks.window_tiles())
-    self.callbacks.render(objects)
+    local objects = world:objects_in_area(callbacks.window_tiles())
+    callbacks.render(objects)
     -- run commands
-    self:__execute_commands(self.callbacks.get_commands())
+    self:__execute_commands(callbacks.get_commands())
     -- wait, if necessary
-    if self.callbacks.current_time_ms() < nxt then 
-      self.callbacks.sleep_ms(nxt - self.callbacks.current_time_ms()) 
+    if callbacks.current_time_ms() < nxt then 
+      callbacks.sleep_ms(nxt - callbacks.current_time_ms()) 
     end
   end
-  self.callbacks.finish_ui()
+  callbacks.finish_ui()
 end
 
 function Game:type()
@@ -67,12 +68,10 @@ function Game:__check_callbacks(cb)
 end
 
 function Game:__execute_commands(cmd)
-  --self.callbacks.reset_forces(world.player)
-  local speed = 8
-  local x, y = 0, 0
-  if cmd.up then y = -speed elseif cmd.down then y = speed end
-  if cmd.left then x = -speed elseif cmd.right then x = speed end
-  self.callbacks.set_velocity(world.player, x, y)
+  x, y = 0, 0
+  if cmd.up then y = -1 elseif cmd.down then y = 1 end
+  if cmd.left then x = -1 elseif cmd.right then x = 1 end
+  world.player:set_direction_vector(x, y)
 end
 
 function Game:__tostring()
