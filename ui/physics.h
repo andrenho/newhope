@@ -3,6 +3,8 @@
 
 #include "lua.h"
 
+void physics_init();
 int cb_do_physics(lua_State* L);
+void physics_finish();
 
 #endif
