@@ -8,14 +8,15 @@ World.W = 100000 -- used for calculations
 -- 
 function World:new()
   local self = setmetatable({}, World)
-  --self.player = Player:new(7, 7)
   --self.people = { self.player }
   --self.cars = { Car:new(10, 10, CarModel.REGULAR) }
   --self.player:acquire_car(self.cars[1])
   --self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
 
-  self.people = {}
-  self.cars = {}
+  --self.people = {}
+  --self.cars = {}
+  self.player = Player:new(0, 0)
+  self.dynamic_objects = { self.player, }
   self.cities = {}
 
   self.predefined_tiles = {}
@@ -27,12 +28,9 @@ end
 --
 -- one step in the world
 --
-function World:step()
-  for _,person in ipairs(self.people) do
-    person:step()
-  end
-  for _,car in ipairs(self.cars) do
-    car:step()
+function World:step(collisions)
+  for _,object in ipairs(self.dynamic_objects) do
+    object:step()
   end
 end
 
@@ -68,23 +66,13 @@ function World:person_in_position(x, y, except)
 end
 
 -- 
--- return a list of people among the tiles
+-- return a list of objects among the tiles
 --
-function World:people_in_area(x1, y1, x2, y2)
+function World:objects_in_area(x1, y1, x2, y2)
   local cond = function(p) 
-                 return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2 
-                         and not p.in_car)
+                 return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2)
                end
-  return funct.filter(self.people, cond)
-end
-
-
--- 
--- return a list of cars among the tiles
---
-function World:cars_in_area(x1, y1, x2, y2)
-  local cond = function(p) return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2) end
-  return funct.filter(self.cars, cond)
+  return funct.filter(self.dynamic_objects, cond)
 end
 
 

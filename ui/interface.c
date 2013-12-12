@@ -21,38 +21,26 @@ bool if_reload_engine;
 
 // function prototypes
 extern int setenv (const char *, const char *, int);
-static bool if_call(int narg, int nres);
 static int traceback(lua_State *L);
-static void stack_dump();
-
-// macros
-#define LUA_FIELD(c_field, field, type) { 	\
-	lua_pushstring(L, field);	\
-	lua_gettable(L, -2);		\
-	(c_field) = lua_to ## type(L, -1); \
-	lua_pop(L, 1); }
-#define LUA_SET_FIELD(c_field, field, type) { \
-	lua_pushstring(L, field); \
-	lua_push ## type(L, c_field); \
-	lua_settable(L, -3); }
-#define LUA_PUSH_FUNCTION(f) { lua_pushstring(L, f); lua_gettable(L, -2); }
-#define LUA_PUSH_METHOD(f) { LUA_PUSH_FUNCTION(f); lua_pushvalue(L, -2); }
-#define LUA_PUSH_MEMBER(f) { LUA_PUSH_FUNCTION(f); }
 
 // callbacks
 struct Callback {
 	const char* name;
 	lua_CFunction fct;
 } callbacks[] = {
-	{ "active", 		cb_active },
-	{ "current_time_us",	cb_current_time_us },
-	{ "do_physics",		cb_do_physics },
-	{ "finish_ui",		cb_finish_ui },
-	{ "get_commands",	cb_get_commands },
-	{ "initialize_ui", 	cb_initialize_ui },
-	{ "sleep_us",		cb_sleep_us },
-	{ "render",		cb_render },
-	{ "window_tiles",	cb_window_tiles },
+	{ "active", 		 cb_active },
+	{ "add_dynamic_objects", cb_add_dynamic_objects },
+	{ "apply_force",         cb_apply_force },
+	{ "current_time_ms",	 cb_current_time_ms },
+	{ "do_physics",		 cb_do_physics },
+	{ "finish_ui",		 cb_finish_ui },
+	{ "get_commands",	 cb_get_commands },
+	{ "initialize_ui", 	 cb_initialize_ui },
+	{ "sleep_ms",		 cb_sleep_ms },
+	{ "render",		 cb_render_physics },
+	{ "reset_forces",        cb_reset_forces },
+	{ "set_velocity",        cb_set_velocity },
+	{ "window_tiles",	 cb_window_tiles },
 	{ NULL, NULL }
 };
 
@@ -94,7 +82,8 @@ void if_start_game()
 	// parameter 1 - world
 	lua_getglobal(L, "World");
 	LUA_PUSH_METHOD("new");
-	if_call(1, 0);
+	if_call(1, 1);
+	lua_remove(L, 4);
 
 	// parameter 2 - callbacks
 	lua_newtable(L);
@@ -129,17 +118,7 @@ void if_error(const char *fmt, ...)
 	if_reload_engine = true; */
 }
 
-
-void if_finish()
-{
-	lua_close(L);
-}
-
-/********************
- * STATIC FUNCTIONS *
- ********************/
-
-static bool if_call(int narg, int nres)
+bool if_call(int narg, int nres)
 {
 	int base = lua_gettop(L) - narg;
 	lua_pushcfunction(L, traceback);
@@ -155,21 +134,7 @@ static bool if_call(int narg, int nres)
 	return true;
 }
 
-static int traceback(lua_State *L)
-{
-	const char *msg = lua_tostring(L, 1);
-	if(msg) {
-		luaL_traceback(L, L, msg, 1);
-	} else if(!lua_isnoneornil(L, 1)) {
-		if(!luaL_callmeta(L, 1, "__tostring")) {
-			lua_pushliteral(L, "(no error message)");
-		}
-	}
-	return 1;
-}
-
-
-static void stack_dump() 
+void stack_dump() 
 {
 	int i;
 	int top = lua_gettop(L); /* depth of the stack */
@@ -189,8 +154,10 @@ static void stack_dump()
 		case LUA_TTABLE:
 			lua_getglobal(L, "tostring");
 			lua_pushvalue(L, i);
-			assert(lua_pcall(L, 1, 1, 0) == LUA_OK);
-			printf("%s", lua_tolstring(L, -1, NULL));
+			if(lua_pcall(L, 1, 1, 0) == LUA_OK)
+				printf("%s", lua_tolstring(L, -1, NULL));
+			else
+				printf("table: ?");
 			lua_pop(L, 1);
 			break;
 		default: 
@@ -200,4 +167,26 @@ static void stack_dump()
 		printf(" "); /* put a separator */
 	}
 	printf("\n"); /* end the listing */
+}
+
+void if_finish()
+{
+	lua_close(L);
+}
+
+/********************
+ * STATIC FUNCTIONS *
+ ********************/
+
+static int traceback(lua_State *L)
+{
+	const char *msg = lua_tostring(L, 1);
+	if(msg) {
+		luaL_traceback(L, L, msg, 1);
+	} else if(!lua_isnoneornil(L, 1)) {
+		if(!luaL_callmeta(L, 1, "__tostring")) {
+			lua_pushliteral(L, "(no error message)");
+		}
+	}
+	return 1;
 }
