@@ -1,0 +1,7 @@
+#!/usr/bin/env lua
+
+package.path = ';;engine/?.lua'
+require 'block'
+block_output_c()
+
+-- vim: ts=2:sw=2:sts=2:expandtab

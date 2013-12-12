@@ -1,13 +1,13 @@
 local World = {}
 World.__index = World
 
+World.W = 100000 -- used for calculations
+
 --
 -- create a new world map
 -- 
-function World:new(w, h)
+function World:new()
   local self = setmetatable({}, World)
-  self.w = w
-  self.h = h
   --self.player = Player:new(7, 7)
   --self.people = { self.player }
   --self.cars = { Car:new(10, 10, CarModel.REGULAR) }
@@ -42,9 +42,7 @@ end
 --
 function World:tiles(x, y)
   local predef = self.predefined_tiles[world:unique_tile_id(x,y)]
-  if x < 0 or y < 0 or x > (self.w-1) or y > (self.h-1) then
-    return { Block.WATER }
-  elseif predef then
+  if predef then
     return predef
   else
     for _, city in ipairs(self.cities) do
@@ -94,10 +92,10 @@ end
 -- return a unique identifier for a tile, and revert the value
 --
 function World:unique_tile_id(x, y)
-  return x + (y * self.w)
+  return x + (y * World.W)
 end
 function World:revert_unique_tile(id)
-  return (id % self.w), math.floor(id / self.w)
+  return (id % World.W), math.floor(id / World.W)
 end
 
 
@@ -113,9 +111,17 @@ function World:tile_walkable(x, y)
   return true
 end
 
+-- 
+-- Return type
+--
+function World:type()
+  return 'World'
+end
+
 
 --
 -- Print some debug information
+--
 function World:debug()
   print 'something'
 end
@@ -126,7 +132,7 @@ end
 -------------
 
 function World:__tostring()
-  return '[World w:' .. self.w .. ' h:' .. self.h .. ']'
+  return '[World]'
 end
 
 function World:__add_people_to_cities()

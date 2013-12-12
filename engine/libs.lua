@@ -1,4 +1,4 @@
---package.path = './?/init.lua;./?.lua;;'
+-- the C program that'll call this module should set package.path accordingly
 
 local loaded = {}
 function my_require(module)
@@ -9,7 +9,7 @@ function my_require(module)
   return require(module)
 end
 
-require 'util.strict' -- forbids declaring globals in functions
+-- require 'util.strict' -- forbids declaring globals in functions
 
 -- modules
 table  = my_require('util.table')
@@ -21,6 +21,6 @@ geo  = my_require('geo')
 game = my_require('game')
 
 -- classes
-World = my_require('world.world')
+World = my_require('world')
 
 -- vim: ts=2:sw=2:sts=2:expandtab

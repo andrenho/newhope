@@ -4,16 +4,19 @@ Game.__index = Game
 world = nil -- global variable world
 
 Game.__required_callbacks = {
-  'initialize_ui',
   'active',
   'current_time_us',
-  'sleep_us',
+  'do_physics',
+  'finish_ui',
   'get_commands',
+  'initialize_ui',
+  'sleep_us',
   'render',
   'window_tiles',
 }
 
 function Game:new(w, callbacks)
+  assert(w:type() == 'World')
   world = w
   local self = setmetatable({}, Game)
   self.callbacks = self:__check_callbacks(callbacks)
@@ -24,9 +27,10 @@ function Game:start()
   self.callbacks.initialize_ui()
   while self.callbacks.active() do
     -- get current time
-    local t = self.callbacks.current_time_us()
+    local nxt = self.callbacks.current_time_us() + 1/60
     -- advance frame
-    world:step()
+    local collisions = self.callbacks.do_physics(world.dynamic_objects())
+    world:step(collisions)
     -- draw screen
     self.callbacks.render(self:__render_units(self.callbacks.window_tiles))
     -- run commands
@@ -34,9 +38,11 @@ function Game:start()
       self:__execute_command(cmd)
     end
     -- wait, if necessary
-    local t2 = self.callbacks.current_time_us()
-    if t2 > t then self.callbacks.sleep_us(t2-t) end
+    if self.callbacks.current_time_us() < nxt then 
+      self.callbacks.sleep_us(nxt - self.callbacks.current_time_us()) 
+    end
   end
+  self.callbacks.finish_ui()
 end
 
 function Game:type()
@@ -52,7 +58,7 @@ function Game:__check_callbacks(cb)
   for _,cb_name in ipairs(Game.__required_callbacks) do
     if not cb[cb_name] then missing[#missing+1] = cb_name end
   end
-  if #missing > 0 then error('Callbacks missing: '..table.concat(missing, ', ')) end
+--  if #missing > 0 then error('Callbacks missing: '..table.concat(missing, ', '), 2) end
   return cb
 end
 
