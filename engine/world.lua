@@ -21,7 +21,6 @@ end
 function World:initialize()
   self.player = Player:new(0, -2)
   self:add_dynamic_object(self.player)
-  physics.setup_player_collision_handler(self.player)
 
   self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
   self:__add_people_to_cities()
@@ -45,7 +44,7 @@ end
 --
 function World:add_dynamic_object(obj)
   self.dynamic_objects[#self.dynamic_objects+1] = obj
-  physics.add_dynamic_object(obj)
+  obj:physics_create()
   self.dynamic_object_bodies[obj.body] = obj
 end
 
@@ -152,7 +151,7 @@ function World:__add_static_objects()
   for x = x1,x2 do
     for y = y1,y2 do
       if not self:tile_walkable(x,y) then
-        physics.add_static_object(x, y, 1, 1)
+        --physics.add_static_object(x, y, 1, 1)
       end
     end
   end

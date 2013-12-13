@@ -13,14 +13,18 @@ function Person:step()
 end
 
 
--- 
--- Set direction
--- 
-function Person:set_movement_vector(x, y)
-  self.__mov_vect.x = x
-  self.__mov_vect.y = y
+--
+-- Create object in physics world
+--
+function Person:physics_create()
+  error('This function should have been replaced by a C function.')
 end
 
+-- 
+-- Define a target to the person walk towards
+function Person:set_target()
+  error('This function should have been replaced by a C function.')
+end
 
 ----------------------
 -- ABSTRACT METHODS --
@@ -45,6 +49,7 @@ function Person:__init(x, y)
   self.physics_model = DynamicObject.MOVEABLE_PERSON
   self.__mov_vect = { x = 0, y = 0 }
   self.__speed = 4
+  self.body = 0
   return self
 end
 

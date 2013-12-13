@@ -13,13 +13,13 @@ Game.__required_callbacks = {
 }
 
 Game.__physics_callbacks = {
-  'add_dynamic_object',
-  'add_static_object',
-  'apply_force',
+  -- general
   'step',
+  -- person
+  'create_person_body',
+  'set_person_target',
+  -- player
   'setup_player_collision_handler',
-  'set_velocity',
-  'reset_forces',
 }
 
 function Game:new(w, cb)
@@ -28,7 +28,7 @@ function Game:new(w, cb)
   self.__callbacks = self:__check_callbacks(cb)
 
   -- setup globals
-  physics = self:__create_physics_object(cb)
+  self:__setup_physics_callbacks(cb)
   world = w
 
   return self
@@ -41,7 +41,7 @@ function Game:start()
     -- get current time
     local nxt = self.__callbacks.current_time_ms() + 1000/60
     -- advance frame
-    local collisions = physics.step(world.dynamic_objects)
+    local collisions = self.__physics_step(world.dynamic_objects)
     world:step(collisions)
     -- draw screen
     local x1,y1,x2,y2 = self.__callbacks.window_tiles()
@@ -74,23 +74,30 @@ function Game:__check_callbacks(cb)
   return cb
 end
 
-function Game:__execute_commands(cmd)
-  x, y = 0, 0
-  if cmd.up then y = -1 elseif cmd.down then y = 1 end
-  if cmd.left then x = -1 elseif cmd.right then x = 1 end
-  --world.player:set_movement_vector(x, y)
-  physics.reset_forces(world.player)
-  physics.apply_force(world.player, x*5000, y*5000)
-  -- TODO - create friction
-end
-
-function Game:__create_physics_object(cb)
+function Game:__setup_physics_callbacks(cb)
   local missing = {}
   for _,cb_name in ipairs(Game.__physics_callbacks) do
     if not cb[cb_name] then missing[#missing+1] = cb_name end
   end
   if #missing > 0 then error('Physics callbacks missing: '..table.concat(missing, ', '), 2) end
-  return cb
+  self.__physics_step = self.__callbacks.step
+  Person.physics_create = self.__callbacks.create_person_body
+  Person.set_target = self.__callbacks.set_target
+  Player.__setup_collision_handler = self.__callbacks.setup_player_collision_handler
+end
+
+function Game:__execute_commands(cmd)
+  x, y = 0, 0
+  if cmd.up then y = -1 elseif cmd.down then y = 1 end
+  if cmd.left then x = -1 elseif cmd.right then x = 1 end
+  --world.player:set_movement_vector(x, y)
+  --physics.reset_forces(world.player)
+  --physics.apply_force(world.player, x*5000, y*5000)
+  -- TODO - create friction
+end
+
+function Game:__physics_step(collisions)
+  error('This function should have been replaced by a C function.')
 end
 
 function Game:__tostring()

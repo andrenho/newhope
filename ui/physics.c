@@ -20,6 +20,116 @@ void physics_init()
 	cpSpaceSetGravity(space, gravity);
 }
 
+
+int cb_step(lua_State* L)
+{
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	cpSpaceStep(space, 1.0/60.0);
+
+	/*
+	int n = luaL_len(L, 1);
+	for(int i=1; i<=n; i++) {
+		// get object
+		lua_rawgeti(L, 1, i);
+
+		// get object info
+		cpBody* body;
+		LUA_FIELD(body, "body", userdata);
+		cpVect pos = cpBodyGetPos(body);
+
+		// get object type
+		int model;
+		LUA_FIELD(model, "physics_model", integer);
+		assert(model != 0);
+
+		// set new data
+		LUA_SET_FIELD(pos.x, "x", number);
+		LUA_SET_FIELD(pos.y, "y", number);
+		LUA_SET_FIELD(cpBodyGetAngle(body), "angle", number);
+	}*/
+
+	lua_newtable(L);
+	return 1;
+}
+
+void physics_finish()
+{
+	cpSpaceFree(space);
+}
+
+
+/**************
+ *   PERSON   *
+ **************/
+
+
+int cb_create_person_body(lua_State* L)
+{
+	return 0;
+}
+
+
+int cb_set_person_target(lua_State* L)
+{
+	return 0;
+}
+
+
+
+/*************
+ *   PLAYER  *
+ *************/
+
+
+static int handle_player_collision(cpArbiter* arb, cpSpace *sp, void *data)
+{
+	cpBody *a, *b;
+	cpArbiterGetBodies(arb, &a, &b);
+
+	// exclude player
+	if(a == player_body) {
+		a = b;
+	}
+
+	// push player:collision
+	LUA_PUSH_PLAYER();
+	LUA_PUSH_METHOD("collision");
+
+	// find 'against'
+	LUA_PUSH_WORLD();
+	LUA_PUSH_MEMBER("dynamic_object_bodies");
+	lua_pushlightuserdata(L, a);
+	lua_rawget(L, -2);
+	lua_remove(L, -2);
+	lua_remove(L, -2);
+	
+	// call player:collision(against)
+	if_call(2, 0);
+
+	return 1;
+}
+
+
+int cb_setup_player_collision_handler(lua_State* L)
+{
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	cpBody* body;
+	LUA_FIELD(body, "body", userdata);
+	cpSpaceAddCollisionHandler(space, 0, 0, handle_player_collision, NULL, 
+			NULL, NULL, NULL);
+	player_body = body;
+	
+	return 1;
+}
+
+
+/****************
+ *   OLD CODE   *
+ ****************/
+
+/*
 int cb_add_static_object(lua_State* L)
 {
 	cpFloat x = luaL_checknumber(L, 1),
@@ -83,50 +193,9 @@ int cb_add_dynamic_object(lua_State* L)
 
 	return 0;
 }
+*/
 
-
-static int handle_player_collision(cpArbiter* arb, cpSpace *sp, void *data)
-{
-	cpBody *a, *b;
-	cpArbiterGetBodies(arb, &a, &b);
-
-	// exclude player
-	if(a == player_body) {
-		a = b;
-	}
-
-	// push player:collision
-	LUA_PUSH_PLAYER();
-	LUA_PUSH_METHOD("collision");
-
-	// find 'against'
-	LUA_PUSH_WORLD();
-	LUA_PUSH_MEMBER("dynamic_object_bodies");
-	lua_pushlightuserdata(L, a);
-	lua_rawget(L, -2);
-	lua_remove(L, -2);
-	lua_remove(L, -2);
-	
-	// call player:collision(against)
-	if_call(2, 0);
-
-	return 1;
-}
-
-
-int cb_setup_player_collision_handler(lua_State* L)
-{
-	luaL_checktype(L, 1, LUA_TTABLE);
-
-	cpBody* body;
-	LUA_FIELD(body, "body", userdata);
-	cpSpaceAddCollisionHandler(space, 0, 0, handle_player_collision, NULL, 
-			NULL, NULL, NULL);
-	player_body = body;
-	
-	return 1;
-}
-
+/*
 int cb_reset_forces(lua_State* L)
 {
 	luaL_checktype(L, 1, LUA_TTABLE);
@@ -165,40 +234,4 @@ int cb_set_velocity(lua_State* L)
 	cpBodySetVel(body, cpv(x, y));
 	return 0;
 }
-
-
-int cb_step(lua_State* L)
-{
-	luaL_checktype(L, 1, LUA_TTABLE);
-
-	cpSpaceStep(space, 1.0/60.0);
-
-	int n = luaL_len(L, 1);
-	for(int i=1; i<=n; i++) {
-		// get object
-		lua_rawgeti(L, 1, i);
-
-		// get object info
-		cpBody* body;
-		LUA_FIELD(body, "body", userdata);
-		cpVect pos = cpBodyGetPos(body);
-
-		// get object type
-		int model;
-		LUA_FIELD(model, "physics_model", integer);
-		assert(model != 0);
-
-		// set new data
-		LUA_SET_FIELD(pos.x, "x", number);
-		LUA_SET_FIELD(pos.y, "y", number);
-		LUA_SET_FIELD(cpBodyGetAngle(body), "angle", number);
-	}
-
-	lua_newtable(L);
-	return 1;
-}
-
-void physics_finish()
-{
-	cpSpaceFree(space);
-}
+*/

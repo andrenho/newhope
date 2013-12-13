@@ -7,6 +7,7 @@ Player.__index = Player
 function Player:new(x, y)
   local self = setmetatable({}, Player)
   Person.__init(self, x, y)
+  self:__setup_collision_handler()
   self.__speed = 8
   return self
 end
@@ -28,6 +29,10 @@ end
 
 function Player:__tostring()
   return '[Player x:' .. self.x .. ' y:' .. self.y .. ']'
+end
+
+function Player:__setup_collision_handler()
+  error('This function should have been replaced by a C function.')
 end
 
 return Player
