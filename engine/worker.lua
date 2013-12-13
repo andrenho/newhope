@@ -14,7 +14,7 @@ end
 function Worker:__init2(x, y)
   Person.__init(self, x, y)
   self.physics_model = DynamicObject.IMMOVEABLE_PERSON
-  self.mass = 1000000
+  self.mass = -1
 end
 
 

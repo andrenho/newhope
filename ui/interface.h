@@ -20,8 +20,12 @@ void if_finish();
 	lua_pushstring(L, field); \
 	lua_push ## type(L, c_field); \
 	lua_settable(L, -3); }
+
 #define LUA_PUSH_FUNCTION(f) { lua_pushstring(L, f); lua_gettable(L, -2); }
 #define LUA_PUSH_METHOD(f) { LUA_PUSH_FUNCTION(f); lua_pushvalue(L, -2); }
 #define LUA_PUSH_MEMBER(f) { LUA_PUSH_FUNCTION(f); }
+
+#define LUA_PUSH_WORLD() { lua_getglobal(L, "world"); }
+#define LUA_PUSH_PLAYER() { LUA_PUSH_WORLD(); lua_pushstring(L, "player"); lua_gettable(L, -2); lua_remove(L, -2); }
 
 #endif

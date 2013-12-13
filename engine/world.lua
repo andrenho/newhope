@@ -9,7 +9,8 @@ World.W = 100000 -- used for calculations
 function World:new()
   local self = setmetatable({}, World)
 
-  self.dynamic_objects = { }
+  self.dynamic_objects = {}
+  self.dynamic_object_bodies = {}
   self.cities = {}
   self.predefined_tiles = {}
   return self
@@ -45,6 +46,7 @@ end
 function World:add_dynamic_object(obj)
   self.dynamic_objects[#self.dynamic_objects+1] = obj
   physics.add_dynamic_object(obj)
+  self.dynamic_object_bodies[obj.body] = obj
 end
 
 

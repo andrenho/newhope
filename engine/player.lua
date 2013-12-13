@@ -17,6 +17,11 @@ function Player:type()
 end
 
 
+function Player:collision(against)
+  print('Collision against '..tostring(against))
+end
+
+
 -------------
 -- PRIVATE --
 -------------

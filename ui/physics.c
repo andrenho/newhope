@@ -7,7 +7,10 @@
 
 #include "interface.h"
 
+extern lua_State *L;
+
 static cpSpace* space;
+static cpBody* player_body = NULL;
 
 void physics_init()
 {
@@ -31,6 +34,9 @@ int cb_add_dynamic_object(lua_State* L)
 	LUA_FIELD(h, "h", number);
 	LUA_FIELD(angle, "angle", number);
 	LUA_FIELD(mass, "mass", number);
+	if(mass == -1) {
+		mass = INFINITY;
+	}
 	LUA_FIELD(vel_limit, "velocity_limit", number);
 	LUA_FIELD(model, "physics_model", integer);
 
@@ -66,7 +72,29 @@ int cb_add_dynamic_object(lua_State* L)
 
 static int handle_player_collision(cpArbiter* arb, cpSpace *sp, void *data)
 {
-	printf("Collision.\n");
+	cpBody *a, *b;
+	cpArbiterGetBodies(arb, &a, &b);
+
+	// exclude player
+	if(a == player_body) {
+		a = b;
+	}
+
+	// push player:collision
+	LUA_PUSH_PLAYER();
+	LUA_PUSH_METHOD("collision");
+
+	// find 'against'
+	LUA_PUSH_WORLD();
+	LUA_PUSH_MEMBER("dynamic_object_bodies");
+	lua_pushlightuserdata(L, a);
+	lua_rawget(L, -2);
+	lua_remove(L, -2);
+	lua_remove(L, -2);
+	
+	// call player:collision(against)
+	if_call(2, 0);
+
 	return 1;
 }
 
@@ -79,6 +107,7 @@ int cb_setup_player_collision_handler(lua_State* L)
 	LUA_FIELD(body, "body", userdata);
 	cpSpaceAddCollisionHandler(space, 0, 0, handle_player_collision, NULL, 
 			NULL, NULL, NULL);
+	player_body = body;
 	
 	return 1;
 }
