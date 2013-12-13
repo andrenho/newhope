@@ -7,7 +7,7 @@ Person.__index = Person
 --
 function Person:step()
   -- move
-  physics.set_velocity(self, self.__mov_vect.x * self.__speed, self.__mov_vect.y * self.__speed)
+  --physics.set_velocity(self, self.__mov_vect.x * self.__speed, self.__mov_vect.y * self.__speed)
 
   return self
 end

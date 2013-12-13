@@ -20,6 +20,19 @@ void physics_init()
 	cpSpaceSetGravity(space, gravity);
 }
 
+int cb_add_static_object(lua_State* L)
+{
+	cpFloat x = luaL_checknumber(L, 1),
+		y = luaL_checknumber(L, 2),
+		w = luaL_checknumber(L, 3),
+		h = luaL_checknumber(L, 4);
+	cpShape *obj = cpSegmentShapeNew(space->staticBody, 
+			cpv(x-(w/2), y-(h/2)), cpv(x+(w/2), y+(h/2)), 0);
+	cpShapeSetFriction(obj, 1);
+	cpSpaceAddShape(space, obj);
+	return 0;
+}
+
 int cb_add_dynamic_object(lua_State* L)
 {
 	luaL_checktype(L, 1, LUA_TTABLE);
@@ -40,17 +53,19 @@ int cb_add_dynamic_object(lua_State* L)
 	LUA_FIELD(vel_limit, "velocity_limit", number);
 	LUA_FIELD(model, "physics_model", integer);
 
-	(void) angle, (void) mass;
+	(void) angle, (void) h;
 
 	// create chipmunk object
 	cpBody* body;
 	cpShape* shape;
 	if(model == 1 || model == 2) {
 		cpFloat moment = cpMomentForCircle(mass, 0, w, cpv(0, 0));
+		moment = INFINITY;
 		body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
 		cpBodySetPos(body, cpv(x, y));
 		cpBodySetAngle(body, 0);
 		shape = cpSpaceAddShape(space, cpCircleShapeNew(body, w, cpv(0, 0)));
+		cpShapeSetFriction(shape, 0.1);
 		shape->collision_type = 0;
 	}
 	else {
@@ -132,7 +147,7 @@ int cb_apply_force(lua_State* L)
 
 	cpBody* body;
 	LUA_FIELD(body, "body", userdata);
-	cpBodyApplyForce(body, cpv(x*100, y*100), cpv(0, 0));
+	cpBodyApplyForce(body, cpv(x, y), cpv(0, 0));
 	return 0;
 }
 
@@ -172,17 +187,6 @@ int cb_step(lua_State* L)
 		int model;
 		LUA_FIELD(model, "physics_model", integer);
 		assert(model != 0);
-		/*
-		if(model == 1 || model == 2) {
-			cpBodySetAngle(body, 0);
-			// TODO - maybe model 2 can be a static object ?
-			if(model == 2) {
-				double orig_x, orig_y;
-				LUA_SET_FIELD(orig_x, "original_x", number);
-				LUA_SET_FIELD(orig_y, "original)y", number);
-				cpBodySetPos(body, cpv(orig_x, orig_y));
-			}
-		}*/
 
 		// set new data
 		LUA_SET_FIELD(pos.x, "x", number);

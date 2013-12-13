@@ -41,6 +41,7 @@ struct Callback {
 
 	// physics
 	{ "add_dynamic_object",  cb_add_dynamic_object },
+	{ "add_static_object",   cb_add_static_object },
 	{ "apply_force",         cb_apply_force },
 	{ "step",		 cb_step },
 	{ "reset_forces",        cb_reset_forces },

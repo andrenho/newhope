@@ -1,8 +1,6 @@
 local World = {}
 World.__index = World
 
-World.W = 100000 -- used for calculations
-
 --
 -- create a new world map
 -- 
@@ -21,12 +19,14 @@ end
 -- initialize world map
 --
 function World:initialize()
-  self.player = Player:new(0, 0)
+  self.player = Player:new(0, -2)
   self:add_dynamic_object(self.player)
   physics.setup_player_collision_handler(self.player)
 
   self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
   self:__add_people_to_cities()
+
+  self:__add_static_objects()
 end
 
 
@@ -83,10 +83,10 @@ end
 -- return a unique identifier for a tile, and revert the value
 --
 function World:unique_tile_id(x, y)
-  return x + (y * World.W)
+  return x + (y * 1000000)
 end
 function World:revert_unique_tile(id)
-  return (id % World.W), math.floor(id / World.W)
+  return (id % 1000000), math.floor(id / World.W)
 end
 
 
@@ -144,6 +144,22 @@ function World:__add_people_to_cities()
       end
     end
   end
+end
+
+-- TODO : low performance, I think. Maybe add as the player walks?
+function World:__add_static_objects()
+  local x1, y1, x2, y2 = self:__limits()
+  for x = x1,x2 do
+    for y = y1,y2 do
+      if not self:tile_walkable(x,y) then
+        physics.add_static_object(x, y, 1, 1)
+      end
+    end
+  end
+end
+
+function World:__limits()
+  return -30, -30, 30, 30
 end
 
 return World

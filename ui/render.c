@@ -23,13 +23,8 @@ int cb_render(lua_State* L)
 }
 
 
-int cb_render_physics(lua_State* L)
+static void render_physics_objects(lua_State* L)
 {
-	luaL_checktype(L, 1, LUA_TTABLE);
-
-	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
-	SDL_RenderClear(ren);
-
 	int scr_w, scr_h;
 	SDL_GetWindowSize(win, &scr_w, &scr_h);
 
@@ -73,6 +68,60 @@ int cb_render_physics(lua_State* L)
 		SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
 		SDL_RenderDrawLines(ren, pts, 5);
 	}
+}
+
+
+static void render_physics_static(lua_State* L)
+{
+	int x1 = luaL_checknumber(L, 2),
+	    y1 = luaL_checknumber(L, 3),
+	    x2 = luaL_checknumber(L, 4),
+	    y2 = luaL_checknumber(L, 5);
+
+	LUA_PUSH_WORLD();
+
+	int scr_w, scr_h;
+	SDL_GetWindowSize(win, &scr_w, &scr_h);
+
+	SDL_SetRenderDrawColor(ren, 128, 0, 0, 255);
+
+	int x, y;
+	for(x=x1; x<=x2; x++) {
+		for(y=y1; y<=y2; y++) {
+			LUA_PUSH_METHOD("tile_walkable");
+			lua_pushinteger(L, x);
+			lua_pushinteger(L, y);
+			if_call(3, 1);
+			if(!lua_toboolean(L, -1)) {
+				int x_ = x*8 + (scr_w/2/scale) + rx;
+				int y_ = y*8 + (scr_h/2/scale) + ry;
+				int w_ = 8;
+				int h_ = 8;
+
+				const SDL_Point pts[] = {
+					{ x_-(w_/2), y_-(h_/2) },
+					{ x_-(w_/2), y_+(h_/2) },
+					{ x_+(w_/2), y_+(h_/2) },
+					{ x_+(w_/2), y_-(h_/2) },
+					{ x_-(w_/2), y_-(h_/2) }
+				};
+				SDL_RenderDrawLines(ren, pts, 5);
+			}
+			lua_pop(L, 1);
+		}
+	}
+}
+
+
+int cb_render_physics(lua_State* L)
+{
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+	SDL_RenderClear(ren);
+
+	render_physics_objects(L);
+	render_physics_static(L);
 
 	SDL_RenderPresent(ren);
 	return 0;
@@ -84,10 +133,10 @@ int cb_window_tiles(lua_State* L)
 	int w, h;
 	SDL_GetWindowSize(win, &w, &h);
 
-	lua_pushinteger(L, rx-(w/2 / scale));
-	lua_pushinteger(L, ry-(h/2 / scale));
-	lua_pushinteger(L, rx+(w/2 / scale));
-	lua_pushinteger(L, ry+(h/2 / scale));
+	lua_pushinteger(L, rx-(w/2 / scale / 8));
+	lua_pushinteger(L, ry-(h/2 / scale / 8));
+	lua_pushinteger(L, rx+(w/2 / scale / 8));
+	lua_pushinteger(L, ry+(h/2 / scale / 8));
 
 	return 4;
 }

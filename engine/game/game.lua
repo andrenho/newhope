@@ -14,6 +14,7 @@ Game.__required_callbacks = {
 
 Game.__physics_callbacks = {
   'add_dynamic_object',
+  'add_static_object',
   'apply_force',
   'step',
   'setup_player_collision_handler',
@@ -43,8 +44,9 @@ function Game:start()
     local collisions = physics.step(world.dynamic_objects)
     world:step(collisions)
     -- draw screen
-    local objects = world:objects_in_area(self.__callbacks.window_tiles())
-    self.__callbacks.render(objects)
+    local x1,y1,x2,y2 = self.__callbacks.window_tiles()
+    local objects = world:objects_in_area(x1,y1,x2,y2)
+    self.__callbacks.render(objects, x1, y1, x2, y2)
     -- run commands
     self:__execute_commands(self.__callbacks.get_commands())
     -- wait, if necessary
@@ -76,7 +78,10 @@ function Game:__execute_commands(cmd)
   x, y = 0, 0
   if cmd.up then y = -1 elseif cmd.down then y = 1 end
   if cmd.left then x = -1 elseif cmd.right then x = 1 end
-  world.player:set_movement_vector(x, y)
+  --world.player:set_movement_vector(x, y)
+  physics.reset_forces(world.player)
+  physics.apply_force(world.player, x*5000, y*5000)
+  -- TODO - create friction
 end
 
 function Game:__create_physics_object(cb)

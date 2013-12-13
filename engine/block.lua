@@ -13,8 +13,8 @@ function Block:__new(description, friction, immaterial)
   return self
 end
 
-function Block.add(description, friction)
-  Block[description] = Block:__new(description, friction)
+function Block.add(description, friction, immaterial)
+  Block[description] = Block:__new(description, friction, immaterial)
   Block.all[#Block.all+1] = Block[description]
 end
 
@@ -23,7 +23,7 @@ end
 -------------
 
 function Block:__tostring()
-  return '[' + description + ']'
+  return '['..self.description..']'
 end
 
 --------------------
@@ -34,7 +34,7 @@ Block.add('NOTHING', 0, true)
 Block.add('GRASS', 1)
 Block.add('WATER')
 Block.add('WOODEN_WALL')
-Block.add('FLOOR')
+Block.add('FLOOR', 1, true)
 Block.add('DOOR_OPEN', 0, true)
 Block.add('DOOR_CLOSED')
 

@@ -49,6 +49,7 @@ World -- enum Block
 '
 class physics {
   +add_dynamic_object()
+  +add_static_object()
   +apply_force()
   +step()
   +setup_player_collision_handler()
@@ -97,6 +98,7 @@ abstract class Person {
 
 class Player {
   +new(x,y)
+  +collision(against)
 }
 
 class Shopkeeper {

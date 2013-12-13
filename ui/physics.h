@@ -4,6 +4,7 @@
 #include "lua.h"
 
 void physics_init();
+int cb_add_static_object(lua_State* L);
 int cb_add_dynamic_object(lua_State* L);
 int cb_step(lua_State* L);
 int cb_apply_force(lua_State* L);
