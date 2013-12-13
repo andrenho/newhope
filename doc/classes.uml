@@ -21,12 +21,8 @@ package game {
 main ()- Game
 main ()- World
 Game -- World
-Game -- physics
-DynamicObject -- physics
 World --> "*" City : cities
 World --> "*" DynamicObject: dynamic_objects
-
-physics -() chipmunk 
 
 City   -->  "*" Building : __buildings
 Building -- enum BuildingType
@@ -47,17 +43,6 @@ World -- enum Block
 '
 ' classes definitions
 '
-class physics {
-  +add_dynamic_object()
-  +add_static_object()
-  +apply_force()
-  +step()
-  +setup_player_collision_handler()
-  +set_velocity()
-  +reset_forces()
-}
-
-
 class Game {
   +new(world, callbacks)
   +start()
@@ -93,6 +78,8 @@ abstract class DynamicObject {
 abstract class Person {
   +step()
   +set_movement_vector(x,y)
+  +physics_create() : C
+  +set_target(x,y) : C
   -__speed
 }
 
