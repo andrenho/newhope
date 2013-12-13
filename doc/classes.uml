@@ -1,0 +1,139 @@
+@startuml
+
+scale 5/6
+
+'
+' inheritance
+'
+
+DynamicObject <|-- Person
+Person <|-- Worker
+Worker <|-- Shopkeeper
+Person <|-- Player
+
+' 
+' classes relations
+'
+package game {
+  class Game
+}
+
+main ()- Game
+main ()- World
+Game -- World
+Game -- physics
+DynamicObject -- physics
+World --> "*" City : cities
+World --> "*" DynamicObject: dynamic_objects
+
+physics -() chipmunk 
+
+City   -->  "*" Building : __buildings
+Building -- enum BuildingType
+
+package buildinglayout <<Rect>> {
+  class 0_1 << (S,lavender) >>
+}
+Building --> buildinglayout
+
+package citylayout <<Rect>> {
+  class layout_1 << (S,lavender) >>
+}
+City --> citylayout
+citylayout .. enum BuildingType
+
+World -- enum Block
+
+'
+' classes definitions
+'
+class physics {
+  +add_dynamic_object()
+  +apply_force()
+  +step()
+  +setup_player_collision_handler()
+  +set_velocity()
+  +reset_forces()
+}
+
+
+class Game {
+  +new(world, callbacks)
+  +start()
+}
+
+class World {
+  +new()
+  +initialize()
+  +step()
+  +add_dynamic_object(obj)
+  +tiles(x,y)
+  +objects_in_area(x1,y1,x2,y2)
+  +unique_tile_id(x,y)
+  +revert_unique_tile(id)
+  +tile_walkable(x,y)
+  +debug()
+  +predefined_tiles
+}
+
+abstract class DynamicObject {
+  -__init(x,y,w,h,mass,angle,vlimit)
+  +{abstract} step()
+  +physics_model
+  +x,y
+  +w,h
+  +mass
+  +angle
+  +velocity_limit
+  +body : c_ptr
+  +shape : c_ptr
+}
+
+abstract class Person {
+  +step()
+  +set_movement_vector(x,y)
+  -__speed
+}
+
+class Player {
+  +new(x,y)
+}
+
+class Shopkeeper {
+  +new(x,y)
+}
+
+class City {
+  +x, y
+  +basic_block
+  +new(layout,x,y,w,h,basic_block)
+  +tiles(x,y)
+}
+
+class Building {
+  +x, y, w, h
+  +new(btype,layout,x,y)
+  +tiles(x,y)
+}
+
+class Block {
+  +id
+  +description
+  +friction
+  +immaterial
+  {static} +all
+  {static} +init(description, friction, immaterial)
+}
+
+enum BuildingType {
+  HOUSE
+  . . .
+}
+hide enum BuildingType methods
+
+hide enum layout_1 members
+hide enum layout_1 methods
+hide enum 0_1 members
+hide enum 0_1 methods
+
+@enduml

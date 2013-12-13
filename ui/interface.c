@@ -28,19 +28,25 @@ struct Callback {
 	const char* name;
 	lua_CFunction fct;
 } callbacks[] = {
+
+	// callbacks
 	{ "active", 		 cb_active },
-	{ "add_dynamic_objects", cb_add_dynamic_objects },
-	{ "apply_force",         cb_apply_force },
 	{ "current_time_ms",	 cb_current_time_ms },
-	{ "do_physics",		 cb_do_physics },
 	{ "finish_ui",		 cb_finish_ui },
 	{ "get_commands",	 cb_get_commands },
 	{ "initialize_ui", 	 cb_initialize_ui },
 	{ "sleep_ms",		 cb_sleep_ms },
 	{ "render",		 cb_render_physics },
+	{ "window_tiles",	 cb_window_tiles },
+
+	// physics
+	{ "add_dynamic_object",  cb_add_dynamic_object },
+	{ "apply_force",         cb_apply_force },
+	{ "step",		 cb_step },
 	{ "reset_forces",        cb_reset_forces },
 	{ "set_velocity",        cb_set_velocity },
-	{ "window_tiles",	 cb_window_tiles },
+	{ "setup_player_collision_handler", cb_setup_player_collision_handler },
+	
 	{ NULL, NULL }
 };
 

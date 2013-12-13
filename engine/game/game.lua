@@ -1,53 +1,58 @@
 local Game = {}
 Game.__index = Game
 
-world = nil -- global variable world
-callbacks = nil
-
 Game.__required_callbacks = {
   'active',
-  'add_dynamic_objects',
-  'apply_force',
   'current_time_ms',
-  'do_physics',
   'finish_ui',
   'get_commands',
   'initialize_ui',
-  'set_velocity',
   'sleep_ms',
   'render',
-  'reset_forces',
   'window_tiles',
+}
+
+Game.__physics_callbacks = {
+  'add_dynamic_object',
+  'apply_force',
+  'step',
+  'setup_player_collision_handler',
+  'set_velocity',
+  'reset_forces',
 }
 
 function Game:new(w, cb)
   assert(w:type() == 'World')
-  world = w
   local self = setmetatable({}, Game)
-  callbacks = self:__check_callbacks(cb)
+  self.__callbacks = self:__check_callbacks(cb)
+
+  -- setup globals
+  physics = self:__create_physics_object(cb)
+  world = w
+
   return self
 end
 
 function Game:start()
-  callbacks.initialize_ui()
-  callbacks.add_dynamic_objects(world.dynamic_objects)
-  while callbacks.active() do
+  self.__callbacks.initialize_ui()
+  world:initialize()
+  while self.__callbacks.active() do
     -- get current time
-    local nxt = callbacks.current_time_ms() + 1000/60
+    local nxt = self.__callbacks.current_time_ms() + 1000/60
     -- advance frame
-    local collisions = callbacks.do_physics(world.dynamic_objects)
+    local collisions = physics.step(world.dynamic_objects)
     world:step(collisions)
     -- draw screen
-    local objects = world:objects_in_area(callbacks.window_tiles())
-    callbacks.render(objects)
+    local objects = world:objects_in_area(self.__callbacks.window_tiles())
+    self.__callbacks.render(objects)
     -- run commands
-    self:__execute_commands(callbacks.get_commands())
+    self:__execute_commands(self.__callbacks.get_commands())
     -- wait, if necessary
-    if callbacks.current_time_ms() < nxt then 
-      callbacks.sleep_ms(nxt - callbacks.current_time_ms()) 
+    if self.__callbacks.current_time_ms() < nxt then 
+      self.__callbacks.sleep_ms(nxt - self.__callbacks.current_time_ms()) 
     end
   end
-  callbacks.finish_ui()
+  self.__callbacks.finish_ui()
 end
 
 function Game:type()
@@ -71,7 +76,16 @@ function Game:__execute_commands(cmd)
   x, y = 0, 0
   if cmd.up then y = -1 elseif cmd.down then y = 1 end
   if cmd.left then x = -1 elseif cmd.right then x = 1 end
-  world.player:set_direction_vector(x, y)
+  world.player:set_movement_vector(x, y)
+end
+
+function Game:__create_physics_object(cb)
+  local missing = {}
+  for _,cb_name in ipairs(Game.__physics_callbacks) do
+    if not cb[cb_name] then missing[#missing+1] = cb_name end
+  end
+  if #missing > 0 then error('Physics callbacks missing: '..table.concat(missing, ', '), 2) end
+  return cb
 end
 
 function Game:__tostring()

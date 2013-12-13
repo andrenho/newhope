@@ -1,56 +1,5 @@
 @startuml
 
-package "geo" {
-	Shape --> "*" Point : points
-	Segment --> "2" Point: p1, p2
-	Vector .. Point
-	Shape --> Rectangle : outer_rectangle()
-}
-
-class Point {
-	+x
-	+y
-	+new(x, y)
-	+distance(other)
-	+distance_manhattan(other)
-	+translate(other)
-	+rotate(angle)
-	-__eq(other)
-}
-
-class Segment {
-	+new(p1,p2)
-	+intersect(other)
-	-__eq(other)
-}
-
-class Shape {
-	+anchor
-	+new(points, anchor)
-	+contains_point(p)
-	+intersect(other)
-	+segments()
-	+translate()
-	+rotate()
-	-__eq(other)
-}
-
-class Rectangle {
-	+x,y,w,h
-	+new(x,y,w,h)
-	+intersect(other)
-	+contains_point(p)
-}
-
-class Vector {
-	+x, y
-	+magnitude, angle
-	+new_mag(magnitude, angle)
-	+new_xy(x, y)
-	-__eq(other)
-	-__add(other)
-}
-
 class funct {
 	+filter(table,func)
 	+map(table,func)

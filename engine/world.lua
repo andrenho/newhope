@@ -9,24 +9,42 @@ World.W = 100000 -- used for calculations
 function World:new()
   local self = setmetatable({}, World)
 
-  self.player = Player:new(0, 0)
-  self.dynamic_objects = { self.player, }
-  --self.cities = {}
-  self.cities = { City:new(1, 0, 0, 20, 20, Block.GRASS) }
-
+  self.dynamic_objects = { }
+  self.cities = {}
   self.predefined_tiles = {}
-  self:__add_people_to_cities()
   return self
+end
+
+
+-- 
+-- initialize world map
+--
+function World:initialize()
+  self.player = Player:new(0, 0)
+  self:add_dynamic_object(self.player)
+  physics.setup_player_collision_handler(self.player)
+
+  self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
+  self:__add_people_to_cities()
 end
 
 
 --
 -- one step in the world
 --
-function World:step(collisions)
+function World:step()
   for _,object in ipairs(self.dynamic_objects) do
     object:step()
   end
+end
+
+
+--
+-- Add a new dynamic object
+--
+function World:add_dynamic_object(obj)
+  self.dynamic_objects[#self.dynamic_objects+1] = obj
+  physics.add_dynamic_object(obj)
 end
 
 
@@ -47,18 +65,6 @@ function World:tiles(x, y)
   end
 end
 
-
---
--- Return the person in a given position. If no person is there, return nil.
---
-function World:person_in_position(x, y, except)
-  local people = self:people_in_area(x-1, y-1, x+1, y+1)
-  if people[1] == except then
-    return people[2]
-  else
-    return people[1]
-  end
-end
 
 -- 
 -- return a list of objects among the tiles
@@ -131,7 +137,7 @@ function World:__add_people_to_cities()
             person = Shopkeeper:new(x, y)
           end
           assert(person, 'Invalid person type: ' .. p.type)
-          self.people[#self.people+1] = person
+          self:add_dynamic_object(person)
         end
       end
     end

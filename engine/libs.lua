@@ -17,7 +17,6 @@ funct  = my_require('util.funct')
 string = my_require('util.string')
 
 -- libraries
-geo  = my_require('geo')
 game = my_require('game')
 
 -- classes
@@ -26,9 +25,14 @@ World         = my_require('world')
 DynamicObject = my_require('dynamicobject')
 Person        = my_require('person')
 Player        = my_require('player')
+Worker        = my_require('worker')
 Shopkeeper    = my_require('shopkeeper')
 City          = my_require('city')
 Building      = my_require('building')
 BuildingType  = my_require('buildingtype')
+
+-- global variables set elsewhere (game.Game:new)
+world = nil
+physics = nil
 
 -- vim: ts=2:sw=2:sts=2:expandtab

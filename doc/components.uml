@@ -1,10 +1,11 @@
 @startuml
 
-[geo] ..> [phys] : uses
-[world] ..> [geo] : uses
-main ..> [world] : uses
-main ..> [game] : uses
-[util]
-phystest ..> [geo] : uses
+[main_c] ..> [world] : creates
+[main_c] <..> [game] : interacts
+[game] ..> [world] : uses
+[world] ..> [util] : uses
+[game] .. chipmunk
+[world] <..> chipmunk : interacts
+[main_c] ..> SDL2 : uses
 
 @enduml
