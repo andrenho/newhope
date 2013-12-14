@@ -33,6 +33,8 @@ Object        = my_require('object')
 StaticPerson  = my_require('staticperson')
 DynamicPerson = my_require('dynamicperson')
 Player        = my_require('player')
+CarModel      = my_require('carmodel')
+Car           = my_require('car')
 
 -- global variables set elsewhere (game.Game:new)
 world = nil

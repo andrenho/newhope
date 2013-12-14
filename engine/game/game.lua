@@ -16,6 +16,8 @@ Game.__physics_callbacks = {
   -- general
   'step',
   'add_static_tile',
+  -- car
+  'create_car_body',
   -- person
   'create_dynamic_person_body',
   'create_static_person_body',
@@ -91,12 +93,14 @@ function Game:__setup_physics_callbacks(cb)
     if not cb[cb_name] then missing[#missing+1] = cb_name end
   end
   if #missing > 0 then error('Physics callbacks missing: '..table.concat(missing, ', '), 2) end
-  self.__physics_step = self.__callbacks.step
-  World.__physics_add_solid_tile = self.__callbacks.add_static_tile
-  StaticPerson.create_physics_body = self.__callbacks.create_static_person_body
+  -- install callbacks in objects
+  self.__physics_step               = self.__callbacks.step
+  World.__physics_add_solid_tile    = self.__callbacks.add_static_tile
+  Car.create_physics_body           = self.__callbacks.create_car_body
+  StaticPerson.create_physics_body  = self.__callbacks.create_static_person_body
   DynamicPerson.create_physics_body = self.__callbacks.create_dynamic_person_body
-  DynamicPerson.set_target = self.__callbacks.set_dynamic_person_target
-  Player.setup_collision_handler = self.__callbacks.setup_player_collision_handler
+  DynamicPerson.set_target          = self.__callbacks.set_dynamic_person_target
+  Player.setup_collision_handler    = self.__callbacks.setup_player_collision_handler
 end
 
 

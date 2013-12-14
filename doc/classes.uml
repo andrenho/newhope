@@ -39,6 +39,9 @@ citylayout .. enum BuildingType
 
 World -- Block : tiles(x,y)
 
+Car *-- CarModel : attrib
+Car *-- CarControls : controls
+
 '
 ' classes definitions
 '
@@ -83,6 +86,25 @@ class Player {
   +step()
   +setup_collision_handler() : C
 }
+
+class Car {
+  +angle
+  +new(x,y,model)
+}
+
+class CarControls << (S,lavender) >> {
+  +accelerate
+  +breaking
+  +left
+  +right
+  +gear
+}
+hide CarControls methods
+
+class CarModel << (S,lavander) >> {
+  +w,h
+}
+hide CarControls methods
 
 class City {
   +x, y

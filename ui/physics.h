@@ -12,6 +12,7 @@ void physics_finish();
 // person
 int cb_create_dynamic_person_body(lua_State* L);
 int cb_create_static_person_body(lua_State* L);
+int cb_create_car_body(lua_State* L);
 int cb_set_dynamic_person_target(lua_State* L);
 
 // player 

@@ -44,6 +44,7 @@ struct Callback {
 	{ "add_static_tile",                    cb_add_static_tile },
 	{ "create_dynamic_person_body", 	cb_create_dynamic_person_body },
 	{ "create_static_person_body", 		cb_create_static_person_body },
+	{ "create_car_body",                    cb_create_car_body },
 	{ "set_dynamic_person_target", 		cb_set_dynamic_person_target },
 	{ "setup_player_collision_handler", 	cb_setup_player_collision_handler },
 	

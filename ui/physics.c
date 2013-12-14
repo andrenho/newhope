@@ -69,6 +69,16 @@ void physics_finish()
 }
 
 
+/***********
+ *   CAR   *
+ ***********/
+int cb_create_car_body(lua_State* L)
+{
+	// TODO
+	return 0;
+}
+
+
 /**************
  *   PERSON   *
  **************/

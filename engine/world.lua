@@ -27,6 +27,8 @@ function World:initialize()
   self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
   self:__add_people_to_cities()
 
+  self:add_object(Car:new(-10, -10, CarModel.REGULAR))
+
   self:__add_static_objects()
 end
 
