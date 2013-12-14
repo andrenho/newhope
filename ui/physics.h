@@ -5,6 +5,7 @@
 
 // world
 void physics_init();
+int cb_add_static_tile(lua_State* L);
 int cb_step(lua_State* L);
 void physics_finish();
 

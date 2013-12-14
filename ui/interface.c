@@ -41,6 +41,7 @@ struct Callback {
 
 	// physics
 	{ "step",		 		cb_step },
+	{ "add_static_tile",                    cb_add_static_tile },
 	{ "create_dynamic_person_body", 	cb_create_dynamic_person_body },
 	{ "create_static_person_body", 		cb_create_static_person_body },
 	{ "set_dynamic_person_target", 		cb_set_dynamic_person_target },

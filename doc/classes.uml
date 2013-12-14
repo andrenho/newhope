@@ -37,7 +37,7 @@ package citylayout <<Rect>> {
 City --> citylayout
 citylayout .. enum BuildingType
 
-World -- enum Block
+World -- Block : tiles(x,y)
 
 '
 ' classes definitions
@@ -52,7 +52,6 @@ class World {
   +initialize()
   +step()
   +add_object(obj)
-  +tiles(x,y)
   +objects_in_area(x1,y1,x2,y2)
   +unique_tile_id(x,y)
   +revert_unique_tile(id)
@@ -102,7 +101,7 @@ class Block {
   +id
   +description
   +friction
-  +immaterial
+  +solid
   {static} +all
   {static} +init(description, friction, immaterial)
 }

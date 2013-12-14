@@ -15,6 +15,7 @@ Game.__required_callbacks = {
 Game.__physics_callbacks = {
   -- general
   'step',
+  'add_static_tile',
   -- person
   'create_dynamic_person_body',
   'create_static_person_body',
@@ -91,6 +92,7 @@ function Game:__setup_physics_callbacks(cb)
   end
   if #missing > 0 then error('Physics callbacks missing: '..table.concat(missing, ', '), 2) end
   self.__physics_step = self.__callbacks.step
+  World.__physics_add_solid_tile = self.__callbacks.add_static_tile
   StaticPerson.create_physics_body = self.__callbacks.create_static_person_body
   DynamicPerson.create_physics_body = self.__callbacks.create_dynamic_person_body
   DynamicPerson.set_target = self.__callbacks.set_dynamic_person_target

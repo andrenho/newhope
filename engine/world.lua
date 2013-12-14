@@ -11,7 +11,7 @@ function World:new()
   self.cities = {}
   self.predefined_tiles = {}
 
-  self.__object_bodies = {}
+  self.object_bodies = {}
   return self
 end
 
@@ -22,6 +22,7 @@ end
 function World:initialize()
   self.player = Player:new(-5, -7)
   self:add_object(self.player)
+  self.player:setup_collision_handler()
 
   self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
   self:__add_people_to_cities()
@@ -46,7 +47,7 @@ end
 function World:add_object(obj)
   self.objects[#self.objects+1] = obj
   obj:create_physics_body()
-  self.__object_bodies[obj.body] = obj
+  self.object_bodies[obj.body] = obj
 end
 
 
@@ -95,8 +96,7 @@ end
 --
 function World:tile_walkable(x, y)
   local st = self:tiles(x, y)
-  if st[1].friction == math.huge 
-        or (st[2] and not st[2].immaterial) or (st[3] and not st[3].immaterial) then
+  if st[1].friction == math.huge or (st[2] and st[2].solid) or (st[3] and st[3].solid) then
     return false
   end
   return true
@@ -152,10 +152,14 @@ function World:__add_static_objects()
   for x = x1,x2 do
     for y = y1,y2 do
       if not self:tile_walkable(x,y) then
-        --physics.add_static_object(x, y, 1, 1)
+        self:__physics_add_solid_tile(x, y, 1, 1)
       end
     end
   end
+end
+
+function World:__physics_add_solid_tile(x, y, w, h)
+  error('This method must be implemented in C.')
 end
 
 function World:__limits()

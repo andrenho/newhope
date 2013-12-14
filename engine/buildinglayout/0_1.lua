@@ -26,7 +26,7 @@ return {
   ['d'] = Block.DOOR_OPEN,
 
   people = {
-    { type = 'Shopkeeper', x = 1, y = 1 },
+    { type = 'Shopkeeper', x = 0.5, y = 0.5 },
   }
 }
 
