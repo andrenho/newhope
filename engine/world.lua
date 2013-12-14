@@ -7,10 +7,11 @@ World.__index = World
 function World:new()
   local self = setmetatable({}, World)
 
-  self.dynamic_objects = {}
-  self.dynamic_object_bodies = {}
+  self.objects = {}
   self.cities = {}
   self.predefined_tiles = {}
+
+  self.__object_bodies = {}
   return self
 end
 
@@ -20,7 +21,7 @@ end
 --
 function World:initialize()
   self.player = Player:new(0, -2)
-  self:add_dynamic_object(self.player)
+  self:add_object(self.player)
 
   self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
   self:__add_people_to_cities()
@@ -35,19 +36,19 @@ end
 -- one step in the world
 --
 function World:step()
-  for _,object in ipairs(self.dynamic_objects) do
+  for _,object in ipairs(self.objects) do
     object:step()
   end
 end
 
 
 --
--- Add a new dynamic object
+-- Add a new object
 --
-function World:add_dynamic_object(obj)
-  self.dynamic_objects[#self.dynamic_objects+1] = obj
-  obj:physics_create()
-  self.dynamic_object_bodies[obj.body] = obj
+function World:add_object(obj)
+  self.objects[#self.objects+1] = obj
+  obj:create_physics_body()
+  self.object_bodies[obj.body] = obj
 end
 
 
@@ -76,7 +77,7 @@ function World:objects_in_area(x1, y1, x2, y2)
   local cond = function(p) 
                  return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2)
                end
-  return funct.filter(self.dynamic_objects, cond)
+  return funct.filter(self.objects, cond)
 end
 
 
@@ -140,7 +141,7 @@ function World:__add_people_to_cities()
             person = Shopkeeper:new(x, y)
           end
           assert(person, 'Invalid person type: ' .. p.type)
-          self:add_dynamic_object(person)
+          self:add_object(person)
         end
       end
     end

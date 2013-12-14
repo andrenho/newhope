@@ -6,10 +6,10 @@ scale 5/6
 ' inheritance
 '
 
-DynamicObject <|-- Person
-Person <|-- Worker
-Worker <|-- Shopkeeper
-Person <|-- Player
+Object <|-- DynamicPerson
+Object <|-- StaticPerson
+Object <|-- Car
+DynamicPerson <|-- Player
 
 ' 
 ' classes relations
@@ -19,10 +19,9 @@ package game {
 }
 
 main ()- Game
-main ()- World
 Game -- World
 World --> "*" City : cities
-World --> "*" DynamicObject: dynamic_objects
+World --> "*" Object: objects
 
 City   -->  "*" Building : __buildings
 Building -- enum BuildingType
@@ -52,7 +51,7 @@ class World {
   +new()
   +initialize()
   +step()
-  +add_dynamic_object(obj)
+  +add_object(obj)
   +tiles(x,y)
   +objects_in_area(x1,y1,x2,y2)
   +unique_tile_id(x,y)
@@ -62,30 +61,25 @@ class World {
   +predefined_tiles
 }
 
-abstract class DynamicObject {
-  -__init(x,y,w,h,mass,angle,vlimit)
-  +{abstract} step()
-  +physics_model
+abstract class Object {
   +x,y
-  +w,h
-  +mass
-  +angle
-  +velocity_limit
+  -__init(x,y)
   +body : c_ptr
-  +shape : c_ptr
+  +{abstract} step()
+  +{abstract} create_physics_body() : C
 }
 
-abstract class Person {
-  +step()
-  +set_movement_vector(x,y)
-  +physics_create() : C
+class DynamicPerson {
   +set_target(x,y) : C
-  -__speed
+}
+
+class StaticPerson {
 }
 
 class Player {
   +new(x,y)
   +collision(against)
+  +step()
 }
 
 class Shopkeeper {
