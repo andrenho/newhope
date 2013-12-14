@@ -26,6 +26,8 @@ function World:initialize()
   self:__add_people_to_cities()
 
   self:__add_static_objects()
+
+  self.player:set_target(10, 10)
 end
 
 

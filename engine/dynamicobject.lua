@@ -24,7 +24,7 @@ function DynamicObject:__init(x, y, w, h, mass, angle, velocity_limit)
   self.mass = mass
   self.angle = angle or 0
   self.velocity_limit = velocity_limit or 0
-  self.body, self.shape = nil, nil  -- use for C pointers
+  self.body, self.shape, self.target = nil, nil, nil  -- use for C pointers
   return self
 end
 

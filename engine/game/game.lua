@@ -82,7 +82,7 @@ function Game:__setup_physics_callbacks(cb)
   if #missing > 0 then error('Physics callbacks missing: '..table.concat(missing, ', '), 2) end
   self.__physics_step = self.__callbacks.step
   Person.physics_create = self.__callbacks.create_person_body
-  Person.set_target = self.__callbacks.set_target
+  Person.set_target = self.__callbacks.set_person_target
   Player.__setup_collision_handler = self.__callbacks.setup_player_collision_handler
 end
 

@@ -23,50 +23,105 @@ int cb_render(lua_State* L)
 }
 
 
-static void render_physics_objects(lua_State* L)
+static void render_rectangle(double x, double y, double w, double h, double angle,
+		int model)
 {
 	int scr_w, scr_h;
 	SDL_GetWindowSize(win, &scr_w, &scr_h);
 
+	// get angle
+	double x1 = -w/2 * 8;
+	double y1 = -h/2 * 8;
+	double x2 =  w/2 * 8;
+	double y2 =  h/2 * 8;
+	double px1 = x1 * cos(angle) - y1 * sin(angle) + (x*8);
+	double py1 = x1 * sin(angle) + y1 * cos(angle) + (y*8);
+	double px2 = x1 * cos(angle) - y2 * sin(angle) + (x*8);
+	double py2 = x1 * sin(angle) + y2 * cos(angle) + (y*8);
+	double px3 = x2 * cos(angle) - y2 * sin(angle) + (x*8);
+	double py3 = x2 * sin(angle) + y2 * cos(angle) + (y*8);
+	double px4 = x2 * cos(angle) - y1 * sin(angle) + (x*8);
+	double py4 = x2 * sin(angle) + y1 * cos(angle) + (y*8);
+
+	// get deslocation
+	double desloc_x = (scr_w/2/scale) + rx;
+	double desloc_y = (scr_h/2/scale) + ry;
+
+	// draw points
+	const SDL_Point pts[] = {
+		{ px1+desloc_x, py1+desloc_y },
+		{ px2+desloc_x, py2+desloc_y },
+		{ px3+desloc_x, py3+desloc_y },
+		{ px4+desloc_x, py4+desloc_y },
+		{ px1+desloc_x, py1+desloc_y },
+	};
+	SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
+	SDL_RenderDrawLines(ren, pts, 5);
+}
+
+
+SDL_Point circle_pixel[10000];
+static void render_circle(double x1, double y1, double radius, int model)
+{
+	int scr_w, scr_h;
+	SDL_GetWindowSize(win, &scr_w, &scr_h);
+
+	int r = radius *= 8;
+	int x0 = (x1*8) + (scr_w/2/scale) + rx;
+	int y0 = (y1*8) + (scr_h/2/scale) + ry;
+
+	int x = radius, y = 0;
+	int radiusError = 1-x;
+	int i = 0;
+
+	while(x >= y) {
+		circle_pixel[i++] = (const SDL_Point){ x + x0, y + y0 };
+		circle_pixel[i++] = (const SDL_Point){ y + x0, x + y0 };
+		circle_pixel[i++] = (const SDL_Point){ -x + x0, y + y0 };
+		circle_pixel[i++] = (const SDL_Point){ -y + x0, x + y0 };
+		circle_pixel[i++] = (const SDL_Point){ -x + x0, -y + y0 };
+		circle_pixel[i++] = (const SDL_Point){ -y + x0, -x + y0 };
+		circle_pixel[i++] = (const SDL_Point){ x + x0, -y + y0 };
+		circle_pixel[i++] = (const SDL_Point){ y + x0, -x + y0 };
+		y++;
+		if(radiusError<0)
+			radiusError += 2*y+1;
+		else {
+			x--;
+			radiusError += 2*(y-x+1);
+		}
+	}
+
+	if(model == 1) {
+		SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
+	} else {
+		SDL_SetRenderDrawColor(ren, 0, 0, 128, 255);
+	}
+	SDL_RenderDrawPoints(ren, circle_pixel, i);
+}
+
+
+static void render_physics_objects(lua_State* L)
+{
 	int n = luaL_len(L, 1);
 	for(int i=1; i<=n; i++) {
 		lua_rawgeti(L, 1, i);
 
+		int model;
 		double x, y, w, h, angle;
 		LUA_FIELD(x, "x", number);
 		LUA_FIELD(y, "y", number);
 		LUA_FIELD(w, "w", number);
 		LUA_FIELD(h, "h", number);
 		LUA_FIELD(angle, "angle", number);
+		LUA_FIELD(model, "physics_model", integer);
 
-		// get angle
-		double x1 = -w/2 * 8;
-		double y1 = -h/2 * 8;
-		double x2 =  w/2 * 8;
-		double y2 =  h/2 * 8;
-		double px1 = x1 * cos(angle) - y1 * sin(angle) + (x*8);
-		double py1 = x1 * sin(angle) + y1 * cos(angle) + (y*8);
-		double px2 = x1 * cos(angle) - y2 * sin(angle) + (x*8);
-		double py2 = x1 * sin(angle) + y2 * cos(angle) + (y*8);
-		double px3 = x2 * cos(angle) - y2 * sin(angle) + (x*8);
-		double py3 = x2 * sin(angle) + y2 * cos(angle) + (y*8);
-		double px4 = x2 * cos(angle) - y1 * sin(angle) + (x*8);
-		double py4 = x2 * sin(angle) + y1 * cos(angle) + (y*8);
+		(void) h, (void) angle, (void) render_rectangle;
 
-		// get deslocation
-		double desloc_x = (scr_w/2/scale) + rx;
-		double desloc_y = (scr_h/2/scale) + ry;
+		if(model == 1 || model == 2) {
+			render_circle(x, y, w, model);
+		}
 
-		// draw points
-		const SDL_Point pts[] = {
-			{ px1+desloc_x, py1+desloc_y },
-			{ px2+desloc_x, py2+desloc_y },
-			{ px3+desloc_x, py3+desloc_y },
-			{ px4+desloc_x, py4+desloc_y },
-			{ px1+desloc_x, py1+desloc_y },
-		};
-		SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
-		SDL_RenderDrawLines(ren, pts, 5);
 	}
 }
 

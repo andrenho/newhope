@@ -27,7 +27,6 @@ int cb_step(lua_State* L)
 
 	cpSpaceStep(space, 1.0/60.0);
 
-	/*
 	int n = luaL_len(L, 1);
 	for(int i=1; i<=n; i++) {
 		// get object
@@ -36,6 +35,8 @@ int cb_step(lua_State* L)
 		// get object info
 		cpBody* body;
 		LUA_FIELD(body, "body", userdata);
+		if(body == 0)
+			continue;
 		cpVect pos = cpBodyGetPos(body);
 
 		// get object type
@@ -47,7 +48,7 @@ int cb_step(lua_State* L)
 		LUA_SET_FIELD(pos.x, "x", number);
 		LUA_SET_FIELD(pos.y, "y", number);
 		LUA_SET_FIELD(cpBodyGetAngle(body), "angle", number);
-	}*/
+	}
 
 	lua_newtable(L);
 	return 1;
@@ -66,12 +67,55 @@ void physics_finish()
 
 int cb_create_person_body(lua_State* L)
 {
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	// get object fields
+	cpFloat x, y;
+	LUA_FIELD(x, "x", number);
+	LUA_FIELD(y, "y", number);
+	
+	// create person body
+	cpBody* body = cpSpaceAddBody(space, cpBodyNew(70, INFINITY));
+	cpBodySetPos(body, cpv(x, y));
+
+	// create person shape
+	cpShape* shape = cpSpaceAddShape(space, 
+			cpCircleShapeNew(body, 1, cpvzero));
+	cpShapeSetFriction(shape, 0.1);
+
+	// create target body
+	cpBody* target = cpBodyNew(INFINITY, INFINITY);
+	cpBodySetPos(target, cpv(x, y));
+
+	// create joint
+	cpConstraint* joint = cpSpaceAddConstraint(space, 
+			cpPivotJointNew2(target, body, cpvzero, cpvzero));
+	joint->maxBias = 15.0f;
+	joint->maxForce = 30000.0f;
+
+	// save pointers to LUA
+	LUA_SET_FIELD(body, "body", lightuserdata);
+	LUA_SET_FIELD(shape, "shape", lightuserdata);
+	LUA_SET_FIELD(target, "target", lightuserdata);
+	LUA_SET_FIELD(joint, "joint", lightuserdata);
+	
 	return 0;
 }
 
 
 int cb_set_person_target(lua_State* L)
 {
+	luaL_checktype(L, 1, LUA_TTABLE);
+	double x = luaL_checknumber(L, 2);
+	double y = luaL_checknumber(L, 3);
+	lua_pop(L, 2);
+
+	cpBody* target;
+	LUA_FIELD(target, "target", userdata);
+	if(target) {
+		cpBodySetPos(target, cpv(x, y));
+	}
+
 	return 0;
 }
 
