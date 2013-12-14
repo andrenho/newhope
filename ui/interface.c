@@ -40,10 +40,11 @@ struct Callback {
 	{ "window_tiles",	 cb_window_tiles },
 
 	// physics
-	{ "step",		 cb_step },
-	{ "create_person_body",  cb_create_person_body },
-	{ "set_person_target",   cb_set_person_target },
-	{ "setup_player_collision_handler", cb_setup_player_collision_handler },
+	{ "step",		 		cb_step },
+	{ "create_dynamic_person_body", 	cb_create_dynamic_person_body },
+	{ "create_static_person_body", 		cb_create_static_person_body },
+	{ "set_dynamic_person_target", 		cb_set_dynamic_person_target },
+	{ "setup_player_collision_handler", 	cb_setup_player_collision_handler },
 	
 	{ NULL, NULL }
 };

@@ -39,11 +39,6 @@ int cb_step(lua_State* L)
 			continue;
 		cpVect pos = cpBodyGetPos(body);
 
-		// get object type
-		int model;
-		LUA_FIELD(model, "physics_model", integer);
-		assert(model != 0);
-
 		// set new data
 		LUA_SET_FIELD(pos.x, "x", number);
 		LUA_SET_FIELD(pos.y, "y", number);
@@ -65,7 +60,13 @@ void physics_finish()
  **************/
 
 
-int cb_create_person_body(lua_State* L)
+int cb_create_static_person_body(lua_State* L)
+{
+	return 0;
+}
+
+
+int cb_create_dynamic_person_body(lua_State* L)
 {
 	luaL_checktype(L, 1, LUA_TTABLE);
 
@@ -103,7 +104,7 @@ int cb_create_person_body(lua_State* L)
 }
 
 
-int cb_set_person_target(lua_State* L)
+int cb_set_dynamic_person_target(lua_State* L)
 {
 	luaL_checktype(L, 1, LUA_TTABLE);
 	double x = luaL_checknumber(L, 2);
@@ -142,7 +143,7 @@ static int handle_player_collision(cpArbiter* arb, cpSpace *sp, void *data)
 
 	// find 'against'
 	LUA_PUSH_WORLD();
-	LUA_PUSH_MEMBER("dynamic_object_bodies");
+	LUA_PUSH_MEMBER("object_bodies");
 	lua_pushlightuserdata(L, a);
 	lua_rawget(L, -2);
 	lua_remove(L, -2);

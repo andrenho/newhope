@@ -65,25 +65,24 @@ abstract class Object {
   +x,y
   -__init(x,y)
   +body : c_ptr
-  +{abstract} step()
-  +{abstract} create_physics_body() : C
+  +step()
+  +{abstract} create_physics_body()
 }
 
 class DynamicPerson {
+  +create_physics_body() : C
   +set_target(x,y) : C
 }
 
 class StaticPerson {
+  +create_physics_body() : C
 }
 
 class Player {
   +new(x,y)
   +collision(against)
   +step()
-}
-
-class Shopkeeper {
-  +new(x,y)
+  +setup_collision_handler() : C
 }
 
 class City {

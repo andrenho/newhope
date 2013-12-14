@@ -66,11 +66,10 @@ static void render_circle(double x1, double y1, double radius, int model)
 	int scr_w, scr_h;
 	SDL_GetWindowSize(win, &scr_w, &scr_h);
 
-	int r = radius *= 8;
 	int x0 = (x1*8) + (scr_w/2/scale) + rx;
 	int y0 = (y1*8) + (scr_h/2/scale) + ry;
 
-	int x = radius, y = 0;
+	int x = 4, y = 0;
 	int radiusError = 1-x;
 	int i = 0;
 
@@ -118,10 +117,7 @@ static void render_physics_objects(lua_State* L)
 
 		(void) h, (void) angle, (void) render_rectangle;
 
-		if(model == 1 || model == 2) {
-			render_circle(x, y, w, model);
-		}
-
+		render_circle(x, y, w, model);
 	}
 }
 

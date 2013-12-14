@@ -20,16 +20,19 @@ string = my_require('util.string')
 game = my_require('game')
 
 -- classes
-Block         = my_require('block')
 World         = my_require('world')
-DynamicObject = my_require('dynamicobject')
-Person        = my_require('person')
-Player        = my_require('player')
-Worker        = my_require('worker')
-Shopkeeper    = my_require('shopkeeper')
+
+-- classes (map)
+Block         = my_require('block')
 City          = my_require('city')
 Building      = my_require('building')
 BuildingType  = my_require('buildingtype')
+
+-- classes (objects)
+Object        = my_require('object')
+StaticPerson  = my_require('staticperson')
+DynamicPerson = my_require('dynamicperson')
+Player        = my_require('player')
 
 -- global variables set elsewhere (game.Game:new)
 world = nil

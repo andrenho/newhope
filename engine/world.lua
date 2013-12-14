@@ -20,15 +20,13 @@ end
 -- initialize world map
 --
 function World:initialize()
-  self.player = Player:new(0, -2)
+  self.player = Player:new(-5, -7)
   self:add_object(self.player)
 
   self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
   self:__add_people_to_cities()
 
   self:__add_static_objects()
-
-  self.player:set_target(10, 10)
 end
 
 
@@ -48,7 +46,7 @@ end
 function World:add_object(obj)
   self.objects[#self.objects+1] = obj
   obj:create_physics_body()
-  self.object_bodies[obj.body] = obj
+  self.__object_bodies[obj.body] = obj
 end
 
 
@@ -138,7 +136,7 @@ function World:__add_people_to_cities()
           local x = p.x + city.x + building.x + 0.5
           local y = p.y + city.y + building.y + 0.5
           if p.type == 'Shopkeeper' then
-            person = Shopkeeper:new(x, y)
+            person = StaticPerson:new(x, y)
           end
           assert(person, 'Invalid person type: ' .. p.type)
           self:add_object(person)
