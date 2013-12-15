@@ -18,6 +18,7 @@ function Car:new(x, y, model)
 end
 
 function Car:step()
+  self:__calculate_forces()
 end
 
 function Car:type()
@@ -38,6 +39,13 @@ end
 
 function Car:__calculate_attributes()
   self.attrib = table.shallow_copy(self.__model)
+end
+
+function Car:__calculate_forces()
+  self:__reset_forces()
+  if self.controls.accelerate then
+    self:__apply_force(1000, 0, 1)
+  end
 end
 
 function Car:__apply_force(force, relative_dir, wheel)

@@ -72,18 +72,18 @@ end
 -------------
 
 function Game:__execute_commands(cmd)
+  --[[
   x, y = 0, 0
   if cmd.up then y = -1 elseif cmd.down then y = 1 end
   if cmd.left then x = -1 elseif cmd.right then x = 1 end
   world.player:set_target(world.player.x + (x*1000000), world.player.y + (y*1000000))
-  --[[
+  ]]
   local car = world.objects[3]
   assert(car.is_car())
-  car.accelerate = cmd.up
-  car.breaking = cmd.down
-  car.left = cmd.left
-  car.right = cmd.right
-  ]]
+  car.controls.accelerate = cmd.up
+  car.controls.breaking = cmd.down
+  if cmd.left then car.controls.left = 1 else car.controls.left = 0 end
+  if cmd.right then car.controls.right = 1 else car.controls.right = 0 end
 end
 
 

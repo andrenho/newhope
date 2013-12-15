@@ -113,15 +113,34 @@ int cb_create_car_body(lua_State* L)
 
 int cb_apply_force(lua_State* L)
 {
-	// TODO
+	// get parameters: (1) car, (2) force, (3) relative_dir, (4) wheel
 	luaL_checktype(L, 1, LUA_TTABLE);
-	double x = luaL_checknumber(L, 2);
-	double y = luaL_checknumber(L, 3);
-	lua_pop(L, 2);
+	double force = luaL_checknumber(L, 2);
+	double relative_dir = luaL_checknumber(L, 3);
+	int wheel = luaL_checkinteger(L, 4);
+	assert(wheel == 1 || wheel == 2);
+	lua_pop(L, 3);
 
+	// get object information
 	cpBody* body;
+	cpFloat angle;
 	LUA_FIELD(body, "body", userdata);
-	cpBodyApplyForce(body, cpv(x, y), cpv(0, 0));
+	LUA_FIELD(angle, "angle", number);
+
+	// get object attributes
+	cpFloat wheels_radius;
+	lua_pushstring(L, "attrib");
+	lua_gettable(L, -2);
+	LUA_FIELD(wheels_radius, "wheels_radius", number);
+	
+	// calculate vector relative direction
+	cpVect rel_dir = cpv(force, 0); // TODO
+	
+	// calculate wheel position vector
+	cpVect wheel_dir = cpv(0, 0);
+
+	// apply force
+	cpBodyApplyForce(body, rel_dir, wheel_dir);
 	return 0;
 }
 

@@ -109,6 +109,8 @@ hide CarControls methods
 class CarModel << (S,lavander) >> {
   +w,h
   +mass
+  +wheels_radius
+  +max_steering_angle
 }
 hide CarModel methods
 
