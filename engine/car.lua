@@ -2,7 +2,8 @@ local Car = setmetatable({}, Object)
 Car.__index = Car
 
 function Car:new(x, y, model)
-  local self = self or setmetatable({}, Car)
+  local self = setmetatable({}, Car)
+  self:__init(x, y)
   self.controls = {
     accelerate = false,
     breaking = false,
@@ -16,8 +17,15 @@ function Car:new(x, y, model)
   return self
 end
 
+function Car:step()
+end
+
 function Car:type()
   return 'Car'
+end
+
+function Car:is_car()
+  return true
 end
 
 -------------
@@ -30,6 +38,14 @@ end
 
 function Car:__calculate_attributes()
   self.attrib = table.shallow_copy(self.__model)
+end
+
+function Car:__apply_force(force, relative_dir, wheel)
+  error('This method must be implemented in C.')
+end
+
+function Car:__reset_forces()
+  error('This method must be implemented in C.')
 end
 
 return Car

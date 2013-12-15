@@ -1,7 +1,8 @@
 return {
   REGULAR = {
-    w = 2,
-    h = 5,
+    w = 5,
+    h = 2,
+    mass = 1500,
   }
 }
 

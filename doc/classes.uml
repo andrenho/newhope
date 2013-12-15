@@ -68,6 +68,7 @@ abstract class Object {
   -__init(x,y)
   +body : c_ptr
   +step()
+  +is_car()
   +{abstract} create_physics_body()
 }
 
@@ -90,6 +91,10 @@ class Player {
 class Car {
   +angle
   +new(x,y,model)
+  +is_car()
+  +step()
+  -apply_force(force, relative_dir, wheel) : C
+  -reset_forces() : C
 }
 
 class CarControls << (S,lavender) >> {
@@ -103,8 +108,9 @@ hide CarControls methods
 
 class CarModel << (S,lavander) >> {
   +w,h
+  +mass
 }
-hide CarControls methods
+hide CarModel methods
 
 class City {
   +x, y

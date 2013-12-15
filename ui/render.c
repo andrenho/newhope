@@ -24,7 +24,7 @@ int cb_render(lua_State* L)
 
 
 static void render_rectangle(double x, double y, double w, double h, double angle,
-		int model)
+		SDL_Color color)
 {
 	int scr_w, scr_h;
 	SDL_GetWindowSize(win, &scr_w, &scr_h);
@@ -55,13 +55,13 @@ static void render_rectangle(double x, double y, double w, double h, double angl
 		{ px4+desloc_x, py4+desloc_y },
 		{ px1+desloc_x, py1+desloc_y },
 	};
-	SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
+	SDL_SetRenderDrawColor(ren, 0, color.r, color.g, color.b);
 	SDL_RenderDrawLines(ren, pts, 5);
 }
 
 
 SDL_Point circle_pixel[10000];
-static void render_circle(double x1, double y1, double radius, int model)
+static void render_circle(double x1, double y1, double radius, SDL_Color color)
 {
 	int scr_w, scr_h;
 	SDL_GetWindowSize(win, &scr_w, &scr_h);
@@ -91,11 +91,7 @@ static void render_circle(double x1, double y1, double radius, int model)
 		}
 	}
 
-	if(model == 1) {
-		SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
-	} else {
-		SDL_SetRenderDrawColor(ren, 0, 0, 128, 255);
-	}
+	SDL_SetRenderDrawColor(ren, 0, color.r, color.g, color.b);
 	SDL_RenderDrawPoints(ren, circle_pixel, i);
 }
 
@@ -106,18 +102,29 @@ static void render_physics_objects(lua_State* L)
 	for(int i=1; i<=n; i++) {
 		lua_rawgeti(L, 1, i);
 
-		int model;
-		double x, y, w, h, angle;
-		LUA_FIELD(x, "x", number);
-		LUA_FIELD(y, "y", number);
-		LUA_FIELD(w, "w", number);
-		LUA_FIELD(h, "h", number);
-		LUA_FIELD(angle, "angle", number);
-		LUA_FIELD(model, "physics_model", integer);
+		// get object type
+		LUA_PUSH_METHOD("is_car");
+		if_call(1, 1);
+		int is_car = lua_toboolean(L, -1);
+		lua_pop(L, 1);
 
-		(void) h, (void) angle, (void) render_rectangle;
-
-		render_circle(x, y, w, model);
+		// draw car
+		if(is_car) {
+			double x, y, w, h, angle;
+			LUA_FIELD(x, "x", number);
+			LUA_FIELD(y, "y", number);
+			LUA_FIELD(angle, "angle", number);
+			lua_pushstring(L, "attrib");
+			lua_gettable(L, -2);
+			LUA_FIELD(w, "w", number);
+			LUA_FIELD(h, "h", number);
+			render_rectangle(x, y, w, h, angle, (SDL_Color){128,0,0});
+		} else { // draw person
+			double x, y;
+			LUA_FIELD(x, "x", number);
+			LUA_FIELD(y, "y", number);
+			render_circle(x, y, 1, (SDL_Color){0,0,0});
+		}
 	}
 }
 

@@ -16,13 +16,16 @@ function Object:create_physics_body()
   error('Abstract method')
 end
 
+function Object:is_car()
+  return false
+end
+
 -------------
 -- PRIVATE --
 -------------
 
 function Object:__init(x, y)
   self.x, self.y = x, y
-  self.body = 0
   return self
 end
 

@@ -72,12 +72,68 @@ void physics_finish()
 /***********
  *   CAR   *
  ***********/
+
+
 int cb_create_car_body(lua_State* L)
 {
-	// TODO
+	luaL_checktype(L, 1, LUA_TTABLE);
+	
+	// get car fields
+	cpFloat x, y, angle;
+	LUA_FIELD(x, "x", number);
+	LUA_FIELD(y, "y", number);
+	LUA_FIELD(angle, "angle", number);
+
+	// get car attributes
+	cpFloat w, h, mass;
+	lua_pushstring(L, "attrib");
+	lua_gettable(L, -2);
+	LUA_FIELD(w, "w", number);
+	LUA_FIELD(h, "h", number);
+	LUA_FIELD(mass, "mass", number);
+	lua_pop(L, 1);
+
+	// create person body
+	cpFloat moment = cpMomentForBox(mass, w, h);
+	cpBody* body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
+	cpBodySetPos(body, cpv(x, y));
+	cpBodySetAngle(body, angle);
+
+	// create person shape
+	cpShape* shape = cpSpaceAddShape(space, cpBoxShapeNew(body, w, h));
+	cpShapeSetFriction(shape, 0.1);
+
+	// save pointers to LUA
+	LUA_SET_FIELD(body, "body", lightuserdata);
+	LUA_SET_FIELD(shape, "shape", lightuserdata);
+	
 	return 0;
 }
 
+
+int cb_apply_force(lua_State* L)
+{
+	// TODO
+	luaL_checktype(L, 1, LUA_TTABLE);
+	double x = luaL_checknumber(L, 2);
+	double y = luaL_checknumber(L, 3);
+	lua_pop(L, 2);
+
+	cpBody* body;
+	LUA_FIELD(body, "body", userdata);
+	cpBodyApplyForce(body, cpv(x, y), cpv(0, 0));
+	return 0;
+}
+
+int cb_reset_forces(lua_State* L)
+{
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	cpBody* body;
+	LUA_FIELD(body, "body", userdata);
+	cpBodyResetForces(body);
+	return 0;
+}
 
 /**************
  *   PERSON   *
@@ -214,49 +270,3 @@ int cb_setup_player_collision_handler(lua_State* L)
 	
 	return 1;
 }
-
-
-/****************
- *   OLD CODE   *
- ****************/
-
-/*
-int cb_reset_forces(lua_State* L)
-{
-	luaL_checktype(L, 1, LUA_TTABLE);
-
-	cpBody* body;
-	LUA_FIELD(body, "body", userdata);
-	cpBodyResetForces(body);
-	return 0;
-}
-
-
-int cb_apply_force(lua_State* L)
-{
-	luaL_checktype(L, 1, LUA_TTABLE);
-	double x = luaL_checknumber(L, 2);
-	double y = luaL_checknumber(L, 3);
-	lua_pop(L, 2);
-
-	cpBody* body;
-	LUA_FIELD(body, "body", userdata);
-	cpBodyApplyForce(body, cpv(x, y), cpv(0, 0));
-	return 0;
-}
-
-
-
-int cb_set_velocity(lua_State* L)
-{
-	luaL_checktype(L, 1, LUA_TTABLE);
-	double x = luaL_checknumber(L, 2);
-	double y = luaL_checknumber(L, 3);
-	lua_pop(L, 2);
-
-	cpBody* body;
-	LUA_FIELD(body, "body", userdata);
-	cpBodySetVel(body, cpv(x, y));
-	return 0;
-}
-*/

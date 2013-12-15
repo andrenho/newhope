@@ -18,6 +18,8 @@ Game.__physics_callbacks = {
   'add_static_tile',
   -- car
   'create_car_body',
+  'apply_force',
+  'reset_forces',
   -- person
   'create_dynamic_person_body',
   'create_static_person_body',
@@ -74,6 +76,14 @@ function Game:__execute_commands(cmd)
   if cmd.up then y = -1 elseif cmd.down then y = 1 end
   if cmd.left then x = -1 elseif cmd.right then x = 1 end
   world.player:set_target(world.player.x + (x*1000000), world.player.y + (y*1000000))
+  --[[
+  local car = world.objects[3]
+  assert(car.is_car())
+  car.accelerate = cmd.up
+  car.breaking = cmd.down
+  car.left = cmd.left
+  car.right = cmd.right
+  ]]
 end
 
 
@@ -97,6 +107,8 @@ function Game:__setup_physics_callbacks(cb)
   self.__physics_step               = self.__callbacks.step
   World.__physics_add_solid_tile    = self.__callbacks.add_static_tile
   Car.create_physics_body           = self.__callbacks.create_car_body
+  Car.__apply_force                 = self.__callbacks.apply_force
+  Car.__reset_forces                = self.__callbacks.reset_forces
   StaticPerson.create_physics_body  = self.__callbacks.create_static_person_body
   DynamicPerson.create_physics_body = self.__callbacks.create_dynamic_person_body
   DynamicPerson.set_target          = self.__callbacks.set_dynamic_person_target
