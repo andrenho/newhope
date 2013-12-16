@@ -47,6 +47,9 @@ struct Callback {
 	{ "create_car_body",                    cb_create_car_body },
 	{ "apply_force",                        cb_apply_force },
 	{ "reset_forces",                       cb_reset_forces },
+	{ "car_speed",                          cb_car_speed },
+	{ "car_step",                           cb_car_step },
+	{ "car_set_angle",                      cb_car_set_angle },
 	{ "set_dynamic_person_target", 		cb_set_dynamic_person_target },
 	{ "setup_player_collision_handler", 	cb_setup_player_collision_handler },
 	

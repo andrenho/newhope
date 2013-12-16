@@ -13,6 +13,9 @@ void physics_finish();
 int cb_create_car_body(lua_State* L);
 int cb_apply_force(lua_State* L);
 int cb_reset_forces(lua_State* L);
+int cb_car_speed(lua_State* L);
+int cb_car_step(lua_State* L);
+int cb_car_set_angle(lua_State* L);
 
 // person
 int cb_create_dynamic_person_body(lua_State* L);

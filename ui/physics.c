@@ -18,6 +18,7 @@ void physics_init()
 	cpVect gravity = cpv(0, 0);
 	space = cpSpaceNew();
 	cpSpaceSetGravity(space, gravity);
+	cpSpaceSetDamping(space, 0.2);
 }
 
 
@@ -101,7 +102,7 @@ int cb_create_car_body(lua_State* L)
 
 	// create person shape
 	cpShape* shape = cpSpaceAddShape(space, cpBoxShapeNew(body, w, h));
-	cpShapeSetFriction(shape, 0.1);
+	cpShapeSetFriction(shape, 0);
 
 	// save pointers to LUA
 	LUA_SET_FIELD(body, "body", lightuserdata);
@@ -118,7 +119,7 @@ int cb_apply_force(lua_State* L)
 	double force = luaL_checknumber(L, 2);
 	double relative_dir = luaL_checknumber(L, 3);
 	int wheel = luaL_checkinteger(L, 4);
-	assert(wheel == 1 || wheel == 2);
+	assert(wheel >= 0 || wheel <= 2);
 	lua_pop(L, 3);
 
 	// get object information
@@ -132,17 +133,52 @@ int cb_apply_force(lua_State* L)
 	lua_pushstring(L, "attrib");
 	lua_gettable(L, -2);
 	LUA_FIELD(wheels_radius, "wheels_radius", number);
-	
+
 	// calculate vector relative direction
-	cpVect rel_dir = cpv(force, 0); // TODO
+	cpVect rel_dir = cpv(cos(angle + relative_dir)*force, 
+			sin(angle + relative_dir)*force);
 	
 	// calculate wheel position vector
-	cpVect wheel_dir = cpv(0, 0);
+	if(wheel == 0)
+		wheels_radius = 0;
+	else if(wheel == 2)
+		wheels_radius -= wheels_radius;
+	cpVect wheel_dir = cpv(cos(angle)*wheels_radius, sin(angle)*wheels_radius);
 
 	// apply force
-	cpBodyApplyForce(body, rel_dir, wheel_dir);
+	cpBodyApplyForce(body, cpv(500, 0), cpvzero);
+
 	return 0;
 }
+
+int cb_car_step(lua_State* L)
+{
+	luaL_checktype(L, 1, LUA_TTABLE);
+	cpBody* body;
+	LUA_FIELD(body, "body", userdata);
+
+	// get lateral velocity
+	cpVect normal = cpvperp(cpBodyGetRot(body));
+	cpVect linear = cpvmult(normal, cpvdot(normal, cpBodyGetVel(body)));
+
+	cpVect impulse = cpvmult(cpvneg(linear), cpBodyGetMass(body));
+	printf("%f %f\n", impulse.x, impulse.y);
+	cpBodyApplyImpulse(body, impulse, cpvzero);
+}
+
+int cb_car_set_angle(lua_State* L)
+{
+	luaL_checktype(L, 1, LUA_TTABLE);
+	double n = luaL_checknumber(L, 2);
+	lua_pop(L, 1);
+
+	cpBody* body;
+	LUA_FIELD(body, "body", userdata);
+	
+	cpBodySetAngle(body, cpBodyGetAngle(body)+n);
+	return 0;
+}
+
 
 int cb_reset_forces(lua_State* L)
 {
@@ -152,6 +188,18 @@ int cb_reset_forces(lua_State* L)
 	LUA_FIELD(body, "body", userdata);
 	cpBodyResetForces(body);
 	return 0;
+}
+
+
+int cb_car_speed(lua_State* L)
+{
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	cpBody* body;
+	LUA_FIELD(body, "body", userdata);
+
+	lua_pushnumber(L, cpvlength(cpBodyGetForce(body))/ 800);
+	return 1;
 }
 
 /**************
@@ -195,7 +243,7 @@ int cb_create_dynamic_person_body(lua_State* L)
 	LUA_FIELD(y, "y", number);
 	
 	// create person body
-	cpBody* body = cpSpaceAddBody(space, cpBodyNew(70, INFINITY));
+	cpBody* body = cpSpaceAddBody(space, cpBodyNew(10, INFINITY));
 	cpBodySetPos(body, cpv(x, y));
 
 	// create person shape

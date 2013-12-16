@@ -93,6 +93,7 @@ class Car {
   +new(x,y,model)
   +is_car()
   +step()
+  +speed() : C
   -apply_force(force, relative_dir, wheel) : C
   -reset_forces() : C
 }

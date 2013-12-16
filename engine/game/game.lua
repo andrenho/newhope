@@ -20,6 +20,9 @@ Game.__physics_callbacks = {
   'create_car_body',
   'apply_force',
   'reset_forces',
+  'car_speed',
+  'car_step',
+  'car_set_angle',
   -- person
   'create_dynamic_person_body',
   'create_static_person_body',
@@ -109,6 +112,9 @@ function Game:__setup_physics_callbacks(cb)
   Car.create_physics_body           = self.__callbacks.create_car_body
   Car.__apply_force                 = self.__callbacks.apply_force
   Car.__reset_forces                = self.__callbacks.reset_forces
+  Car.speed                         = self.__callbacks.car_speed
+  Car.step_c                        = self.__callbacks.car_step
+  Car.set_angle                     = self.__callbacks.car_set_angle
   StaticPerson.create_physics_body  = self.__callbacks.create_static_person_body
   DynamicPerson.create_physics_body = self.__callbacks.create_dynamic_person_body
   DynamicPerson.set_target          = self.__callbacks.set_dynamic_person_target

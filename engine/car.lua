@@ -11,7 +11,7 @@ function Car:new(x, y, model)
     right = 0,
     gear = 1,
   }
-  self.angle = 0
+  self.angle = math.pi/8
   self.__model = model
   self:__calculate_attributes()
   return self
@@ -21,12 +21,16 @@ function Car:step()
   self:__calculate_forces()
 end
 
-function Car:type()
-  return 'Car'
+function Car:speed()
+  error('This method must be implemented in C.')
 end
 
 function Car:is_car()
   return true
+end
+
+function Car:type()
+  return 'Car'
 end
 
 -------------
@@ -42,10 +46,16 @@ function Car:__calculate_attributes()
 end
 
 function Car:__calculate_forces()
-  self:__reset_forces()
+  -- acceleration
   if self.controls.accelerate then
-    self:__apply_force(1000, 0, 1)
+    self:__apply_force(1000, 0, 0)
   end
+  if self.controls.left > 0 then
+    self:set_angle(0.05)
+  elseif self.controls.right > 0 then
+    self:set_angle(-0.05)
+  end
+  self:step_c()
 end
 
 function Car:__apply_force(force, relative_dir, wheel)
