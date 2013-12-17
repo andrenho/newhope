@@ -20,7 +20,7 @@ end
 -- initialize world map
 --
 function World:initialize()
-   self.player = Player:new(0, 0)
+   self.player = Player:new(5, 10)
    --[[
    self.player:setup_collision_handler()
    self:add_object(Car:new(-5, -5, CarModel.REGULAR))

@@ -11,6 +11,7 @@ end
 
 function Physics:add_object(obj)
    self.objects[#self.objects+1] = obj
+   return obj
 end
 
 -------------

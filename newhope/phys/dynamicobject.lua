@@ -6,6 +6,8 @@ function DynamicObject:new(x, y, radius)
    self.body = love.physics.newBody(physics.pworld, x, y, 'dynamic')
    self.shape = love.physics.newCircleShape(radius)
    self.fixture = love.physics.newFixture(self.body, self.shape, 1)
+   self.fixture:setDensity(1)
+   self.body:setLinearDamping(100)
    return self
 end
 
@@ -13,6 +15,11 @@ function DynamicObject:draw_wireframe()
    love.graphics.setColor(0, 128, 0)
    love.graphics.circle('line', self.body:getX() * 10, self.body:getY() * 10, 
          self.shape:getRadius() * 10)
+end
+
+function DynamicObject:up()
+   print('hi')
+   self.body:setLinearVelocity(0, -30)
 end
 
 -------------

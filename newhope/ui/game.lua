@@ -9,10 +9,13 @@ end
 function Game:keypressed(key, unicode)
    if key == 'q' then
       os.exit()
+   elseif key == 'up' then
+      world.player:up()
    end
 end
 
 function Game:step(dt)
+   world.player:up()
    physics.pworld:update(dt)
 end
 

@@ -11,6 +11,10 @@ function Player:type()
   return 'Player'
 end
 
+function Player:up()
+  self.physics_object:up()
+end
+
 function Player:collision(other)
   print(other)
 end
