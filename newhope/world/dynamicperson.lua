@@ -4,11 +4,8 @@ DynamicPerson.__index = DynamicPerson
 function DynamicPerson:new(x, y)
   local self = self or setmetatable({}, DynamicPerson)
   self:__init(x,y)
+  physics:add_object(phys.DynamicObject:new(x, y, 0.5))
   return self
-end
-
-function DynamicPerson:create_physics_body()
-  error('This method must be implemented in C.')
 end
 
 function DynamicPerson:set_target(x,y)

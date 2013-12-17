@@ -20,12 +20,10 @@ end
 -- initialize world map
 --
 function World:initialize()
-   --[[
    self.player = Player:new(0, 0)
+   --[[
    self.player:setup_collision_handler()
-
    self:add_object(Car:new(-5, -5, CarModel.REGULAR))
-
    ]]
    self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
    --self:__add_people_to_cities()

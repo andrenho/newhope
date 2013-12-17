@@ -11,6 +11,7 @@ function UI:load()
 end
 
 function UI:draw()
+   love.graphics.translate(100, 100)
    -- draw wireframe (physics objects)
    if self.mode == 'wireframe' then
       love.graphics.setBackgroundColor(255, 255, 255)
