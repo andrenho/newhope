@@ -15,6 +15,10 @@ function table:shallow_copy()
    return t2
 end
 
+function table.pack(...)
+   return { n = select("#", ...), ... }
+end
+
 return table
 
 -- vim: ts=3:sw=3:sts=3:expandtab

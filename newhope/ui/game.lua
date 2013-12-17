@@ -1,9 +1,8 @@
 local Game = {}
 Game.__index = Game
 
-function Game:new(world_)
+function Game:new()
    local self = setmetatable({}, Game)
-   world = world_
    return self
 end
 

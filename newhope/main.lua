@@ -10,24 +10,40 @@ function my_require(module)
 end
 
 -- load modules
-phys = my_require('phys')
-ui   = my_require('ui')
+table  = my_require('util.table')
+funct  = my_require('util.funct')
+string = my_require('util.string')
+phys   = my_require('phys')
+ui     = my_require('ui')
 
 -- load classes
+World         = my_require('world.world')
+-- map --
+Block         = my_require('world.block')
+City          = my_require('world.city')
+Building      = my_require('world.building')
+BuildingType  = my_require('world.buildingtype')
+-- objects --
+Object        = my_require('world.object')
+StaticPerson  = my_require('world.staticperson')
+DynamicPerson = my_require('world.dynamicperson')
+Player        = my_require('world.player')
+CarModel      = my_require('world.carmodel')
+Car           = my_require('world.car')
 
--- initialize game
-world   = nil -- TODO
+-- create game
+world   = World:new()
 physics = phys.Physics:new()
-
--- temporary (TODO)
-physics:add_object(phys.StaticObject:new(400, 80, 10, 10))
-physics:add_object(phys.DynamicObject:new(80, 80, 5, 5))
 
 -- initialize UI
 game = ui.Game:new()
 ui   = ui.UI:new()
 
+-- initialize game
+world:initialize()
+
 -- setup LÖVE callbacks
+function love.load() ui:load() end
 function love.draw() ui:draw() end
 function love.update(dt) game:step(dt) end
 function love.keypressed(key, unicode) game:keypressed(key, unicode) end

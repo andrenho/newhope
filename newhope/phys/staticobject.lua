@@ -11,8 +11,9 @@ end
 
 function StaticObject:draw_wireframe()
    love.graphics.setColor(128, 0, 0)
-   love.graphics.polygon('line', 
-         self.body:getWorldPoints(self.shape:getPoints()))
+   local pts = table.pack(self.body:getWorldPoints(self.shape:getPoints()))
+   for k, pt in ipairs(pts) do pts[k] = pt * 10 end
+   love.graphics.polygon('line', unpack(pts))
 end
 
 -------------

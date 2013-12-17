@@ -11,8 +11,8 @@ end
 
 function DynamicObject:draw_wireframe()
    love.graphics.setColor(0, 128, 0)
-   love.graphics.circle('line', self.body:getX(), self.body:getY(), 
-         self.shape:getRadius())
+   love.graphics.circle('line', self.body:getX() * 10, self.body:getY() * 10, 
+         self.shape:getRadius() * 10)
 end
 
 -------------

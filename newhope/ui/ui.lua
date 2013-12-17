@@ -7,6 +7,9 @@ function UI:new()
    return self
 end
 
+function UI:load()
+end
+
 function UI:draw()
    -- draw wireframe (physics objects)
    if self.mode == 'wireframe' then
