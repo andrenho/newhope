@@ -11,22 +11,21 @@ end
 
 -- load modules
 phys = my_require('phys')
+ui   = my_require('ui')
 
 -- load classes
-Game = my_require('game')
-UI   = my_require('ui.ui')
 
 -- initialize game
 world   = nil -- TODO
 physics = phys.Physics:new()
-game    = Game:new()
 
 -- temporary (TODO)
 physics:add_object(phys.StaticObject:new(400, 80, 10, 10))
 physics:add_object(phys.DynamicObject:new(80, 80, 5, 5))
 
 -- initialize UI
-ui = UI:new()
+game = ui.Game:new()
+ui   = ui.UI:new()
 
 -- setup LÖVE callbacks
 function love.draw() ui:draw() end
