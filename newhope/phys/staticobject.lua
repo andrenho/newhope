@@ -9,6 +9,12 @@ function StaticObject:new(x, y, w, h)
    return self
 end
 
+function StaticObject:draw_wireframe()
+   love.graphics.setColor(128, 0, 0)
+   love.graphics.polygon('line', 
+         self.body:getWorldPoints(self.shape:getPoints()))
+end
+
 -------------
 -- PRIVATE --
 -------------

@@ -3,7 +3,19 @@ UI.__index = UI
 
 function UI:new()
    local self = setmetatable({}, UI)
+   self.mode = 'wireframe'
    return self
+end
+
+function UI:draw()
+   -- draw wireframe (physics objects)
+   if self.mode == 'wireframe' then
+      love.graphics.setBackgroundColor(255, 255, 255)
+      love.graphics.clear()
+      for _,obj in ipairs(physics.objects) do
+         obj:draw_wireframe()
+      end
+   end
 end
 
 -------------

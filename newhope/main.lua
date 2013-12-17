@@ -9,21 +9,28 @@ function my_require(module)
    return require(module)
 end
 
--- modules
-physics = my_require('physics')
+-- load modules
+phys = my_require('phys')
 
--- classes
+-- load classes
 Game = my_require('game')
+UI   = my_require('ui.ui')
 
 -- initialize game
-world = nil -- TODO
-phys = physics.Physics:new()
-game = Game:new(world)
+world   = nil -- TODO
+physics = phys.Physics:new()
+game    = Game:new()
 
 -- temporary (TODO)
-phys:add_object(physics.PhysStaticObj:new(50, 50, 10, 10))
+physics:add_object(phys.StaticObject:new(400, 80, 10, 10))
+physics:add_object(phys.DynamicObject:new(80, 80, 5, 5))
 
 -- initialize UI
-my_require('ui.lovemain')
+ui = UI:new()
+
+-- setup LÖVE callbacks
+function love.draw() ui:draw() end
+function love.update(dt) game:step(dt) end
+function love.keypressed(key, unicode) game:keypressed(key, unicode) end
 
 -- vim: ts=3:sw=3:sts=3:expandtab
