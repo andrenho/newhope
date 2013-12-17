@@ -18,8 +18,7 @@ function DynamicObject:draw_wireframe()
 end
 
 function DynamicObject:up()
-   print('hi')
-   self.body:setLinearVelocity(0, -30)
+   self.body:setLinearVelocity(0, -40)
 end
 
 -------------
