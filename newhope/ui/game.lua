@@ -7,6 +7,16 @@ function Game:new(world_)
    return self
 end
 
+function Game:keypressed(key, unicode)
+   if key == 'q' then
+      os.exit()
+   end
+end
+
+function Game:step(dt)
+   physics.pworld:update(dt)
+end
+
 -------------
 -- PRIVATE --
 -------------
