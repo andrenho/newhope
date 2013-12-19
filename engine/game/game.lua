@@ -36,11 +36,19 @@ function Game:start()
    end
 end
 
+
+function Game:clean_up()
+   ui:clean_up()
+end
+
 -------------
 -- PRIVATE --
 -------------
 
 function Game:__do_event(e)
+   if e.event == 'quit' then
+      self.active = false
+   end
 end
 
 function Game:__tostring()

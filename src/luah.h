@@ -12,6 +12,7 @@ void luah_set_c_function(lua_State* L, const char* lua_object,
 		const char* lua_func_name, lua_CFunction c_func);
 
 void luah_start_engine(lua_State* L);
+void luah_end_engine(lua_State* L);
 
 void luah_error(lua_State* L, const char *fmt, ...);
 void luah_stack_dump(lua_State* L);

@@ -62,6 +62,15 @@ void luah_start_engine(lua_State* L)
 }
 
 
+void luah_end_engine(lua_State* L)
+{
+	lua_getglobal(L, "game");
+	LUA_PUSH_METHOD(L, "clean_up");
+	luah_call(L, 1, 0);
+	lua_close(L);
+}
+
+
 void luah_set_c_function(lua_State* L, const char* lua_object, 
 		const char* lua_func_name, lua_CFunction c_func)
 {
