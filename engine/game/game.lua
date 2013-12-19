@@ -26,7 +26,8 @@ function Game:start()
       end
       
       -- redraw screen
-      ui:redraw()
+      local x1,y1,x2,y2 = ui:visible_tiles()
+      ui:redraw(world:objects_in_area(x1,y1,x2,y2))
 
       -- wait for frame
       local now = ui:now()
@@ -39,6 +40,7 @@ end
 
 function Game:clean_up()
    ui:clean_up()
+   world:clean_up()
 end
 
 -------------

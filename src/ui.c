@@ -4,17 +4,20 @@
 #include <SDL2/SDL.h>
 
 #include "luah.h"
-
+#include "wireframe.h"
 
 typedef struct UI {
 	SDL_Window* win;
 	SDL_Renderer* ren;
+	bool wireframe_mode;
 } UI;
 static UI ui;
 
 
 int ui_c_init(lua_State* L)
 {
+	ui.wireframe_mode = true;
+
 	// initialize SDL
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		fprintf(stderr, "\nUnable to initialize SDL: %s\n", SDL_GetError());
@@ -51,7 +54,12 @@ int ui_c_redraw(lua_State* L)
 	SDL_RenderClear(ui.ren);
 
 	SDL_SetRenderDrawColor(ui.ren, 0, 0, 0, 255);
-	//render_objects();
+
+	if(ui.wireframe_mode) {
+		wireframe_render(L, ui.ren);
+	} else {
+		abort();
+	}
 
 	SDL_RenderPresent(ui.ren);
 	return 0;
@@ -76,6 +84,16 @@ int ui_user_events(lua_State* L)
 	}
 
 	return 1;
+}
+
+
+int ui_visible_tiles(lua_State* L)
+{
+	lua_pushnumber(L, -1000);
+	lua_pushnumber(L, -1000);
+	lua_pushnumber(L, 1000);
+	lua_pushnumber(L, 1000);
+	return 4;
 }
 
 

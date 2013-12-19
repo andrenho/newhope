@@ -20,6 +20,8 @@ end
 -- initialize world map
 --
 function World:initialize()
+   self:__init_physics()
+
    self.player = Player:new(5, 10)
    --[[
    self.player:setup_collision_handler()
@@ -29,6 +31,14 @@ function World:initialize()
    --self:__add_people_to_cities()
 
    self:__add_static_objects()
+end
+
+
+--
+-- clean up
+--
+function World:clean_up()
+   self:__finish_physics()
 end
 
 
