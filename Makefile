@@ -11,6 +11,7 @@ include src/libraries.mk
 SRC = src/main.c	\
       src/luah.c	\
       src/physics.c	\
+      src/dynamicp.c    \
       src/staticp.c     \
       src/ui.c		\
       src/wireframe.c

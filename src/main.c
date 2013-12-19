@@ -4,6 +4,7 @@
 #include "ui.h"
 #include "physics.h"
 #include "staticp.h"
+#include "dynamicp.h"
 
 static void complement_engine_functions(lua_State* L);
 
@@ -45,6 +46,9 @@ static void complement_engine_functions(lua_State* L)
 	luah_set_c_function(L, "World", "__physics_create_static_obj", 
 			physics_create_static_obj);
 
-	// Static object
+	// Static person
 	luah_set_c_function(L, "StaticPerson", "init_physics", staticp_init);
+
+	// Dynamic person
+	luah_set_c_function(L, "DynamicPerson", "init_physics", dynamicp_init);
 }
