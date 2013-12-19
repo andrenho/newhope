@@ -16,7 +16,6 @@ typedef struct Controls {
 } Controls;
 
 cpSpace* space;
-cpBody* car;
 cpBody* tire[4];
 
 Controls controls = { 0, 0, 0, 0 };
@@ -27,18 +26,6 @@ Controls controls = { 0, 0, 0, 0 };
  *           *
  *************/
 
-int collision_callback(cpArbiter *arb, struct cpSpace *space, void *data)
-{
-	cpBody *a, *b;
-
-	cpArbiterGetBodies(arb, &a, &b);
-	if(a == car || b == car) {
-		printf("hi\n");
-		return 0;
-	}
-	return 1;
-}
-
 void init_physics()
 {
 	// setup space
@@ -46,44 +33,18 @@ void init_physics()
 
 	// setup tires
 	int i;
-	for(i=0; i<2; i++) {
+	for(i=0; i<1; i++) {
 		cpFloat x = 0, y = 0, w = 0.5, h = 1.75;
 		cpFloat mass = 50;
 		cpFloat moment = cpMomentForBox(mass, w, h);
 		tire[i] = cpSpaceAddBody(space, cpBodyNew(mass, moment));
-		cpShape* shape = cpSpaceAddShape(space, cpBoxShapeNew2(tire[i], 
+		cpSpaceAddShape(space, cpBoxShapeNew2(tire[i], 
 					cpBBNew(x-(w/2), y-(h/2), x+(w/2), y+(h/2))));
-		cpShapeSetGroup(shape, 2);
-		cpBodySetPos(tire[i], cpv(i, 0));
-		//cpBodySetAngle(tire[i], -M_PI/6);
+		cpSpaceReindexShapesForBody(space, tire[0]);
+		cpBodySetAngle(tire[i], -M_PI/6);
 		//cpBodySetVel(tire[i], cpv(0, 10));
 		//cpBodyApplyImpulse(tire[i], cpv(0, 1000), cpvzero);
 	}
-
-	// setup car
-	int x = 0, y = 0, w = 4, h = 9;
-	cpFloat mass = 150;
-	cpFloat moment = cpMomentForBox(mass, w, h);
-	car = cpSpaceAddBody(space, cpBodyNew(mass, moment));
-	cpShape* shape = cpSpaceAddShape(space, cpBoxShapeNew2(car, 
-				cpBBNew(x-(w/2), y-(h/2), x+(w/2), y+(h/2))));
-	cpShapeSetGroup(shape, 1);
-
-	// place tires
-	cpBodySetPos(tire[0], cpv(x, y+(h/2)-1.5));
-	cpBodySetPos(tire[1], cpv(x, y-(h/2)+1.5));
-
-	// setup joints
-	for(i=0; i<2; i++) {
-		cpSpaceAddConstraint(space, 
-				cpPivotJointNew(car, tire[i], cpBodyGetPos(tire[i])));
-		cpSpaceAddConstraint(space, 
-				cpRotaryLimitJointNew(car, tire[i], 
-					i==0 ? -M_PI/6 : 0, i==0 ? M_PI/6 : 0));
-	}
-
-
-	cpSpaceSetDefaultCollisionHandler(space, collision_callback, NULL, NULL, NULL, NULL);
 }
 
 cpVect lateral_velocity(int n)
@@ -129,12 +90,12 @@ void update_friction(int n)
 
 void update_drive()
 {
-	const cpFloat max_forward_speed = 100;
+	const cpFloat max_forward_speed = 150;
 	const cpFloat max_backward_speed = -20;
-	const cpFloat max_drive_force = 150;
+	const cpFloat max_drive_force = 100;
 
 	int i;
-	for(i=0; i<2; i++) {
+	for(i=0; i<1; i++) {
 		cpFloat desired_speed = 0;
 
 		// find desired speed
@@ -162,7 +123,7 @@ void update_drive()
 void update_turn()
 {
 	int i;
-	for(i=0; i<2; i++) {
+	for(i=0; i<1; i++) {
 		cpFloat desired_torque = 0;
 		if(controls.left)
 			desired_torque = -1100;
@@ -212,10 +173,9 @@ void draw_shape(cpBody* body, cpShape* shape, void* data)
 void render_objects()
 {
 	int i;
-	for(i=0; i<2; i++) {
+	for(i=0; i<1; i++) {
 		cpBodyEachShape(tire[i], draw_shape, NULL);
 	}
-	cpBodyEachShape(car, draw_shape, NULL);
 }
 
 int main()
@@ -240,10 +200,7 @@ int main()
 		Uint32 t = SDL_GetTicks() + 1000/60;
 
 		// physics step
-		int i;
-		for(i=0; i<2; i++) {
-			update_friction(i);
-		}
+		update_friction(0);
 		update_drive();
 		update_turn();
 		cpSpaceStep(space, 1.0/60.0);
@@ -260,9 +217,9 @@ int main()
 		}
 		const Uint8* k = SDL_GetKeyboardState(NULL);
 		controls.forward = k[SDL_SCANCODE_UP];
-		controls.back =    k[SDL_SCANCODE_DOWN];
-		controls.left =    k[SDL_SCANCODE_LEFT];
-		controls.right =   k[SDL_SCANCODE_RIGHT];
+		controls.back = k[SDL_SCANCODE_DOWN];
+		controls.left = k[SDL_SCANCODE_LEFT];
+		controls.right = k[SDL_SCANCODE_RIGHT];
 
 		// render
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
