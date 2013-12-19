@@ -142,8 +142,9 @@ function World:__add_static_objects()
    for x = x1,x2 do
       for y = y1,y2 do
          if not self:tile_walkable(x,y) then
-            local obj = phys.StaticObject:new(x, y, 1, 1)
-            physics:add_object(obj)
+            -- TODO
+            --local obj = phys.StaticObject:new(x, y, 1, 1)
+            --physics:add_object(obj)
          end
       end
    end

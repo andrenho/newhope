@@ -8,7 +8,8 @@
 include src/config.mk
 include src/libraries.mk
 
-SRC = src/main.c
+SRC = src/main.c	\
+      src/luah.c
 
 OBJ = ${SRC:.c=.o} #ui/block.h
 HEADERS = ${SRC:.c=.h}

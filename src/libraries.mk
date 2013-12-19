@@ -1,5 +1,5 @@
 # system libraries
-LUA  = $(shell pkg-config --cflags lua > /dev/null 2> /dev/null; echo $$?)
+LUA  = $(shell pkg-config --cflags luajit > /dev/null 2> /dev/null; echo $$?)
 SDL2 = $(shell sdl2-config --cflags > /dev/null 2> /dev/null; echo $$?)
 
 # SDL libraries

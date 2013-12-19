@@ -13,8 +13,6 @@ end
 table  = my_require('util.table')
 funct  = my_require('util.funct')
 string = my_require('util.string')
-phys   = my_require('phys')
-ui     = my_require('ui')
 
 -- load classes
 World         = my_require('world.world')
@@ -32,20 +30,11 @@ CarModel      = my_require('world.carmodel')
 Car           = my_require('world.car')
 
 -- create game
-world   = World:new()
-physics = phys.Physics:new()
+world = World:new()
+--game  = ui.Game:new()
+--ui    = ui.UI:new()
 
--- initialize UI
-game = ui.Game:new()
-ui   = ui.UI:new()
-
--- initialize game
+-- initialize engine
 world:initialize()
-
--- setup LÖVE callbacks
-function love.load() ui:load() end
-function love.draw() ui:draw() end
-function love.update(dt) game:step(dt) end
-function love.keypressed(key, unicode) game:keypressed(key, unicode) end
 
 -- vim: ts=3:sw=3:sts=3:expandtab

@@ -4,7 +4,6 @@ DynamicPerson.__index = DynamicPerson
 function DynamicPerson:new(x, y)
   local self = self or setmetatable({}, DynamicPerson)
   self:__init(x,y)
-  self.physics_object = physics:add_object(phys.DynamicObject:new(x, y, 0.5))
   return self
 end
 
