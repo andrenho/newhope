@@ -1,6 +1,7 @@
 #include <lua.h>
 
 #include "luah.h"
+#include "ui.h"
 
 static void complement_engine_functions(lua_State* L);
 
@@ -27,4 +28,10 @@ int main()
 
 static void complement_engine_functions(lua_State* L)
 {
+	// UI
+	luah_set_c_function(L, "ui", "__c_init",    ui_c_init);
+	luah_set_c_function(L, "ui", "now",         ui_now);
+	luah_set_c_function(L, "ui", "wait",        ui_wait);
+	luah_set_c_function(L, "ui", "__c_redraw",  ui_c_redraw);
+	luah_set_c_function(L, "ui", "user_events", ui_user_events);
 }

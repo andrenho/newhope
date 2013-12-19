@@ -13,28 +13,26 @@ end
 table  = my_require('util.table')
 funct  = my_require('util.funct')
 string = my_require('util.string')
+game   = my_require('game')
 
 -- load classes
-World         = my_require('world.world')
+World         = my_require('world')
 -- map --
-Block         = my_require('world.block')
-City          = my_require('world.city')
-Building      = my_require('world.building')
-BuildingType  = my_require('world.buildingtype')
+Block         = my_require('block')
+City          = my_require('city')
+Building      = my_require('building')
+BuildingType  = my_require('buildingtype')
 -- objects --
-Object        = my_require('world.object')
-StaticPerson  = my_require('world.staticperson')
-DynamicPerson = my_require('world.dynamicperson')
-Player        = my_require('world.player')
-CarModel      = my_require('world.carmodel')
-Car           = my_require('world.car')
+Object        = my_require('object')
+StaticPerson  = my_require('staticperson')
+DynamicPerson = my_require('dynamicperson')
+Player        = my_require('player')
+CarModel      = my_require('carmodel')
+Car           = my_require('car')
 
 -- create game
 world = World:new()
---game  = ui.Game:new()
---ui    = ui.UI:new()
-
--- initialize engine
-world:initialize()
+ui    = game.UI:new()
+game  = game.Game:new()
 
 -- vim: ts=3:sw=3:sts=3:expandtab

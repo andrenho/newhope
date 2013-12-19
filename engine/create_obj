@@ -1,5 +1,7 @@
+#!/usr/bin/env lua
+
 if #arg ~= 1 then
-   print('Usage: '..arg[-1]..' '..arg[0]..' Classname')
+   print('Usage: '..arg[0]..' Classname')
    os.exit()
 end
 
