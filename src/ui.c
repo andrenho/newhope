@@ -48,7 +48,7 @@ int ui_wait(lua_State* L)
 }
 
 
-int ui_c_redraw(lua_State* L)
+int ui_render(lua_State* L)
 {
 	SDL_SetRenderDrawColor(ui.ren, 255, 255, 255, 255);
 	SDL_RenderClear(ui.ren);
@@ -89,10 +89,10 @@ int ui_user_events(lua_State* L)
 
 int ui_visible_tiles(lua_State* L)
 {
-	lua_pushnumber(L, -1000);
-	lua_pushnumber(L, -1000);
-	lua_pushnumber(L, 1000);
-	lua_pushnumber(L, 1000);
+	lua_pushnumber(L, -50);
+	lua_pushnumber(L, -50);
+	lua_pushnumber(L, 50);
+	lua_pushnumber(L, 50);
 	return 4;
 }
 

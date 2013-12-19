@@ -22,13 +22,13 @@ end
 function World:initialize()
    self:__init_physics()
 
-   self.player = Player:new(5, 10)
+   --self.player = self:__add_object(Player:new(5, 10))
    --[[
    self.player:setup_collision_handler()
    self:add_object(Car:new(-5, -5, CarModel.REGULAR))
    ]]
    self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
-   --self:__add_people_to_cities()
+   self:__add_people_to_cities()
 
    self:__add_static_objects()
 end
@@ -138,6 +138,7 @@ function World:__add_people_to_cities()
                local y = p.y + city.y + building.y + 0.5
                if p.type == 'Shopkeeper' then
                   person = StaticPerson:new(x, y)
+                  self:__add_object(person)
                end
                assert(person, 'Invalid person type: ' .. p.type)
             end
@@ -146,15 +147,18 @@ function World:__add_people_to_cities()
    end
 end
 
+function World:__add_object(obj)
+   self.objects[#self.objects+1] = obj
+   obj:init_physics()
+end
+
 -- TODO : low performance, I think. Maybe add as the player walks?
 function World:__add_static_objects()
    local x1, y1, x2, y2 = self:__limits()
    for x = x1,x2 do
       for y = y1,y2 do
          if not self:tile_walkable(x,y) then
-            -- TODO
-            --local obj = phys.StaticObject:new(x, y, 1, 1)
-            --physics:add_object(obj)
+            self:__physics_create_static_obj(x, y, 1, 1)
          end
       end
    end

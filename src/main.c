@@ -3,6 +3,7 @@
 #include "luah.h"
 #include "ui.h"
 #include "physics.h"
+#include "staticp.h"
 
 static void complement_engine_functions(lua_State* L);
 
@@ -33,7 +34,7 @@ static void complement_engine_functions(lua_State* L)
 	luah_set_c_function(L, "ui", "__c_init",      ui_c_init);
 	luah_set_c_function(L, "ui", "now",           ui_now);
 	luah_set_c_function(L, "ui", "wait",          ui_wait);
-	luah_set_c_function(L, "ui", "__c_redraw",    ui_c_redraw);
+	luah_set_c_function(L, "ui", "render",        ui_render);
 	luah_set_c_function(L, "ui", "user_events",   ui_user_events);
 	luah_set_c_function(L, "ui", "visible_tiles", ui_visible_tiles);
 	luah_set_c_function(L, "ui", "clean_up",      ui_clean_up);
@@ -41,4 +42,9 @@ static void complement_engine_functions(lua_State* L)
 	// World
 	luah_set_c_function(L, "World", "__init_physics", physics_init);
 	luah_set_c_function(L, "World", "__finish_physics", physics_finish);
+	luah_set_c_function(L, "World", "__physics_create_static_obj", 
+			physics_create_static_obj);
+
+	// Static object
+	luah_set_c_function(L, "StaticPerson", "init_physics", staticp_init);
 }

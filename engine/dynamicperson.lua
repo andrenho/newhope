@@ -7,10 +7,6 @@ function DynamicPerson:new(x, y)
   return self
 end
 
-function DynamicPerson:set_target(x,y)
-  error('This method must be implemented in C.')
-end
-
 function DynamicPerson:type()
   return 'DynamicPerson'
 end

@@ -10,10 +10,6 @@ function UI:initialize()
    self.c_ptr = self:__c_init()
 end
 
-function UI:redraw(objects)
-   self:__c_redraw(objects)
-end
-
 -------------
 -- PRIVATE --
 -------------

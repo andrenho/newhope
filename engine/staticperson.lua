@@ -7,10 +7,6 @@ function StaticPerson:new(x, y)
   return self
 end
 
-function StaticPerson:create_physics_body()
-  error('This method must be implemented in C.')
-end
-
 function StaticPerson:type()
   return 'StaticPerson'
 end
