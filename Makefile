@@ -5,16 +5,12 @@
 # Please make your configuration changes in the `config.mk` file.
 # 
 
-include ui/config.mk
-include ui/libraries.mk
+include src/config.mk
+include src/libraries.mk
 
-SRC = ui/main.c		\
-      ui/interface.c	\
-      ui/physics.c	\
-      ui/render.c	\
-      ui/ui.c
+SRC = src/main.c
 
-OBJ = ${SRC:.c=.o} ui/block.h
+OBJ = ${SRC:.c=.o} #ui/block.h
 HEADERS = ${SRC:.c=.h}
 DIST = 
 DATA = # TODO
@@ -33,7 +29,7 @@ options:
 	@${CC} -c ${CFLAGS} -o $@ $<
 	@${CC} -MM ${CFLAGS} $*.c > $*.d
 
-${OBJ}: ui/config.mk ui/libraries.mk
+${OBJ}: src/config.mk src/libraries.mk
 
 -include ${OBJ:.o=.d}
 
