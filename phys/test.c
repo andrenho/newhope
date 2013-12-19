@@ -25,7 +25,8 @@ void init_physics()
 		tire[i] = cpSpaceAddBody(space, cpBodyNew(mass, moment));
 		cpSpaceAddShape(space, cpBoxShapeNew2(tire[i], 
 					cpBBNew(x-(w/2), y-(h/2), x+(w/2), y+(h/2))));
-		cpBodySetAngle(tire[0], 2);
+		cpBodySetAngle(tire[0], 0.5);
+		cpSpaceReindexShapesForBody(space, tire[0]);
 	}
 }
 
