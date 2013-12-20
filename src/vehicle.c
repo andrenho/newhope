@@ -11,7 +11,7 @@ static Vehicle* create_vehicle(cpFloat x, cpFloat y, cpFloat angle,
 		cpFloat w, cpFloat h);
 static void update_friction(lua_State* L, cpBody* body);
 static void update_drive(lua_State* L, cpBody* body, bool forward, bool back);
-static void update_turn(lua_State* L, Vehicle* v);
+static void update_turn(lua_State* L, cpBody* body, double left, double right);
 
 
 int vehicle_init(lua_State* L)
@@ -54,17 +54,18 @@ int vehicle_update(lua_State* L)
 	// get controls
 	lua_pushstring(L, "controls");
 	lua_gettable(L, -2);
-	bool accelerate, breaks, left, right;
+	bool accelerate, breaks;
+	double left, right;
 	LUA_FIELD(L, accelerate, "accelerate", boolean);
 	LUA_FIELD(L, breaks, "breaks", boolean);
-	LUA_FIELD(L, left, "left", boolean);
-	LUA_FIELD(L, right, "right", boolean);
+	LUA_FIELD(L, left, "left", number);
+	LUA_FIELD(L, right, "right", number);
 
 	update_friction(L, v->front_wheel_body);
 	update_friction(L, v->rear_wheel_body);
 	update_drive(L, v->front_wheel_body, accelerate, breaks);
 	update_drive(L, v->rear_wheel_body, accelerate, breaks);
-	//update_turn(L, v);
+	update_turn(L, v->front_wheel_body, left, right);
 
 	return 0;
 }
@@ -235,6 +236,12 @@ static void update_drive(lua_State* L, cpBody* body, bool forward, bool back)
 }
 
 
-static void update_turn(lua_State* L, Vehicle* v)
+static void update_turn(lua_State* L, cpBody* body, double left, double right)
 {
+	cpFloat desired_torque = 0;
+	if(left)
+		desired_torque = -1100;
+	else if(right)
+		desired_torque = 1100;
+	cpBodySetTorque(body, desired_torque);
 }
