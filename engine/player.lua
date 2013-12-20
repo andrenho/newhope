@@ -28,7 +28,6 @@ function Player:exit_vehicle()
    end
    self.__in_vehicle = false
    self:set_position(fx, vpos.y)
-   print(fx, vpos.y)
    return true
 end
 
