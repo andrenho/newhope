@@ -19,6 +19,10 @@ function Player:collision(other)
   print(other)
 end
 
+function Player:in_vehicle()
+  return world.objects[2]
+end
+
 -------------
 -- PRIVATE --
 -------------

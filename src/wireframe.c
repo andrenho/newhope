@@ -11,7 +11,7 @@
 // TODO - restrict all to visible area
 // TODO
 
-const double Z = 20;
+const double Z = 8;
 int rx = 50, ry = 50;
 
 SDL_Point circle_pixel[10000];

@@ -8,8 +8,7 @@ function Vehicle:new(x, y, model)
   self.controls = {
     accelerate = false,
     breaking = false,
-    left = 0,
-    right = 0,
+    steering = 0,
     gear = 1,
   }
   self.angle = math.pi/8
@@ -18,20 +17,24 @@ function Vehicle:new(x, y, model)
   return self
 end
 
-function Vehicle:type()
-  return 'Vehicle'
+function Vehicle:step()
+  self:__update_physics()
 end
 
 -------------
 -- PRIVATE --
 -------------
 
+function Vehicle:__calculate_attributes()
+  self.attrib = table.shallow_copy(self.__model)
+end
+
 function Vehicle:__tostring()
   return '[Vehicle]'
 end
 
-function Vehicle:__calculate_attributes()
-  self.attrib = table.shallow_copy(self.__model)
+function Vehicle:type()
+  return 'Vehicle'
 end
 
 return Vehicle

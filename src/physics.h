@@ -11,4 +11,6 @@ int physics_step(lua_State* L);
 int physics_create_static_obj(lua_State* L);
 int physics_finish(lua_State* L);
 
+int physics_obj_pos(lua_State* L);
+
 #endif

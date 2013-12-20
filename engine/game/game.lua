@@ -21,6 +21,7 @@ function Game:start()
       world:step()
 
       -- get user events
+      self:__check_keyboard_state(ui:keyboard_state())
       for _,evt in ipairs(ui:user_events()) do
          self:__do_event(evt)
       end
@@ -47,6 +48,26 @@ end
 -------------
 -- PRIVATE --
 -------------
+
+function Game:__check_keyboard_state(st)
+   local vehicle = world.player:in_vehicle()
+   if vehicle then
+      vehicle.accelerate = st.up
+      vehicle.breaks = st.down
+      if st.right then 
+         vehicle.steering = 1
+      elseif st.left then
+         vehicle.steering = -1
+      else
+         vehicle.steering = 0
+      end
+   else
+      local pos = world.player:pos()
+      if st.up then pos.y = pos.y-100 elseif st.down then pos.y = pos.y+100 end
+      if st.right then pos.x = pos.x+100 elseif st.left then pos.x = pos.x-100 end
+      world.player:set_target(pos.x, pos.y)
+   end
+end
 
 function Game:__do_event(e)
    if e.event == 'quit' then

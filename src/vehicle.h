@@ -12,6 +12,7 @@ typedef struct Vehicle {
 } Vehicle;
 
 int vehicle_init(lua_State* L);
+int vehicle_update(lua_State* L);
 int vehicle_clean_up(lua_State* L);
 
 #endif

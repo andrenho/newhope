@@ -87,6 +87,19 @@ int ui_user_events(lua_State* L)
 }
 
 
+int ui_keyboard_state(lua_State* L)
+{
+	const Uint8* k = SDL_GetKeyboardState(NULL);
+
+	lua_createtable(L, 0, 5);
+	LUA_SET_FIELD(L, k[SDL_SCANCODE_UP], "up", boolean);
+	LUA_SET_FIELD(L, k[SDL_SCANCODE_DOWN], "down", boolean);
+	LUA_SET_FIELD(L, k[SDL_SCANCODE_LEFT], "left", boolean);
+	LUA_SET_FIELD(L, k[SDL_SCANCODE_RIGHT], "right", boolean);
+	return 1;
+}
+
+
 int ui_visible_tiles(lua_State* L)
 {
 	lua_pushnumber(L, -50);

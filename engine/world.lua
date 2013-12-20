@@ -11,6 +11,8 @@ function World:new()
    self.cities = {}
    self.predefined_tiles = {}
 
+   self.__obj_ptr = {}
+
    self.objects_ptr = {}
    return self
 end
@@ -23,9 +25,7 @@ function World:initialize()
    self:__init_physics()
 
    self.player = self:__add_object(Player:new(5, 10))
-   --[[
-   self.player:setup_collision_handler()
-   ]]
+
    self:__add_object(Vehicle:new(10, 10, VehicleModel.REGULAR))
    
    self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
@@ -108,6 +108,16 @@ function World:tile_walkable(x, y)
    return true
 end
 
+--
+-- when a collision happens, this method is called by the C code
+--
+function World:collision_callback(body_a, body_b)
+   local a = self.__obj_ptr[body_a]
+   local b = self.__obj_ptr[body_b]
+   a:collision(b)
+   b:collision(a)
+end
+
 -- 
 -- Return type
 --
@@ -155,6 +165,7 @@ end
 function World:__add_object(obj)
    self.objects[#self.objects+1] = obj
    obj:init_physics()
+   self.__obj_ptr[obj.body] = obj
    return obj
 end
 
