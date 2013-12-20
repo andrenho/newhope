@@ -31,3 +31,21 @@ int staticp_init(lua_State* L)
 
 	return 0;
 }
+
+
+int staticp_clean_up(lua_State* L)
+{
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	cpBody* body;
+	cpShape* shape;
+	LUA_FIELD(L, body, "body", userdata);
+	LUA_FIELD(L, shape, "shape", userdata);
+
+	cpSpaceRemoveShape(space, shape);
+	cpSpaceRemoveBody(space, body);
+	cpShapeFree(shape);
+	cpBodyFree(body);
+
+	return 0;
+}

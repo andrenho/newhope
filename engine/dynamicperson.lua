@@ -11,6 +11,10 @@ function DynamicPerson:type()
   return 'DynamicPerson'
 end
 
+function DynamicPerson:set_target(x, y)
+  error('C override')
+end
+
 -------------
 -- PRIVATE --
 -------------

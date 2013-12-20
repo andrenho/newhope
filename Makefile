@@ -14,6 +14,7 @@ SRC = src/main.c	\
       src/dynamicp.c    \
       src/staticp.c     \
       src/ui.c		\
+      src/vehicle.c	\
       src/wireframe.c
 
 OBJ = ${SRC:.c=.o} #ui/block.h

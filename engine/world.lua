@@ -11,7 +11,7 @@ function World:new()
    self.cities = {}
    self.predefined_tiles = {}
 
-   self.object_bodies = {}
+   self.objects_ptr = {}
    return self
 end
 
@@ -22,11 +22,12 @@ end
 function World:initialize()
    self:__init_physics()
 
-   --self.player = self:__add_object(Player:new(5, 10))
+   self.player = self:__add_object(Player:new(5, 10))
    --[[
    self.player:setup_collision_handler()
-   self:add_object(Car:new(-5, -5, CarModel.REGULAR))
    ]]
+   self:__add_object(Vehicle:new(10, 10, VehicleModel.REGULAR))
+   
    self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
    self:__add_people_to_cities()
 
@@ -38,6 +39,9 @@ end
 -- clean up
 --
 function World:clean_up()
+   for _,obj in ipairs(self.objects) do
+      self:__remove_object(obj)
+   end
    self:__finish_physics()
 end
 
@@ -46,6 +50,7 @@ end
 -- one step in the world
 --
 function World:step()
+   self:__physics_step()
    for _,object in ipairs(self.objects) do
       object:step()
    end
@@ -150,7 +155,17 @@ end
 function World:__add_object(obj)
    self.objects[#self.objects+1] = obj
    obj:init_physics()
+   return obj
 end
+
+
+function World:__remove_object(obj)
+   obj:clean_up()
+   for k,v in ipairs(obj) do 
+      if v == obj then table.remove(self.objects, k) end
+   end
+end
+
 
 -- TODO : low performance, I think. Maybe add as the player walks?
 function World:__add_static_objects()

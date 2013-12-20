@@ -13,9 +13,9 @@ int physics_init(lua_State* L)
 }
 
 
-int physics_finish(lua_State* L)
+int physics_step(lua_State* L)
 {
-	cpSpaceFree(space);
+	cpSpaceStep(space, 1.0/60.0);
 	return 0;
 }
 
@@ -32,5 +32,20 @@ int physics_create_static_obj(lua_State* L)
 	cpShapeSetFriction(shape, 1);
 	cpSpaceAddShape(space, shape);
 
+	return 0;
+}
+
+
+static void free_static_shape(cpBody *body, cpShape *shape, void* data)
+{
+	cpSpaceRemoveShape(space, shape);
+	cpShapeFree(shape);
+}
+
+
+int physics_finish(lua_State* L)
+{
+	cpBodyEachShape(space->staticBody, free_static_shape, NULL);
+	cpSpaceFree(space);
 	return 0;
 }

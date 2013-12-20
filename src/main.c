@@ -5,6 +5,7 @@
 #include "physics.h"
 #include "staticp.h"
 #include "dynamicp.h"
+#include "vehicle.h"
 
 static void complement_engine_functions(lua_State* L);
 
@@ -42,13 +43,20 @@ static void complement_engine_functions(lua_State* L)
 
 	// World
 	luah_set_c_function(L, "World", "__init_physics", physics_init);
+	luah_set_c_function(L, "World", "__physics_step", physics_step);
+	luah_set_c_function(L, "World", "__physics_create_static_obj", physics_create_static_obj);
 	luah_set_c_function(L, "World", "__finish_physics", physics_finish);
-	luah_set_c_function(L, "World", "__physics_create_static_obj", 
-			physics_create_static_obj);
 
 	// Static person
 	luah_set_c_function(L, "StaticPerson", "init_physics", staticp_init);
+	luah_set_c_function(L, "StaticPerson", "clean_up", staticp_clean_up);
 
 	// Dynamic person
 	luah_set_c_function(L, "DynamicPerson", "init_physics", dynamicp_init);
+	luah_set_c_function(L, "DynamicPerson", "set_target", dynamicp_set_target);
+	luah_set_c_function(L, "DynamicPerson", "clean_up", dynamicp_clean_up);
+
+	// Vehicle
+	luah_set_c_function(L, "Vehicle", "init_physics", vehicle_init);
+	luah_set_c_function(L, "Vehicle", "clean_up", vehicle_clean_up);
 }

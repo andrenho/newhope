@@ -12,12 +12,8 @@ end
 function Object:step()
 end
 
-function Object:create_physics_body()
-  error('Abstract method')
-end
-
-function Object:is_car()
-  return false
+function Object:init_physics()
+  error('C override')
 end
 
 -------------
@@ -26,6 +22,7 @@ end
 
 function Object:__init(x, y)
   self.x, self.y = x, y
+  self.is_vehicle = false
   return self
 end
 
