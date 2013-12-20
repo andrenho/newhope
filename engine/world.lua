@@ -25,8 +25,8 @@ function World:initialize()
    self:__init_physics()
 
    self.player = self:__add_object(Player:new(5, 10))
-
-   self:__add_object(Vehicle:new(10, 10, VehicleModel.REGULAR))
+   local players_vehicle = self:__add_object(Vehicle:new(10, 10, VehicleModel.REGULAR))
+   self.player.vehicle = players_vehicle
    
    self.cities[#self.cities+1] = City:new(1, 0, 0, 20, 20, Block.GRASS)
    self:__add_people_to_cities()

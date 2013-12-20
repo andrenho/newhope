@@ -52,14 +52,14 @@ end
 function Game:__check_keyboard_state(st)
    local vehicle = world.player:in_vehicle()
    if vehicle then
-      vehicle.accelerate = st.up
-      vehicle.breaks = st.down
+      vehicle.controls.accelerate = st.up
+      vehicle.controls.breaks = st.down
       if st.right then 
-         vehicle.steering = 1
+         vehicle.controls.steering = 1
       elseif st.left then
-         vehicle.steering = -1
+         vehicle.controls.steering = -1
       else
-         vehicle.steering = 0
+         vehicle.controls.steering = 0
       end
    else
       local pos = world.player:pos()
@@ -72,6 +72,10 @@ end
 function Game:__do_event(e)
    if e.event == 'quit' then
       self.active = false
+   elseif e.event == 'key' then
+      if e.key == 'E' and world.player:in_vehicle() then
+         world.player:exit_vehicle()
+      end
    end
 end
 

@@ -76,8 +76,13 @@ int ui_user_events(lua_State* L)
 		switch(e.type) {
 		case SDL_QUIT:
 			lua_newtable(L);
-			luah_stack_dump(L);
 			LUA_SET_FIELD(L, "quit", "event", string);
+			lua_rawseti(L, -2, i++);
+			break;
+		case SDL_KEYDOWN:
+			lua_newtable(L);
+			LUA_SET_FIELD(L, "key", "event", string);
+			LUA_SET_FIELD(L, SDL_GetKeyName(e.key.keysym.sym), "key", string);
 			lua_rawseti(L, -2, i++);
 			break;
 		}

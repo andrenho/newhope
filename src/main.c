@@ -58,6 +58,7 @@ static void complement_engine_functions(lua_State* L)
 	// Dynamic person
 	luah_set_c_function(L, "DynamicPerson", "init_physics", dynamicp_init);
 	luah_set_c_function(L, "DynamicPerson", "set_target", dynamicp_set_target);
+	luah_set_c_function(L, "DynamicPerson", "set_position", dynamicp_set_position);
 	luah_set_c_function(L, "DynamicPerson", "clean_up", dynamicp_clean_up);
 
 	// Vehicle

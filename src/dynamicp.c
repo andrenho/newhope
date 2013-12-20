@@ -62,6 +62,25 @@ int dynamicp_set_target(lua_State* L)
 }
 
 
+int dynamicp_set_position(lua_State* L)
+{
+	luaL_checktype(L, 1, LUA_TTABLE);
+	double x = luaL_checknumber(L, 2);
+	double y = luaL_checknumber(L, 3);
+	lua_pop(L, 2);
+
+	cpBody *target, *body;
+	LUA_FIELD(L, target, "target", userdata);
+	LUA_FIELD(L, body, "body", userdata);
+	if(target) {
+		cpBodySetPos(body, cpv(x, y));
+		cpBodySetPos(target, cpv(x, y));
+	}
+
+	return 0;
+}
+
+
 int dynamicp_clean_up(lua_State* L)
 {
 	luaL_checktype(L, 1, LUA_TTABLE);

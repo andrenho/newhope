@@ -2,25 +2,38 @@ local Player = setmetatable({}, DynamicPerson)
 Player.__index = Player
 
 function Player:new(x, y)
-  local self = self or setmetatable({}, Player)
-  DynamicPerson.new(self, x, y)
-  return self
-end
-
-function Player:type()
-  return 'Player'
-end
-
-function Player:up()
-  self.physics_object:up()
+   local self = self or setmetatable({}, Player)
+   DynamicPerson.new(self, x, y)
+   self.vehicle = nil
+   self.__in_vehicle = false
+   return self
 end
 
 function Player:collision(other)
-  print(other)
+   -- if own vehicle, enter in it
+   if other == self.vehicle and not self.__in_vehicle then
+      self.__in_vehicle = true
+      self:set_position(-100000, -100000)
+   end
+end
+
+function Player:exit_vehicle()
+   -- TODO - check if speed = 0
+   local vpos = self.vehicle:pos()
+   local ppos = self:pos()
+   local fx = vpos.x + funct.max{self.vehicle.attrib.w/2, self.vehicle.attrib.h/2} + 1
+   while not world:tile_walkable(fx, ppos.y) do 
+      fx = fx + 1 
+      if fx > 5 then return false end
+   end
+   self.__in_vehicle = false
+   self:set_position(fx, vpos.y)
+   print(fx, vpos.y)
+   return true
 end
 
 function Player:in_vehicle()
-  return world.objects[2]
+   if self.__in_vehicle then return self.vehicle else return nil end
 end
 
 -------------
@@ -28,9 +41,13 @@ end
 -------------
 
 function Player:__tostring()
-  return '[Player]'
+   return '[Player]'
+end
+
+function Player:type()
+   return 'Player'
 end
 
 return Player
 
--- vim: ts=2:sw=2:sts=2:expandtab
+-- vim: ts=3:sw=3:sts=3:expandtab

@@ -10,8 +10,9 @@ extern cpSpace* space;
 static Vehicle* create_vehicle(cpFloat x, cpFloat y, cpFloat angle, 
 		cpFloat w, cpFloat h);
 static void update_friction(lua_State* L, cpBody* body);
-static void update_drive(lua_State* L, cpBody* body, bool forward, bool back);
-static void update_turn(lua_State* L, cpBody* body, double left, double right);
+static void update_drive(lua_State* L, cpBody* body, bool forward, bool back,
+		cpFloat max_drive_force);
+static void update_turn(lua_State* L, cpBody* body, double steering);
 
 
 int vehicle_init(lua_State* L)
@@ -55,17 +56,16 @@ int vehicle_update(lua_State* L)
 	lua_pushstring(L, "controls");
 	lua_gettable(L, -2);
 	bool accelerate, breaks;
-	double left, right;
+	double steering;
 	LUA_FIELD(L, accelerate, "accelerate", boolean);
 	LUA_FIELD(L, breaks, "breaks", boolean);
-	LUA_FIELD(L, left, "left", number);
-	LUA_FIELD(L, right, "right", number);
+	LUA_FIELD(L, steering, "steering", number);
 
 	update_friction(L, v->front_wheel_body);
 	update_friction(L, v->rear_wheel_body);
-	update_drive(L, v->front_wheel_body, accelerate, breaks);
-	update_drive(L, v->rear_wheel_body, accelerate, breaks);
-	update_turn(L, v->front_wheel_body, left, right);
+	update_drive(L, v->front_wheel_body, accelerate, breaks, 150);
+	update_drive(L, v->rear_wheel_body, accelerate, breaks, 150);
+	update_turn(L, v->front_wheel_body, steering);
 
 	return 0;
 }
@@ -180,7 +180,7 @@ static cpVect forward_velocity(cpBody *body)
 static void update_friction(lua_State* L, cpBody* body)
 {
 	// kill lateral velocity
-	const cpFloat max_lateral_impulse = 300;
+	const cpFloat max_lateral_impulse = 400;
 	cpVect impulse = cpvmult(cpvneg(lateral_velocity(body)), 
 			cpBodyGetMass(body));
 	if(cpvlength(impulse) > max_lateral_impulse)
@@ -206,11 +206,11 @@ static void update_friction(lua_State* L, cpBody* body)
 }
 
 
-static void update_drive(lua_State* L, cpBody* body, bool forward, bool back)
+static void update_drive(lua_State* L, cpBody* body, bool forward, bool back,
+		cpFloat max_drive_force)
 {
 	const cpFloat max_forward_speed = 100;
 	const cpFloat max_backward_speed = -20;
-	const cpFloat max_drive_force = 150;
 
 	cpFloat desired_speed = 0;
 
@@ -236,12 +236,12 @@ static void update_drive(lua_State* L, cpBody* body, bool forward, bool back)
 }
 
 
-static void update_turn(lua_State* L, cpBody* body, double left, double right)
+static void update_turn(lua_State* L, cpBody* body, double steering)
 {
 	cpFloat desired_torque = 0;
-	if(left)
+	if(steering < 0)
 		desired_torque = -1100;
-	else if(right)
+	else if(steering > 0)
 		desired_torque = 1100;
 	cpBodySetTorque(body, desired_torque);
 }
