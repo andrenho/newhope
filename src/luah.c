@@ -17,7 +17,7 @@ static int traceback(lua_State *L);
 lua_State* luah_init(lua_State* L)
 {
 	// initialize LUA
-	setenv("LUA_PATH", "engine/?.lua;engine/?/init.lua;;", 0);
+	putenv("LUA_PATH=engine/?.lua;engine/?/init.lua;;");
 	if(!L) {
 		// first run
 		L = luaL_newstate();
@@ -36,7 +36,7 @@ bool luah_call(lua_State* L, int narg, int nres)
 	int base = lua_gettop(L) - narg;
 	lua_pushcfunction(L, traceback);
 	lua_insert(L, base);
-	if(lua_pcall(L, (narg), (nres), base) != LUA_OK) { 
+	if(lua_pcall(L, (narg), (nres), base) != 0) { 
 		luah_error(L, "%s\n", lua_tostring(L, -1)); 
 		lua_remove(L, base);
 		return false; 
@@ -121,7 +121,7 @@ void luah_stack_dump(lua_State* L)
 		case LUA_TTABLE:
 			lua_getglobal(L, "tostring");
 			lua_pushvalue(L, i);
-			assert(lua_pcall(L, 1, 1, 0) == LUA_OK);
+			assert(lua_pcall(L, 1, 1, 0) == 0);
 			printf("%s", lua_tolstring(L, -1, NULL));
 			lua_pop(L, 1);
 			break;

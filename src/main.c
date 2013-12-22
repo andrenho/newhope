@@ -49,7 +49,7 @@ static void complement_engine_functions(lua_State* L)
 	luah_set_c_function(L, "World", "__finish_physics", physics_finish);
 
 	// Object position
-	luah_set_c_function(L, "Object", "pos", physics_obj_pos);
+	luah_set_c_function(L, "Object", "__pos", physics_obj_pos);
 
 	// Static person
 	luah_set_c_function(L, "StaticPerson", "init_physics", staticp_init);

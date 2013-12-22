@@ -4,6 +4,6 @@
 #include <SDL2/SDL.h>
 #include <lua.h>
 
-void wireframe_render(lua_State* L, SDL_Renderer* ren);
+void wireframe_render(lua_State* L, SDL_Window* win, SDL_Renderer* ren);
 
 #endif

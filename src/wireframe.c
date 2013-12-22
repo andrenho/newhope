@@ -98,16 +98,25 @@ static void draw_vehicle(SDL_Renderer *ren, Vehicle* vehicle)
 	draw_shape(ren, vehicle->front_wheel_body, vehicle->front_wheel_shape);
 }
 
-void wireframe_render(lua_State* L, SDL_Renderer* ren)
+void wireframe_render(lua_State* L, SDL_Window* win, SDL_Renderer* ren)
 {
+	int win_w, win_h;
+	SDL_GetWindowSize(win, &win_w, &win_h);
+
 	// draw static bodies
 	cpBodyEachShape(space->staticBody, draw_static_shape, ren);
 
+	// center screen on player
+	double x = luaL_checknumber(L, 2);
+	double y = luaL_checknumber(L, 3);
+	rx = -x*Z + (win_w/2);
+	ry = -y*Z + (win_h/2);
+
 	// draw other objects
-	int n = luaL_len(L, 2);
+	int n = lua_objlen(L, 4);
 	for(int i=1; i<=n; i++)
 	{
-		lua_rawgeti(L, 2, i);
+		lua_rawgeti(L, 4, i);
 
 		bool is_vehicle;
 		LUA_FIELD(L, is_vehicle, "is_vehicle", boolean);

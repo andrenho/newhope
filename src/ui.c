@@ -56,7 +56,7 @@ int ui_render(lua_State* L)
 	SDL_SetRenderDrawColor(ui.ren, 0, 0, 0, 255);
 
 	if(ui.wireframe_mode) {
-		wireframe_render(L, ui.ren);
+		wireframe_render(L, ui.win, ui.ren);
 	} else {
 		abort();
 	}

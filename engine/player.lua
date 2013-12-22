@@ -9,6 +9,15 @@ function Player:new(x, y)
    return self
 end
 
+function Player:pos()
+   if self.__in_vehicle then
+      return self.vehicle:pos()
+   else
+      return DynamicPerson.pos(self)
+   end
+end
+
+
 function Player:collision(other)
    -- if own vehicle, enter in it
    if other == self.vehicle and not self.__in_vehicle then
@@ -20,7 +29,7 @@ end
 function Player:exit_vehicle()
    -- TODO - check if speed = 0
    local vpos = self.vehicle:pos()
-   local ppos = self:pos()
+   local ppos = self:__pos()
    local fx = vpos.x + funct.max{self.vehicle.attrib.w/2, self.vehicle.attrib.h/2} + 1
    while not world:tile_walkable(fx, ppos.y) do 
       fx = fx + 1 

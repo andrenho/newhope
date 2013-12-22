@@ -28,7 +28,9 @@ function Game:start()
       
       -- redraw screen
       local x1,y1,x2,y2 = ui:visible_tiles()
-      ui:render(world:objects_in_area(x1,y1,x2,y2), x1, y1, x2, y2)
+      local player_pos = world.player:pos()
+      ui:render(player_pos.x, player_pos.y, world:objects_in_area(x1,y1,x2,y2), 
+            { x1, y1, x2, y2})
 
       -- wait for frame
       local now = ui:now()
@@ -75,6 +77,8 @@ function Game:__do_event(e)
    elseif e.event == 'key' then
       if e.key == 'E' and world.player:in_vehicle() then
          world.player:exit_vehicle()
+      elseif e.key == 'Q' then
+         self.active = false
       end
    end
 end

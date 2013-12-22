@@ -20,7 +20,7 @@ function Object:init_physics()
 end
 
 function Object:pos()
-   error('C override')
+   return self:__pos()
 end
 
 -------------

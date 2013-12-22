@@ -6,7 +6,11 @@
 # 
 
 include src/config.mk
-include src/libraries.mk
+ifneq ($(OS), Windows_NT)
+  include src/libraries.mk
+else
+  include src/libraries_win.mk
+endif
 
 SRC = src/main.c	\
       src/luah.c	\
