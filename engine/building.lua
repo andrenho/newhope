@@ -1,10 +1,10 @@
 local Building = {}
 Building.__index = Building
 
-function Building:new(btype, layout, x, y)
+function Building:new(layout, x, y)
    local self = setmetatable({}, Building)
    self.x, self.y = x, y
-   self:__load_layout(btype, layout)
+   self.layout = layout
    self.w = #self.layout[1][1]
    self.h = #self.layout[1]
    return self
@@ -28,12 +28,6 @@ end
 
 function Building:__tostring()
    return '[Building]'
-end
-
-function Building:__load_layout(btype, layout)
-   local mod = string.format('buildinglayout.%d_%d', btype, layout)
-   package.loaded[mod] = nil
-   self.layout = require(mod)
 end
 
 return Building

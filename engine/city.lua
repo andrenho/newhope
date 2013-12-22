@@ -28,11 +28,8 @@ function City:__tostring()
 end
 
 function City:__load_layout(layout)
-   local mod = string.format('citylayout.layout_%d', layout)
-   package.loaded[mod] = nil
-   layout = require(mod)
    for _,bd in ipairs(layout.buildings) do
-      local building = Building:new(bd.btype, bd.layout, bd.x, bd.y)
+      local building = Building:new(bd.layout, bd.x, bd.y)
       if building.x+building.w > self.w or building.y+building.h > self.h then
          error('Building outside city.')
       end

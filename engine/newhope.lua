@@ -16,19 +16,20 @@ string = my_require('util.string')
 game   = my_require('game')
 
 -- load classes
-World         = my_require('world')
+World          = my_require('world')
 -- map --
-Block         = my_require('block')
-City          = my_require('city')
-Building      = my_require('building')
-BuildingType  = my_require('buildingtype')
+Block          = my_require('block')
+Building       = my_require('building')
+BuildingLayout = my_require('buildinglayout')
+City           = my_require('city')
+CityLayout     = my_require('citylayout')
 -- objects --
-Object        = my_require('object')
-StaticPerson  = my_require('staticperson')
-DynamicPerson = my_require('dynamicperson')
-Player        = my_require('player')
-VehicleModel  = my_require('vehiclemodel')
-Vehicle       = my_require('vehicle')
+Object         = my_require('object')
+StaticPerson   = my_require('staticperson')
+DynamicPerson  = my_require('dynamicperson')
+Player         = my_require('player')
+VehicleModel   = my_require('vehiclemodel')
+Vehicle        = my_require('vehicle')
 
 -- create game
 world = World:new()
