@@ -24,7 +24,7 @@ SRC = src/main.c	\
 OBJ = ${SRC:.c=.o} #ui/block.h
 HEADERS = ${SRC:.c=.h}
 DIST = 
-DATA = # TODO
+DATA = data/PressStart2P.ttf
 
 all: options newhope
 

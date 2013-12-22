@@ -6,6 +6,7 @@
 #include "luah.h"
 #include "physics.h"
 #include "vehicle.h"
+#include "ui.h"
 
 // TODO
 // TODO - restrict all to visible area
@@ -131,4 +132,47 @@ void wireframe_render(lua_State* L, SDL_Window* win, SDL_Renderer* ren)
 			cpBodyEachShape(body, draw_circle, ren);
 		}
 	}
+}
+
+
+int wireframe_message(lua_State* L, SDL_Window* win, SDL_Renderer* ren, 
+		TTF_Font* font)
+{
+	// get screen size
+	int win_w, win_h;
+	SDL_GetWindowSize(win, &win_w, &win_h);
+
+	// check parameters
+	luaL_checktype(L, 1, LUA_TTABLE);
+	char* text = (char*)luaL_checkstring(L, 2);
+
+	// display message
+	int lines = ui_wrap_text(text, 50);
+	SDL_Rect r = { 0, win_h - (lines * TTF_FontLineSkip(font)) - 50, 
+		win_w, (lines * TTF_FontLineSkip(font)) + 50 };
+	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+	SDL_RenderFillRect(ren, &r);
+	int i, y = win_h - (lines * TTF_FontLineSkip(font)) + 25;
+	for(i=0; i<lines; i++) {
+		SDL_Surface* sf = TTF_RenderUTF8_Solid(font, text, 
+				(SDL_Color){255,255,255});
+		SDL_Texture* txt = SDL_CreateTextureFromSurface(ren, sf);
+		SDL_RenderCopy(ren, txt, NULL, &(SDL_Rect){ 25, y, sf->w, sf->h });
+		printf("%d %d %d\n", y, sf->w, sf->h);
+		SDL_FreeSurface(sf);
+		SDL_DestroyTexture(txt);
+		y += TTF_FontLineSkip(font);
+	}
+	SDL_RenderPresent(ren);
+	printf("1\n");
+	
+	// wait for keypress
+	for(;;) {
+		const Uint8* k = SDL_GetKeyboardState(NULL);
+		if(k[SDL_SCANCODE_SPACE])
+			break;
+		SDL_Delay(1000.0/60.0);
+	}
+
+	return 0;
 }

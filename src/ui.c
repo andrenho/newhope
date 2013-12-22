@@ -1,7 +1,10 @@
 #include "ui.h"
 
+#include <stdlib.h>
+
 #include <lauxlib.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "luah.h"
 #include "wireframe.h"
@@ -10,6 +13,7 @@ typedef struct UI {
 	SDL_Window* win;
 	SDL_Renderer* ren;
 	bool wireframe_mode;
+	TTF_Font* main_font;
 } UI;
 static UI ui;
 
@@ -21,12 +25,27 @@ int ui_c_init(lua_State* L)
 	// initialize SDL
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		fprintf(stderr, "\nUnable to initialize SDL: %s\n", SDL_GetError());
+		exit(1);
 	}
 
 	// initialize window and renderer
 	if(SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_RESIZABLE, &ui.win, 
 				&ui.ren) != 0) {
 		fprintf(stderr, "\nUnable to intialize window: %s\n", SDL_GetError());
+		exit(1);
+	}
+
+	// initialize TTF_Init
+	if(TTF_Init() == -1) {
+		fprintf(stderr, "\nError initializing SDL2_ttf: %s\n", TTF_GetError());
+		exit(1);
+	}
+
+	// load font
+	ui.main_font = TTF_OpenFont(DATADIR "/PressStart2P.ttf", 16);
+	if(!ui.main_font) {
+		fprintf(stderr, "\nUnable to load font: %s\n", TTF_GetError());
+		exit(1);
 	}
 
 	lua_pushlightuserdata(L, &ui);
@@ -115,10 +134,26 @@ int ui_visible_tiles(lua_State* L)
 }
 
 
+int ui_message(lua_State* L)
+{
+	if(ui.wireframe_mode) {
+		return wireframe_message(L, ui.win, ui.ren, ui.main_font);
+	} else {
+		abort();
+	}
+}
+
+
 int ui_clean_up(lua_State* L)
 {
 	SDL_DestroyRenderer(ui.ren);
 	SDL_DestroyWindow(ui.win);
 	SDL_Quit();
 	return 0;
+}
+
+
+int ui_wrap_text(char* text, int chars)
+{
+	return 1;
 }

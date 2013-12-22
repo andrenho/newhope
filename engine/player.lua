@@ -24,6 +24,7 @@ function Player:collision(other)
       self.__in_vehicle = true
       self:set_position(-100000, -100000)
    end
+   if other:type() == 'StaticPerson' then ui:message('test') end
 end
 
 function Player:exit_vehicle()

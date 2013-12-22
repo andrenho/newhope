@@ -14,10 +14,11 @@ PROFILING = no
 
 # paths
 PREFIX = /usr/local
-DATAPREFIX = ${PREFIX}/share/newhope
+#DATAPREFIX = ${PREFIX}/share/newhope
+DATAPREFIX="data"
 
 # basic flags
-CFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${VINTERMPREFIX}\" -pedantic -Wall -I. -I/usr/include -I../interface -std=gnu99
+CFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${DATAPREFIX}\" -pedantic -Wall -I. -I/usr/include -I../interface -std=gnu99
 LDFLAGS = -L/usr/lib
 
 # Duma libraries

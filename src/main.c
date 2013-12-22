@@ -40,6 +40,7 @@ static void complement_engine_functions(lua_State* L)
 	luah_set_c_function(L, "ui", "user_events",    ui_user_events);
 	luah_set_c_function(L, "ui", "keyboard_state", ui_keyboard_state);
 	luah_set_c_function(L, "ui", "visible_tiles",  ui_visible_tiles);
+	luah_set_c_function(L, "ui", "__message",      ui_message);
 	luah_set_c_function(L, "ui", "clean_up",       ui_clean_up);
 
 	// World

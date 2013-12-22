@@ -10,6 +10,20 @@ function UI:initialize()
    self.c_ptr = self:__c_init()
 end
 
+function UI:message(text, person, type_, options)
+   local tp = type_ or 'message'
+   assert(type(text) == 'string')
+   if tp == 'message' then
+      local pos = nil 
+      if person then pos = person:pos() end
+      self:__message(text, pos)
+   end
+end
+
+function UI:__message(text, person_pos, response_type, options)
+   error('C function')
+end
+
 -------------
 -- PRIVATE --
 -------------
