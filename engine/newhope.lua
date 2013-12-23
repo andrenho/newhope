@@ -1,4 +1,4 @@
-require('util.strict') -- doesn't allow globals to be declared inside functions
+require('util.strict') -- don't allow globals to be declared inside functions
 
 local loaded = {}
 function my_require(module)

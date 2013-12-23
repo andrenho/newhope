@@ -1,6 +1,7 @@
 #include "ui.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <lauxlib.h>
 #include <SDL2/SDL.h>
@@ -155,5 +156,17 @@ int ui_clean_up(lua_State* L)
 
 int ui_wrap_text(char* text, int chars)
 {
-	return 1;
+	int i, len = strlen(text);
+	int nl = 0, lines = 1;
+	for(i=0; i<len; i++) {
+		if(nl > chars) {
+			lines++;
+			nl = 0;
+			while(text[i--] != ' ') { }
+			text[i+1] = '\n';
+		}
+		nl++;
+	}
+
+	return lines;
 }

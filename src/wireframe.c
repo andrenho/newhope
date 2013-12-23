@@ -1,6 +1,8 @@
 #include"wireframe.h"
 
 #include <stdbool.h>
+#include <string.h>
+
 #include <lauxlib.h>
 
 #include "luah.h"
@@ -14,6 +16,8 @@
 
 const double Z = 8;
 int rx = 50, ry = 50;
+
+extern char *strdup(const char *s);
 
 SDL_Point circle_pixel[10000];
 static void render_circle(SDL_Renderer* ren, double x1, double y1, double r)
@@ -43,6 +47,7 @@ static void render_circle(SDL_Renderer* ren, double x1, double y1, double r)
 	SDL_RenderDrawPoints(ren, circle_pixel, i);
 }
 
+
 static void draw_circle(cpBody *body, cpShape *shape, void* data)
 {
 	SDL_Renderer* ren = (SDL_Renderer*)data;
@@ -51,6 +56,7 @@ static void draw_circle(cpBody *body, cpShape *shape, void* data)
 	SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
 	render_circle(ren, pos.x*Z+rx, pos.y*Z+ry, r*Z);
 }
+
 
 static void draw_static_shape(cpBody *body, cpShape *shape, void* data)
 {
@@ -99,19 +105,20 @@ static void draw_vehicle(SDL_Renderer *ren, Vehicle* vehicle)
 	draw_shape(ren, vehicle->front_wheel_body, vehicle->front_wheel_shape);
 }
 
+
 void wireframe_render(lua_State* L, SDL_Window* win, SDL_Renderer* ren)
 {
 	int win_w, win_h;
 	SDL_GetWindowSize(win, &win_w, &win_h);
-
-	// draw static bodies
-	cpBodyEachShape(space->staticBody, draw_static_shape, ren);
 
 	// center screen on player
 	double x = luaL_checknumber(L, 2);
 	double y = luaL_checknumber(L, 3);
 	rx = -x*Z + (win_w/2);
 	ry = -y*Z + (win_h/2);
+
+	// draw static bodies
+	cpBodyEachShape(space->staticBody, draw_static_shape, ren);
 
 	// draw other objects
 	int n = lua_objlen(L, 4);
@@ -144,35 +151,46 @@ int wireframe_message(lua_State* L, SDL_Window* win, SDL_Renderer* ren,
 
 	// check parameters
 	luaL_checktype(L, 1, LUA_TTABLE);
-	char* text = (char*)luaL_checkstring(L, 2);
+	char* text = strdup(luaL_checkstring(L, 2));
 
 	// display message
-	int lines = ui_wrap_text(text, 50);
+	int advance;
+	TTF_GlyphMetrics(font, 'A', NULL, NULL, NULL, NULL, &advance);
+	int lines = ui_wrap_text(text, (win_w-50) / advance);
 	SDL_Rect r = { 0, win_h - (lines * TTF_FontLineSkip(font)) - 50, 
 		win_w, (lines * TTF_FontLineSkip(font)) + 50 };
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 	SDL_RenderFillRect(ren, &r);
-	int i, y = win_h - (lines * TTF_FontLineSkip(font)) + 25;
-	for(i=0; i<lines; i++) {
-		SDL_Surface* sf = TTF_RenderUTF8_Solid(font, text, 
+	int y = win_h - (lines * TTF_FontLineSkip(font)) - 25;
+	char *token;
+#ifdef __MINGW32__
+	while((token = strtok(text, "\n")) != NULL) {
+#else
+	char* saveptr = NULL;
+	while((token = strtok_r(text, "\n", &saveptr)) != NULL) {
+#endif
+		SDL_Surface* sf = TTF_RenderUTF8_Solid(font, token, 
 				(SDL_Color){255,255,255});
 		SDL_Texture* txt = SDL_CreateTextureFromSurface(ren, sf);
 		SDL_RenderCopy(ren, txt, NULL, &(SDL_Rect){ 25, y, sf->w, sf->h });
-		printf("%d %d %d\n", y, sf->w, sf->h);
 		SDL_FreeSurface(sf);
 		SDL_DestroyTexture(txt);
 		y += TTF_FontLineSkip(font);
+		text = NULL;
 	}
 	SDL_RenderPresent(ren);
-	printf("1\n");
 	
 	// wait for keypress
 	for(;;) {
+		SDL_Event e;
+		SDL_PollEvent(&e);
 		const Uint8* k = SDL_GetKeyboardState(NULL);
 		if(k[SDL_SCANCODE_SPACE])
 			break;
 		SDL_Delay(1000.0/60.0);
 	}
+
+	free(text);
 
 	return 0;
 }
