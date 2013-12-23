@@ -1,9 +1,9 @@
-local Player = setmetatable({}, DynamicPerson)
+local Player = setmetatable({}, Person)
 Player.__index = Player
 
 function Player:new(x, y)
    local self = self or setmetatable({}, Player)
-   DynamicPerson.new(self, x, y)
+   Person.new(self, x, y)
    self.vehicle = nil
    self.__in_vehicle = false
    return self
@@ -13,7 +13,7 @@ function Player:pos()
    if self.__in_vehicle then
       return self.vehicle:pos()
    else
-      return DynamicPerson.pos(self)
+      return Person.pos(self)
    end
 end
 
@@ -30,6 +30,7 @@ function Player:collision(other)
    end
 end
 
+
 function Player:exit_vehicle()
    -- TODO - check if speed = 0
    local vpos = self.vehicle:pos()
@@ -44,9 +45,11 @@ function Player:exit_vehicle()
    return true
 end
 
+
 function Player:in_vehicle()
    if self.__in_vehicle then return self.vehicle else return nil end
 end
+
 
 -------------
 -- PRIVATE --

@@ -152,7 +152,7 @@ function World:__add_people_to_cities()
                local x = p.x + city.x + building.x + 0.5
                local y = p.y + city.y + building.y + 0.5
                if p.type == 'Shopkeeper' then
-                  person = StaticPerson:new(x, y)
+                  person = Person:new(x, y) -- TODO (?)
                   self:__add_object(person)
                end
                assert(person, 'Invalid person type: ' .. p.type)
