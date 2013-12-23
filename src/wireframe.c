@@ -14,7 +14,13 @@
 // TODO - restrict all to visible area
 // TODO
 
-const double Z = 8;
+static void visible_tiles(SDL_Window* win, int* x1, int *y1, int* x2, int* y2);
+typedef struct ScreenLimits {
+	SDL_Renderer* ren;
+	int x1, y1, x2, y2;
+} ScreenLimits;
+
+const double Z = 12;
 int rx = 50, ry = 50;
 
 extern char *strdup(const char *s);
@@ -60,11 +66,15 @@ static void draw_circle(cpBody *body, cpShape *shape, void* data)
 
 static void draw_static_shape(cpBody *body, cpShape *shape, void* data)
 {
-	SDL_Renderer* ren = (SDL_Renderer*)data;
-	SDL_SetRenderDrawColor(ren, 150, 0, 0, 255);
+	ScreenLimits* s = (ScreenLimits*)data;
 	cpBB bb = cpShapeGetBB(shape);
+	if(bb.l < s->x1 || bb.l > s->x2 || bb.t < s->y1 || bb.t > s->y2) {
+		// out of bounds
+		return;
+	}
+	SDL_SetRenderDrawColor(s->ren, 150, 0, 0, 255);
 	SDL_Rect rect = { bb.l*Z+rx, bb.b*Z+ry, (bb.r-bb.l)*Z, (bb.t-bb.b)*Z };
-	SDL_RenderDrawRect(ren, &rect);
+	SDL_RenderDrawRect(s->ren, &rect);
 }
 
 
@@ -118,7 +128,10 @@ void wireframe_render(lua_State* L, SDL_Window* win, SDL_Renderer* ren)
 	ry = -y*Z + (win_h/2);
 
 	// draw static bodies
-	cpBodyEachShape(space->staticBody, draw_static_shape, ren);
+	ScreenLimits s;
+	s.ren = ren;
+	visible_tiles(win, &s.x1, &s.y1, &s.x2, &s.y2);
+	cpBodyEachShape(space->staticBody, draw_static_shape, &s);
 
 	// draw other objects
 	int n = lua_objlen(L, 4);
@@ -196,15 +209,30 @@ int wireframe_message(lua_State* L, SDL_Window* win, SDL_Renderer* ren,
 }
 
 
+static void visible_tiles(SDL_Window* win, int* x1, int *y1, int* x2, int* y2)
+{
+	int win_w, win_h;
+	SDL_GetWindowSize(win, &win_w, &win_h);
+
+	*x1 = (-rx) / Z - 5;
+	*y1 = (-ry) / Z - 5;
+	*x2 = (-rx + (win_w)) / Z + 5;
+	*y2 = (-ry + (win_h)) / Z + 5;
+}
+
+
 int wireframe_visible_tiles(lua_State* L, SDL_Window* win)
 {
 	int win_w, win_h;
 	SDL_GetWindowSize(win, &win_w, &win_h);
 
-	lua_pushinteger(L, (-rx) / Z - 5);
-	lua_pushinteger(L, (-ry) / Z - 5);
-	lua_pushinteger(L, (-rx + (win_w)) / Z + 5);
-	lua_pushinteger(L, (-ry + (win_h)) / Z + 5);
+	int x1, y1, x2, y2;
+	visible_tiles(win, &x1, &y1, &x2, &y2);
+
+	lua_pushinteger(L, x1);
+	lua_pushinteger(L, y1);
+	lua_pushinteger(L, x2);
+	lua_pushinteger(L, y2);
 
 	return 4;
 }
