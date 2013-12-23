@@ -28,7 +28,7 @@ end
 -------------
 
 function Object:__init(x, y)
-   self.x, self.y = x, y
+   self.init_x, self.init_y = x, y
    self.is_vehicle = false
    return self
 end

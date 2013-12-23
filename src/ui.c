@@ -127,11 +127,11 @@ int ui_keyboard_state(lua_State* L)
 
 int ui_visible_tiles(lua_State* L)
 {
-	lua_pushnumber(L, -50);
-	lua_pushnumber(L, -50);
-	lua_pushnumber(L, 50);
-	lua_pushnumber(L, 50);
-	return 4;
+	if(ui.wireframe_mode) {
+		return wireframe_visible_tiles(L, ui.win);
+	} else {
+		abort();
+	}
 }
 
 

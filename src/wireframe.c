@@ -194,3 +194,17 @@ int wireframe_message(lua_State* L, SDL_Window* win, SDL_Renderer* ren,
 
 	return 0;
 }
+
+
+int wireframe_visible_tiles(lua_State* L, SDL_Window* win)
+{
+	int win_w, win_h;
+	SDL_GetWindowSize(win, &win_w, &win_h);
+
+	lua_pushinteger(L, (-rx) / Z - 5);
+	lua_pushinteger(L, (-ry) / Z - 5);
+	lua_pushinteger(L, (-rx + (win_w)) / Z + 5);
+	lua_pushinteger(L, (-ry + (win_h)) / Z + 5);
+
+	return 4;
+}

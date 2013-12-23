@@ -2,8 +2,7 @@ local Vehicle = setmetatable({}, Object)
 Vehicle.__index = Vehicle
 
 function Vehicle:new(x, y, model)
-  local self = setmetatable({}, Vehicle)
-  self:__init(x, y)
+  self = self:__init(x, y)
   self.is_vehicle = true
   self.controls = {
     accelerate = false,

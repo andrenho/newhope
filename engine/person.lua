@@ -1,10 +1,6 @@
 local Person = setmetatable({}, Object)
 Person.__index = Person
 
-function Person:new(x, y)
-   return Object.__init(self, x, y)
-end
-
 function Person:set_position(x, y)
   error('C override')
 end

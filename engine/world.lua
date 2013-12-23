@@ -80,8 +80,9 @@ end
 --
 function World:objects_in_area(x1, y1, x2, y2)
    local cond = function(p) 
-                         return (p.x >= x1 and p.x <= x2 and p.y >= y1 and p.y <= y2)
-                      end
+                   local pos = p:pos()
+                   return (pos.x >= x1 and pos.x <= x2 and pos.y >= y1 and pos.y <= y2)
+                end
    return funct.filter(self.objects, cond)
 end
 
@@ -152,7 +153,7 @@ function World:__add_people_to_cities()
                local x = p.x + city.x + building.x + 0.5
                local y = p.y + city.y + building.y + 0.5
                if p.type == 'Shopkeeper' then
-                  person = Person:new(x, y) -- TODO (?)
+                  person = ai.Shopkeeper:new(x, y) -- TODO (?)
                   self:__add_object(person)
                end
                assert(person, 'Invalid person type: ' .. p.type)

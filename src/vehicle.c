@@ -21,8 +21,8 @@ int vehicle_init(lua_State* L)
 	
 	// get car fields
 	cpFloat x, y, angle;
-	LUA_FIELD(L, x, "x", number);
-	LUA_FIELD(L, y, "y", number);
+	LUA_FIELD(L, x, "init_x", number);
+	LUA_FIELD(L, y, "init_y", number);
 	LUA_FIELD(L, angle, "angle", number);
 
 	// get car attributes

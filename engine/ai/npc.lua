@@ -1,0 +1,28 @@
+local NPC = setmetatable({}, Person)
+NPC.__index = NPC
+
+function NPC:new(x, y)
+   local self = self:__init(x, y)
+   return self
+end
+
+function NPC:respond_to(other, dialog)
+   return 'NOTHING', {}
+end
+
+function NPC:act()
+end
+
+-------------
+-- PRIVATE --
+-------------
+
+function NPC:__tostring()
+   return '[NPC]'
+end
+
+function NPC:type() return 'NPC' end
+
+return NPC
+
+-- vim: ts=3:sw=3:sts=3:expandtab

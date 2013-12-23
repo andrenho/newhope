@@ -30,6 +30,9 @@ Player         = my_require('player')
 VehicleModel   = my_require('vehiclemodel')
 Vehicle        = my_require('vehicle')
 
+-- AI module
+ai = my_require('ai')
+
 -- create game
 world = World:new()
 ui    = game.UI:new()

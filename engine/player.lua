@@ -2,8 +2,7 @@ local Player = setmetatable({}, Person)
 Player.__index = Player
 
 function Player:new(x, y)
-   local self = self or setmetatable({}, Player)
-   Person.new(self, x, y)
+   local self = self.__init(self, x, y)
    self.vehicle = nil
    self.__in_vehicle = false
    return self
