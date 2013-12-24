@@ -45,14 +45,14 @@ end
 function Game:conversation(player, other, message, text)
    local r_msg, r_text, r_options, r_opt_txt
    while r_msg ~= 'BYE' do
-      ui:message(player, text)
+      ui:message(text, player)
       local r_msg, r_text, r_options, r_opt_txt = other:respond_to(player, message)
       if #r_options == 0 then
-         ui:message(other, r_text)
+         ui:message(r_text, other)
          if r_msg == 'BYE' then return end
          message, text = player:respond_to(other, r_msg) 
       else
-         message = ui:message(other, r_text, 'options', r_opt_txt)
+         message = ui:message(r_text, other, 'options', r_opt_txt)
          text = ''
       end
    end

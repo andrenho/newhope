@@ -18,7 +18,7 @@ function UI:message(text, person, type_, options)
       if person then pos = person:pos() end
       self:__message(text, pos)
    else
-      assert(false)
+      assert('Invalid message box type: '..tp)
    end
 end
 

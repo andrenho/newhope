@@ -24,7 +24,9 @@ function Player:collision(other)
       self:set_position(-100000, -100000)
    end
    -- if it's a NPC, talk to him
-   game:conversation(self, other, 'HELLO', 'Hello.')
+   if other.is_npc then
+      game:conversation(self, other, 'HELLO', 'Hello.')
+   end
 end
 
 
