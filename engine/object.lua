@@ -30,6 +30,7 @@ end
 function Object:__init(x, y)
    self.init_x, self.init_y = x, y
    self.is_vehicle = false
+   self.is_npc = false
    return self
 end
 

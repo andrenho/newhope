@@ -20,7 +20,7 @@ typedef struct ScreenLimits {
 	int x1, y1, x2, y2;
 } ScreenLimits;
 
-const double Z = 12;
+const double Z = 8;
 int rx = 50, ry = 50;
 
 extern char *strdup(const char *s);

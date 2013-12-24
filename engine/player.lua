@@ -23,10 +23,8 @@ function Player:collision(other)
       self.__in_vehicle = true
       self:set_position(-100000, -100000)
    end
-   if other:type() == 'StaticPerson' then 
-      local t = [[Each call to strtok() returns a pointer to a null-terminated string containing the next token. This string does not include the delimiting byte. If no more tokens are found, strtok() returns NULL.]]
-      ui:message(t)
-   end
+   -- if it's a NPC, talk to him
+   game:conversation(self, other, 'HELLO', 'Hello.')
 end
 
 

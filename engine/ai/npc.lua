@@ -3,11 +3,12 @@ NPC.__index = NPC
 
 function NPC:new(x, y)
    local self = self:__init(x, y)
+   self.is_npc = true
    return self
 end
 
-function NPC:respond_to(other, dialog)
-   return 'NOTHING', {}
+function NPC:respond_to(other, message)
+   return 'BYE', 'Get out.', {}
 end
 
 function NPC:act()

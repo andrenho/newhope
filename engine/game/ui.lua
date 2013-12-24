@@ -17,6 +17,8 @@ function UI:message(text, person, type_, options)
       local pos = nil 
       if person then pos = person:pos() end
       self:__message(text, pos)
+   else
+      assert(false)
    end
 end
 

@@ -42,6 +42,23 @@ function Game:start()
 end
 
 
+function Game:conversation(player, other, message, text)
+   local r_msg, r_text, r_options, r_opt_txt
+   while r_msg ~= 'BYE' do
+      ui:message(player, text)
+      local r_msg, r_text, r_options, r_opt_txt = other:respond_to(player, message)
+      if #r_options == 0 then
+         ui:message(other, r_text)
+         if r_msg == 'BYE' then return end
+         message, text = player:respond_to(other, r_msg) 
+      else
+         message = ui:message(other, r_text, 'options', r_opt_txt)
+         text = ''
+      end
+   end
+end
+
+
 function Game:clean_up()
    ui:clean_up()
    world:clean_up()
