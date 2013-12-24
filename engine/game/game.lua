@@ -29,13 +29,12 @@ function Game:start()
       -- redraw screen
       local x1,y1,x2,y2 = ui:visible_tiles()
       local player_pos = world.player:pos()
-      ui:render(player_pos.x, player_pos.y, world:objects_in_area(x1,y1,x2,y2), 
-            { x1, y1, x2, y2})
+      ui:render(player_pos.x, player_pos.y, world:objects_in_area(x1,y1,x2,y2))
 
       -- wait for frame
       local now = ui:now()
+      print(next_frame - now)
       if now < next_frame then
-         --print(next_frame - now)
          ui:wait(next_frame - now)
       end
    end

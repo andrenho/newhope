@@ -61,6 +61,7 @@ end
 -- return the stack of tiles (max 10)
 --
 function World:tiles(x, y)
+   return { Block.GRASS }
    local predef = self.predefined_tiles[world:unique_tile_id(x,y)]
    if predef then
       return predef
@@ -80,9 +81,9 @@ end
 --
 function World:objects_in_area(x1, y1, x2, y2)
    local cond = function(p) 
-                   local pos = p:pos()
-                   return (pos.x >= x1 and pos.x <= x2 and pos.y >= y1 and pos.y <= y2)
-                end
+      local pos = p:pos()
+      return (pos.x >= x1 and pos.x <= x2 and pos.y >= y1 and pos.y <= y2)
+   end
    return funct.filter(self.objects, cond)
 end
 
