@@ -202,6 +202,14 @@ int wireframe_message(lua_State* L, SDL_Window* win, SDL_Renderer* ren,
 			break;
 		SDL_Delay(1000.0/60.0);
 	}
+	for(;;) {
+		SDL_Event e;
+		SDL_PollEvent(&e);
+		const Uint8* k = SDL_GetKeyboardState(NULL);
+		if(!k[SDL_SCANCODE_SPACE])
+			break;
+		SDL_Delay(1000.0/60.0);
+	}
 
 	free(text);
 
