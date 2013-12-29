@@ -61,7 +61,6 @@ end
 -- return the stack of tiles (max 10)
 --
 function World:tiles(x, y)
-   return { Block.GRASS }
    local predef = self.predefined_tiles[world:unique_tile_id(x,y)]
    if predef then
       return predef
