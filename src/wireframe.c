@@ -25,28 +25,10 @@ int rx = 50, ry = 50;
 
 extern char *strdup(const char *s);
 
-static void draw_visible_tiles(lua_State* L, ScreenLimits* s)
+static void draw_visible_tiles(lua_State* L)
 {
-	LUA_PUSH_WORLD(L);
-
-	int x, y;
-	for(x=s->x1; x<=s->x2; x++) for(y=s->y1; y<=s->y2; y++) {
-		/* 
-		 * TODO - add some kind of cache
-		 *
-		// find tile
-		LUA_PUSH_METHOD(L, "tiles");
-		lua_pushinteger(L, x);
-		lua_pushinteger(L, y);
-		luah_call(L, 3, 1);
-		lua_rawgeti(L, -1, 1);
-		lua_pushstring(L, "id");
-		lua_gettable(L, -2);
-		int block = lua_tointeger(L, -1);
-
-		lua_pop(L, 3);
-		*/
-	}
+	// get 4th parameter
+	
 }
 
 SDL_Point circle_pixel[10000];
@@ -157,7 +139,7 @@ void wireframe_render(lua_State* L, SDL_Window* win, SDL_Renderer* ren)
 	visible_tiles(win, &s.x1, &s.y1, &s.x2, &s.y2);
 
 	// draw visible tiles
-	draw_visible_tiles(L, &s);
+	draw_visible_tiles(L);
 
 	// draw static objects
 	cpBodyEachShape(space->staticBody, draw_static_shape, &s);

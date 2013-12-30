@@ -16,9 +16,9 @@ string = my_require('util.string')
 game   = my_require('game')
 
 -- load classes
+Block          = my_require('block')
 World          = my_require('world')
 -- map --
-Block          = my_require('block')
 Building       = my_require('building')
 BuildingLayout = my_require('buildinglayout')
 City           = my_require('city')

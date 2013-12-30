@@ -12,6 +12,7 @@ function World:new()
    self.predefined_tiles = {}
 
    self.__obj_ptr = {}
+   self.__tile_cache = {}
 
    self.objects_ptr = {}
    return self
@@ -72,6 +73,33 @@ function World:tiles(x, y)
       end
       return { Block.GRASS } -- TODO
    end
+end
+
+
+--
+-- return the stack of tile IDs (max 10)
+--
+function World:tilemap_ids(x1, y1, x2, y2)
+   -- TODO - cache size
+   local t = {}
+   local __tile_cache = self.__tile_cache -- speedup hack
+   for x = x1,x2 do
+      if not __tile_cache[x] then __tile_cache[x] = {} end
+      t[x] = {}
+      for y = y1,y2 do
+         local ids = __tile_cache[x][y]
+         if not ids then
+            ids = self:tiles(x,y)
+            for k,v in ipairs(ids) do 
+               ids[k] = v.id
+            end
+            __tile_cache[x][y] = ids
+         end
+         t[x][y] = ids
+      end
+   end
+   self.__tile_cache = __tile_cache
+   return t
 end
 
 
