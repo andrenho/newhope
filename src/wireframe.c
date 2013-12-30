@@ -20,15 +20,35 @@ typedef struct ScreenLimits {
 	int x1, y1, x2, y2;
 } ScreenLimits;
 
-const double Z = 8;
-int rx = 50, ry = 50;
+extern int rx, ry;
+extern double Z;
 
 extern char *strdup(const char *s);
 
-static void draw_visible_tiles(lua_State* L)
+static void draw_visible_tiles(lua_State* L, ScreenLimits* s)
 {
-	// get 4th parameter
-	
+	SDL_Texture* tx = SDL_CreateTexture(s->ren, SDL_PIXELFORMAT_RGBA8888,
+			SDL_TEXTUREACCESS_STATIC, 1, 1);
+
+	// IMPORTANT: the last parameter should contain the tile list
+	luaL_checktype(L, -1, LUA_TTABLE);
+
+	int x, y;
+	for(x=s->x1; x<=s->x2; x++) for(y=s->y1; y<=s->y2; y++) {
+		// find tile ID
+		lua_rawgeti(L, -1, x);  		// t[x]
+		lua_rawgeti(L, -1, y);  		// t[x][y]
+		lua_rawgeti(L, -1, 1);			// t[x][y][1]
+		int block = lua_tointeger(L, -1);
+
+		// draw tile
+		SDL_SetRenderDrawColor(s->ren, 0, 128, 0, 0);
+		SDL_RenderDrawPoint(s->ren, (x+0.5)*Z+rx, (y+0.5)*Z+ry);
+
+		lua_pop(L, 3);
+	}
+
+	SDL_DestroyTexture(tx);
 }
 
 SDL_Point circle_pixel[10000];
@@ -124,31 +144,22 @@ static void draw_vehicle(SDL_Renderer *ren, Vehicle* vehicle)
 
 void wireframe_render(lua_State* L, SDL_Window* win, SDL_Renderer* ren)
 {
-	int win_w, win_h;
-	SDL_GetWindowSize(win, &win_w, &win_h);
-
-	// center screen on player
-	double x = luaL_checknumber(L, 2);
-	double y = luaL_checknumber(L, 3);
-	rx = -x*Z + (win_w/2);
-	ry = -y*Z + (win_h/2);
-
 	// find visible tiles
 	ScreenLimits s;
 	s.ren = ren;
 	visible_tiles(win, &s.x1, &s.y1, &s.x2, &s.y2);
 
 	// draw visible tiles
-	draw_visible_tiles(L);
+	draw_visible_tiles(L, &s);
 
 	// draw static objects
 	cpBodyEachShape(space->staticBody, draw_static_shape, &s);
 
 	// draw other objects
-	int n = lua_objlen(L, 4);
+	int n = lua_objlen(L, 2);
 	for(int i=1; i<=n; i++)
 	{
-		lua_rawgeti(L, 4, i);
+		lua_rawgeti(L, 2, i);
 
 		bool is_vehicle;
 		LUA_FIELD(L, is_vehicle, "is_vehicle", boolean);

@@ -14,6 +14,7 @@ function Game:start()
 
    -- main loop
    while self.active do
+
       -- initialize timer
       local next_frame = ui:now() + 1000/60
 
@@ -27,14 +28,17 @@ function Game:start()
       end
       
       -- redraw screen
-      local x1,y1,x2,y2 = ui:visible_tiles()
       local player_pos = world.player:pos()
-      ui:render(player_pos.x, player_pos.y, world:objects_in_area(x1,y1,x2,y2),
-                world:tilemap_ids(x1,y1,x2,y2))
+      ui:center_screen(player_pos.x, player_pos.y)
+      local x1,y1,x2,y2 = ui:visible_tiles()
+      local obj_in_area = world:objects_in_area(x1,y1,x2,y2)
+      local tiles_in_area = world:tilemap_ids(x1,y1,x2,y2)
+      local think_time = next_frame - ui:now()
+      ui:render(obj_in_area, tiles_in_area)
 
       -- wait for frame
       local now = ui:now()
-      print(next_frame - now)
+      print('Thinking: '..think_time, 'Rendering: '..(next_frame - now))
       if now < next_frame then
          ui:wait(next_frame - now)
       end

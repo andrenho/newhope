@@ -18,6 +18,8 @@ typedef struct UI {
 } UI;
 static UI ui;
 
+const double Z = 10;
+int rx = 50, ry = 50;
 
 int ui_c_init(lua_State* L)
 {
@@ -29,10 +31,16 @@ int ui_c_init(lua_State* L)
 		exit(1);
 	}
 
-	// initialize window and renderer
-	if(SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_RESIZABLE, &ui.win, 
-				&ui.ren) != 0) {
+	// initialize window
+	if(!(ui.win = SDL_CreateWindow("NewHope", SDL_WINDOWPOS_CENTERED, 
+			SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_RESIZABLE))) {
 		fprintf(stderr, "\nUnable to intialize window: %s\n", SDL_GetError());
+		exit(1);
+	}
+
+	// initialize renderer
+	if(!(ui.ren = SDL_CreateRenderer(ui.win, -1, SDL_RENDERER_SOFTWARE))) {
+		fprintf(stderr, "\nUnable to intialize renderer: %s\n", SDL_GetError());
 		exit(1);
 	}
 
@@ -122,6 +130,21 @@ int ui_keyboard_state(lua_State* L)
 	LUA_SET_FIELD(L, k[SDL_SCANCODE_LEFT], "left", boolean);
 	LUA_SET_FIELD(L, k[SDL_SCANCODE_RIGHT], "right", boolean);
 	return 1;
+}
+
+
+int ui_center_screen(lua_State* L)
+{
+	int win_w, win_h;
+	SDL_GetWindowSize(ui.win, &win_w, &win_h);
+
+	// center screen on player
+	double x = luaL_checknumber(L, 2);
+	double y = luaL_checknumber(L, 3);
+	rx = -x*Z + (win_w/2);
+	ry = -y*Z + (win_h/2);
+
+	return 0;
 }
 
 
