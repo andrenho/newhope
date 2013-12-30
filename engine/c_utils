@@ -1,0 +1,10 @@
+#!/usr/bin/env lua
+
+if arg[1] == 'block' then
+  local Block = require('engine.block')
+  block_output_c()
+else
+  print('Options: block')
+end
+
+-- vim: ts=2:sw=2:sts=2:expandtab

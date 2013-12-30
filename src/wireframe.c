@@ -5,6 +5,7 @@
 
 #include <lauxlib.h>
 
+#include "block.h"
 #include "luah.h"
 #include "physics.h"
 #include "vehicle.h"
@@ -42,8 +43,19 @@ static void draw_visible_tiles(lua_State* L, ScreenLimits* s)
 		int block = lua_tointeger(L, -1);
 
 		// draw tile
-		SDL_SetRenderDrawColor(s->ren, 0, 128, 0, 0);
+		switch(block) {
+		case GRASS:
+			SDL_SetRenderDrawColor(s->ren, 0, 128, 0, 0); break;
+		case WATER:
+			SDL_SetRenderDrawColor(s->ren, 0, 0, 255, 0); break;
+		case FLOOR:
+			SDL_SetRenderDrawColor(s->ren, 255, 0, 0, 0); break;
+		default:
+			SDL_SetRenderDrawColor(s->ren, 255, 255, 255, 0); break;
+		}
 		SDL_RenderDrawPoint(s->ren, (x+0.5)*Z+rx, (y+0.5)*Z+ry);
+		SDL_RenderDrawPoint(s->ren, (x+0.5)*Z+rx, (y+0.5)*Z+ry+1);
+		SDL_RenderDrawPoint(s->ren, (x+0.5)*Z+rx+1, (y+0.5)*Z+ry+1);
 
 		lua_pop(L, 3);
 	}

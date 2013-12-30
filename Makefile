@@ -21,7 +21,7 @@ SRC = src/main.c	\
       src/vehicle.c	\
       src/wireframe.c
 
-OBJ = ${SRC:.c=.o} #ui/block.h
+OBJ = ${SRC:.c=.o} src/block.h
 HEADERS = ${SRC:.c=.h}
 DIST = 
 DATA = data/PressStart2P.ttf
@@ -48,9 +48,9 @@ newhope: ${OBJ}
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
 
-ui/block.h: engine/block.lua
+src/block.h: engine/block.lua
 	@echo SH -o $@
-	./ui/parse_blocks > $@
+	./engine/c_utils block > $@
 
 docs: doc/classes.txt
 	@echo plantuml $<
