@@ -181,8 +181,7 @@ int ui_show_minimap(lua_State* L)
 	SDL_Event e;
 	for(;;) {
 		while(SDL_PollEvent(&e)) {
-			if(e.type == SDL_KEYDOWN 
-			&& e.key.keysym.sym == SDLK_RETURN) {
+			if(e.type == SDL_KEYDOWN) {
 				return 0;
 			}
 		}
