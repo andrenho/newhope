@@ -8,6 +8,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "luah.h"
+#include "minimap.h"
 #include "wireframe.h"
 
 typedef struct UI {
@@ -15,6 +16,7 @@ typedef struct UI {
 	SDL_Renderer* ren;
 	bool wireframe_mode;
 	TTF_Font* main_font;
+	Minimap* mm;
 } UI;
 static UI ui;
 
@@ -56,6 +58,9 @@ int ui_c_init(lua_State* L)
 		fprintf(stderr, "\nUnable to load font: %s\n", TTF_GetError());
 		exit(1);
 	}
+
+	// create minimap
+	ui.mm = minimap_new(L, ui.ren, 250, 250);
 
 	lua_pushlightuserdata(L, &ui);
 	return 1;
@@ -154,6 +159,33 @@ int ui_visible_tiles(lua_State* L)
 		return wireframe_visible_tiles(L, ui.win);
 	} else {
 		abort();
+	}
+}
+
+
+int ui_show_minimap(lua_State* L)
+{
+	int win_w, win_h;
+	SDL_GetWindowSize(ui.win, &win_w, &win_h);
+
+	SDL_SetRenderDrawColor(ui.ren, 0x96, 0x4b, 0x00, SDL_ALPHA_OPAQUE);
+	SDL_Rect r = { win_w/2 - ui.mm->w/2 - 5, win_h/2 - ui.mm->h/2 - 5, 
+		ui.mm->w + 10, ui.mm->h + 10 };
+	SDL_RenderFillRect(ui.ren, &r);
+
+	SDL_Rect r2 = { r.x+5, r.y+5, r.w-10, r.h-10 };
+	SDL_RenderCopy(ui.ren, ui.mm->tx, NULL, &r2);
+
+	SDL_RenderPresent(ui.ren);
+
+	SDL_Event e;
+	for(;;) {
+		while(SDL_PollEvent(&e)) {
+			if(e.type == SDL_KEYDOWN 
+			&& e.key.keysym.sym == SDLK_RETURN) {
+				return 0;
+			}
+		}
 	}
 }
 

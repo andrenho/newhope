@@ -3,10 +3,11 @@ Block.__index = Block
 Block.all = {}
 
 local block_count = 0
-function Block:__new(description, solid, friction)
+function Block:__new(description, color, solid, friction)
   local self = setmetatable({}, Block)
   self.id = block_count
   block_count = block_count + 1
+  self.color = color
   self.description = description
   if solid == nil then
     self.solid = true
@@ -17,8 +18,8 @@ function Block:__new(description, solid, friction)
   return self
 end
 
-function Block.add(description, solid, friction)
-  Block[description] = Block:__new(description, solid, friction)
+function Block.add(description, color, solid, friction)
+  Block[description] = Block:__new(description, color, solid, friction)
   Block.all[#Block.all+1] = Block[description]
 end
 
@@ -34,14 +35,14 @@ end
 -- LIST OF BLOCKS --
 --------------------
 
---        name            solid   friction
-Block.add('NOTHING',      false,  0)
-Block.add('GRASS',        true,   1)
-Block.add('WATER',        false,  10)
-Block.add('WOODEN_WALL',  true)
-Block.add('FLOOR',        true)
-Block.add('DOOR_OPEN',    false)
-Block.add('DOOR_CLOSED',  true)
+--        name            color             solid   friction
+Block.add('NOTHING',      {0x00,0x00,0x00}, false,  0)
+Block.add('GRASS',        {0x00,0x80,0x00}, true,   1)
+Block.add('WATER',        {0x00,0x00,0x80}, false,  10)
+Block.add('WOODEN_WALL',  {0x00,0x00,0x00}, true)
+Block.add('FLOOR',        {0x80,0x00,0x00}, true)
+Block.add('DOOR_OPEN',    {0x00,0x00,0x00}, false)
+Block.add('DOOR_CLOSED',  {0x00,0x00,0x00}, true)
 
 -----------------------
 -- GENERATE C HEADER --

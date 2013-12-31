@@ -137,6 +137,7 @@ function World:tile_walkable(x, y)
    return true
 end
 
+
 --
 -- when a collision happens, this method is called by the C code
 --
@@ -146,6 +147,15 @@ function World:collision_callback(body_a, body_b)
    a:collision(b)
    b:collision(a)
 end
+
+
+-- 
+-- Return the limits of the world (x1, y1, x2, y2)
+-- 
+function World:limits()
+   return -10000, -10000, 10000, 10000
+end
+
 
 -- 
 -- Return type
@@ -207,20 +217,17 @@ function World:__remove_object(obj)
 end
 
 
--- TODO : low performance, I think. Maybe add as the player walks?
+-- TODO : add static objects outside cities
 function World:__add_static_objects()
-   local x1, y1, x2, y2 = self:__limits()
-   for x = x1,x2 do
-      for y = y1,y2 do
-         if not self:tile_walkable(x,y) then
-            self:__physics_create_static_obj(x, y, 1, 1)
+   for _,city in ipairs(self.cities) do
+      for x = city.x, (city.x+city.w) do
+         for y = city.y, (city.y+city.h)  do
+            if not self:tile_walkable(x,y) then
+               self:__physics_create_static_obj(x, y, 1, 1)
+            end
          end
       end
    end
-end
-
-function World:__limits()
-   return -30, -30, 30, 30
 end
 
 return World

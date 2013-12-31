@@ -41,6 +41,7 @@ static void complement_engine_functions(lua_State* L)
 	luah_set_c_function(L, "ui", "keyboard_state", ui_keyboard_state);
 	luah_set_c_function(L, "ui", "center_screen",  ui_center_screen);
 	luah_set_c_function(L, "ui", "visible_tiles",  ui_visible_tiles);
+	luah_set_c_function(L, "ui", "show_minimap",   ui_show_minimap);
 	luah_set_c_function(L, "ui", "__message",      ui_message);
 	luah_set_c_function(L, "ui", "clean_up",       ui_clean_up);
 

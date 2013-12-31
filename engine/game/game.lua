@@ -98,6 +98,8 @@ function Game:__do_event(e)
    elseif e.event == 'key' then
       if e.key == 'E' and world.player:in_vehicle() then
          world.player:exit_vehicle()
+      elseif e.key == 'M' then
+         ui:show_minimap()
       elseif e.key == 'Q' then
          self.active = false
       end

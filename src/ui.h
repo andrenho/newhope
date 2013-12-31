@@ -11,6 +11,7 @@ int ui_user_events(lua_State* L);
 int ui_keyboard_state(lua_State* L);
 int ui_visible_tiles(lua_State* L);
 int ui_center_screen(lua_State* L);
+int ui_show_minimap(lua_State* L);
 int ui_message(lua_State* L);
 int ui_clean_up(lua_State* L);
 
