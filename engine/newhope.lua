@@ -10,15 +10,17 @@ function my_require(module)
 end
 
 -- load modules
-table  = my_require('util.table')
-funct  = my_require('util.funct')
-string = my_require('util.string')
-game   = my_require('game')
+table   = my_require('util.table')
+funct   = my_require('util.funct')
+string  = my_require('util.string')
+voronoi = my_require('util.voronoi')
+game    = my_require('game')
 
 -- load classes
 Block          = my_require('block')
 World          = my_require('world')
 -- map --
+MapGen         = my_require('mapgen')
 Building       = my_require('building')
 BuildingLayout = my_require('buildinglayout')
 City           = my_require('city')
@@ -34,7 +36,7 @@ Vehicle        = my_require('vehicle')
 ai = my_require('ai')
 
 -- create game
-world = World:new()
+world = World:new(-10000, -10000, 10000, 10000)
 ui    = game.UI:new()
 game  = game.Game:new()
 

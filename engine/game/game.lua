@@ -38,7 +38,7 @@ function Game:start()
 
       -- wait for frame
       local now = ui:now()
-      --print('Thinking: '..think_time, 'Rendering: '..(next_frame - now))
+      print('Thinking: '..think_time, 'Rendering: '..(next_frame - now))
       if now < next_frame then
          ui:wait(next_frame - now)
       end

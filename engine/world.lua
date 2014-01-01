@@ -4,8 +4,10 @@ World.__index = World
 --
 -- create a new world map
 -- 
-function World:new()
+function World:new(x1, y1, x2, y2)
    local self = setmetatable({}, World)
+
+   self.x1, self.y1, self.x2, self.y2 = x1, y1, x2, y2
 
    self.objects = {}
    self.cities = {}
@@ -23,6 +25,9 @@ end
 -- initialize world map
 --
 function World:initialize()
+   self.__mapgen = MapGen:new(self.x1, self.y1, self.x2, self.y2)
+   self.__mapgen:create()
+
    self:__init_physics()
 
    self.player = self:__add_object(Player:new(5, 10))
@@ -71,7 +76,7 @@ function World:tiles(x, y)
             return city:tiles(x-city.x, y-city.y)
          end
       end
-      return { Block.GRASS } -- TODO
+      return { self.__mapgen:tile(x,y) } -- TODO
    end
 end
 
@@ -153,7 +158,7 @@ end
 -- Return the limits of the world (x1, y1, x2, y2)
 -- 
 function World:limits()
-   return -10000, -10000, 10000, 10000
+   return self.x1, self.y1, self.x2, self.y2
 end
 
 
