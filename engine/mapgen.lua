@@ -1,18 +1,20 @@
 local MapGen = {}
 MapGen.__index = MapGen
 
-function MapGen:new(x1, y1, x2, y2)
+function MapGen:new(x1, y1, x2, y2, seed)
    local self = setmetatable({}, MapGen)
+   self.polygons = {}
    self.__x1, self.__y1, self.__x2, self.__y2 = x1, y1, x2, y2
    self.__outer_rectangle = {}
-   self.polygons = {}
+   self.__points = {}
+   math.randomseed(seed or os.time())
    return self
 end
 
 
 function MapGen:create()
    self.voronoi = self:__create_polygons()
-   self:__create_sea()
+   self:__set_altitude()
    self:__create_biomes()
 end
 
@@ -43,8 +45,11 @@ function MapGen:__create_polygons()
       -- find outer rectangles
       local points_x, points_y = {}, {}
       for j=1,#poly.points,2 do
-         points_x[#points_x+1] = poly.points[j]
-         points_y[#points_y+1] = poly.points[j+1]
+         local x, y = poly.points[j], poly.points[j+1]
+         points_x[#points_x+1] = x
+         points_y[#points_y+1] = y
+         if not self.__points[x] then self.__points[x] = {} end
+         self.__points[x][y] = 0
       end
       self.polygons[i].outer_rectangle = {
          x1 = funct.min(points_x),
@@ -58,15 +63,27 @@ function MapGen:__create_polygons()
 end
 
 
-function MapGen:__create_sea()
-   local F = io.open("temp.txt", "w")
-   for i = 1, 50 do
-      for j = 1, 50 do
-         local f = noise.Simplex2D(i + .5, j + .3)
-         F:write(string.format("(%i, %i): %f\n", i, j, f))
+function MapGen:__set_altitude(seed)
+   -- ideas from <http://www.stuffwithstuff.com/robot-frog/3d/hills/index.html>
+
+   -- create heightmap
+   local hm = {}
+   for x=1,256 do 
+      hm[x] = {}
+      for y=1,256 do
+         if x > 50 and y > 50 then
+            hm[x][y] = 1
+         else
+            hm[x][y] = 0 
+         end
       end
    end
-   F:close()
+
+   -- TODO - create altitude
+   
+
+   -- apply heightmap to points
+   --local function closest_points
 end
 
 

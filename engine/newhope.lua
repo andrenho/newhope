@@ -14,7 +14,6 @@ table   = my_require('util.table')
 funct   = my_require('util.funct')
 string  = my_require('util.string')
 voronoi = my_require('util.voronoi')
-noise   = my_require('util.noise')
 game    = my_require('game')
 
 -- load classes
