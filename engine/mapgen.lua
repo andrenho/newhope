@@ -13,7 +13,9 @@ end
 
 
 function MapGen:create()
+   print('Creating map polygons...')
    self.voronoi = self:__create_polygons()
+   print('Setting altitudes...')
    self:__set_altitude()
    self:__create_biomes()
 end
@@ -67,10 +69,11 @@ function MapGen:__set_altitude(seed)
    -- ideas from <http://www.stuffwithstuff.com/robot-frog/3d/hills/index.html>
 
    -- create heightmap
-   local hm = {}
-   for x=1,256 do 
+   local hm, points = {}, {}
+   for x=0,255 do 
       hm[x] = {}
-      for y=1,256 do
+      for y=0,255 do
+         points[#points+1] = { x = x, y = y }
          if x > 50 and y > 50 then
             hm[x][y] = 1
          else
@@ -79,11 +82,24 @@ function MapGen:__set_altitude(seed)
       end
    end
 
-   -- TODO - create altitude
-   
+   -- TODO - calculate height map altitude
 
    -- apply heightmap to points
-   --local function closest_points
+   local lim_x1, lim_y1, lim_x2, lim_y2 = world:limits()
+   local prop_w, prop_h = lim_x1 / (lim_x2-lim_x1), lim_y1 / (lim_y2-lim_y1)
+   for _,poly in ipairs(self.polygons) do
+      for j=1,#poly.polygon.points,2 do
+         local x, y = poly.polygon.points[j], poly.polygon.points[j+1]
+         local prop_x = (x / (lim_x2 - lim_x1) - prop_w) * 255
+         local prop_y = (y / (lim_y2 - lim_y1) - prop_h) * 255
+         local closest = self:__closest_point(points, prop_x, prop_y)
+         self.__points[x][y] = hm[closest.x][closest.y]
+         assert(self.__points[x][y])
+      end
+   end
+
+   -- calculate polygon average altitude
+   
 end
 
 
@@ -96,6 +112,10 @@ function MapGen:__create_biomes()
 end
 
 
+-- 
+-- HELPER METHODS
+--
+
 function MapGen:__polycontains(poly, x, y)
    -- TODO - this can be even faster if we create inner rectangles
    local r = poly.outer_rectangle
@@ -103,6 +123,20 @@ function MapGen:__polycontains(poly, x, y)
       return poly.polygon:containspoint(x,y)
    end
    return false
+end
+
+
+function MapGen:__closest_point(pts, x, y)
+   local min_dist, min_pt = math.huge, { x = -math.huge, y = -math.huge }
+   for _,pt in ipairs(pts) do
+      local dst = math.abs(pt.x - x) + math.abs(pt.y - y)
+      if dst < min_dist then
+         min_dist = dst
+         min_pt.x, min_pt.y = pt.x, pt.y
+      end
+   end
+   assert(min_dist ~= math.huge)
+   return min_pt
 end
 
 
