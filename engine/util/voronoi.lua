@@ -515,7 +515,7 @@ function voronoilib.tools:processPoint(point,ivoronoi)
     
     ivoronoi.beachline:insertAtStart(point)
  
-    segment = {startPoint = {x = ivoronoi.boundary[1], y = (ivoronoi.beachline.last.y + ivoronoi.beachline.last.prev.y) / 2}, endPoint = {x = 0, y = 0}, done = false, type = 3}
+    local segment = {startPoint = {x = ivoronoi.boundary[1], y = (ivoronoi.beachline.last.y + ivoronoi.beachline.last.prev.y) / 2}, endPoint = {x = 0, y = 0}, done = false, type = 3}
     table.insert(ivoronoi.segments, segment)
     
     ivoronoi.beachline.last.seg0 = segment

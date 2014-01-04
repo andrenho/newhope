@@ -7,16 +7,21 @@ function MapGen:new(x1, y1, x2, y2, seed)
    self.__x1, self.__y1, self.__x2, self.__y2 = x1, y1, x2, y2
    self.__outer_rectangle = {}
    self.__points = {}
-   math.randomseed(seed or os.time())
+   self.__seed = seed
    return self
 end
 
 
 function MapGen:create()
+   math.randomseed(self.__seed or os.time())
    print('Creating map polygons...')
    self.voronoi = self:__create_polygons()
-   print('Setting altitudes...')
-   self:__set_altitude()
+   print('Creating heightmap...')
+   local hm, w, h = self:__create_heightmap()
+   self:__setup_heightmap_altitudes(hm, w, h)
+   print('Applying heightmap...')
+   self:__apply_heightmap(hm, w, h)
+   print('Creating biomes...')
    self:__create_biomes()
 end
 
@@ -51,7 +56,6 @@ function MapGen:__create_polygons()
          points_x[#points_x+1] = x
          points_y[#points_y+1] = y
          if not self.__points[x] then self.__points[x] = {} end
-         self.__points[x][y] = 0
       end
       self.polygons[i].outer_rectangle = {
          x1 = funct.min(points_x),
@@ -65,15 +69,11 @@ function MapGen:__create_polygons()
 end
 
 
-function MapGen:__set_altitude(seed)
-   -- ideas from <http://www.stuffwithstuff.com/robot-frog/3d/hills/index.html>
-
-   -- create heightmap
-   local hm, points = {}, {}
+function MapGen:__create_heightmap()
+   local hm = {}
    for x=0,255 do 
       hm[x] = {}
       for y=0,255 do
-         points[#points+1] = { x = x, y = y }
          if x > 50 and y > 50 then
             hm[x][y] = 1
          else
@@ -81,34 +81,56 @@ function MapGen:__set_altitude(seed)
          end
       end
    end
+   return hm, 255, 255
+end
 
-   -- TODO - calculate height map altitude
 
-   -- apply heightmap to points
+function MapGen:__setup_heightmap_altitudes(hm, w, h, seed)
+   -- ideas from <http://www.stuffwithstuff.com/robot-frog/3d/hills/index.html>
+end
+
+
+function MapGen:__apply_heightmap(hm, w, h)
+   local points = {}
+   for x=0,255 do for y=0,255 do points[#points+1] = { x=x, y=y } end end
+
    local lim_x1, lim_y1, lim_x2, lim_y2 = world:limits()
    local prop_w, prop_h = lim_x1 / (lim_x2-lim_x1), lim_y1 / (lim_y2-lim_y1)
    for _,poly in ipairs(self.polygons) do
       for j=1,#poly.polygon.points,2 do
          local x, y = poly.polygon.points[j], poly.polygon.points[j+1]
-         local prop_x = (x / (lim_x2 - lim_x1) - prop_w) * 255
-         local prop_y = (y / (lim_y2 - lim_y1) - prop_h) * 255
-         local closest = self:__closest_point(points, prop_x, prop_y)
-         self.__points[x][y] = hm[closest.x][closest.y]
+         if not self.__points[x][y] then
+            local prop_x = (x / (lim_x2 - lim_x1) - prop_w) * w
+            local prop_y = (y / (lim_y2 - lim_y1) - prop_h) * h
+            local closest = self:__closest_point(points, prop_x, prop_y)
+            self.__points[x][y] = hm[closest.x][closest.y]
+         end
          assert(self.__points[x][y])
       end
    end
 
    -- calculate polygon average altitude
-   
+   for _,poly in ipairs(self.polygons) do
+      local i, alt = 0, 0
+      for j=1,#poly.polygon.points,2 do
+         local x, y = poly.polygon.points[j], poly.polygon.points[j+1]
+         alt = alt + self.__points[x][y]
+         i = i+1
+      end
+      assert(i>0)
+      poly.altitude = alt / i
+   end
 end
 
 
 function MapGen:__create_biomes()
    for i,poly in ipairs(self.polygons) do
-      poly.biome = Block.GRASS
+      if poly.altitude > 0 then
+         poly.biome = Block.GRASS
+      else
+         poly.biome = Block.WATER
+      end
    end
-   self.polygons[5].biome = Block.WATER
-   self.polygons[10].biome = Block.WATER
 end
 
 
