@@ -7,6 +7,7 @@ function MapGen:new(x1, y1, x2, y2, seed)
    self.__x1, self.__y1, self.__x2, self.__y2 = x1, y1, x2, y2
    self.__outer_rectangle = {}
    self.__points = {}
+   self.__point_list = {}
    self.__seed = seed
    return self
 end
@@ -21,6 +22,8 @@ function MapGen:create()
    self:__setup_heightmap_altitudes(hm, w, h)
    print('Applying heightmap...')
    self:__apply_heightmap(hm, w, h)
+   print('Creating rivers...')
+   self:__create_rivers()
    print('Creating biomes...')
    self:__create_biomes()
 end
@@ -56,6 +59,7 @@ function MapGen:__create_polygons()
          points_x[#points_x+1] = x
          points_y[#points_y+1] = y
          if not self.__points[x] then self.__points[x] = {} end
+         self.__point_list[#self.__point_list+1] = { x=x, y=y }
       end
       self.polygons[i].outer_rectangle = {
          x1 = funct.min(points_x),
@@ -74,19 +78,35 @@ function MapGen:__create_heightmap()
    for x=0,255 do 
       hm[x] = {}
       for y=0,255 do
-         if x > 50 and y > 50 then
-            hm[x][y] = 1
-         else
-            hm[x][y] = 0 
-         end
+         hm[x][y] = 0 
       end
    end
    return hm, 255, 255
 end
 
 
-function MapGen:__setup_heightmap_altitudes(hm, w, h, seed)
-   -- ideas from <http://www.stuffwithstuff.com/robot-frog/3d/hills/index.html>
+function MapGen:__setup_heightmap_altitudes(hm, w, h)
+   -- idea from <http://www.stuffwithstuff.com/robot-frog/3d/hills/index.html>
+   for _=1,100 do
+      local r = math.random(6, 30)
+      local theta = math.random(0, 2*math.pi)
+      local distance = math.random(0, w/2-r*1.5)
+      local x = math.floor(w / 2 + math.cos(theta) * distance)
+      local y = math.floor(h / 2 + math.sin(theta) * distance)
+      self:__create_hill(hm, w, h, x, y, r)
+   end
+end
+
+
+function MapGen:__create_hill(hm, w, h, x1, y1, r, set_to)
+   for x2=0,255 do
+      for y2=0,255 do
+         local alt = math.pow(r,2) - (math.pow(x2-x1,2) + math.pow(y2-y1,2))
+         if alt > 0 then
+            hm[x2][y2] = set_to or (hm[x2][y2] + alt)
+         end
+      end
+   end
 end
 
 
@@ -119,6 +139,15 @@ function MapGen:__apply_heightmap(hm, w, h)
       end
       assert(i>0)
       poly.altitude = alt / i
+   end
+end
+
+
+function MapGen:__create_rivers()
+   local function create_river(x, y)
+   end
+   for _=1,1 do
+      
    end
 end
 
