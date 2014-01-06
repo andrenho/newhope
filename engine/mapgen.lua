@@ -87,10 +87,10 @@ end
 
 function MapGen:__setup_heightmap_altitudes(hm, w, h)
    -- idea from <http://www.stuffwithstuff.com/robot-frog/3d/hills/index.html>
-   for _=1,100 do
+   for _=1,200 do
       local r = math.random(6, 30)
-      local theta = math.random(0, 2*math.pi)
-      local distance = math.random(0, w/2-r*1.5)
+      local theta = math.random(0, 2*math.pi) + math.random()
+      local distance = math.random(0, w/2-r*2)
       local x = math.floor(w / 2 + math.cos(theta) * distance)
       local y = math.floor(h / 2 + math.sin(theta) * distance)
       self:__create_hill(hm, w, h, x, y, r)
