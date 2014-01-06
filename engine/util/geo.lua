@@ -51,25 +51,9 @@ return Segment
 local Polygon = {}
 Polygon.__index = Polygon
 
-function Polygon:new(points)
-   local self = setmetatable({}, Polygon)
+function Polygon:new(points, segments)
    self.points = points
-
-   -- add segments
-   self.segments = {}
-   for i=1,(#points-1) do
-      self.segments[#self.segments+1] = Segment:new(points[i], points[i+1])
-   end
-   self.segments[#self.segments+1] = Segment:new(points[#points], points[1])
-
-   -- add outer rectangle
-   self.polygons[i].outer_rectangle = {
-      x1 = funct.min(points_x),
-      y1 = funct.min(points_y),
-      x2 = funct.max(points_x),
-      y2 = funct.max(points_y),
-   }
-
+   self.segments = segments
    return self
 end
 
@@ -104,25 +88,42 @@ function Plane:new()
 end
 
 
-function Plane:find_segment(p1,p2)
+function Plane:add_point(pt)
 end
 
 
-function Plane:add_polygon(points)
-   
+function Plane:add_segment(seg)
+end
+
+
+function Plane:add_polygon(polygon)
+   self.polygons[#self.polygons+1] = polygon
 end
 
 
 function Polygon.generate_voronoi(polygons, repetitions, x1, y1, x2, y2)
    local plane = Plane:new()
+   -- create voronoi
    local vor = voronoi:new(polygons, repetitions, x1, y1, x2, y2)
    for _,vpoly in ipairs(vor.polygons) do
       local pts = {}
+      -- add points
       for j=1,#vpoly.points,2 do
          local x, y = poly.points[j], poly.points[j+1]
-         pts[#pts+1] = Point:new(x, y)
+         local p = point:new(x, y)
+         pts[#pts+1] = p
+         self:add_point(p)
       end
-      plane:add_polygon(pts)
+      -- add segments
+      local segs = {}
+      for j=1,(#pts-1) do
+         local seg = Segment:new(pts[i], pts[i+1])
+         self:add_segment(seg)
+         segs[#segs+1] = seg
+      end
+      self:add_segment(Segment:new(pts[#pts], pts[1]))
+      -- add polygons
+      plane:add_polygon(Polygon:new(pts, segs))
    end
    return plane
 end
