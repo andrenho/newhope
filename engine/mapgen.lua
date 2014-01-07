@@ -16,7 +16,7 @@ end
 function MapGen:create()
    math.randomseed(self.__seed or os.time())
    print('Creating map polygons...')
-   self.voronoi = self:__create_polygons()
+   self.plane = self:__create_polygons()
    print('Creating heightmap...')
    local hm, w, h = self:__create_heightmap()
    self:__setup_heightmap_altitudes(hm, w, h)
@@ -30,8 +30,8 @@ end
 
 
 function MapGen:tile(x,y)
-   for i,poly in ipairs(self.polygons) do
-      if self:__polycontains(poly, x, y) then
+   for _,poly in ipairs(self.plane.polygons) do
+      if poly:contains_point(x,y) then
          return poly.biome
       end
    end
@@ -44,32 +44,7 @@ end
 -------------
 
 function MapGen:__create_polygons()
-   -- create voronoi diagram
-   local vor = voronoi:new(500, 1, self.__x1, self.__y1, 
-                             -self.__x1+self.__x2, -self.__y1+self.__y2)
-   for i,poly in ipairs(vor.polygons) do
-      -- create polygon
-      self.polygons[i] = {}
-      self.polygons[i].polygon = poly
-
-      -- find outer rectangles
-      local points_x, points_y = {}, {}
-      for j=1,#poly.points,2 do
-         local x, y = poly.points[j], poly.points[j+1]
-         points_x[#points_x+1] = x
-         points_y[#points_y+1] = y
-         if not self.__points[x] then self.__points[x] = {} end
-         self.__point_list[#self.__point_list+1] = { x=x, y=y }
-      end
-      self.polygons[i].outer_rectangle = {
-         x1 = funct.min(points_x),
-         y1 = funct.min(points_y),
-         x2 = funct.max(points_x),
-         y2 = funct.max(points_y),
-      }
-   end
-
-   return vor
+   return geo.Plane.generate_voronoi(500, 1, self.__x1, self.__y1, -self.__x1+self.__x2, -self.__y1+self.__y2)
 end
 
 
@@ -116,29 +91,15 @@ function MapGen:__apply_heightmap(hm, w, h)
 
    local lim_x1, lim_y1, lim_x2, lim_y2 = world:limits()
    local prop_w, prop_h = lim_x1 / (lim_x2-lim_x1), lim_y1 / (lim_y2-lim_y1)
-   for _,poly in ipairs(self.polygons) do
-      for j=1,#poly.polygon.points,2 do
-         local x, y = poly.polygon.points[j], poly.polygon.points[j+1]
-         if not self.__points[x][y] then
-            local prop_x = (x / (lim_x2 - lim_x1) - prop_w) * w
-            local prop_y = (y / (lim_y2 - lim_y1) - prop_h) * h
-            local closest = self:__closest_point(points, prop_x, prop_y)
-            self.__points[x][y] = hm[closest.x][closest.y]
-         end
-         assert(self.__points[x][y])
-      end
-   end
 
-   -- calculate polygon average altitude
-   for _,poly in ipairs(self.polygons) do
-      local i, alt = 0, 0
-      for j=1,#poly.polygon.points,2 do
-         local x, y = poly.polygon.points[j], poly.polygon.points[j+1]
-         alt = alt + self.__points[x][y]
-         i = i+1
+   for _,poly in ipairs(self.plane.polygons) do
+      for _,p in ipairs(poly.points) do
+            local prop_x = (p.x / (lim_x2 - lim_x1) - prop_w) * w
+            local prop_y = (p.y / (lim_y2 - lim_y1) - prop_h) * h
+            local closest = self:__closest_point(points, prop_x, prop_y)
+            self.plane:point(p.x,p.y).altitude = hm[closest.x][closest.y]
       end
-      assert(i>0)
-      poly.altitude = alt / i
+      poly.altitude = funct.avg(poly.points, function(p) return p.altitude end)
    end
 end
 
@@ -153,29 +114,20 @@ end
 
 
 function MapGen:__create_biomes()
-   for i,poly in ipairs(self.polygons) do
+   for _,poly in ipairs(self.plane.polygons) do
       if poly.altitude > 0 then
          poly.biome = Block.GRASS
       else
          poly.biome = Block.WATER
       end
    end
+   self.plane.polygons[1].biome = Block.GRASS
 end
 
 
 -- 
 -- HELPER METHODS
 --
-
-function MapGen:__polycontains(poly, x, y)
-   -- TODO - this can be even faster if we create inner rectangles
-   local r = poly.outer_rectangle
-   if x >= r.x1 and x <= r.x2 and y >= r.y1 and y <= r.y2 then
-      return poly.polygon:containspoint(x,y)
-   end
-   return false
-end
-
 
 function MapGen:__closest_point(pts, x, y)
    local min_dist, min_pt = math.huge, { x = -math.huge, y = -math.huge }

@@ -34,11 +34,19 @@ function max(tbl, func)
    return t[#t]
 end
 
+function avg(tbl, func)
+   local f = func or function(p) return p end
+   local s = 0.0
+   for _,v in ipairs(tbl) do s = s+f(v) end
+   return s/#tbl
+end
+
 return {
    map=map,
    filter=filter,
    min=min,
    max=max,
+   avg=avg,
 }
 
 -- vim: ts=3:sw=3:sts=3:expandtab
