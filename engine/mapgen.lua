@@ -62,7 +62,7 @@ end
 
 function MapGen:__setup_heightmap_altitudes(hm, w, h)
    -- idea from <http://www.stuffwithstuff.com/robot-frog/3d/hills/index.html>
-   for _=1,200 do
+   for _=1,500 do
       local r = math.random(6, 30)
       local theta = math.random(0, 2*math.pi) + math.random()
       local distance = math.random(0, w/2-r*2)
@@ -77,7 +77,7 @@ function MapGen:__create_hill(hm, w, h, x1, y1, r, set_to)
    for x2=0,255 do
       for y2=0,255 do
          local alt = math.pow(r,2) - (math.pow(x2-x1,2) + math.pow(y2-y1,2))
-         if alt > 0 then
+         if alt > -1 then
             hm[x2][y2] = set_to or (hm[x2][y2] + alt)
          end
       end
@@ -96,7 +96,7 @@ function MapGen:__apply_heightmap(hm, w, h)
       for _,p in ipairs(poly.points) do
             local prop_x = (p.x / (lim_x2 - lim_x1) - prop_w) * w
             local prop_y = (p.y / (lim_y2 - lim_y1) - prop_h) * h
-            local closest = self:__closest_point(points, prop_x, prop_y)
+            local closest = { x = math.floor(prop_x), y = math.floor(prop_y) }
             self.plane:point(p.x,p.y).altitude = hm[closest.x][closest.y]
       end
       poly.altitude = funct.avg(poly.points, function(p) return p.altitude end)
@@ -108,7 +108,8 @@ function MapGen:__create_rivers()
    local function create_river(x, y)
    end
    for _=1,1 do
-      
+      local p = self.plane:random_point()
+      while p.altitude <= 0 do p = self.plane:random_point() end
    end
 end
 
@@ -121,7 +122,6 @@ function MapGen:__create_biomes()
          poly.biome = Block.WATER
       end
    end
-   self.plane.polygons[1].biome = Block.GRASS
 end
 
 

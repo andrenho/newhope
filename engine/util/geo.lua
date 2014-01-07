@@ -82,7 +82,7 @@ function Polygon:contains_point(x,y)
    local r = self.outer_rectangle
    local p = self.points
    local c = false
-   if x >= r.x1 and y >= r.y1 and x < r.x2 and y < r.y2 then
+   if x >= r.x1 and y >= r.y1 and x <= r.x2 and y <= r.y2 then
       local j = #self.points
       for i=1,#self.points do
          if ((p[i].y > y) ~= (p[j].y > y)) and (x < (p[j].x-p[i].x) * (y - p[i].y) / (p[j].y - p[i].y) + p[i].x) then
@@ -119,12 +119,14 @@ function Plane:new()
    self.points = {}
    self.segments = {}
    self.polygons = {}
+   self.__point_list = {}
    return self
 end
 
 
 function Plane:add_point(pt)
    self.points[pt:unique_id()] = pt
+   self.__point_list[#self.__point_list+1] = pt
 end
 
 
@@ -135,6 +137,11 @@ end
 
 function Plane:add_polygon(polygon)
    self.polygons[#self.polygons+1] = polygon
+end
+
+
+function Plane:random_point()
+   return self.__point_list[math.random(1, #self.__point_list)]
 end
 
 
