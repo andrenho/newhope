@@ -10,8 +10,8 @@ function Point:new(x, y)
 end
 
 
-function Point:unique_id()
-   return self.y * 1000000 + self.x
+function Point:__eq(o)
+   return self.x == o.x and self.y == o.y
 end
 
 
@@ -20,7 +20,7 @@ end
 -------------
 
 function Point:__tostring()
-   return ('[%0.2f %0.2f]'):format(self.x, self.y)
+   return ('[%0.2f %0.2f (%0.2f)]'):format(self.x, self.y, self.altitude)
 end
 
 function Point:type() return 'Point' end
@@ -40,17 +40,12 @@ function Segment:new(startpoint, endpoint)
 end
 
 
-function Segment:unique_id()
-   return self.startpoint:unique_id() + self.endpoint:unique_id()
-end
-
-
 -------------
 -- PRIVATE --
 -------------
 
 function Segment:__tostring()
-   return '[Polygon]'
+   return '[Segment '..tostring(self.startpoint)..' '..tostring(self.endpoint)..']'
 end
 
 
@@ -120,18 +115,29 @@ function Plane:new()
    self.segments = {}
    self.polygons = {}
    self.__point_list = {}
+   self.__segment_list = {}
    return self
 end
 
 
 function Plane:add_point(pt)
-   self.points[pt:unique_id()] = pt
+   if not self.points[pt.x] then self.points[pt.x] = {} end
+   self.points[pt.x][pt.y] = pt
    self.__point_list[#self.__point_list+1] = pt
 end
 
 
 function Plane:add_segment(seg)
-   self.segments[seg:unique_id()] = seg
+   local x1, y1, x2, y2 = seg.startpoint.x, seg.startpoint.y, seg.endpoint.x, seg.endpoint.y
+   if not self.segments[x1] then self.segments[x1] = {} end
+   if not self.segments[x1][y1] then self.segments[x1][y1] = {} end
+   if not self.segments[x1][y1][x2] then self.segments[x1][y1][x2] = {} end
+   self.segments[x1][y1][x2][y2] = seg
+   if not self.segments[x2] then self.segments[x2] = {} end
+   if not self.segments[x2][y2] then self.segments[x2][y2] = {} end
+   if not self.segments[x2][y2][x1] then self.segments[x2][y2][x1] = {} end
+   self.segments[x2][y2][x1][y1] = seg
+   self.__segment_list[#self.__segment_list+1] = seg
 end
 
 
@@ -145,8 +151,14 @@ function Plane:random_point()
 end
 
 
-function Plane:point(x,y)
-   return self.points[Point:new(x,y):unique_id()] -- TODO - slow
+function Plane:segments_containing_endpoint(p)
+   local segs = {}
+   for _,seg in pairs(self.__segment_list) do
+      if seg.startpoint == p or seg.endpoint == p then 
+         segs[#segs+1] = seg
+      end
+   end
+   return segs
 end
 
 

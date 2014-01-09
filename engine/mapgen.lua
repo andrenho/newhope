@@ -4,6 +4,7 @@ MapGen.__index = MapGen
 function MapGen:new(x1, y1, x2, y2, seed)
    local self = setmetatable({}, MapGen)
    self.polygons = {}
+   self.rivers = {}
    self.__x1, self.__y1, self.__x2, self.__y2 = x1, y1, x2, y2
    self.__outer_rectangle = {}
    self.__points = {}
@@ -94,10 +95,10 @@ function MapGen:__apply_heightmap(hm, w, h)
 
    for _,poly in ipairs(self.plane.polygons) do
       for _,p in ipairs(poly.points) do
-            local prop_x = (p.x / (lim_x2 - lim_x1) - prop_w) * w
-            local prop_y = (p.y / (lim_y2 - lim_y1) - prop_h) * h
-            local closest = { x = math.floor(prop_x), y = math.floor(prop_y) }
-            self.plane:point(p.x,p.y).altitude = hm[closest.x][closest.y]
+         local prop_x = (p.x / (lim_x2 - lim_x1) - prop_w) * w
+         local prop_y = (p.y / (lim_y2 - lim_y1) - prop_h) * h
+         local closest = { x = math.floor(prop_x), y = math.floor(prop_y) }
+         self.plane.points[p.x][p.y].altitude = hm[closest.x][closest.y]
       end
       poly.altitude = funct.avg(poly.points, function(p) return p.altitude end)
    end
@@ -105,12 +106,41 @@ end
 
 
 function MapGen:__create_rivers()
-   local function create_river(x, y)
-   end
    for _=1,1 do
       local p = self.plane:random_point()
-      while p.altitude <= 0 do p = self.plane:random_point() end
+      while p.altitude <= 0 do p = self.plane:random_point() end -- if it's on water, try a new point
+      local points_used = { p } -- TODO - repeated?
+      local river_pts = { p }
+      print(p)
+      while p.altitude > 0 do
+         -- find next point that contains the lowest altitude, ignoring the points already used
+         local np, lowest_alt = nil, math.huge
+         print(unpack(self.plane:segments_containing_endpoint(p)))
+         for _,seg in ipairs(self.plane:segments_containing_endpoint(p)) do
+            -- find next point
+            local op = seg.startpoint
+            if op == p then op = seg.endpoint end
+            -- find lowest point
+            --print(p, unpack(points_used))
+            if not table.find(points_used, op) then
+               if op.altitude < lowest_alt then
+                  lowest_alt = op.altitude
+                  np = op
+               end
+            end
+         end
+         if not np then break end -- ??
+
+         p = np
+         -- add segment
+         points_used[#points_used+1] = p
+         river_pts[#river_pts+1] = p
+         if #river_pts > 10 then break end -- avoid infinite loops
+      end
+      print(unpack(river_pts))
+      --self.rivers[#self.rivers+1] = river
    end
+   -- TODO : point equals, segnemnt, segments_containing_point
 end
 
 

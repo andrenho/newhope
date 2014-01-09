@@ -22,6 +22,8 @@ Minimap* minimap_new(lua_State* L, SDL_Renderer* ren, int w, int h)
 
 	// create texture
 	SDL_Surface* sf = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+
+	// draw tiles
 	for(int x=0; x<w; x++) for(int y=0; y<h; y++) {
 		// find tile
 		LUA_PUSH_METHOD(L, "tiles");
@@ -45,6 +47,15 @@ Minimap* minimap_new(lua_State* L, SDL_Renderer* ren, int w, int h)
 
 		lua_pop(L, 6);
 	}
+
+	// draw rivers
+	/*
+	LUA_PUSH_MEMBER(L, "mapgen");
+	LUA_PUSH_MEMBER(L, "rivers");
+	for(int i=0; i<lua_objlen(L); i++) {
+		
+	}*/
+
 	mm->tx = SDL_CreateTextureFromSurface(ren, sf);
 	SDL_FreeSurface(sf);
 

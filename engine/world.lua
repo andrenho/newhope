@@ -25,8 +25,8 @@ end
 -- initialize world map
 --
 function World:initialize()
-   self.__mapgen = MapGen:new(self.x1, self.y1, self.x2, self.y2)
-   self.__mapgen:create()
+   self.mapgen = MapGen:new(self.x1, self.y1, self.x2, self.y2)
+   self.mapgen:create()
 
    self:__init_physics()
 
@@ -76,7 +76,7 @@ function World:tiles(x, y)
             return city:tiles(x-city.x, y-city.y)
          end
       end
-      return { self.__mapgen:tile(x,y) } -- TODO
+      return { self.mapgen:tile(x,y) } -- TODO
    end
 end
 

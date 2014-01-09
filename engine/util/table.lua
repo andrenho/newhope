@@ -1,6 +1,7 @@
 local table = setmetatable({}, { __index = table })
 
 function table:find(el)
+   assert(type(self) == 'table')
    for k,v in pairs(self) do
       if v == el then return k end
    end
