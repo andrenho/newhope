@@ -45,7 +45,7 @@ end
 -------------
 
 function MapGen:__create_polygons()
-   return geo.Plane.generate_voronoi(500, 1, self.__x1, self.__y1, -self.__x1+self.__x2, -self.__y1+self.__y2)
+   return geo.Plane.generate_voronoi(20, 1, self.__x1, self.__y1, -self.__x1+self.__x2, -self.__y1+self.__y2)
 end
 
 
@@ -93,13 +93,14 @@ function MapGen:__apply_heightmap(hm, w, h)
    local lim_x1, lim_y1, lim_x2, lim_y2 = world:limits()
    local prop_w, prop_h = lim_x1 / (lim_x2-lim_x1), lim_y1 / (lim_y2-lim_y1)
 
+   for _,p in ipairs(self.plane.__point_list) do
+      local prop_x = (p.x / (lim_x2 - lim_x1) - prop_w) * w
+      local prop_y = (p.y / (lim_y2 - lim_y1) - prop_h) * h
+      local closest = { x = math.floor(prop_x), y = math.floor(prop_y) }
+      self.plane.points[p].altitude = hm[closest.x][closest.y]
+      print(self.plane.points[p])
+   end
    for _,poly in ipairs(self.plane.polygons) do
-      for _,p in ipairs(poly.points) do
-         local prop_x = (p.x / (lim_x2 - lim_x1) - prop_w) * w
-         local prop_y = (p.y / (lim_y2 - lim_y1) - prop_h) * h
-         local closest = { x = math.floor(prop_x), y = math.floor(prop_y) }
-         self.plane.points[p.x][p.y].altitude = hm[closest.x][closest.y]
-      end
       poly.altitude = funct.avg(poly.points, function(p) return p.altitude end)
    end
 end
@@ -111,7 +112,7 @@ function MapGen:__create_rivers()
       while p.altitude <= 0 do p = self.plane:random_point() end -- if it's on water, try a new point
       local points_used = { p } -- TODO - repeated?
       local river_pts = { p }
-      print(p)
+      --print(p)
       while p.altitude > 0 do
          -- find next point that contains the lowest altitude, ignoring the points already used
          local np, lowest_alt = nil, math.huge
@@ -121,7 +122,6 @@ function MapGen:__create_rivers()
             local op = seg.startpoint
             if op == p then op = seg.endpoint end
             -- find lowest point
-            --print(p, unpack(points_used))
             if not table.find(points_used, op) then
                if op.altitude < lowest_alt then
                   lowest_alt = op.altitude

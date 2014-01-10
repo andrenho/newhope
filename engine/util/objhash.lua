@@ -1,13 +1,14 @@
 function objhash()
-   return setmetatable({ _proxy = {} }, {
+   return setmetatable({ data = {} }, {
       __newindex = function(t, k, v)
-         print(k)
-         t._proxy[k:__hash()] = v
+         t.data[k:__hash()] = v
       end,
       __index = function(t, k)
-         return t._proxy[k:__hash()]
+         return t.data[k:__hash()]
       end
    })
 end
+
+return objhash
 
 -- vim: ts=3:sw=3:sts=3:expandtab

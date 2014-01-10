@@ -19,6 +19,10 @@ end
 -- PRIVATE --
 -------------
 
+function Point:__hash()
+   return self.y * 1000000 + self.x
+end
+
 function Point:__tostring()
    return ('[%0.2f %0.2f (%0.2f)]'):format(self.x, self.y, self.altitude)
 end
@@ -39,10 +43,13 @@ function Segment:new(startpoint, endpoint)
    return self
 end
 
-
 -------------
 -- PRIVATE --
 -------------
+
+function Segment:__hash() -- if endpoints are inverted, it should return the same hash
+   return self.startpoint:__hash() + self.endpoint:__hash()
+end
 
 function Segment:__tostring()
    return '[Segment '..tostring(self.startpoint)..' '..tostring(self.endpoint)..']'
@@ -111,33 +118,22 @@ Plane.__index = Plane
 
 function Plane:new()
    local self = setmetatable({}, Plane)
-   self.points = {}
-   self.segments = {}
+   self.points = objhash()
+   self.segments = objhash()
    self.polygons = {}
    self.__point_list = {}
-   self.__segment_list = {}
    return self
 end
 
 
 function Plane:add_point(pt)
-   if not self.points[pt.x] then self.points[pt.x] = {} end
-   self.points[pt.x][pt.y] = pt
    self.__point_list[#self.__point_list+1] = pt
+   self.points[pt] = pt
 end
 
 
 function Plane:add_segment(seg)
-   local x1, y1, x2, y2 = seg.startpoint.x, seg.startpoint.y, seg.endpoint.x, seg.endpoint.y
-   if not self.segments[x1] then self.segments[x1] = {} end
-   if not self.segments[x1][y1] then self.segments[x1][y1] = {} end
-   if not self.segments[x1][y1][x2] then self.segments[x1][y1][x2] = {} end
-   self.segments[x1][y1][x2][y2] = seg
-   if not self.segments[x2] then self.segments[x2] = {} end
-   if not self.segments[x2][y2] then self.segments[x2][y2] = {} end
-   if not self.segments[x2][y2][x1] then self.segments[x2][y2][x1] = {} end
-   self.segments[x2][y2][x1][y1] = seg
-   self.__segment_list[#self.__segment_list+1] = seg
+   self.segments[seg] = seg
 end
 
 
@@ -153,7 +149,7 @@ end
 
 function Plane:segments_containing_endpoint(p)
    local segs = {}
-   for _,seg in pairs(self.__segment_list) do
+   for _,seg in pairs(self.segments.data) do
       if seg.startpoint == p or seg.endpoint == p then 
          segs[#segs+1] = seg
       end

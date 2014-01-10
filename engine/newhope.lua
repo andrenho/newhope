@@ -13,6 +13,7 @@ end
 table   = my_require('util.table')
 funct   = my_require('util.funct')
 geo     = my_require('util.geo')
+objhash = my_require('util.objhash')
 string  = my_require('util.string')
 voronoi = my_require('util.voronoi')
 game    = my_require('game')
