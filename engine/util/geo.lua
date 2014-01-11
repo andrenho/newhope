@@ -127,8 +127,10 @@ end
 
 
 function Plane:add_point(pt)
-   self.__point_list[#self.__point_list+1] = pt
-   self.points[pt] = pt
+   if not self.points[pt] then
+      self.__point_list[#self.__point_list+1] = pt
+      self.points[pt] = pt
+   end
 end
 
 
@@ -174,11 +176,11 @@ function Plane.generate_voronoi(polygons, repetitions, x1, y1, x2, y2)
       -- add segments
       local segs = {}
       for j=1,(#pts-1) do
-         local seg = Segment:new(pts[j], pts[j+1])
+         local seg = Segment:new(plane.points[pts[j]], plane.points[pts[j+1]])
          plane:add_segment(seg)
          segs[#segs+1] = seg
       end
-      plane:add_segment(Segment:new(pts[#pts], pts[1]))
+      plane:add_segment(Segment:new(plane.points[pts[#pts]], plane.points[pts[1]]))
       -- add polygons
       plane:add_polygon(Polygon:new(pts, segs))
    end

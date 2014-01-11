@@ -45,7 +45,7 @@ end
 -------------
 
 function MapGen:__create_polygons()
-   return geo.Plane.generate_voronoi(20, 1, self.__x1, self.__y1, -self.__x1+self.__x2, -self.__y1+self.__y2)
+   return geo.Plane.generate_voronoi(500, 1, self.__x1, self.__y1, -self.__x1+self.__x2, -self.__y1+self.__y2)
 end
 
 
@@ -98,8 +98,8 @@ function MapGen:__apply_heightmap(hm, w, h)
       local prop_y = (p.y / (lim_y2 - lim_y1) - prop_h) * h
       local closest = { x = math.floor(prop_x), y = math.floor(prop_y) }
       self.plane.points[p].altitude = hm[closest.x][closest.y]
-      print(self.plane.points[p])
    end
+
    for _,poly in ipairs(self.plane.polygons) do
       poly.altitude = funct.avg(poly.points, function(p) return p.altitude end)
    end
@@ -116,7 +116,7 @@ function MapGen:__create_rivers()
       while p.altitude > 0 do
          -- find next point that contains the lowest altitude, ignoring the points already used
          local np, lowest_alt = nil, math.huge
-         print(unpack(self.plane:segments_containing_endpoint(p)))
+         --print(unpack(self.plane:segments_containing_endpoint(p)))
          for _,seg in ipairs(self.plane:segments_containing_endpoint(p)) do
             -- find next point
             local op = seg.startpoint
@@ -140,7 +140,6 @@ function MapGen:__create_rivers()
       print(unpack(river_pts))
       --self.rivers[#self.rivers+1] = river
    end
-   -- TODO : point equals, segnemnt, segments_containing_point
 end
 
 
