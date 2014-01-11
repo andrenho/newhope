@@ -107,7 +107,7 @@ end
 
 
 function MapGen:__create_rivers()
-   for _=1,1 do
+   for _=1,15 do
       local p = self.plane:random_point()
       while p.altitude <= 0 do p = self.plane:random_point() end -- if it's on water, try a new point
       local points_used = { p } -- TODO - repeated?
@@ -135,10 +135,9 @@ function MapGen:__create_rivers()
          -- add segment
          points_used[#points_used+1] = p
          river_pts[#river_pts+1] = p
-         if #river_pts > 10 then break end -- avoid infinite loops
+         if #river_pts > 100 then break end -- avoid infinite loops
       end
-      print(unpack(river_pts))
-      --self.rivers[#self.rivers+1] = river
+      self.rivers[#self.rivers+1] = river_pts
    end
 end
 

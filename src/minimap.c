@@ -6,6 +6,8 @@
 
 Minimap* minimap_new(lua_State* L, SDL_Renderer* ren, int w, int h)
 {
+	// TODO - separate this function in smaller functions
+	
 	Minimap* mm = malloc(sizeof(Minimap));
 	mm->w = w;
 	mm->h = h;
@@ -48,17 +50,38 @@ Minimap* minimap_new(lua_State* L, SDL_Renderer* ren, int w, int h)
 		lua_pop(L, 6);
 	}
 
+	int prop_w = limit_x1 / (limit_x2 - limit_x1),
+	    prop_h = limit_y1 / (limit_y2 - limit_y1);
+
 	// draw rivers
-	/*
+	SDL_Renderer* sr = SDL_CreateSoftwareRenderer(sf);
+	SDL_SetRenderDrawColor(sr, 64, 224, 255, SDL_ALPHA_OPAQUE);
 	LUA_PUSH_MEMBER(L, "mapgen");
 	LUA_PUSH_MEMBER(L, "rivers");
-	for(int i=0; i<lua_objlen(L); i++) {
-		
-	}*/
+	int nrivers = lua_objlen(L, -1);
+	for(int i=0; i<nrivers; i++) {
+		// draw river
+		lua_rawgeti(L, -1, i+1);
+		int npts = lua_objlen(L, -1);
+		SDL_Point* points = calloc(sizeof(SDL_Point), npts);
+		for(int j=0; j<npts; j++) {
+			lua_rawgeti(L, -1, j+1);
+			double x, y;
+			LUA_FIELD(L, x, "x", number);
+			LUA_FIELD(L, y, "y", number);
+			points[j].x = (x / (limit_x2 - limit_x1) - prop_w) * w + w/2;
+			points[j].y = (y / (limit_y2 - limit_y1) - prop_h) * h + h/2;
+			lua_pop(L, 1);
+		}
+		SDL_RenderDrawLines(sr, points, npts);
+		free(points);
+		lua_pop(L, 1);
+	}
+	SDL_RenderPresent(sr);
+	SDL_DestroyRenderer(sr);
 
 	mm->tx = SDL_CreateTextureFromSurface(ren, sf);
 	SDL_FreeSurface(sf);
-
 	return mm;
 }
 
