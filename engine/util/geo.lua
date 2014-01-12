@@ -6,18 +6,23 @@ function Point:new(x, y)
    self.x = x
    self.y = y
    self.altitude = 0
+   self.moisture = 0
+   self.closest_points = {}
    return self
 end
 
-
-function Point:__eq(o)
-   return self.x == o.x and self.y == o.y
+-- manhattan distance
+function Point:mh_distance(o)
+   return math.abs(self.x-o.x) + math.abs(self.y-o.y)
 end
-
 
 -------------
 -- PRIVATE --
 -------------
+
+function Point:__eq(o)
+   return self.x == o.x and self.y == o.y
+end
 
 function Point:__hash()
    return self.y * 1000000 + self.x
@@ -121,14 +126,14 @@ function Plane:new()
    self.points = objhash()
    self.segments = objhash()
    self.polygons = {}
-   self.__point_list = {}
+   self.point_list = {}
    return self
 end
 
 
 function Plane:add_point(pt)
    if not self.points[pt] then
-      self.__point_list[#self.__point_list+1] = pt
+      self.point_list[#self.point_list+1] = pt
       self.points[pt] = pt
    end
 end
@@ -145,7 +150,7 @@ end
 
 
 function Plane:random_point()
-   return self.__point_list[math.random(1, #self.__point_list)]
+   return self.point_list[math.random(1, #self.point_list)]
 end
 
 
@@ -185,6 +190,8 @@ function Plane.generate_voronoi(polygons, repetitions, x1, y1, x2, y2)
       plane:add_polygon(Polygon:new(pts, segs))
    end
 
+   plane:__find_closest_points()
+
    return plane
 end
 
@@ -192,6 +199,15 @@ end
 -------------
 -- PRIVATE --
 -------------
+
+function Plane:__find_closest_points()
+   for _,pt in ipairs(self.point_list) do
+      local closest = table.shallow_copy(self.point_list)
+      table.sort(closest, function(a, b) return pt:mh_distance(a) < pt:mh_distance(b) end)
+      table.remove(closest, 1)
+      pt.closest_points = closest
+   end
+end
 
 function Plane:__tostring()
    return '[Plane]'

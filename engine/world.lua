@@ -38,6 +38,7 @@ function World:initialize()
    self:__add_people_to_cities()
 
    self:__add_static_objects()
+   collectgarbage()
 end
 
 
