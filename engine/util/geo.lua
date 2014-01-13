@@ -16,6 +16,11 @@ function Point:mh_distance(o)
    return math.abs(self.x-o.x) + math.abs(self.y-o.y)
 end
 
+-- real distance
+function Point:distance(o)
+   return math.sqrt(math.pow(o.x - self.x, 2) + math.pow(o.y - self.y, 2))
+end
+
 -------------
 -- PRIVATE --
 -------------

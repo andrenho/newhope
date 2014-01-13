@@ -8,8 +8,9 @@ function MapGen:new(x1, y1, x2, y2, seed)
    self.__x1, self.__y1, self.__x2, self.__y2 = x1, y1, x2, y2
    self.__outer_rectangle = {}
    self.__points = {}
-   self.point_list = {}
    self.__seed = seed
+   self.__all_river_points = {}
+   self.point_list = {}
    return self
 end
 
@@ -98,7 +99,7 @@ function MapGen:__normalize_heightmap(hm, w, h)
    end
    for x=0,255 do
       for y=0,255 do
-         hm[x][y] = hm[x][y] / max_alt * 255
+         hm[x][y] = hm[x][y] / max_alt
       end
    end
 end
@@ -153,6 +154,7 @@ function MapGen:__create_rivers()
          -- add segment
          points_used[#points_used+1] = p
          river_pts[#river_pts+1] = p
+         self.__all_river_points[#self.__all_river_points+1] = p
          if #river_pts > 100 then break end -- avoid infinite loops
       end
       self.rivers[#self.rivers+1] = river_pts
@@ -163,18 +165,57 @@ end
 function MapGen:__terrain_features()
    -- find moisture
    for _,pt in ipairs(self.plane.point_list) do
-      local moisutre = 255
-      -- TODO
+      if pt.altitude <= 0 then
+         pt.moisture = 1
+      else
+         for _,ptw in ipairs(pt.closest_points) do
+            if ptw.altitude <= 0 or table.find(self.__all_river_points, ptw) then -- water
+               pt.moisture = math.max((2000 - pt:distance(ptw)) / 2000, 0)
+               break
+            end
+         end
+      end
+   end
+   for _,poly in ipairs(self.plane.polygons) do
+      poly.moisture = funct.avg(poly.points, function(p) return p.moisture end)
    end
 end
 
 
 function MapGen:__create_biomes()
+--[[
+ALT MOIST 1---------------------------0
+ 1        snow       tundra      bare
+ |        temperF    grass     savannah
+ 0        tropF      grass      desert ]]
+
    for _,poly in ipairs(self.plane.polygons) do
-      if poly.altitude > 0 then
-         poly.biome = Block.GRASS
-      else
+      if poly.altitude <= 0 then
          poly.biome = Block.WATER
+      elseif poly.altitude < 0.05 then
+         if poly.moisture < 0.05 then
+            poly.biome = Block.DESERT
+         elseif poly.moisture < 0.1 then
+            poly.biome = Block.GRASS
+         else
+            poly.biome = Block.TROPFOR
+         end
+      elseif poly.altitude < 0.1 then
+         if poly.moisture < 0.05 then
+            poly.biome = Block.SAVANNAH
+         elseif poly.moisture < 0.1 then
+            poly.biome = Block.GRASS
+         else
+            poly.biome = Block.TEMPFOR
+         end
+      else
+         if poly.moisture < 0.05 then
+            poly.biome = Block.BARE
+         elseif poly.moisture < 0.1 then
+            poly.biome = Block.TUNDRA
+         else
+            poly.biome = Block.SNOW
+         end
       end
    end
 end

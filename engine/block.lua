@@ -38,6 +38,13 @@ end
 --        name            color             solid   friction
 Block.add('NOTHING',      {0x00,0x00,0x00}, false,  0)
 Block.add('GRASS',        {0x00,0x80,0x00}, true,   1)
+Block.add('SNOW',         {0xff,0xff,0xff}, true,   1)
+Block.add('TUNDRA',       {0xa0,0xa0,0xa0}, true,   1)
+Block.add('BARE',         {0x50,0x50,0x50}, true,   1)
+Block.add('TEMPFOR',      {0x00,0x50,0x00}, true,   1)
+Block.add('SAVANNAH',     {0x80,0x80,0x00}, true,   1)
+Block.add('TROPFOR',      {0x00,0xa0,0x00}, true,   1)
+Block.add('DESERT',       {0xb0,0xb0,0x00}, true,   1)
 Block.add('WATER',        {0x00,0x00,0x80}, false,  10)
 Block.add('WOODEN_WALL',  {0x00,0x00,0x00}, true)
 Block.add('FLOOR',        {0x80,0x00,0x00}, true)
