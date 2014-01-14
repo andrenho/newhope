@@ -90,7 +90,7 @@ function Polygon:new(points, segments)
 end
 
 
-function Polygon:contains_point(x,y)
+function Polygon:is_point_inside(x,y)
    local r = self.outer_rectangle
    local p = self.points
    local c = false
@@ -159,6 +159,25 @@ function Plane:random_point()
 end
 
 
+function Plane:polygon_neighbours(poly)
+   local others = {}
+   for _,other in ipairs(self.polygons) do
+      local npts = 0
+      for _,pt1 in ipairs(other.points) do
+         for _,pt2 in ipairs(poly.points) do
+            if pt1 == pt2 then npts = npts+1 end
+            if npts == 2 then
+               others[#others+1] = other
+               goto nxt
+            end
+         end
+      end
+      ::nxt::
+   end
+   return others
+end
+
+
 function Plane:segments_containing_endpoint(p)
    local segs = {}
    for _,seg in pairs(self.segments.data) do
@@ -173,12 +192,17 @@ end
 function Plane.generate_voronoi(polygons, repetitions, x1, y1, x2, y2)
    local plane = Plane:new()
    -- create voronoi
-   local vor = voronoi:new(polygons, repetitions, x1, y1, x2, y2)
-   for _,vpoly in ipairs(vor.polygons) do
+   --local vor = voronoi:new(polygons, repetitions, x1, y1, x2, y2)
+
+   -- load voronoi
+   require('util.prevoronoi')
+   local polygons = prebuilt[math.random(1, #prebuilt)]
+
+   for _,vpoly in ipairs(polygons) do
       local pts = {}
       -- add points
-      for j=1,#vpoly.points,2 do
-         local x, y = vpoly.points[j], vpoly.points[j+1]
+      for j=1,#vpoly,2 do
+         local x, y = vpoly[j], vpoly[j+1]
          local p = Point:new(x, y)
          pts[#pts+1] = p
          plane:add_point(p)
@@ -196,6 +220,10 @@ function Plane.generate_voronoi(polygons, repetitions, x1, y1, x2, y2)
    end
 
    plane:__find_closest_points()
+
+   -- free memory
+   prebuilt = nil
+   collectgarbage()
 
    return plane
 end

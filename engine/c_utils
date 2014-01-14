@@ -1,10 +1,31 @@
-#!/usr/bin/env lua
+#!/usr/bin/env luajit
 
 if arg[1] == 'block' then
   local Block = require('engine.block')
   block_output_c()
+elseif arg[1] == 'voronoi' then
+  math.randomseed(os.time())
+  local voronoi = require('util.voronoi')
+  local vor = voronoi:new(800, 3, -10000, -10000, 20000, 20000)
+  local f = io.open('util/prevoronoi.lua', 'r')
+  if f == nil then
+    f = io.open('util/prevoronoi.lua', 'w')
+    f:write('prebuilt = {}\n')
+  else
+    f:close()
+    f = io.open('util/prevoronoi.lua', 'a')
+  end
+  f:write('prebuilt[#prebuilt+1] = { \n')
+  for _,poly in ipairs(vor.polygons) do
+    f:write('   { ')
+    for _,pt in ipairs(poly.points) do
+      f:write(pt .. ', ')
+    end
+    f:write('   },\n')
+  end
+  f:write('}\n\n')
 else
-  print('Options: block')
+  print('Options: block voronoi')
 end
 
 -- vim: ts=2:sw=2:sts=2:expandtab

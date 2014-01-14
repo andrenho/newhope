@@ -37,19 +37,23 @@ end
 
 --        name            color             solid   friction
 Block.add('NOTHING',      {0x00,0x00,0x00}, false,  0)
-Block.add('GRASS',        {0x00,0x80,0x00}, true,   1)
-Block.add('SNOW',         {0xff,0xff,0xff}, true,   1)
-Block.add('TUNDRA',       {0xa0,0xa0,0xa0}, true,   1)
-Block.add('BARE',         {0x50,0x50,0x50}, true,   1)
-Block.add('TEMPFOR',      {0x00,0x50,0x00}, true,   1)
-Block.add('SAVANNAH',     {0x80,0x80,0x00}, true,   1)
-Block.add('TROPFOR',      {0x00,0xa0,0x00}, true,   1)
-Block.add('DESERT',       {0xb0,0xb0,0x00}, true,   1)
-Block.add('WATER',        {0x00,0x00,0x80}, false,  10)
+Block.add('GRASS',        { 98, 153, 112}, true,   1)
+Block.add('SNOW',         {248, 248, 248}, true,   1)
+Block.add('TUNDRA',       {193, 193 ,180}, true,   1)
+Block.add('BARE',         {130, 130, 130}, true,   1)
+Block.add('TEMPFOR',      {112, 166,  98}, true,   1)
+Block.add('SAVANNAH',     {153, 180, 112}, true,   1)
+Block.add('TROPFOR',      { 85, 139, 112}, true,   1)
+Block.add('DESERT',       {212, 192, 155}, true,   1)
+Block.add('BEACH',        {172, 159, 139}, true,   1)
+Block.add('SHRUBLAND',    {196, 204 ,187}, true,   1)
+Block.add('WATER',        { 54,  54,  97}, false,  10)
 Block.add('WOODEN_WALL',  {0x00,0x00,0x00}, true)
 Block.add('FLOOR',        {0x80,0x00,0x00}, true)
 Block.add('DOOR_OPEN',    {0x00,0x00,0x00}, false)
 Block.add('DOOR_CLOSED',  {0x00,0x00,0x00}, true)
+
+--Block.TROPFOR.color = { 0, 0, 0 }
 
 -----------------------
 -- GENERATE C HEADER --

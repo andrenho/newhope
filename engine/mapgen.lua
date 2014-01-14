@@ -27,16 +27,18 @@ function MapGen:create()
    self:__apply_heightmap(hm, w, h)
    print('Creating rivers...')
    self:__create_rivers()
-   print('Identifying terrain features...')
-   self:__terrain_features()
+   print('Calculating moisture...')
+   self:__calculate_moisture()
    print('Creating biomes...')
    self:__create_biomes()
+   print('Adding beaches...')
+   self:__add_beaches()
 end
 
 
 function MapGen:tile(x,y)
    for _,poly in ipairs(self.plane.polygons) do
-      if poly:contains_point(x,y) then
+      if poly:is_point_inside(x,y) then
          return poly.biome
       end
    end
@@ -68,11 +70,7 @@ end
 function MapGen:__setup_heightmap_altitudes(hm, w, h)
    -- idea from <http://www.stuffwithstuff.com/robot-frog/3d/hills/index.html>
    for _=1,500 do
-      local r = math.random(6, 30)
-      local theta = math.random(0, 2*math.pi) + math.random()
-      local distance = math.random(0, w/2-r*2)
-      local x = math.floor(w / 2 + math.cos(theta) * distance)
-      local y = math.floor(h / 2 + math.sin(theta) * distance)
+      local x, y, r = self:__random_offcentre(w, h)
       self:__create_hill(hm, w, h, x, y, r)
    end
 end
@@ -126,16 +124,25 @@ end
 
 
 function MapGen:__create_rivers()
-   for _=1,15 do
+   for i=1,25 do
       local p = self.plane:random_point()
       while p.altitude <= 0 do p = self.plane:random_point() end -- if it's on water, try a new point
+      if i == 1 then p = geo.Point:new(1,1) end
       local points_used = { p } -- TODO - repeated?
       local river_pts = { p }
-      --print(p)
       while p.altitude > 0 do
+         -- if the river is getting to sea, end it
+         for _,poly in ipairs(self.plane.polygons) do
+            for _,pt in ipairs(poly.points) do
+               if table.find(river_pts, pt) then
+                  if poly.altitude <= 0 then
+                     goto done
+                  end
+               end
+            end
+         end
          -- find next point that contains the lowest altitude, ignoring the points already used
          local np, lowest_alt = nil, math.huge
-         --print(unpack(self.plane:segments_containing_endpoint(p)))
          for _,seg in ipairs(self.plane:segments_containing_endpoint(p)) do
             -- find next point
             local op = seg.startpoint
@@ -157,19 +164,20 @@ function MapGen:__create_rivers()
          self.__all_river_points[#self.__all_river_points+1] = p
          if #river_pts > 100 then break end -- avoid infinite loops
       end
+      ::done::
       self.rivers[#self.rivers+1] = river_pts
    end
 end
 
 
-function MapGen:__terrain_features()
+function MapGen:__calculate_moisture()
    -- find moisture
    for _,pt in ipairs(self.plane.point_list) do
       if pt.altitude <= 0 then
          pt.moisture = 1
       else
          for _,ptw in ipairs(pt.closest_points) do
-            if ptw.altitude <= 0 or table.find(self.__all_river_points, ptw) then -- water
+            if --[[ptw.altitude <= 0 or]] table.find(self.__all_river_points, ptw) then -- water
                pt.moisture = math.max((2000 - pt:distance(ptw)) / 2000, 0)
                break
             end
@@ -186,30 +194,29 @@ function MapGen:__create_biomes()
 --[[
 ALT MOIST 1---------------------------0
  1        snow       tundra      bare
- |        temperF    grass     savannah
+ |        temperF    shurbland  savannah
  0        tropF      grass      desert ]]
-
    for _,poly in ipairs(self.plane.polygons) do
       if poly.altitude <= 0 then
          poly.biome = Block.WATER
-      elseif poly.altitude < 0.05 then
-         if poly.moisture < 0.05 then
+      elseif poly.altitude < 0.03 then
+         if poly.moisture < 0.03 then
             poly.biome = Block.DESERT
-         elseif poly.moisture < 0.1 then
+         elseif poly.moisture < 0.2 then
             poly.biome = Block.GRASS
          else
             poly.biome = Block.TROPFOR
          end
-      elseif poly.altitude < 0.1 then
+      elseif poly.altitude < 0.15 then
          if poly.moisture < 0.05 then
             poly.biome = Block.SAVANNAH
          elseif poly.moisture < 0.1 then
-            poly.biome = Block.GRASS
+            poly.biome = Block.SHRUBLAND
          else
             poly.biome = Block.TEMPFOR
          end
       else
-         if poly.moisture < 0.05 then
+         if poly.moisture < 0.06 then
             poly.biome = Block.BARE
          elseif poly.moisture < 0.1 then
             poly.biome = Block.TUNDRA
@@ -221,9 +228,33 @@ ALT MOIST 1---------------------------0
 end
 
 
+function MapGen:__add_beaches()
+   for _,poly in ipairs(self.plane.polygons) do
+      if poly.biome ~= Block.WATER then
+         for _,neighbour in ipairs(self.plane:polygon_neighbours(poly)) do
+            if neighbour.biome == Block.WATER then
+               poly.biome = Block.BEACH
+               break
+            end
+         end
+      end
+   end
+end
+
+
 -- 
 -- HELPER METHODS
 --
+
+function MapGen:__random_offcentre(w, h)
+   local r = math.random(6, 30)
+   local theta = math.random(0, 2*math.pi) + math.random()
+   local distance = math.random(0, w/2-r*2)
+   local x = math.floor(w / 2 + math.cos(theta) * distance)
+   local y = math.floor(h / 2 + math.sin(theta) * distance)
+   return x, y, r
+end
+
 
 function MapGen:__closest_point(pts, x, y)
    local min_dist, min_pt = math.huge, { x = -math.huge, y = -math.huge }
