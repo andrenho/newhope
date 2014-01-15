@@ -10,6 +10,7 @@ function MapGen:new(x1, y1, x2, y2, seed)
    self.__points = {}
    self.__seed = seed
    self.__all_river_points = {}
+   self.__river_tiles = objhash()
    self.point_list = {}
    return self
 end
@@ -27,6 +28,7 @@ function MapGen:create()
    self:__apply_heightmap(hm, w, h)
    print('Creating rivers...')
    self:__create_rivers()
+   self:__create_river_tiles()
    print('Calculating moisture...')
    self:__calculate_moisture()
    print('Creating biomes...')
@@ -37,6 +39,8 @@ end
 
 
 function MapGen:tile(x,y)
+   local p = geo.Point:new(x,y)
+   if self.__river_tiles[p] then return Block.WATER end
    for _,poly in ipairs(self.plane.polygons) do
       if poly:is_point_inside(x,y) then
          return poly.biome
@@ -124,7 +128,7 @@ end
 
 
 function MapGen:__create_rivers()
-   for i=1,25 do
+   for i=1,1 do
       local p = self.plane:random_point()
       while p.altitude <= 0 do p = self.plane:random_point() end -- if it's on water, try a new point
       if i == 1 then p = geo.Point:new(1,1) end
@@ -166,6 +170,38 @@ function MapGen:__create_rivers()
       end
       ::done::
       self.rivers[#self.rivers+1] = river_pts
+   end
+end
+
+
+function MapGen:__create_river_tiles()
+   local plot = function(x,y)
+      x, y = math.ceil(x), math.ceil(y)
+      for xx=x-30,x+30 do
+         for yy=y-30,y+30 do
+            self.__river_tiles[geo.Point:new(xx,yy)] = true
+         end
+      end
+   end
+   for _,river in ipairs(self.rivers) do
+      for i = 1,(#river-1) do
+         local j = i+1
+         -- Bresenham's line algorithm
+         -- TODO - fix for vertical line?
+         local deltax = river[#river].x - river[1].x
+         local deltay = river[#river].y - river[1].y
+         local err = 0
+         local deltaerr = math.abs(deltay / deltax)
+         local y = river[1].y
+         for x=river[1].x,river[#river].x do
+            plot(x,y)
+            err = err + deltaerr
+            if err >= 0.5 then
+               y = y + 1
+               err = err - 1
+            end
+         end
+      end
    end
 end
 
@@ -218,7 +254,7 @@ ALT MOIST 1---------------------------0
       else
          if poly.moisture < 0.06 then
             poly.biome = Block.BARE
-         elseif poly.moisture < 0.1 then
+         elseif poly.moisture < 0.09 then
             poly.biome = Block.TUNDRA
          else
             poly.biome = Block.SNOW
