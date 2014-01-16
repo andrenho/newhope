@@ -28,6 +28,7 @@ function MapGen:create()
    self:__apply_heightmap(hm, w, h)
    print('Creating rivers...')
    self:__create_rivers()
+   print('Setting up rivers...')
    self:__create_river_tiles()
    print('Calculating moisture...')
    self:__calculate_moisture()
@@ -129,12 +130,15 @@ end
 
 function MapGen:__create_rivers()
    for i=1,1 do
+      ::try_again::
+
+      -- choose a random point in land
       local p = self.plane:random_point()
-      while p.altitude <= 0 do p = self.plane:random_point() end -- if it's on water, try a new point
-      if i == 1 then p = geo.Point:new(1,1) end
-      local points_used = { p } -- TODO - repeated?
+      local points_used = { p }
       local river_pts = { p }
+
       while p.altitude > 0 do
+         
          -- if the river is getting to sea, end it
          for _,poly in ipairs(self.plane.polygons) do
             for _,pt in ipairs(poly.points) do
@@ -145,6 +149,7 @@ function MapGen:__create_rivers()
                end
             end
          end
+
          -- find next point that contains the lowest altitude, ignoring the points already used
          local np, lowest_alt = nil, math.huge
          for _,seg in ipairs(self.plane:segments_containing_endpoint(p)) do
@@ -159,16 +164,27 @@ function MapGen:__create_rivers()
                end
             end
          end
-         if not np then break end -- ??
+         if not np then break end -- no point was found (TODO -- ??)
 
-         p = np
          -- add segment
-         points_used[#points_used+1] = p
-         river_pts[#river_pts+1] = p
-         self.__all_river_points[#self.__all_river_points+1] = p
+         points_used[#points_used+1] = np
+         river_pts[#river_pts+1] = np
+         self.__all_river_points[#self.__all_river_points+1] = np
+
          if #river_pts > 100 then break end -- avoid infinite loops
+
+         -- the point found is now the current point
+         p = np
       end
+
       ::done::
+
+      -- do not accept rivers of length 1 
+      if #river_pts < 6 then 
+         goto try_again 
+      end
+
+      -- add reiver
       self.rivers[#self.rivers+1] = river_pts
    end
 end
@@ -177,8 +193,8 @@ end
 function MapGen:__create_river_tiles()
    local plot = function(x,y)
       x, y = math.ceil(x), math.ceil(y)
-      for xx=x-30,x+30 do
-         for yy=y-30,y+30 do
+      for xx=x-50,x+50 do
+         for yy=y-50,y+50 do
             self.__river_tiles[geo.Point:new(xx,yy)] = true
          end
       end
@@ -188,16 +204,16 @@ function MapGen:__create_river_tiles()
          local j = i+1
          -- Bresenham's line algorithm
          -- TODO - fix for vertical line?
-         local deltax = river[#river].x - river[1].x
-         local deltay = river[#river].y - river[1].y
+         local deltax = math.abs(river[#river].x) - math.abs(river[1].x)
+         local deltay = math.abs(river[#river].y) - math.abs(river[1].y)
          local err = 0
          local deltaerr = math.abs(deltay / deltax)
-         local y = river[1].y
-         for x=river[1].x,river[#river].x do
+         local y = math.abs(river[1].y)
+         for x=math.abs(river[1].x),math.abs(river[#river].x) do
             plot(x,y)
             err = err + deltaerr
             if err >= 0.5 then
-               y = y + 1
+               y = y - 1
                err = err - 1
             end
          end
@@ -252,7 +268,7 @@ ALT MOIST 1---------------------------0
             poly.biome = Block.TEMPFOR
          end
       else
-         if poly.moisture < 0.06 then
+         if poly.moisture < 0.05 then
             poly.biome = Block.BARE
          elseif poly.moisture < 0.09 then
             poly.biome = Block.TUNDRA

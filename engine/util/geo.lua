@@ -178,6 +178,16 @@ function Plane:polygon_neighbours(poly)
 end
 
 
+function Plane:polygon_containing_point(p)
+   for _,poly in ipairs(self.polygons) do
+      if poly:is_point_inside(p.x, p.y) then
+         return poly
+      end
+   end
+   return nil
+end
+
+
 function Plane:segments_containing_endpoint(p)
    local segs = {}
    for _,seg in pairs(self.segments.data) do
