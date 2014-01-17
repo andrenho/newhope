@@ -192,9 +192,8 @@ end
 
 function MapGen:__create_river_tiles()
    local plot = function(x,y)
-      x, y = math.ceil(x), math.ceil(y)
-      for xx=x-50,x+50 do
-         for yy=y-50,y+50 do
+      for xx=x-50,x+50, 3 do
+         for yy=y-50,y+50, 3 do
             self.__river_tiles[geo.Point:new(xx,yy)] = true
          end
       end
@@ -204,16 +203,16 @@ function MapGen:__create_river_tiles()
          local j = i+1
          -- Bresenham's line algorithm
          -- TODO - fix for vertical line?
-         local deltax = math.abs(river[#river].x) - math.abs(river[1].x)
-         local deltay = math.abs(river[#river].y) - math.abs(river[1].y)
+         local deltax = math.ceil(river[#river].x) - math.ceil(river[1].x)
+         local deltay = math.ceil(river[#river].y) - math.ceil(river[1].y)
          local err = 0
          local deltaerr = math.abs(deltay / deltax)
-         local y = math.abs(river[1].y)
-         for x=math.abs(river[1].x),math.abs(river[#river].x) do
+         local y = math.ceil(river[1].y)
+         for x=math.ceil(river[1].x),math.ceil(river[#river].x) do
             plot(x,y)
             err = err + deltaerr
             if err >= 0.5 then
-               y = y - 1
+               y = y + 1
                err = err - 1
             end
          end
