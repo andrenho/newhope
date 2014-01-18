@@ -55,7 +55,7 @@ Minimap* minimap_new(lua_State* L, SDL_Renderer* ren, int w, int h)
 
 	// draw rivers
 	SDL_Renderer* sr = SDL_CreateSoftwareRenderer(sf);
-	SDL_SetRenderDrawColor(sr, 64, 224, 255, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(sr, 54, 54, 97, SDL_ALPHA_OPAQUE);
 	LUA_PUSH_MEMBER(L, "mapgen");
 	LUA_PUSH_MEMBER(L, "rivers");
 	int nrivers = lua_objlen(L, -1);

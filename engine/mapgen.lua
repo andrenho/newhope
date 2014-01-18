@@ -129,7 +129,7 @@ end
 
 
 function MapGen:__create_rivers()
-   for i=1,1 do
+   for i=1,10 do
       ::try_again::
 
       -- choose a random point in land
@@ -192,38 +192,24 @@ end
 
 function MapGen:__create_river_tiles()
    local plot = function(x,y)
-      for xx=x-50,x+50, 3 do
-         for yy=y-50,y+50, 3 do
+      local length = math.random(3,12)
+      for xx=x-length,x+length, 3 do
+         for yy=y-length,y+length, 3 do
             self.__river_tiles[geo.Point:new(xx,yy)] = true
          end
       end
    end
    for _,river in ipairs(self.rivers) do
-      print('From '..tostring(river[1])..' to '..tostring(river[#river]))
-      --for i = 1,(#river-1) do
-      --   local j = i+1
-         -- Bresenham's line algorithm
-         -- TODO - fix for vertical line?
-      local x0 = math.min(math.ceil(river[1].x), math.ceil(river[#river].x))
-      local x1 = math.max(math.ceil(river[1].x), math.ceil(river[#river].x))
-      local y0 = math.min(math.ceil(river[1].y), math.ceil(river[#river].y))
-      local y1 = math.max(math.ceil(river[1].y), math.ceil(river[#river].y))
-      -- the problem is when x0 > x1, but y1 > y0 - the slope must be positive
-      print(x0, x1, y0, y1)
-      local deltax = x1 - x0
-      local deltay = y1 - y0
-      local err = 0
-      local deltaerr = math.abs(deltay / deltax)
-      local y = y0
-      for x=x0,x1 do
-         plot(x,y)
-         err = err + deltaerr
-         if err >= 0.5 then
-            y = y + 1
-            err = err - 1
+      for i = 1,(#river-1) do
+         local x1, x2, y1, y2 = math.ceil(river[i].x), math.ceil(river[i+1].x),
+                                math.ceil(river[i].y), math.ceil(river[i+1].y)
+         local dx, dy = x2-x1, y2-y1
+         local v = (x1>x2) and -1 or 1
+         for x=x1,x2,v do
+            local y = y1 + dy * (x - x1) / dx
+            plot(x, math.ceil(y))
          end
       end
-      --end
    end
 end
 

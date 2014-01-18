@@ -25,7 +25,7 @@ end
 -- initialize world map
 --
 function World:initialize()
-   self.mapgen = MapGen:new(self.x1, self.y1, self.x2, self.y2, 8)
+   self.mapgen = MapGen:new(self.x1, self.y1, self.x2, self.y2)
    self.mapgen:create()
 
    self:__init_physics()
