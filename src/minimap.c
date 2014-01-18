@@ -77,6 +77,21 @@ Minimap* minimap_new(lua_State* L, SDL_Renderer* ren, int w, int h)
 		free(points);
 		lua_pop(L, 1);
 	}
+	lua_pop(L, 2);
+
+	// draw cities
+	LUA_PUSH_MEMBER(L, "cities");
+	int ncities(L, -1);
+	for(int i=0; i<ncities; i++) {
+		// get data
+		lua_rawgeti(L, -1, i+1);
+		int x, y;
+		LUA_FIELD(L, x, "x", integer);
+		LUA_FIELD(L, y, "y", integer);
+
+		lua_pop(L, 1);
+	}
+
 	SDL_RenderPresent(sr);
 	SDL_DestroyRenderer(sr);
 

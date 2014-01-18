@@ -39,6 +39,21 @@ function MapGen:create()
 end
 
 
+-- return positions for new cities
+function MapGen:cities_positions(n)
+   local t, z = {}, -150 * n/2
+   for i=1,n do
+      t[#t] = geo.Point:new(z, z)
+      z = z + 150
+   end
+   return t
+end
+
+
+function MapGen:create_roads()
+end
+
+
 function MapGen:tile(x,y)
    local p = geo.Point:new(x,y)
    if self.__river_tiles[p] then return Block.WATER end
@@ -129,7 +144,7 @@ end
 
 
 function MapGen:__create_rivers()
-   for i=1,10 do
+   for i=1,12 do
       ::try_again::
 
       -- choose a random point in land
@@ -244,14 +259,14 @@ ALT MOIST 1---------------------------0
       if poly.altitude <= 0 then
          poly.biome = Block.WATER
       elseif poly.altitude < 0.03 then
-         if poly.moisture < 0.03 then
+         if poly.moisture < 0.05 then
             poly.biome = Block.DESERT
          elseif poly.moisture < 0.2 then
             poly.biome = Block.GRASS
          else
             poly.biome = Block.TROPFOR
          end
-      elseif poly.altitude < 0.15 then
+      elseif poly.altitude < 0.2 then
          if poly.moisture < 0.05 then
             poly.biome = Block.SAVANNAH
          elseif poly.moisture < 0.1 then
