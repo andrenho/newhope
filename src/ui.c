@@ -176,6 +176,8 @@ int ui_show_minimap(lua_State* L)
 	SDL_Rect r2 = { r.x+5, r.y+5, r.w-10, r.h-10 };
 	SDL_RenderCopy(ui.ren, ui.mm->tx, NULL, &r2);
 
+	minimap_draw_player(ui.mm, L, ui.ren, win_w, win_h);
+
 	SDL_RenderPresent(ui.ren);
 
 	SDL_Event e;

@@ -10,6 +10,7 @@ typedef struct Minimap {
 } Minimap;
 
 Minimap* minimap_new(lua_State* L, SDL_Renderer* ren, int w, int h);
+void minimap_draw_player(Minimap* mm, lua_State* L, SDL_Renderer* ren, int ww, int wh);
 void minimap_destroy(Minimap** mm);
 
 #endif
