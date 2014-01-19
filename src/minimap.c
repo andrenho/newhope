@@ -81,16 +81,43 @@ Minimap* minimap_new(lua_State* L, SDL_Renderer* ren, int w, int h)
 
 	// draw cities
 	LUA_PUSH_MEMBER(L, "cities");
-	int ncities(L, -1);
+	SDL_SetRenderDrawColor(sr, 149, 69, 53, SDL_ALPHA_OPAQUE);
+	int ncities = lua_objlen(L, -1);
 	for(int i=0; i<ncities; i++) {
 		// get data
 		lua_rawgeti(L, -1, i+1);
-		int x, y;
-		LUA_FIELD(L, x, "x", integer);
-		LUA_FIELD(L, y, "y", integer);
+		double x, y;
+		LUA_FIELD(L, x, "x", number);
+		LUA_FIELD(L, y, "y", number);
+
+		// find points
+		int px = (x / (limit_x2 - limit_x1) - prop_w) * w + w/2;
+		int py = (y / (limit_y2 - limit_y1) - prop_h) * h + h/2;
+		SDL_Rect r1 = { px-2, py-2, 5, 5 };
+		SDL_Rect r2 = { px-4, py-4, 9, 9 };
+
+		// draw rectangles
+		SDL_RenderFillRect(sr, &r1);
+		SDL_RenderDrawRect(sr, &r2);
 
 		lua_pop(L, 1);
 	}
+	lua_pop(L, 1);
+
+	// draw player
+	LUA_PUSH_MEMBER(L, "player");
+	double x, y;
+	LUA_FIELD(L, x, "x", number);
+	LUA_FIELD(L, y, "y", number);
+	int px = (x / (limit_x2 - limit_x1) - prop_w) * w + w/2;
+	int py = (y / (limit_y2 - limit_y1) - prop_h) * h + h/2;
+	printf("%f %f %d %d\n", x, y, px, py);
+	SDL_Rect r1 = { px-2, py-2, 5, 5 };
+	SDL_Rect r2 = { px-3, py-3, 7, 7 };
+	SDL_SetRenderDrawColor(sr, 255, 255, 0, SDL_ALPHA_OPAQUE);
+	SDL_RenderFillRect(sr, &r1);
+	SDL_SetRenderDrawColor(sr, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_RenderDrawRect(sr, &r2);
 
 	SDL_RenderPresent(sr);
 	SDL_DestroyRenderer(sr);

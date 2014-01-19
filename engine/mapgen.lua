@@ -41,10 +41,10 @@ end
 
 -- return positions for new cities
 function MapGen:cities_positions(n)
-   local t, z = {}, -150 * n/2
+   local t, z = {}, -2000 * n/2
    for i=1,n do
-      t[#t] = geo.Point:new(z, z)
-      z = z + 150
+      t[i] = geo.Point:new(z, z)
+      z = z + 2000
    end
    return t
 end
@@ -194,12 +194,12 @@ function MapGen:__create_rivers()
 
       ::done::
 
-      -- do not accept rivers of length 1 
+      -- do not accept rivers of length 6
       if #river_pts < 6 then 
          goto try_again 
       end
 
-      -- add reiver
+      -- add river
       self.rivers[#self.rivers+1] = river_pts
    end
 end

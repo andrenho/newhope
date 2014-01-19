@@ -30,7 +30,7 @@ function World:initialize()
    self.mapgen:create()
 
    -- create cities
-   for _,p in ipairs(self.mapgen:cities_positions(10)) do
+   for _,p in ipairs(self.mapgen:cities_positions(7)) do
       self.cities[#self.cities+1] = City:new(CityLayout.LAYOUT_1, p.x, p.y, 20, 20, Block.GRASS)
    end
    self.mapgen:create_roads()
