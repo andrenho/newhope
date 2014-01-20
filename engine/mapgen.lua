@@ -10,7 +10,7 @@ function MapGen:new(x1, y1, x2, y2, seed)
    self.__points = {}
    self.__seed = seed
    self.__all_river_points = {}
-   self.__river_tiles = objhash()
+   self.__river_tiles = {}
    self.point_list = {}
    return self
 end
@@ -56,7 +56,7 @@ end
 
 function MapGen:tile(x,y)
    local p = geo.Point:new(x,y)
-   if self.__river_tiles[p] then return Block.WATER end
+   if self.__river_tiles[x] and self.__river_tiles[x][y] then return Block.WATER end
    for _,poly in ipairs(self.plane.polygons) do
       if poly:is_point_inside(x,y) then
          return poly.biome
@@ -206,11 +206,24 @@ end
 
 
 function MapGen:__create_river_tiles()
-   local plot = function(x,y)
-      local length = math.random(3,12)
-      for xx=x-length,x+length, 3 do
-         for yy=y-length,y+length, 3 do
-            self.__river_tiles[geo.Point:new(xx,yy)] = true
+   local add_tile = function(x,y)
+      if not self.__river_tiles[x] then self.__river_tiles[x] = {} end
+      self.__river_tiles[x][y] = true
+   end
+   local plot = function(x0,y0)
+      local x, y = math.random(3,12), 0
+      local radius_error = 1-x
+      while x >= y do
+         for nx = -x,x do add_tile(nx+x0, y+y0) end
+         for ny = -y,y do add_tile(x+x0, ny+y0) end
+         for nx = -x,x do add_tile(nx+x0, -y+y0) end
+         for ny = -y,y do add_tile(-x+x0, ny+y0) end
+         y = y+1
+         if radius_error < 0 then
+            radius_error = radius_error + (2*y+1)
+         else
+            x = x-1
+            radius_error = radius_error + (2*(y-x+1))
          end
       end
    end

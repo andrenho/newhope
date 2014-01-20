@@ -102,7 +102,7 @@ function World:tilemap_ids(x1, y1, x2, y2)
          local ids = __tile_cache[x][y]
          if not ids then
             ids = self:tiles(x,y)
-            for k,v in ipairs(ids) do 
+            for k,v in ipairs(ids) do
                ids[k] = v.id
             end
             __tile_cache[x][y] = ids
