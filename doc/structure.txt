@@ -1,0 +1,40 @@
+Tile types           City types      Produces
+----------           ----------      --------
+Grass                Agricultural    Grain
+Snow                 Refinery        Oil
+Tundra               
+Bare                 Mine            Iron, uranium
+Temperate Forest     Timber          Wood, herbs
+Tropical Forest      Timber          Wood, herbs
+Savannah             
+Desert/beach         Chemical plant  Silicon
+Shrubland
+Water
+                     City            Machines, electronics, medicine
+		     Frontier town   Drugs, weapons
+
+
+Procution chain
+---------------
+Grain -> everyone
+Wood  -> everyone
+Oil   -> everyone
+
+Silicon -> Electronics
+
+Electronics -> 
+Oil         -> Machines
+Iron        ->
+
+Oil  -> Weapons
+Iron -> 
+
+Herbs -> Medicine
+
+Machines -> Drugs 
+Herbs    ->
+
+
+
+Prices
+------
