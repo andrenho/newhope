@@ -26,6 +26,7 @@ Electronics ->
 Oil         -> Machines
 Iron        ->
 
+Wood ->
 Oil  -> Weapons
 Iron -> 
 
@@ -38,3 +39,26 @@ Herbs    ->
 
 Prices
 ------
+
+Grain > Wood > Oil > Silicon > Herbs > Medicine > Uranium* > Electronics >
+Machine > Drugs* > Weapons*
+
+* Illegal drugs
+
+
+City buildings      Jobs
+--------------      ----
+Wall                Gatekeeper
+General store       Shopkeeper
+Car repair shop     Mechanic
+Car dealership      Car dealer
+Bar                 Bartender, mercenaries, contractor
+Merchant union      Secretary
+Guns for hire       Dispatcher
+Infirmaty/hospital  Medic
+Gun shop            Gun trader
+                    Guard
+		    Drug dealer
+House
+Building
+...

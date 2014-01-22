@@ -86,6 +86,10 @@ function Polygon:new(points, segments)
       x2 = funct.max(funct.map(self.points, function(p) return p.x end)),
       y2 = funct.max(funct.map(self.points, function(p) return p.y end)),
    }
+   self.center_point = Point:new(
+      funct.avg(funct.map(self.points, function(p) return p.x end)),
+      funct.avg(funct.map(self.points, function(p) return p.y end))
+   )
    return self
 end
 
@@ -156,6 +160,11 @@ end
 
 function Plane:random_point()
    return self.point_list[math.random(1, #self.point_list)]
+end
+
+
+function Plane:random_polygon()
+   return self.polygons[math.random(1, #self.polygons)]
 end
 
 

@@ -30,9 +30,7 @@ function World:initialize()
    self.mapgen:create()
 
    -- create cities
-   for _,p in ipairs(self.mapgen:cities_positions(7)) do
-      self.cities[#self.cities+1] = City:new(CityLayout.LAYOUT_1, p.x, p.y, 20, 20, Block.GRASS)
-   end
+   self:__create_cities()
    self.mapgen:create_roads()
 
    self:__init_physics()
@@ -193,6 +191,41 @@ function World:__tostring()
    return '[World]'
 end
 
+
+function World:__create_cities()
+   for _,point in ipairs(self.mapgen:cities_positions(20)) do
+      local r, tp = math.random(), nil
+      if r < 0.1 then
+         tp = CityType.CAPITAL
+      elseif r < 0.2 then
+         tp = CityType.FRONTIER
+      else
+         tp = self:__city_type(point)
+      end
+      -- TODO - random
+      self.cities[#self.cities+1] = City:new(point, tp)
+      --self.cities[#self.cities+1] = City:new(CityLayout.LAYOUT_1, p.x, p.y, 20, 20, Block.GRASS)
+   end
+end
+
+
+function World:__city_type(p)
+   local b = self.mapgen.plane:polygon_containing_point(p)
+   if b == Biome.GRASS then
+      return CityType.AGRICULTURAL
+   elseif b == Biome.SNOW then
+      return CityType.REFINERY
+   elseif b == Biome.BARE then
+      return CityType.MINING
+   elseif b == Biome.TEMPFOR or b == Biome.TROPFOR then
+      return CityType.FORESTAL
+   elseif b == Biome.DESERT or b == Biome.BEACH then
+      return CityType.CHEMICAL
+   end
+   return CityType.RANDOM
+end
+
+
 function World:__add_people_to_cities()
    for _,city in ipairs(self.cities) do
       for _,building in ipairs(city.buildings) do
@@ -212,6 +245,7 @@ function World:__add_people_to_cities()
       end
    end
 end
+
 
 function World:__add_object(obj)
    self.objects[#self.objects+1] = obj

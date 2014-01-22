@@ -20,6 +20,7 @@ game    = my_require('game')
 
 -- load classes
 Block          = my_require('block')
+CityType       = my_require('citytype')
 World          = my_require('world')
 -- map --
 MapGen         = my_require('mapgen')

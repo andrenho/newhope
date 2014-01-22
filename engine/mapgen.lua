@@ -41,11 +41,29 @@ end
 
 -- return positions for new cities
 function MapGen:cities_positions(n)
-   local t, z = {}, -2000 * n/2
-   for i=1,n do
-      t[i] = geo.Point:new(z, z)
-      z = z + 2000
+   local t, ignore = {}, {}
+   ::again::
+   for _,biome in ipairs(Block.terrains) do -- cycle between terrains
+      if n <= 0 then break end -- done
+      if biome ~= Block.WATER and biome ~= Block.BEACH then
+         local poly, tries = nil, 0
+         while not poly or poly.biome ~= biome do
+            poly = self.plane:random_polygon()
+            if biome == Block.DESERT and poly.biome == Block.BEACH then break end -- DESERT == BEACH
+            if table.find(ignore, poly) then poly = nil end -- ignore polygons already included
+            tries = tries + 1
+            if tries > 100 then goto next_biome end -- terrain not found, try next
+         end
+         if poly then 
+            t[#t+1] = poly.center_point -- add polygon to list
+            ignore[#ignore+1] = poly
+            for _,p in ipairs(self.plane:polygon_neighbours(poly)) do ignore[#ignore+1] = p end -- ignore neighbours
+         end
+         n = n - 1
+      end
+      ::next_biome::
    end
+   if n > 0 then goto again end
    return t
 end
 
@@ -207,6 +225,7 @@ end
 
 function MapGen:__create_river_tiles()
    local add_tile = function(x,y)
+      if x ~= x or y ~= y then return end -- test for NaN
       if not self.__river_tiles[x] then self.__river_tiles[x] = {} end
       self.__river_tiles[x][y] = true
    end
