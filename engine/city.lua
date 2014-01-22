@@ -1,11 +1,15 @@
 local City = {}
 City.__index = City
 
-function City:new(layout, x, y, w, h, basic_block)
+function City:new(x, y, tp, biome)
    local self = setmetatable({}, City)
-   self.x, self.y, self.w, self.h = x, y, w, h
-   self.basic_block = basic_block
+   self.x, self.y = x, y
+   tp = CityType.AGRICULTURAL -- TODO
+   local layout_number = math.random(1,#CityLayout[tp])
+   local layout = CityLayout[tp][layout_number]
+   self.w, self.h = layout.w, layout.h
    self.buildings = {}
+   self.biome = biome
    self:__load_layout(layout)
    return self
 end
@@ -13,10 +17,11 @@ end
 function City:tiles(x, y)
    for _, bd in ipairs(self.buildings) do
       if x >= bd.x and x < (bd.x+bd.w) and y >= bd.y and y < (bd.y+bd.h) then
-         return bd:tiles(x-bd.x, y-bd.y, self.basic_block)
+--         print(x, y, self.biome, bd:tiles(x-bd.x, y-bd.y, self.biome)[1])
+         return bd:tiles(x-bd.x, y-bd.y, self.biome)
       end
    end
-   return { self.basic_block }
+   return { self.biome }
 end
 
 -------------

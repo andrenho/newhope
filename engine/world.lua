@@ -43,6 +43,8 @@ function World:initialize()
 
    self:__add_static_objects()
    collectgarbage()
+
+   print(self:tiles(0, 0)[1])
 end
 
 
@@ -194,32 +196,32 @@ end
 
 function World:__create_cities()
    for _,point in ipairs(self.mapgen:cities_positions(20)) do
+      if _ == 1 then point = geo.Point:new(0,0) end
+      local biome = self.mapgen.plane:polygon_containing_point(point).biome
       local r, tp = math.random(), nil
       if r < 0.1 then
          tp = CityType.CAPITAL
       elseif r < 0.2 then
          tp = CityType.FRONTIER
       else
-         tp = self:__city_type(point)
+         tp = self:__city_type(biome)
       end
-      -- TODO - random
-      self.cities[#self.cities+1] = City:new(point, tp)
-      --self.cities[#self.cities+1] = City:new(CityLayout.LAYOUT_1, p.x, p.y, 20, 20, Block.GRASS)
+      if tp == CityType.RANDOM then tp = CityType.random() end
+      self.cities[#self.cities+1] = City:new(math.ceil(point.x), math.ceil(point.y), tp, biome)
    end
 end
 
 
-function World:__city_type(p)
-   local b = self.mapgen.plane:polygon_containing_point(p)
-   if b == Biome.GRASS then
+function World:__city_type(b)
+   if b == Block.GRASS then
       return CityType.AGRICULTURAL
-   elseif b == Biome.SNOW then
+   elseif b == Block.SNOW then
       return CityType.REFINERY
-   elseif b == Biome.BARE then
+   elseif b == Block.BARE then
       return CityType.MINING
-   elseif b == Biome.TEMPFOR or b == Biome.TROPFOR then
+   elseif b == Block.TEMPFOR or b == Block.TROPFOR then
       return CityType.FORESTAL
-   elseif b == Biome.DESERT or b == Biome.BEACH then
+   elseif b == Block.DESERT or b == Block.BEACH then
       return CityType.CHEMICAL
    end
    return CityType.RANDOM

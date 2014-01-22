@@ -33,6 +33,11 @@ Minimap* minimap_new(lua_State* L, SDL_Renderer* ren, int w, int h)
 		lua_pushinteger(L, (-limit_y1+limit_y2) / h * (y-h/2));
 		luah_call(L, 3, 1);
 		lua_rawgeti(L, -1, 1);
+		/*
+		printf("%d %d\n", (-limit_x1+limit_x2) / w * (x-w/2), (-limit_y1+limit_y2) / h * (y-h/2)); 
+		if(x == 125 && y == 125) { 
+			luah_stack_dump(L); 
+		}*/
 		// get tile colors
 		lua_pushstring(L, "color");
 		lua_gettable(L, -2);

@@ -1,7 +1,11 @@
 return {
-   LAYOUT_1 = {
-      buildings = {
-         { layout=BuildingLayout.HOUSE_1, x=0, y=0 }
+   [CityType.AGRICULTURAL] = {
+      {
+         w = 20,
+         h = 20,
+         buildings = {
+            { layout=BuildingLayout.HOUSE_1, x=0, y=0 }
+         },
       },
    },
 }
