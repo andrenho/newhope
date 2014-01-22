@@ -43,8 +43,6 @@ function World:initialize()
 
    self:__add_static_objects()
    collectgarbage()
-
-   print(self:tiles(0, 0)[1])
 end
 
 
