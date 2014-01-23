@@ -1,4 +1,4 @@
-return {
+local BuildingLayout = {
    GENERAL_STORE = {
       [1] = { '        ',
               ' ffffff ',
@@ -31,5 +31,13 @@ return {
       }
    },
 }
+
+BuildingLayout.CAR_DEALERSHIP = table.deepcopy(BuildingLayout.GENERAL_STORE)
+BuildingLayout.CAR_DEALERSHIP.people[1].type = 'CarDealer'
+
+BuildingLayout.BAR = table.deepcopy(BuildingLayout.GENERAL_STORE)
+BuildingLayout.BAR.people[1].type = 'Bartender'
+
+return BuildingLayout
 
 -- vim: ts=3:sw=3:sts=3:expandtab

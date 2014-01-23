@@ -236,10 +236,20 @@ function World:__add_people_to_cities()
                local x = p.x + city.x + building.x + 0.5
                local y = p.y + city.y + building.y + 0.5
                if p.type == 'Shopkeeper' then
-                  person = ai.Shopkeeper:new(x, y) -- TODO (?)
-                  self:__add_object(person)
+                  person = ai.Shopkeeper:new(x, y)
+               elseif p.type == 'CarDealer' then
+                  person = ai.CarDealer:new(x, y)
+               elseif p.type == 'Bartender' then
+                  person = ai.Bartender:new(x, y)
+               elseif p.type == 'Secretary' then
+                  person = ai.Secretary:new(x, y)
+               elseif p.type == 'Dispatcher' then
+                  person = ai.Dispatcher:new(x, y)
+               elseif p.type == 'Medic' then
+                  person = ai.Medic:new(x, y)
                end
                assert(person, 'Invalid person type: ' .. p.type)
+               self:__add_object(person)
             end
          end
       end
