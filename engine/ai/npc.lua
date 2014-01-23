@@ -2,7 +2,7 @@ local NPC = setmetatable({}, Person)
 NPC.__index = NPC
 
 function NPC:new(x, y)
-   local self = self:__init(x, y)
+   local self = setmetatable({}, self:__init(x, y))
    self.is_npc = true
    return self
 end

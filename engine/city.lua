@@ -4,7 +4,6 @@ City.__index = City
 function City:new(x, y, tp, biome)
    local self = setmetatable({}, City)
    self.x, self.y = x, y
-   tp = CityType.AGRICULTURAL -- TODO
    local layout_number = math.random(1,#CityLayout[tp])
    local layout = CityLayout[tp][layout_number]
    self.w, self.h = layout.w, layout.h
@@ -17,7 +16,6 @@ end
 function City:tiles(x, y)
    for _, bd in ipairs(self.buildings) do
       if x >= bd.x and x < (bd.x+bd.w) and y >= bd.y and y < (bd.y+bd.h) then
---         print(x, y, self.biome, bd:tiles(x-bd.x, y-bd.y, self.biome)[1])
          return bd:tiles(x-bd.x, y-bd.y, self.biome)
       end
    end

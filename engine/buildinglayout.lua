@@ -1,5 +1,5 @@
 return {
-   HOUSE_1 = {
+   GENERAL_STORE = {
       [1] = { '        ',
               ' ffffff ',
               ' ffffff ',
