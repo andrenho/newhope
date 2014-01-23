@@ -1,12 +1,15 @@
 local CityLayout = {
    [CityType.AGRICULTURAL] = {
       {
-         w = 40,
+         w = 70,
          h = 20,
          buildings = {
             { layout=BuildingLayout.GENERAL_STORE, x=0, y=0 },
             { layout=BuildingLayout.CAR_DEALERSHIP, x=10, y=0 },
-            { layout=BuildingLayout.BAR, x=20, y=2 },
+            { layout=BuildingLayout.BAR, x=20, y=0 },
+            { layout=BuildingLayout.MERCHANT_UNION, x=30, y=0 },
+            { layout=BuildingLayout.GUNS_FOR_HIRE, x=40, y=0 },
+            { layout=BuildingLayout.INFIRMARY, x=50, y=0 },
          },
       },
    },

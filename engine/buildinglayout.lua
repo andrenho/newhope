@@ -38,6 +38,16 @@ BuildingLayout.CAR_DEALERSHIP.people[1].type = 'CarDealer'
 BuildingLayout.BAR = table.deepcopy(BuildingLayout.GENERAL_STORE)
 BuildingLayout.BAR.people[1].type = 'Bartender'
 
+BuildingLayout.MERCHANT_UNION = table.deepcopy(BuildingLayout.GENERAL_STORE)
+BuildingLayout.MERCHANT_UNION.people[1].type = 'Secretary'
+
+BuildingLayout.GUNS_FOR_HIRE = table.deepcopy(BuildingLayout.GENERAL_STORE)
+BuildingLayout.GUNS_FOR_HIRE.people[1].type = 'Dispatcher'
+
+BuildingLayout.INFIRMARY = table.deepcopy(BuildingLayout.GENERAL_STORE)
+BuildingLayout.INFIRMARY.people[1].type = 'Medic'
+
+
 return BuildingLayout
 
 -- vim: ts=3:sw=3:sts=3:expandtab
