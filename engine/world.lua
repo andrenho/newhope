@@ -193,7 +193,7 @@ end
 
 
 function World:__create_cities()
-   for _,point in ipairs(self.mapgen:cities_positions(2)) do
+   for _,point in ipairs(self.mapgen:cities_positions(20)) do
       if _ == 1 then point = geo.Point:new(0,0) end
       local biome = self.mapgen.plane:polygon_containing_point(point).biome
       local r, tp = math.random(), nil
