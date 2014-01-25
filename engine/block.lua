@@ -35,23 +35,29 @@ end
 -- LIST OF BLOCKS --
 --------------------
 
---            name                  color                   solid    friction
-Block.add('NOTHING',         {0x00,0x00,0x00}, false,   0)
-Block.add('GRASS',            { 98, 153, 112},   true,    1)
-Block.add('SNOW',             {248, 248, 248},   true,    1)
-Block.add('TUNDRA',          {193, 193, 180},   true,    1)
-Block.add('BARE',             {130, 130, 130},   true,    1)
-Block.add('TEMPFOR',         {112, 166,   98},   true,    1)
-Block.add('SAVANNAH',       {153, 180, 112},   true,    1)
-Block.add('TROPFOR',         { 85, 139, 112},   true,    1)
-Block.add('DESERT',          {212, 192, 155},   true,    1)
-Block.add('BEACH',            {172, 159, 139},   true,    1)
-Block.add('SHRUBLAND',      {196, 204 ,187},   true,    1)
-Block.add('WATER',            { 54,   54,   97},   false,   10)
+--   name                  color             solid    friction
+-- TERRAINS
+Block.add('NOTHING',       {0x00,0x00,0x00}, false,   0)
+Block.add('GRASS',         { 98, 153, 112},  true,    1)
+Block.add('SNOW',          {248, 248, 248},  true,    1)
+Block.add('TUNDRA',        {193, 193, 180},  true,    1)
+Block.add('BARE',          {130, 130, 130},  true,    1)
+Block.add('TEMPFOR',       {112, 166,  98},  true,    1)
+Block.add('SAVANNAH',      {153, 180, 112},  true,    1)
+Block.add('TROPFOR',       { 85, 139, 112},  true,    1)
+Block.add('DESERT',        {212, 192, 155},  true,    1)
+Block.add('BEACH',         {172, 159, 139},  true,    1)
+Block.add('SHRUBLAND',     {196, 204 ,187},  true,    1)
+Block.add('WATER',         { 54,  54,  97},  false,   10)
+
+-- STRUCTURES
 Block.add('WOODEN_WALL',   {0x00,0x00,0x00}, true)
-Block.add('FLOOR',            {0x80,0x00,0x00}, true)
-Block.add('DOOR_OPEN',      {0x00,0x00,0x00}, false)
+Block.add('FLOOR',         {0x80,0x00,0x00}, true)
+Block.add('DOOR_OPEN',     {0x00,0x00,0x00}, false)
 Block.add('DOOR_CLOSED',   {0x00,0x00,0x00}, true)
+
+-- PILE OF GOODS
+Block.add('GRAIN_PILE',    {0x00,0x80,0x00}, true)
 
 Block.terrains = { Block.GRASS, Block.SNOW, Block.TUNDRA, Block.BARE, Block.TEMPFOR, Block.SAVANNAH, 
                             Block.TROPFOR, Block.DESERT, Block.BEACH, Block.SHRUBLAND, Block.WATER }

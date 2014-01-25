@@ -39,7 +39,7 @@ function World:initialize()
    local players_vehicle = self:__add_object(Vehicle:new(10, 10, VehicleModel.REGULAR))
    self.player.vehicle = players_vehicle
    
-   self:__add_people_to_cities()
+   self:__add_objects_to_cities()
 
    self:__add_static_objects()
    collectgarbage()
@@ -226,30 +226,32 @@ function World:__city_type(b)
 end
 
 
-function World:__add_people_to_cities()
+function World:__add_objects_to_cities()
    for _,city in ipairs(self.cities) do
       for _,building in ipairs(city.buildings) do
-         if building.layout.people then
-            for _,p in ipairs(building.layout.people) do
-               -- create person
-               local person = nil
-               local x = p.x + city.x + building.x + 0.5
-               local y = p.y + city.y + building.y + 0.5
-               if p.type == 'Shopkeeper' then
-                  person = ai.Shopkeeper:new(x, y)
-               elseif p.type == 'CarDealer' then
-                  person = ai.CarDealer:new(x, y)
-               elseif p.type == 'Bartender' then
-                  person = ai.Bartender:new(x, y)
-               elseif p.type == 'Secretary' then
-                  person = ai.Secretary:new(x, y)
-               elseif p.type == 'Dispatcher' then
-                  person = ai.Dispatcher:new(x, y)
-               elseif p.type == 'Medic' then
-                  person = ai.Medic:new(x, y)
+         if building.layout.objects then
+            for _,o in ipairs(building.layout.objects) do
+               -- create object
+               local obj = nil
+               local x = o.x + city.x + building.x + 0.5
+               local y = o.y + city.y + building.y + 0.5
+               if o.type == 'Shopkeeper' then
+                  obj = ai.Shopkeeper:new(x, y)
+               elseif o.type == 'CarDealer' then
+                  obj = ai.CarDealer:new(x, y)
+               elseif o.type == 'Bartender' then
+                  obj = ai.Bartender:new(x, y)
+               elseif o.type == 'Secretary' then
+                  obj = ai.Secretary:new(x, y)
+               elseif o.type == 'Dispatcher' then
+                  obj = ai.Dispatcher:new(x, y)
+               elseif o.type == 'Medic' then
+                  obj = ai.Medic:new(x, y)
+               elseif o.type == 'ResourcePile' then
+                  obj = ResourcePile:new(x, y, o.resource, city)
                end
-               assert(person, 'Invalid person type: ' .. p.type)
-               self:__add_object(person)
+               assert(obj, 'Invalid object type: ' .. o.type)
+               self:__add_object(obj)
             end
          end
       end

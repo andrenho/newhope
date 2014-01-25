@@ -19,6 +19,7 @@ Procution chain
 Grain -> everyone
 Wood  -> everyone
 Oil   -> everyone
+Uranium
 
 Silicon -> Electronics
 

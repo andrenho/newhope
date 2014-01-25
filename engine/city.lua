@@ -9,6 +9,8 @@ function City:new(x, y, tp, biome)
    self.w, self.h = layout.w, layout.h
    self.buildings = {}
    self.biome = biome
+   self.resources = {}
+   for _,v in pairs(Resources) do self.resources[v] = 0 end
    self:__load_layout(layout)
    return self
 end

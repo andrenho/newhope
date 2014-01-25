@@ -4,6 +4,7 @@ Player.__index = Player
 function Player:new(x, y)
    local self = self.__init(self, x, y)
    self.vehicle = nil
+   self.money = 2000
    self.__in_vehicle = false
    return self
 end

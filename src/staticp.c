@@ -13,8 +13,8 @@ int staticp_init(lua_State* L)
 
 	// get object fields
 	cpFloat x, y;
-	LUA_FIELD(L, x, "x", number);
-	LUA_FIELD(L, y, "y", number);
+	LUA_FIELD(L, x, "init_x", number);
+	LUA_FIELD(L, y, "init_y", number);
 	
 	// create person body
 	cpBody* body = cpSpaceAddBody(space, cpBodyNew(INFINITY, INFINITY));

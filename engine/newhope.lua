@@ -19,6 +19,7 @@ voronoi = my_require('util.voronoi')
 game    = my_require('game')
 
 -- load classes
+Resources      = my_require('resources')
 Block          = my_require('block')
 CityType       = my_require('citytype')
 World          = my_require('world')
@@ -30,6 +31,7 @@ City           = my_require('city')
 CityLayout     = my_require('citylayout')
 -- objects --
 Object         = my_require('object')
+ResourcePile   = my_require('resourcepile')
 Person         = my_require('person')
 Player         = my_require('player')
 VehicleModel   = my_require('vehiclemodel')

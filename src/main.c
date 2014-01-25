@@ -53,6 +53,8 @@ static void complement_engine_functions(lua_State* L)
 
 	// Object position
 	luah_set_c_function(L, "Object", "__pos", physics_obj_pos);
+	luah_set_c_function(L, "Object", "init_physics", staticp_init);
+	luah_set_c_function(L, "Object", "clean_up", staticp_clean_up);
 
 	// Dynamic person
 	luah_set_c_function(L, "Person", "init_physics", dynamicp_init);
