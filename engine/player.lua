@@ -28,6 +28,10 @@ function Player:collision(other)
    if other.is_npc then
       game:conversation(self, other, 'HELLO', '')
    end
+   -- if its a resource pile in a shop, offers to buy it
+   if other:type() == 'ResourcePile' then
+      game:conversation(self, other.shopkeeper, 'BUY', '')
+   end
 end
 
 

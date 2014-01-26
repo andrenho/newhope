@@ -6,6 +6,7 @@ function ResourcePile:new(x, y, resource, city)
    self:__init(x, y)
    self.resource = resource
    self.city = city
+   self.shopkeeper = city.shopkeeper
    return self
 end
 

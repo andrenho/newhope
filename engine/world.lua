@@ -237,6 +237,7 @@ function World:__add_objects_to_cities()
                local y = o.y + city.y + building.y + 0.5
                if o.type == 'Shopkeeper' then
                   obj = ai.Shopkeeper:new(x, y)
+                  city.shopkeeper = obj
                elseif o.type == 'CarDealer' then
                   obj = ai.CarDealer:new(x, y)
                elseif o.type == 'Bartender' then
@@ -248,6 +249,7 @@ function World:__add_objects_to_cities()
                elseif o.type == 'Medic' then
                   obj = ai.Medic:new(x, y)
                elseif o.type == 'ResourcePile' then
+                  assert(city.shopkeeper)
                   obj = ResourcePile:new(x, y, o.resource, city)
                end
                assert(obj, 'Invalid object type: ' .. o.type)
