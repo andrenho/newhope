@@ -28,7 +28,6 @@ local BuildingLayout = {
 
       objects = {
          { type = 'Shopkeeper', x = 0.5, y = 0.5 },
-         { type = 'ResourcePile', x = 0.5, y = 2.5, resource = Resources.GRAIN },
       }
    },
 }

@@ -31,7 +31,6 @@ City           = my_require('city')
 CityLayout     = my_require('citylayout')
 -- objects --
 Object         = my_require('object')
-ResourcePile   = my_require('resourcepile')
 Person         = my_require('person')
 Player         = my_require('player')
 VehicleModel   = my_require('vehiclemodel')

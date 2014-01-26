@@ -248,9 +248,6 @@ function World:__add_objects_to_cities()
                   obj = ai.Dispatcher:new(x, y)
                elseif o.type == 'Medic' then
                   obj = ai.Medic:new(x, y)
-               elseif o.type == 'ResourcePile' then
-                  assert(city.shopkeeper)
-                  obj = ResourcePile:new(x, y, o.resource, city)
                end
                assert(obj, 'Invalid object type: ' .. o.type)
                self:__add_object(obj)
