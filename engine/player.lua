@@ -26,7 +26,7 @@ function Player:collision(other)
    end
    -- if it's a NPC, talk to him
    if other.is_npc then
-      game:conversation(self, other, 'HELLO', '')
+      other:talk_to_player('HELLO')
    end
 end
 

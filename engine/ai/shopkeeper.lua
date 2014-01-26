@@ -5,6 +5,11 @@ function Shopkeeper:new(x, y)
    return ai.NPC.new(self, x, y)
 end
 
+function Shopkeeper:talk_to_player(message)
+   ui:message(_t('Take a look at our fine merchanisings!'))
+   ui:buy_sell(self.city)
+end
+
 -------------
 -- PRIVATE --
 -------------

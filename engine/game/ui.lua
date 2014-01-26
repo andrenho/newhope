@@ -26,6 +26,10 @@ function UI:__message(text, person_pos, response_type, options)
    error('C function')
 end
 
+function UI:buy_sell(city)
+   error('C function')
+end
+
 -------------
 -- PRIVATE --
 -------------

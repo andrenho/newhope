@@ -47,6 +47,7 @@ function Game:start()
 end
 
 
+--[[
 function Game:conversation(player, other, message, text)
    local r_msg, r_text, r_options, r_opt_txt
    while r_msg ~= 'BYE' do
@@ -55,6 +56,7 @@ function Game:conversation(player, other, message, text)
       if #r_options == 0 then
          ui:message(r_text, other)
          if r_msg == 'BYE' then return end
+         print(player)
          message, text = player:respond_to(other, r_msg) 
       else
          message = ui:message(r_text, other, 'options', r_opt_txt)
@@ -62,6 +64,7 @@ function Game:conversation(player, other, message, text)
       end
    end
 end
+]]
 
 
 function Game:clean_up()

@@ -7,8 +7,8 @@ function NPC:new(x, y)
    return self
 end
 
-function NPC:respond_to(other, message)
-   return 'BYE', 'Get out.', {}
+function NPC:talk_to_player(message)
+   ui:message(_t('Get out.'), self)
 end
 
 function NPC:act()
