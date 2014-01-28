@@ -4,29 +4,34 @@
 #include <string.h>
 
 #include <lauxlib.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 
 #include "luah.h"
+#include "block.h"
+#include "physics.h"
 #include "minimap.h"
-#include "wireframe.h"
+#include "vehicle.h"
 
-typedef struct UI {
-	SDL_Window* win;
+UI ui;
+
+typedef struct ScreenLimits {
 	SDL_Renderer* ren;
-	bool wireframe_mode;
-	TTF_Font* main_font;
-	Minimap* mm;
-} UI;
-static UI ui;
+	int x1, y1, x2, y2;
+} ScreenLimits;
 
+static SDL_Point circle_pixel[10000];
 const double Z = 10;
 int rx = 50, ry = 50;
 
+static void visible_tiles(SDL_Window* win, int* x1, int *y1, int* x2, int* y2);
+static void draw_visible_tiles(lua_State* L, ScreenLimits* s);
+static void draw_static_shape(cpBody *body, cpShape *shape, void* data);
+static void draw_vehicle(SDL_Renderer *ren, Vehicle* vehicle);
+static void draw_circle(cpBody *body, cpShape *shape, void* data);
+
+
+
 int ui_c_init(lua_State* L)
 {
-	ui.wireframe_mode = true;
-
 	// initialize SDL
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		fprintf(stderr, "\nUnable to initialize SDL: %s\n", SDL_GetError());
@@ -88,10 +93,35 @@ int ui_render(lua_State* L)
 
 	SDL_SetRenderDrawColor(ui.ren, 0, 0, 0, 255);
 
-	if(ui.wireframe_mode) {
-		wireframe_render(L, ui.win, ui.ren);
-	} else {
-		abort();
+	// find visible tiles
+	ScreenLimits s;
+	s.ren = ui.ren;
+	visible_tiles(ui.win, &s.x1, &s.y1, &s.x2, &s.y2);
+
+	// draw visible tiles
+	draw_visible_tiles(L, &s);
+
+	// draw static objects
+	cpBodyEachShape(space->staticBody, draw_static_shape, &s);
+
+	// draw other objects
+	int n = lua_objlen(L, 2);
+	for(int i=1; i<=n; i++)
+	{
+		lua_rawgeti(L, 2, i);
+
+		bool is_vehicle;
+		LUA_FIELD(L, is_vehicle, "is_vehicle", boolean);
+
+		if(is_vehicle) {
+			Vehicle* vehicle;
+			LUA_FIELD(L, vehicle, "c_ptr", userdata);
+			draw_vehicle(ui.ren, vehicle);
+		} else {
+			cpBody* body;
+			LUA_FIELD(L, body, "body", userdata);
+			cpBodyEachShape(body, draw_circle, ui.ren);
+		}
 	}
 
 	SDL_RenderPresent(ui.ren);
@@ -155,11 +185,18 @@ int ui_center_screen(lua_State* L)
 
 int ui_visible_tiles(lua_State* L)
 {
-	if(ui.wireframe_mode) {
-		return wireframe_visible_tiles(L, ui.win);
-	} else {
-		abort();
-	}
+	int win_w, win_h;
+	SDL_GetWindowSize(ui.win, &win_w, &win_h);
+
+	int x1, y1, x2, y2;
+	visible_tiles(ui.win, &x1, &y1, &x2, &y2);
+
+	lua_pushinteger(L, x1);
+	lua_pushinteger(L, y1);
+	lua_pushinteger(L, x2);
+	lua_pushinteger(L, y2);
+
+	return 4;
 }
 
 
@@ -191,16 +228,6 @@ int ui_show_minimap(lua_State* L)
 }
 
 
-int ui_message(lua_State* L)
-{
-	if(ui.wireframe_mode) {
-		return wireframe_message(L, ui.win, ui.ren, ui.main_font);
-	} else {
-		abort();
-	}
-}
-
-
 int ui_clean_up(lua_State* L)
 {
 	SDL_DestroyRenderer(ui.ren);
@@ -225,4 +252,147 @@ int ui_wrap_text(char* text, int chars)
 	}
 
 	return lines;
+}
+
+
+/*
+ * STATIC
+ */
+static void visible_tiles(SDL_Window* win, int* x1, int *y1, int* x2, int* y2)
+{
+	int win_w, win_h;
+	SDL_GetWindowSize(win, &win_w, &win_h);
+
+	*x1 = (-rx) / Z - 5;
+	*y1 = (-ry) / Z - 5;
+	*x2 = (-rx + (win_w)) / Z + 5;
+	*y2 = (-ry + (win_h)) / Z + 5;
+}
+
+
+static void draw_visible_tiles(lua_State* L, ScreenLimits* s)
+{
+	SDL_Texture* tx = SDL_CreateTexture(s->ren, SDL_PIXELFORMAT_RGBA8888,
+			SDL_TEXTUREACCESS_STATIC, 1, 1);
+
+	// IMPORTANT: the last parameter should contain the tile list
+	luaL_checktype(L, -1, LUA_TTABLE);
+
+	int x, y;
+	for(x=s->x1; x<=s->x2; x++) for(y=s->y1; y<=s->y2; y++) {
+		// find tile ID
+		lua_rawgeti(L, -1, x);  		// t[x]
+		lua_rawgeti(L, -1, y);  		// t[x][y]
+		lua_rawgeti(L, -1, 1);			// t[x][y][1]
+		int block = lua_tointeger(L, -1);
+
+		// draw tile
+		switch(block) {
+		case GRASS:
+			SDL_SetRenderDrawColor(s->ren, 0, 128, 0, 0); break;
+		case WATER:
+			SDL_SetRenderDrawColor(s->ren, 0, 0, 255, 0); break;
+		case FLOOR:
+			SDL_SetRenderDrawColor(s->ren, 255, 0, 0, 0); break;
+		default:
+			SDL_SetRenderDrawColor(s->ren, 255, 255, 255, 0); break;
+		}
+		SDL_RenderDrawPoint(s->ren, (x+0.5)*Z+rx, (y+0.5)*Z+ry);
+		SDL_RenderDrawPoint(s->ren, (x+0.5)*Z+rx, (y+0.5)*Z+ry+1);
+		SDL_RenderDrawPoint(s->ren, (x+0.5)*Z+rx+1, (y+0.5)*Z+ry+1);
+
+		lua_pop(L, 3);
+	}
+
+	SDL_DestroyTexture(tx);
+}
+
+
+static void render_circle(SDL_Renderer* ren, double x1, double y1, double r)
+{
+	int x=r, y=0;
+	int radiusError = 1-x;
+	int i = 0;
+
+	while(x >= y) {
+		circle_pixel[i++] = (const SDL_Point){  x + x1,  y + y1 };
+		circle_pixel[i++] = (const SDL_Point){  y + x1,  x + y1 };
+		circle_pixel[i++] = (const SDL_Point){ -x + x1,  y + y1 };
+		circle_pixel[i++] = (const SDL_Point){ -y + x1,  x + y1 };
+		circle_pixel[i++] = (const SDL_Point){ -x + x1, -y + y1 };
+		circle_pixel[i++] = (const SDL_Point){ -y + x1, -x + y1 };
+		circle_pixel[i++] = (const SDL_Point){  x + x1, -y + y1 };
+		circle_pixel[i++] = (const SDL_Point){  y + x1, -x + y1 };
+		y++;
+		if(radiusError<0)
+			radiusError += 2*y+1;
+		else {
+			x--;
+			radiusError += 2*(y-x+1);
+		}
+	}
+
+	SDL_RenderDrawPoints(ren, circle_pixel, i);
+}
+
+
+static void draw_circle(cpBody *body, cpShape *shape, void* data)
+{
+	SDL_Renderer* ren = (SDL_Renderer*)data;
+	cpVect pos = cpBodyGetPos(body);
+	cpFloat r = cpCircleShapeGetRadius(shape);
+	SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
+	render_circle(ren, pos.x*Z+rx, pos.y*Z+ry, r*Z);
+}
+
+
+static void draw_static_shape(cpBody *body, cpShape *shape, void* data)
+{
+	ScreenLimits* s = (ScreenLimits*)data;
+	cpBB bb = cpShapeGetBB(shape);
+	if(bb.l < s->x1 || bb.l > s->x2 || bb.t < s->y1 || bb.t > s->y2) {
+		// out of bounds
+		return;
+	}
+	SDL_SetRenderDrawColor(s->ren, 150, 0, 0, 255);
+	SDL_Rect rect = { bb.l*Z+rx, bb.b*Z+ry, (bb.r-bb.l)*Z, (bb.t-bb.b)*Z };
+	SDL_RenderDrawRect(s->ren, &rect);
+}
+
+
+static void draw_shape(SDL_Renderer* ren, cpBody* body, cpShape* shape)
+{
+	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+
+	// get body info
+	cpVect v = cpBodyGetPos(body);
+	cpFloat angle = cpBodyGetAngle(body);
+	cpVect rot = cpvforangle(angle);
+
+	// get vectors
+	int n = cpPolyShapeGetNumVerts(shape); 
+	SDL_Point* pts = calloc(sizeof(SDL_Point), n+1);
+
+	// rotate vectors
+	int i;
+	for(i=0; i<n; i++) {
+		cpVect p = cpPolyShapeGetVert(shape, i);
+		cpVect vr = cpvrotate(cpv(p.x,p.y), rot);
+		pts[i] = (SDL_Point) { (vr.x+v.x)*Z+rx, (vr.y+v.y)*Z+ry };
+		if(i == 0)
+			pts[n] = pts[i];
+	}
+
+	// draw
+	SDL_RenderDrawLines(ren, pts, n+1);
+
+	free(pts);
+}
+
+
+static void draw_vehicle(SDL_Renderer *ren, Vehicle* vehicle)
+{
+	draw_shape(ren, vehicle->vehicle_body, vehicle->vehicle_shape);
+	draw_shape(ren, vehicle->rear_wheel_body, vehicle->rear_wheel_shape);
+	draw_shape(ren, vehicle->front_wheel_body, vehicle->front_wheel_shape);
 }

@@ -6,7 +6,7 @@ function Shopkeeper:new(x, y)
 end
 
 function Shopkeeper:talk_to_player(message)
-   ui:message(_t('Take a look at our fine merchanisings!'))
+   ui:message(_t('Take a look at our fine merchanisings!'), self)
    ui:buy_sell(self.city)
 end
 

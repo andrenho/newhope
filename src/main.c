@@ -6,6 +6,7 @@
 #include "staticp.h"
 #include "dynamicp.h"
 #include "vehicle.h"
+#include "dialog.h"
 
 static void complement_engine_functions(lua_State* L);
 
@@ -42,8 +43,10 @@ static void complement_engine_functions(lua_State* L)
 	luah_set_c_function(L, "ui", "center_screen",  ui_center_screen);
 	luah_set_c_function(L, "ui", "visible_tiles",  ui_visible_tiles);
 	luah_set_c_function(L, "ui", "show_minimap",   ui_show_minimap);
-	luah_set_c_function(L, "ui", "__message",      ui_message);
 	luah_set_c_function(L, "ui", "clean_up",       ui_clean_up);
+
+	// UI dialog
+	luah_set_c_function(L, "ui", "__message",      dialog_message);
 
 	// World
 	luah_set_c_function(L, "World", "__init_physics", physics_init);

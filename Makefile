@@ -19,8 +19,8 @@ SRC = src/main.c	\
       src/minimap.c     \
       src/staticp.c     \
       src/ui.c		\
-      src/vehicle.c	\
-      src/wireframe.c
+      src/dialog.c	\
+      src/vehicle.c
 
 OBJ = ${SRC:.c=.o} src/block.h
 HEADERS = ${SRC:.c=.h}
