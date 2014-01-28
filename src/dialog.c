@@ -63,3 +63,10 @@ int dialog_message(lua_State* L)
 
 	return 0;
 }
+
+
+
+int dialog_buysell(lua_State* L)
+{
+	return 0;
+}

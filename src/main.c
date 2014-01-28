@@ -47,6 +47,7 @@ static void complement_engine_functions(lua_State* L)
 
 	// UI dialog
 	luah_set_c_function(L, "ui", "__message",      dialog_message);
+	luah_set_c_function(L, "ui", "buy_sell",       dialog_buysell);
 
 	// World
 	luah_set_c_function(L, "World", "__init_physics", physics_init);
