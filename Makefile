@@ -14,13 +14,16 @@ endif
 
 SRC = main.cc			\
       engine/command.cc		\
+      engine/hero.cc		\
       engine/world.cc		\
       ui/w/wireframeui.cc
 
 OBJ = ${SRC:.cc=.o}
-HEADERS = ${SRC:.cc=.h}
+HEADERS = ${SRC:.cc=.h} ui/ui.h engine/point.h engine/rectangle.h
 DIST = 
 DATA = data/PressStart2P.ttf
+
+LINT_IGNORE=-whitespace,-runtime/references
 
 all: options newhope
 
@@ -29,24 +32,27 @@ options:
 	@echo newhope build options:
 	@echo "CPPFLAGS = ${CPPFLAGS}"
 	@echo "LDFLAGS  = ${LDFLAGS}"
-	@echo "CC       = ${CC}"
+	@echo "CPP       = ${CPP}"
 
-.c.o:
-	@echo CC $<
-	@${CC} -c ${CPPFLAGS} -o $@ $<
-	@${CC} -MM ${CPPFLAGS} $*.cc > $*.d
+.cc.o:
+	@echo CPP $<
+	@${CPP} -c ${CPPFLAGS} -o $@ $<
+	@${CPP} -MM ${CPPFLAGS} $*.cc > $*.d
 
 ${OBJ}: config.mk libraries.mk
 
 -include ${OBJ:.o=.d}
 
 newhope: ${OBJ}
-	@echo CC -o $@
-	@${CC} -o $@ ${OBJ} ${LDFLAGS}
+	@echo CPP -o $@
+	@${CPP} -o $@ ${OBJ} ${LDFLAGS}
 
 docs: doc/classes.txt
 	@echo plantuml $<
 	@java -jar doc/plantuml.jar $<
+
+lint:
+	cpplint --filter=${LINT_IGNORE} ${HEADERS} ${SRC}
 
 clean:
 	@echo cleaning

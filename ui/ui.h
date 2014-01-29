@@ -1,9 +1,10 @@
-#ifndef UI_H
-#define UI_H
+// Copyright 2014 <Imperial Software>
+
+#ifndef UI_UI_H_
+#define UI_UI_H_
 
 #include <cstdint>
 #include <vector>
-using namespace std;
 
 class Command;
 
@@ -13,19 +14,19 @@ public:
 	virtual ~UI() { }
 
 	virtual void Initialize() = 0;
-	virtual bool Active() = 0;
+	virtual bool Active() const = 0;
 	virtual void Quit() = 0;
 
-	virtual uint32_t Now() = 0;
-	virtual void Wait(uint32_t tm) = 0;
+	virtual uint32_t Now() const = 0;
+	virtual void Wait(uint32_t tm) const = 0;
 
-	virtual void GetEvents(vector<Command*>& commands) = 0;
+	virtual void GetEvents(std::vector<Command*>& commands) const = 0;
 
-	virtual void RedrawScene() = 0;
+	virtual void RedrawScene() const = 0;
 
 private:
 	UI(const UI&);
 	UI& operator=(const UI&);
 };
 
-#endif
+#endif  // UI_UI_H_

@@ -42,5 +42,5 @@ ifeq (${PROFILING},yes)
 endif
 
 # compiler and linker
-CC = g++
-#CC = clang++
+CPP = g++
+#CPP = clang++

@@ -1,5 +1,7 @@
-#ifndef WORLD_H
-#define WORLD_H
+// Copyright 2014 <Imperial Software>
+
+#ifndef ENGINE_WORLD_H_
+#define ENGINE_WORLD_H_
 
 class World {
 public:
@@ -8,11 +10,14 @@ public:
 
 	void Initialize();
 
+	inline class Hero& Hero() const { return *hero; }
+
 private:
 	World(const World&);
 	World& operator=(const World&);
 
 	int x1, y1, x2, y2;
+	class Hero* hero;
 };
 
-#endif
+#endif  // ENGINE_WORLD_H_

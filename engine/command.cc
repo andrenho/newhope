@@ -1,10 +1,12 @@
-#include "command.h"
+// Copyright 2014 <Imperial Software>
 
-#include "globals.h"
+#include "engine/command.h"
+
+#include "./globals.h"
 #include "ui/ui.h"
 
 void
-QuitCommand::Execute()
+QuitCommand::Execute() const
 {
 	ui->Quit();
 }
