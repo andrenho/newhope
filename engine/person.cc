@@ -12,7 +12,7 @@ Person::Person(Point init)
 
 
 void 
-Person::InitializePhysics(class cpSpace* space)
+Person::InitializePhysics(struct cpSpace* space)
 {
 	// get object fields
 	cpFloat x = init.X(), y = init.Y();
@@ -54,7 +54,7 @@ Person::Position() const
 
 
 void 
-Person::DestroyPhysics(class cpSpace* space)
+Person::DestroyPhysics(struct cpSpace* space)
 {
 	cpSpaceRemoveShape(space, shape);
 	cpSpaceRemoveConstraint(space, joint);

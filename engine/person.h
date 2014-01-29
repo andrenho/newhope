@@ -10,18 +10,18 @@ public:
 	explicit Person(Point init);
 	virtual ~Person() { }
 
-	virtual void InitializePhysics(class cpSpace* space);
+	virtual void InitializePhysics(struct cpSpace* space);
 	virtual void SetTarget(Point const& p);
-	virtual void DestroyPhysics(class cpSpace* space);
+	virtual void DestroyPhysics(struct cpSpace* space);
 
 	inline virtual double Radius() const { return 0.5; }
 	virtual Point Position() const;
 
 protected:
 	const Point init;
-	class cpBody *body, *target;
-	class cpShape* shape;
-	class cpConstraint* joint;
+	struct cpBody *body, *target;
+	struct cpShape* shape;
+	struct cpConstraint* joint;
 
 private:
 	Person(const Person&);

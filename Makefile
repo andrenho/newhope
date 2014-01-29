@@ -13,6 +13,8 @@ else
 endif
 
 SRC = main.cc			\
+      engine/building.cc	\
+      engine/buildinglayout.cc  \
       engine/command.cc		\
       engine/hero.cc		\
       engine/person.cc		\

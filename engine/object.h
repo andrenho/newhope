@@ -9,8 +9,8 @@ class Object {
 public:
 	virtual ~Object() { }
 
-	virtual void InitializePhysics(class cpSpace* space) { }
-	virtual void DestroyPhysics(class cpSpace* space) { }
+	virtual void InitializePhysics(struct cpSpace* space) { }
+	virtual void DestroyPhysics(struct cpSpace* space) { }
 	virtual Point Position() const = 0;
 
 protected:

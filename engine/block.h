@@ -6,7 +6,11 @@
 #include <cstdint>
 
 enum class Block : uint8_t {
+	// terrain
 	EMPTY, GRASS, OCEAN,
+
+	// objects
+	FLOOR, WOODEN_WALL, DOOR_OPEN,
 };
 
 #endif  // ENGINE_BLOCK_H_

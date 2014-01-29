@@ -28,7 +28,7 @@ private:
 
 	int x1, y1, x2, y2;
 	class Hero* hero;
-	class cpSpace* space;
+	struct cpSpace* space;
 	std::vector<Object*> objects;
 };
 
