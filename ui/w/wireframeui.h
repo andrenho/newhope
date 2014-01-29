@@ -10,10 +10,15 @@ public:
 	~WireframeUI();
 
 	void Initialize();
+	inline bool Active() { return active; }
+	void Quit();
+
 	uint32_t Now();
 	void Wait(uint32_t tm);
 
-	inline bool Active() { return active; }
+	void GetEvents(vector<Command*>& commands);
+
+	void RedrawScene();
 
 private:
 	bool active;

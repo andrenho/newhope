@@ -13,6 +13,7 @@ else
 endif
 
 SRC = main.cc			\
+      engine/command.cc		\
       engine/world.cc		\
       ui/w/wireframeui.cc
 

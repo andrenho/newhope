@@ -4,6 +4,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "engine/command.h"
+
 WireframeUI::WireframeUI()
 	: active(true)
 {
@@ -27,18 +29,17 @@ WireframeUI::WireframeUI()
 	}
 
 	// initialize TTF_Init
-	/*
 	if(TTF_Init() == -1) {
 		fprintf(stderr, "\nError initializing SDL2_ttf: %s\n", TTF_GetError());
 		exit(1);
 	}
 
 	// load font
-	ui.main_font = TTF_OpenFont(DATADIR "/PressStart2P.ttf", 16);
-	if(!ui.main_font) {
+	main_font = TTF_OpenFont(DATADIR "/PressStart2P.ttf", 16);
+	if(!main_font) {
 		fprintf(stderr, "\nUnable to load font: %s\n", TTF_GetError());
 		exit(1);
-	}*/
+	}
 
 }
 
@@ -55,6 +56,13 @@ WireframeUI::Initialize()
 }
 
 
+void
+WireframeUI::Quit()
+{
+	active = false;
+}
+
+
 uint32_t 
 WireframeUI::Now()
 {
@@ -64,5 +72,25 @@ WireframeUI::Now()
 
 void 
 WireframeUI::Wait(uint32_t tm)
+{
+}
+
+
+void 
+WireframeUI::GetEvents(vector<Command*>& cmds)
+{
+	SDL_Event e;
+	while(SDL_PollEvent(&e)) {
+		switch(e.type) {
+		case SDL_QUIT:
+			cmds.push_back(new QuitCommand());
+			break;
+		}
+	}
+}
+
+
+void
+WireframeUI::RedrawScene()
 {
 }

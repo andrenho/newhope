@@ -1,7 +1,10 @@
 #include <cstdlib>
 #include <cstdint>
 #include <cstdio>
+#include <vector>
+using namespace std;
 
+#include "engine/command.h"
 #include "engine/world.h"
 #include "ui/ui.h"
 #include "ui/w/wireframeui.h"
@@ -17,9 +20,16 @@ int main(int argc, char** argv)
 	while(ui->Active()) {
 		uint32_t next_frame = ui->Now() + 1000/60;
 
-		// TODO - process keyboard
+		// process keyboard
+		vector<Command*> commands;
+		ui->GetEvents(commands);
+		for(auto& command : commands) {
+			command->Execute();
+			delete command;
+		}
 
-		// TODO - redraw screen
+		// redraw screen
+		ui->RedrawScene();
 
 		// wait for next frame
 		uint32_t now = ui->Now();
