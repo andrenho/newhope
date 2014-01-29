@@ -8,7 +8,7 @@
 
 class Hero : public Person {
 public:
-	Hero(Point init) : Person(init) { }
+	explicit Hero(Point init) : Person(init) { }
 	virtual ~Hero() { }
 
 private:

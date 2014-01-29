@@ -7,7 +7,7 @@
 
 class Person : public Object {
 public:
-	Person(Point init);
+	explicit Person(Point init);
 	virtual ~Person() { }
 
 	virtual void InitializePhysics(class cpSpace* space);
