@@ -10,7 +10,7 @@ public:
 	// automatic copy constructor
 
 	Point const& P1() const { return p1; }
-	Point const& P2() const { return p1; }
+	Point const& P2() const { return p2; }
 
 private:
 	Rectangle& operator=(const Rectangle&);

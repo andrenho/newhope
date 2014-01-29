@@ -6,6 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <vector>
 
+#include "engine/block.h"
 #include "ui/ui.h"
 
 class Object;
@@ -31,12 +32,12 @@ public:
 private:
 	void CenterScreen(Point const& p) const;
 	Rectangle const* GetVisibleArea() const;
-	void GetVisibleTiles(std::vector<uint8_t[10]>& tiles,
+	void GetVisibleTiles(std::vector<Block[10]>& tiles,
 			Rectangle const& area) const;
-	void GetVisibleObjects(std::vector<Object*>& objects,
-			Rectangle const& area) const;
-	void RenderScene(std::vector<uint8_t[10]> const& tiles,
-			std::vector<Object*> const& objects) const;
+	void RenderScene(Rectangle const& rect) const;
+	void DrawTile(int x, int y) const;
+	void DrawObject(Object const& object) const;
+	void RenderCircle(double x1, double y1, double r) const;
 
 	bool active;
 	

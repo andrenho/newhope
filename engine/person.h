@@ -5,10 +5,12 @@
 
 #include "engine/object.h"
 
-class Person {
+class Person : public Object {
 public:
 	Person() { }
 	virtual ~Person() { }
+
+	inline double Radius() const { return 0.5; }
 
 private:
 	Person(const Person&);

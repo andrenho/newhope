@@ -11,8 +11,8 @@ World::World(int x1, int y1, int x2, int y2)
 
 World::~World()
 {
-	if(hero) {
-		delete hero;
+	for(auto& obj : objects) {
+		delete obj;
 	}
 }
 
@@ -21,4 +21,13 @@ void
 World::Initialize()
 {
 	hero = new class Hero();
+	objects.push_back(hero);
+}
+
+
+int
+World::Tiles(Block (&block)[10], int x, int y)
+{
+	block[0] = Block::GRASS;
+	return 1;
 }

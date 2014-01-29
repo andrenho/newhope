@@ -104,18 +104,12 @@ WireframeUI::GetEvents(std::vector<Command*>& cmds) const
 void
 WireframeUI::RedrawScene() const
 {
-	std::vector<Object*> objects;
-	std::vector<uint8_t[10]> tiles;
-
 	Point hero_pos = world->Hero().Position();
 	CenterScreen(hero_pos);
 
 	Rectangle const* visible_area = GetVisibleArea();
-	GetVisibleTiles(tiles, *visible_area);
-	GetVisibleObjects(objects, *visible_area);
+	RenderScene(*visible_area);
 	delete visible_area;
-
-	RenderScene(tiles, objects);
 }
 
 
@@ -142,22 +136,92 @@ WireframeUI::GetVisibleArea() const
 }
 
 
-void 
-WireframeUI::GetVisibleTiles(std::vector<uint8_t[10]>& tiles,
-		Rectangle const& area) const
+void
+WireframeUI::RenderScene(Rectangle const& rect) const
 {
+	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+	SDL_RenderClear(ren);
+
+	// draw tiles
+	for(int x=rect.P1().X(); x<rect.P2().X(); x++) {
+		for(int y=rect.P1().Y(); y<rect.P2().Y(); y++) {
+			DrawTile(x, y);
+		}
+	}
+
+	// draw objects
+	for(auto const& object: world->Objects()) {
+		DrawObject(*object);
+	}
+	
+	SDL_RenderPresent(ren);
 }
 
 
 void 
-WireframeUI::GetVisibleObjects(std::vector<Object*>& objects,
-		Rectangle const& area) const
+WireframeUI::DrawTile(int x, int y) const
 {
+	Block b[10];
+	int n = world->Tiles(b, x, y);
+	if(n > 0) {
+		Block block = b[n-1];
+		switch(block) {
+		case Block::GRASS:
+			SDL_SetRenderDrawColor(ren, 230, 255, 230, 255); break;
+		default:
+			SDL_SetRenderDrawColor(ren, 255, 255, 255, 255); break;
+		}
+
+		SDL_Rect rect = { 
+			static_cast<int>(x*Z+rx), 
+			static_cast<int>(y*Z+ry), 
+			static_cast<int>(Z), 
+			static_cast<int>(Z) };
+		SDL_RenderFillRect(ren, &rect);
+	}
 }
 
 
 void 
-WireframeUI::RenderScene(std::vector<uint8_t[10]> const& tiles,
-		std::vector<Object*> const& objects) const
+WireframeUI::DrawObject(Object const& object) const
 {
+	const Person* person = nullptr;
+
+	if((person = dynamic_cast<Person const*>(&object)) != nullptr) {
+		Point pos = object.Position();
+		SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
+		RenderCircle(pos.X()*Z+rx, pos.Y()*Z+ry, person->Radius()*Z);
+	}
 }
+
+
+void
+WireframeUI::RenderCircle(double x1, double y1, double r) const
+{
+	double x=r, y=0;
+	int radiusError = 1-x;
+	int i = 0;
+	static SDL_Point circle_pixel[1000];
+
+	while(x >= y) {
+		circle_pixel[i++] = SDL_Point{static_cast<int>( x + x1), static_cast<int>( y + y1) };
+		circle_pixel[i++] = SDL_Point{static_cast<int>( y + x1), static_cast<int>( x + y1) };
+		circle_pixel[i++] = SDL_Point{static_cast<int>(-x + x1), static_cast<int>( y + y1) };
+		circle_pixel[i++] = SDL_Point{static_cast<int>(-y + x1), static_cast<int>( x + y1) };
+		circle_pixel[i++] = SDL_Point{static_cast<int>(-x + x1), static_cast<int>(-y + y1) };
+		circle_pixel[i++] = SDL_Point{static_cast<int>(-y + x1), static_cast<int>(-x + y1) };
+		circle_pixel[i++] = SDL_Point{static_cast<int>( x + x1), static_cast<int>(-y + y1) };
+		circle_pixel[i++] = SDL_Point{static_cast<int>( y + x1), static_cast<int>(-x + y1) };
+		y++;
+		if(radiusError<0) {
+			radiusError += 2*y+1;
+		} else {
+			x--;
+			radiusError += 2*(y-x+1);
+		}
+	}
+
+	SDL_RenderDrawPoints(ren, circle_pixel, i);
+}
+
+
