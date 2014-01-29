@@ -14,17 +14,21 @@ public:
 	~World();
 
 	void Initialize();
+	void Step();
 
 	int Tiles(Block (&block)[10], int x, int y);
 	inline class Hero& Hero() const { return *hero; }
 	inline std::vector<Object*> const& Objects() { return objects; }
 
 private:
+	void AddObject(Object* obj);
+
 	World(const World&);
 	World& operator=(const World&);
 
 	int x1, y1, x2, y2;
 	class Hero* hero;
+	class cpSpace* space;
 	std::vector<Object*> objects;
 };
 

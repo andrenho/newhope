@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 	ui->Initialize();
 
 	while(ui->Active()) {
-		uint32_t next_frame = ui->Now() + 1000/60;
+		uint32_t next_frame = ui->Now() + 1000.0/60.0;
 
 		// process keyboard
 		std::vector<Command*> commands;
@@ -32,12 +32,17 @@ int main(int argc, char** argv)
 			delete command;
 		}
 
+		// advance time
+		world->Step();
+
 		// redraw screen
 		ui->RedrawScene();
 
+		//printf("%0.2f %0.2f\n", world->Hero().Position().X(), world->Hero().Position().Y());
+
 		// wait for next frame
 		uint32_t now = ui->Now();
-		printf("Frame time: %d\n", next_frame - now);
+		//printf("Frame time: %d\n", next_frame - now);
 		if(now < next_frame) {
 			ui->Wait(next_frame - now);
 		}

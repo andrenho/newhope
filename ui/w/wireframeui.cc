@@ -77,13 +77,14 @@ WireframeUI::Quit()
 uint32_t 
 WireframeUI::Now() const
 {
-	return 0;
+	return SDL_GetTicks();
 }
 
 
 void 
 WireframeUI::Wait(uint32_t tm) const
 {
+	SDL_Delay(tm);
 }
 
 
@@ -98,6 +99,11 @@ WireframeUI::GetEvents(std::vector<Command*>& cmds) const
 			break;
 		}
 	}
+
+	const Uint8* k = SDL_GetKeyboardState(NULL);
+	cmds.push_back(new MoveCommand(
+			k[SDL_SCANCODE_UP], k[SDL_SCANCODE_DOWN],
+			k[SDL_SCANCODE_LEFT], k[SDL_SCANCODE_RIGHT]));
 }
 
 
@@ -151,7 +157,10 @@ WireframeUI::RenderScene(Rectangle const& rect) const
 
 	// draw objects
 	for(auto const& object: world->Objects()) {
-		DrawObject(*object);
+		Point pos = object->Position();
+		if(rect.IsInside(pos)) {
+			DrawObject(*object);
+		}
 	}
 	
 	SDL_RenderPresent(ren);

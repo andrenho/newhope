@@ -15,6 +15,7 @@ endif
 SRC = main.cc			\
       engine/command.cc		\
       engine/hero.cc		\
+      engine/person.cc		\
       engine/world.cc		\
       ui/w/wireframeui.cc
 

@@ -8,10 +8,8 @@
 
 class Hero : public Person {
 public:
-	Hero() { }
+	Hero(Point init) : Person(init) { }
 	virtual ~Hero() { }
-
-	Point Position() const;
 
 private:
 	Hero(const Hero&);

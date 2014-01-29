@@ -10,7 +10,6 @@ class Command;
 
 class UI {
 public:
-	UI() { }
 	virtual ~UI() { }
 
 	virtual void Initialize() = 0;
@@ -23,6 +22,9 @@ public:
 	virtual void GetEvents(std::vector<Command*>& commands) const = 0;
 
 	virtual void RedrawScene() const = 0;
+
+protected:
+	UI() { }
 
 private:
 	UI(const UI&);

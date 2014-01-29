@@ -7,10 +7,14 @@
 
 class Object {
 public:
-	Object() { }
 	virtual ~Object() { }
 
+	virtual void InitializePhysics(class cpSpace* space) { }
+	virtual void DestroyPhysics(class cpSpace* space) { }
 	virtual Point Position() const = 0;
+
+protected:
+	Object() { }
 
 private:
 	Object(const Object&);

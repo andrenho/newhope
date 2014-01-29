@@ -7,10 +7,21 @@
 
 class Person : public Object {
 public:
-	Person() { }
+	Person(Point init);
 	virtual ~Person() { }
 
-	inline double Radius() const { return 0.5; }
+	virtual void InitializePhysics(class cpSpace* space);
+	virtual void SetTarget(Point const& p);
+	virtual void DestroyPhysics(class cpSpace* space);
+
+	inline virtual double Radius() const { return 0.5; }
+	virtual Point Position() const;
+
+protected:
+	const Point init;
+	class cpBody *body, *target;
+	class cpShape* shape;
+	class cpConstraint* joint;
 
 private:
 	Person(const Person&);

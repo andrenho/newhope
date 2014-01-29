@@ -12,6 +12,11 @@ public:
 	Point const& P1() const { return p1; }
 	Point const& P2() const { return p2; }
 
+	bool IsInside(Point const& p) const {
+		return p.X() >= p1.X() && p.Y() >= p1.Y() 
+		    && p.X() <= p2.X() && p.Y() <= p2.Y();
+	}
+
 private:
 	Rectangle& operator=(const Rectangle&);
 
