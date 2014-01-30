@@ -2,17 +2,19 @@
 
 #include "engine/building.h"
 
-Building::Building(BuildingType type, Point const& pos)
-	: Position(pos), type(type)
+Building::Building(Point const& pos, BuildingType type, int n)
+	: Position(pos), type(type), 
+	  layout(BuildingLayouts[BuildingPair(type, n)])
 {
 }
 
 
 int 
-Building::Tiles(Block (&block)[10], int x, int y)
+Building::Tiles(Block* (&block)[10], int x, int y) const
 {
-	//BuildingLayout& layout = BuildingLayouts[
-
-	//for(int i=0; i<
-	return 0;
+	for(int i=0; i<layout.floors; i++) {
+		const char blk = layout.floor[i][y][x];
+		block[i] = layout.label.at(blk);
+	}
+	return layout.floors;
 }

@@ -37,6 +37,8 @@ private:
 	void RenderScene(Rectangle const& rect) const;
 	void DrawTile(int x, int y) const;
 	void DrawObject(Object const& object) const;
+	static void DrawStaticShape(struct cpBody *body, struct cpShape *shape, 
+			void* data);
 	void RenderCircle(double x1, double y1, double r) const;
 
 	bool active;

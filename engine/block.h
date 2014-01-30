@@ -5,12 +5,18 @@
 
 #include <cstdint>
 
-enum class Block : uint8_t {
-	// terrain
-	EMPTY, GRASS, OCEAN,
+class Block {
+public:
+	Block(bool crossable)
+		: Crossable(crossable) {}
 
+	const bool Crossable;
+
+	// terrain
+	static Block *EMPTY, *GRASS, *OCEAN,
+	
 	// objects
-	FLOOR, WOODEN_WALL, DOOR_OPEN,
+	*FLOOR, *WOODEN_WALL, *DOOR_OPEN;
 };
 
 #endif  // ENGINE_BLOCK_H_

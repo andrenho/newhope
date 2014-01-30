@@ -9,10 +9,13 @@
 
 class Building {
 public:
-	Building(BuildingType type, Point const& pos);
+	Building(Point const& pos, BuildingType type, int n);
 	virtual ~Building() { }
 
-	int Tiles(Block (&block)[10], int x, int y);
+	int Tiles(Block* (&block)[10], int x, int y) const;
+
+	inline int W() const { return layout.w; }
+	inline int H() const { return layout.h; }
 
 	const Point Position;
 
@@ -21,6 +24,7 @@ private:
 	Building& operator=(const Building&);
 
 	const BuildingType type;
+	BuildingLayout const& layout;
 };
 
 #endif  // ENGINE_BUILDING_H_

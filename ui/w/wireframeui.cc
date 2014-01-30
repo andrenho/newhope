@@ -2,6 +2,7 @@
 
 #include "ui/w/wireframeui.h"
 
+#include <chipmunk.h>
 #include <SDL2/SDL.h>
 #include <cstdlib>
 
@@ -155,6 +156,10 @@ WireframeUI::RenderScene(Rectangle const& rect) const
 		}
 	}
 
+	// draw static objects
+	cpBodyEachShape(world->SpacePhysics()->staticBody, DrawStaticShape, 
+			const_cast<WireframeUI*>(this));
+
 	// draw objects
 	for(auto const& object: world->Objects()) {
 		Point pos = object->Position();
@@ -170,15 +175,14 @@ WireframeUI::RenderScene(Rectangle const& rect) const
 void 
 WireframeUI::DrawTile(int x, int y) const
 {
-	Block b[10];
+	Block* b[10];
 	int n = world->Tiles(b, x, y);
 	if(n > 0) {
-		Block block = b[n-1];
-		switch(block) {
-		case Block::GRASS:
-			SDL_SetRenderDrawColor(ren, 230, 255, 230, 255); break;
-		default:
-			SDL_SetRenderDrawColor(ren, 255, 255, 255, 255); break;
+		Block* block = b[n-1];
+		if(block == Block::GRASS) {
+			SDL_SetRenderDrawColor(ren, 230, 255, 230, 255);
+		} else {
+			SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 		}
 
 		SDL_Rect rect = { 
@@ -201,6 +205,30 @@ WireframeUI::DrawObject(Object const& object) const
 		SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
 		RenderCircle(pos.X()*Z+rx, pos.Y()*Z+ry, person->Radius()*Z);
 	}
+}
+
+
+void 
+WireframeUI::DrawStaticShape(cpBody *body, cpShape *shape, void* data)
+{
+	WireframeUI* self = static_cast<WireframeUI*>(data);
+	Rectangle const* r = self->GetVisibleArea(); // TODO - faster
+
+	cpBB bb = cpShapeGetBB(shape);
+	if(bb.l < r->P1().X() || bb.l > r->P2().X() || 
+			bb.t < r->P1().Y() || bb.t > r->P2().Y()) {
+		// out of bounds
+		return;
+	}
+
+	SDL_SetRenderDrawColor(self->ren, 150, 0, 0, 255);
+	SDL_Rect rect = { 
+		static_cast<int>(bb.l * self->Z + self->rx), 
+		static_cast<int>(bb.b * self->Z + self->ry), 
+		static_cast<int>((bb.r - bb.l) * self->Z),
+		static_cast<int>((bb.t - bb.b) * self->Z) 
+	};
+	SDL_RenderDrawRect(self->ren, &rect);
 }
 
 
@@ -232,5 +260,3 @@ WireframeUI::RenderCircle(double x1, double y1, double r) const
 
 	SDL_RenderDrawPoints(ren, circle_pixel, i);
 }
-
-

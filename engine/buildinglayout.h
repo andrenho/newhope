@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "engine/block.h"
 
@@ -13,13 +14,14 @@ enum BuildingType {
 	GENERAL_STORE,
 };
 
+typedef std::pair<BuildingType, int> BuildingPair;
+
 struct BuildingLayout {
-	int w, h, height;
-	BuildingType type;
+	int w, h, floors;
 	std::vector<std::vector<std::string>> floor;
-	std::map<char, Block> label;
+	std::map<const char, Block*> label;
 };
 
-extern BuildingLayout BuildingLayouts[];
+extern std::map<BuildingPair, BuildingLayout> BuildingLayouts;
 
 #endif  // ENGINE_BUILDINGLAYOUT_H_

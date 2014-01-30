@@ -16,12 +16,20 @@ public:
 	void Initialize();
 	void Step();
 
-	int Tiles(Block (&block)[10], int x, int y);
+	int Tiles(Block* (&block)[10], int x, int y);
+	bool IsTileWalkable(int x, int y);
+
 	inline class Hero& Hero() const { return *hero; }
 	inline std::vector<Object*> const& Objects() { return objects; }
+	inline struct cpSpace* SpacePhysics() const { return space; }
 
 private:
 	void AddObject(Object* obj);
+	void AddStaticObjects();
+	void AddStaticObject(double x, double y, double w, double h);
+
+	static void FreeStaticShape(struct cpBody *body, struct cpShape *shape, 
+			void* data);
 
 	World(const World&);
 	World& operator=(const World&);
@@ -30,6 +38,7 @@ private:
 	class Hero* hero;
 	struct cpSpace* space;
 	std::vector<Object*> objects;
+	std::vector<class City*> cities;
 };
 
 #endif  // ENGINE_WORLD_H_

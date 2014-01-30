@@ -2,10 +2,11 @@
 
 #include "engine/buildinglayout.h"
 
-BuildingLayout BuildingLayouts[] = {
+std::map<BuildingPair, BuildingLayout> BuildingLayouts = {
+{ 
+	BuildingPair(BuildingType::GENERAL_STORE, 1), 
 	{
 		8, 5, 4,
-		BuildingType::GENERAL_STORE,
 		{
 			{
 				"        ",
@@ -41,4 +42,5 @@ BuildingLayout BuildingLayouts[] = {
 			{ 'd', Block::DOOR_OPEN },
 		},
 	},
+},
 };
