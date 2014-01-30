@@ -178,7 +178,7 @@ WireframeUI::DrawTile(int x, int y) const
 	Block* b[10];
 	int n = world->Tiles(b, x, y);
 	if(n > 0) {
-		Block* block = b[n-1];
+		Block* block = b[0];
 		if(block == Block::GRASS) {
 			SDL_SetRenderDrawColor(ren, 230, 255, 230, 255);
 		} else if(block == Block::FLOOR) {
