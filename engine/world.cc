@@ -91,7 +91,7 @@ World::IsTileWalkable(int x, int y)
 	if(n == 2 && !block[1]->Crossable) {
 		return false;
 	}
-	if(n == 3 && !block[2]->Crossable) {
+	if(n >= 3 && !block[2]->Crossable) {
 		return false;
 	}
 
@@ -117,7 +117,7 @@ World::AddStaticObjects()
 		for(int x=city->Position.X(); x<city->Position.X()+city->W(); x++) {
 			for(int y=city->Position.Y(); y<city->Position.Y()+city->H(); y++) {
 				if(!IsTileWalkable(x, y)) {
-					AddStaticObject(x, y, 1, 1);
+					AddStaticObject(x+0.5, y+0.5, 1, 1);
 				}
 			}
 		}
