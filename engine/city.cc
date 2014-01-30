@@ -30,5 +30,6 @@ City::Tiles(Block* (&block)[10], int x, int y) const
 			return b->Tiles(block, x, y);
 		}
 	}
-	return 0;
+	block[0] = Block::EMPTY;
+	return 1;
 }

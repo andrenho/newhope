@@ -46,6 +46,9 @@ World::Initialize()
 	// initialize cities
 	cities.push_back(new City(Point(0, 0), CityType::AGRICULTURAL, 1));
 	AddStaticObjects();
+
+	Block* block[10];
+	Tiles(block, 2, 2);
 }
 
 
@@ -64,7 +67,11 @@ World::Tiles(Block* (&block)[10], int x, int y)
 	for(auto const& city: cities) {
 		if(x >= city->Position.X() && x<(city->Position.X()+city->W())
 		&& y >= city->Position.Y() && y<(city->Position.Y()+city->H())) {
-			return city->Tiles(block, x, y);
+			int n = city->Tiles(block, x, y);
+			if(block[0] == Block::EMPTY) {
+				block[0] = Block::GRASS; // TODO
+			}
+			return n;
 		}
 	}
 

@@ -181,6 +181,8 @@ WireframeUI::DrawTile(int x, int y) const
 		Block* block = b[n-1];
 		if(block == Block::GRASS) {
 			SDL_SetRenderDrawColor(ren, 230, 255, 230, 255);
+		} else if(block == Block::FLOOR) {
+			SDL_SetRenderDrawColor(ren, 255, 230, 230, 255);
 		} else {
 			SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 		}
