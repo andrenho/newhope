@@ -11,6 +11,7 @@
 #include "engine/hero.h"
 #include "engine/point.h"
 #include "engine/rectangle.h"
+#include "engine/vehicle.h"
 #include "engine/world.h"
 
 WireframeUI::WireframeUI()
@@ -120,6 +121,9 @@ WireframeUI::RedrawScene() const
 }
 
 
+/***************************************************************************/
+
+
 void 
 WireframeUI::CenterScreen(Point const& p) const
 {
@@ -175,10 +179,10 @@ WireframeUI::RenderScene(Rectangle const& rect) const
 void 
 WireframeUI::DrawTile(int x, int y) const
 {
-	Block* b[10];
+	const Block* b[10];
 	int n = world->Tiles(b, x, y);
 	if(n > 0) {
-		Block* block = b[0];
+		const Block* block = b[0];
 		if(block == Block::GRASS) {
 			SDL_SetRenderDrawColor(ren, 230, 255, 230, 255);
 		} else if(block == Block::FLOOR) {
@@ -201,12 +205,55 @@ void
 WireframeUI::DrawObject(Object const& object) const
 {
 	const Person* person = nullptr;
+	const Vehicle* vehicle = nullptr;
 
 	if((person = dynamic_cast<Person const*>(&object)) != nullptr) {
 		Point pos = object.Position();
 		SDL_SetRenderDrawColor(ren, 0, 128, 0, 255);
 		RenderCircle(pos.X()*Z+rx, pos.Y()*Z+ry, person->Radius()*Z);
+	} else if((vehicle = dynamic_cast<Vehicle const*>(&object)) != nullptr) {
+		cpBody *vb, *rwb, *fwb;
+		cpShape *vs, *rws, *fws;
+		vehicle->PhysicsBodies(vb, rwb, fwb);
+		vehicle->PhysicsShapes(vs, rws, fws);
+		DrawShape(vb, vs);
+		DrawShape(rwb, rws);
+		DrawShape(fwb, fws);
 	}
+}
+
+
+void 
+WireframeUI::DrawShape(cpBody* body, cpShape* shape) const
+{
+	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+
+	// get body info
+	cpVect v = cpBodyGetPos(body);
+	cpFloat angle = cpBodyGetAngle(body);
+	cpVect rot = cpvforangle(angle);
+
+	// get vectors
+	int n = cpPolyShapeGetNumVerts(shape);
+	SDL_Point* pts = new SDL_Point[n+1];
+
+	// rotate vectors
+	int i;
+	for(i=0; i<n; i++) {
+		cpVect p = cpPolyShapeGetVert(shape, i);
+		cpVect vr = cpvrotate(cpv(p.x,p.y), rot);
+		pts[i] = {
+			static_cast<int>((vr.x+v.x)*Z+rx), 
+			static_cast<int>((vr.y+v.y)*Z+ry)
+		};
+		if(i == 0)
+			pts[n] = pts[i];
+	}
+
+	// draw
+	SDL_RenderDrawLines(ren, pts, n+1);
+
+	delete[] pts;
 }
 
 
@@ -220,6 +267,7 @@ WireframeUI::DrawStaticShape(cpBody *body, cpShape *shape, void* data)
 	if(bb.l < r->P1().X() || bb.l > r->P2().X() || 
 			bb.t < r->P1().Y() || bb.t > r->P2().Y()) {
 		// out of bounds
+		delete r;
 		return;
 	}
 
@@ -231,6 +279,8 @@ WireframeUI::DrawStaticShape(cpBody *body, cpShape *shape, void* data)
 		static_cast<int>((bb.t - bb.b) * self->Z) 
 	};
 	SDL_RenderDrawRect(self->ren, &rect);
+
+	delete r;
 }
 
 

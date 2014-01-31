@@ -8,13 +8,17 @@
 
 class Hero : public Person {
 public:
-	explicit Hero(Point init) : Person(init) { }
+	explicit Hero(Point init);
+	Hero(Point init, class Vehicle* vehicle);
 	virtual ~Hero() { }
+
+	void Collision(Object& obj);
+
+	Point Position() const;
 
 private:
 	Hero(const Hero&);
 	Hero& operator=(const Hero&);
-
 };
 
 #endif  // ENGINE_HERO_H_

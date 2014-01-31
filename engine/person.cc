@@ -3,10 +3,11 @@
 #include <chipmunk.h>
 
 #include "engine/person.h"
+#include "engine/vehicle.h"
 
 Person::Person(Point init)
 	: init(init), body(nullptr), target(nullptr), shape(nullptr), 
-	  joint(nullptr) 
+	  joint(nullptr), vehicle(nullptr), in_vehicle(false)
 { 
 }
 
@@ -42,6 +43,14 @@ void
 Person::SetTarget(Point const& p)
 {
 	cpBodySetPos(target, cpv(p.X(), p.Y()));
+}
+
+
+void 
+Person::SetPosition(Point const& p)
+{
+	cpBodySetPos(target, cpv(p.X(), p.Y()));
+	cpBodySetPos(body, cpv(p.X(), p.Y()));
 }
 
 

@@ -19,7 +19,7 @@ typedef std::pair<BuildingType, int> BuildingPair;
 struct BuildingLayout {
 	int w, h, floors;
 	std::vector<std::vector<std::string>> floor;
-	std::map<const char, Block*> label;
+	std::map<const char, const Block*> label;
 };
 
 extern std::map<BuildingPair, BuildingLayout> BuildingLayouts;

@@ -14,7 +14,7 @@ public:
 	City(Point const& pos, CityType type, int n);
 	virtual ~City();
 
-	int Tiles(Block* (&block)[10], int x, int y) const;
+	int Tiles(const Block* (&block)[10], int x, int y) const;
 
 	inline int W() const { return layout.w; }
 	inline int H() const { return layout.h; }

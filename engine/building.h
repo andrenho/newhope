@@ -12,7 +12,7 @@ public:
 	Building(Point const& pos, BuildingType type, int n);
 	virtual ~Building() { }
 
-	int Tiles(Block* (&block)[10], int x, int y) const;
+	int Tiles(const Block* (&block)[10], int x, int y) const;
 
 	inline int W() const { return layout.w; }
 	inline int H() const { return layout.h; }

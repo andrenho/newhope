@@ -21,6 +21,7 @@ SRC = main.cc			\
       engine/command.cc		\
       engine/hero.cc		\
       engine/person.cc		\
+      engine/vehicle.cc		\
       engine/world.cc		\
       ui/w/wireframeui.cc
 
@@ -59,6 +60,9 @@ docs: doc/classes.txt
 
 lint:
 	cpplint --filter=${LINT_IGNORE} ${HEADERS} ${SRC}
+
+check:
+	cppcheck --include=all --inconclusive ${HEADERS} ${SRC}
 
 clean:
 	@echo cleaning

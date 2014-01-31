@@ -3,9 +3,11 @@
 #include "engine/block.h"
 
 // terrain
-Block* Block::EMPTY 		= new Block(true );
-Block* Block::GRASS 		= new Block(false);
-Block* Block::OCEAN 		= new Block(false);
-Block* Block::FLOOR 		= new Block(false);
-Block* Block::WOODEN_WALL 	= new Block(false);
-Block* Block::DOOR_OPEN 	= new Block(true );
+const Block* Block::EMPTY 		= new Block(true );
+const Block* Block::GRASS 		= new Block(false);
+const Block* Block::OCEAN 		= new Block(false);
+
+//blocks
+const Block* Block::FLOOR 		= new Block(false);
+const Block* Block::WOODEN_WALL 	= new Block(false);
+const Block* Block::DOOR_OPEN 	= new Block(true );

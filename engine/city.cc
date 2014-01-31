@@ -22,7 +22,7 @@ City::~City()
 
 
 int 
-City::Tiles(Block* (&block)[10], int x, int y) const
+City::Tiles(const Block* (&block)[10], int x, int y) const
 {
 	for(auto const& b : buildings) {
 		if(x >= b->Position.X() && x < b->Position.X()+b->W()

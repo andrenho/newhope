@@ -7,16 +7,16 @@
 
 class Block {
 public:
-	Block(bool crossable)
+	explicit Block(bool crossable)
 		: Crossable(crossable) {}
 
 	const bool Crossable;
 
 	// terrain
-	static Block *EMPTY, *GRASS, *OCEAN,
+	static const Block *EMPTY, *GRASS, *OCEAN;
 	
 	// objects
-	*FLOOR, *WOODEN_WALL, *DOOR_OPEN;
+	static const Block *FLOOR, *WOODEN_WALL, *DOOR_OPEN;
 };
 
 #endif  // ENGINE_BLOCK_H_

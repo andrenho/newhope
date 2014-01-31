@@ -10,7 +10,7 @@ Building::Building(Point const& pos, BuildingType type, int n)
 
 
 int 
-Building::Tiles(Block* (&block)[10], int x, int y) const
+Building::Tiles(const Block* (&block)[10], int x, int y) const
 {
 	for(int i=0; i<layout.floors; i++) {
 		const char blk = layout.floor[i][y][x];

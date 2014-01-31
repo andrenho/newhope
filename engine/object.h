@@ -11,7 +11,13 @@ public:
 
 	virtual void InitializePhysics(struct cpSpace* space) { }
 	virtual void DestroyPhysics(struct cpSpace* space) { }
+
+	virtual void Collision(Object& obj) { }
+
+	virtual struct cpBody* PhysicsBodyPtr() const = 0;
 	virtual Point Position() const = 0;
+
+	virtual void Step() {}
 
 protected:
 	Object() { }

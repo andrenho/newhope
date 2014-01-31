@@ -3,6 +3,7 @@
 #ifndef ENGINE_WORLD_H_
 #define ENGINE_WORLD_H_
 
+#include <map>
 #include <vector>
 #include "engine/block.h"
 
@@ -16,7 +17,7 @@ public:
 	void Initialize();
 	void Step();
 
-	int Tiles(Block* (&block)[10], int x, int y);
+	int Tiles(const Block* (&block)[10], int x, int y);
 	bool IsTileWalkable(int x, int y);
 
 	inline class Hero& Hero() const { return *hero; }
@@ -30,6 +31,8 @@ private:
 
 	static void FreeStaticShape(struct cpBody *body, struct cpShape *shape, 
 			void* data);
+	static int CollisionCallback(struct cpArbiter *arb, 
+			struct cpSpace *space, void *data);
 
 	World(const World&);
 	World& operator=(const World&);
@@ -39,6 +42,8 @@ private:
 	struct cpSpace* space;
 	std::vector<Object*> objects;
 	std::vector<class City*> cities;
+
+	std::map<struct cpBody*, Object*> physics_ptr;
 };
 
 #endif  // ENGINE_WORLD_H_
