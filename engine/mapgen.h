@@ -4,8 +4,13 @@
 #define ENGINE_MAPGEN_H_
 
 #include <boost/polygon/voronoi.hpp>
+#include <random>
 
 #include "engine/rectangle.h"
+
+class MapArea {
+
+};
 
 class MapGen {
 public:
@@ -17,10 +22,11 @@ public:
 	virtual ~MapGen();
 
 private:
-	void CreateVoronoi();
+	void CreateVoronoi(int points);
 
 	const Rectangle rect;
 	boost::polygon::voronoi_diagram<double> vd;
+	std::default_random_engine generator;
 };
 
 #endif  // ENGINE_MAPGEN_H_
