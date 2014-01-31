@@ -7,16 +7,20 @@
 #include "engine/city.h"
 #include "engine/citylayout.h"
 #include "engine/hero.h"
+#include "engine/mapgen.h"
 #include "engine/vehicle.h"
 
 World::World(int x1, int y1, int x2, int y2)
-	: x1(x1), y1(y1), x2(x2), y2(y2), hero(nullptr), space(nullptr)
+	: x1(x1), y1(y1), x2(x2), y2(y2), hero(nullptr), space(nullptr),
+	  mapgen(new MapGen(x1, y1, x2, y2))
 { 
 }
 
 
 World::~World()
 {
+	delete mapgen;
+
 	// delete objects
 	for(auto& city : cities) {
 		delete city;
@@ -35,6 +39,9 @@ World::~World()
 void
 World::Initialize()
 {
+	// create map
+	mapgen->Create();
+
 	// initialize physics
 	space = cpSpaceNew();
 	cpSpaceSetDefaultCollisionHandler(space, CollisionCallback, 

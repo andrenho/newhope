@@ -20,6 +20,7 @@ SRC = main.cc			\
       engine/citylayout.cc	\
       engine/command.cc		\
       engine/hero.cc		\
+      engine/mapgen.cc		\
       engine/person.cc		\
       engine/vehicle.cc		\
       engine/world.cc		\

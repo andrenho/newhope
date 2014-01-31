@@ -3,6 +3,8 @@
 #ifndef ENGINE_RECTANGLE_H_
 #define ENGINE_RECTANGLE_H_
 
+#include "engine/point.h"
+
 class Rectangle {
 public:
 	Rectangle(Point const& p1, Point const& p2)

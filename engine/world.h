@@ -44,6 +44,7 @@ private:
 	std::vector<class City*> cities;
 
 	std::map<struct cpBody*, Object*> physics_ptr;
+	class MapGen* mapgen;
 };
 
 #endif  // ENGINE_WORLD_H_
