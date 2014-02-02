@@ -81,15 +81,13 @@ World::Tiles(const Block* (&block)[10], int x, int y) const
 		&& y >= city->Position.Y() && y<(city->Position.Y()+city->H())) {
 			int n = city->Tiles(block, x, y);
 			if(block[0] == Block::EMPTY) {
-				block[0] = Block::GRASS; // TODO
+				block[0] = mapgen->Terrain(x, y);
 			}
 			return n;
 		}
 	}
 
-	// TODO - read from mapgen
-
-	block[0] = Block::GRASS;
+	block[0] = mapgen->Terrain(x, y);
 	return 1;
 }
 

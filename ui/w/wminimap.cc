@@ -59,7 +59,7 @@ WMinimap::FinishImage()
 void 
 WMinimap::PresentImage(int x, int y) const
 {
-	SDL_Rect dest = { x, y };
+	SDL_Rect dest = { x, y, sf->w, sf->h };
 	SDL_RenderCopy(&ren, texture, NULL, &dest);
 	SDL_RenderPresent(&ren);
 }
