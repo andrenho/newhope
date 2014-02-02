@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef ENGINE_HERO_H_
 #define ENGINE_HERO_H_
 

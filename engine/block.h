@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef ENGINE_BLOCK_H_
 #define ENGINE_BLOCK_H_
 
@@ -7,6 +5,9 @@
 
 class Block {
 public:
+	static void StaticInitialization();
+	static void StaticDeletion();
+
 	explicit Block(bool crossable)
 		: Crossable(crossable) {}
 

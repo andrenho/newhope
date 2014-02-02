@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef ENGINE_PERSON_H_
 #define ENGINE_PERSON_H_
 

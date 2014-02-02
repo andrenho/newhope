@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #include "engine/citylayout.h"
 
 std::map<CityPair, CityLayout> CityLayouts = {

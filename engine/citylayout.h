@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef ENGINE_CITYLAYOUT_H_
 #define ENGINE_CITYLAYOUT_H_
 

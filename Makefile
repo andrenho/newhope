@@ -5,11 +5,11 @@
 # Please make your configuration changes in the `config.mk` file.
 # 
 
-include config.mk
+include build/config.mk
 ifneq ($(OS), Windows_NT)
-  include libraries.mk
+  include build/libraries.mk
 else
-  include libraries_win.mk
+  include build/libraries_win.mk
 endif
 
 SRC = main.cc			\
@@ -24,6 +24,7 @@ SRC = main.cc			\
       engine/person.cc		\
       engine/vehicle.cc		\
       engine/world.cc		\
+      ui/minimap.cc		\
       ui/w/wireframeui.cc
 
 OBJ = ${SRC:.cc=.o}
@@ -31,7 +32,7 @@ HEADERS = ${SRC:.cc=.h} ui/ui.h engine/point.h engine/rectangle.h
 DIST = 
 DATA = data/PressStart2P.ttf
 
-LINT_IGNORE=-whitespace,-runtime/references
+LINT_IGNORE=-whitespace,-runtime/references,-legal/copyright,-readability/todo
 
 all: options newhope
 
@@ -47,7 +48,7 @@ options:
 	@${CPP} -c ${CPPFLAGS} -o $@ $<
 	@${CPP} -MM ${CPPFLAGS} $*.cc > $*.d
 
-${OBJ}: config.mk libraries.mk
+${OBJ}: build/config.mk build/libraries.mk
 
 -include ${OBJ:.o=.d}
 

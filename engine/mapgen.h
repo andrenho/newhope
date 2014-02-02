@@ -1,16 +1,11 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef ENGINE_MAPGEN_H_
 #define ENGINE_MAPGEN_H_
 
+#include <boost/polygon/polygon.hpp>
 #include <boost/polygon/voronoi.hpp>
 #include <random>
 
 #include "engine/rectangle.h"
-
-class MapArea {
-
-};
 
 class MapGen {
 public:

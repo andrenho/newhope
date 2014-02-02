@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef ENGINE_COMMAND_H_
 #define ENGINE_COMMAND_H_
 

@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #include <chipmunk.h>
 
 #include "./globals.h"

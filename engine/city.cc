@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #include "engine/city.h"
 
 City::City(Point const& pos, CityType type, int n)

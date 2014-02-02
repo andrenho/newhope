@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #include "engine/buildinglayout.h"
 
 std::map<BuildingPair, BuildingLayout> BuildingLayouts = {

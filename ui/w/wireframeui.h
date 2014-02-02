@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef UI_W_WIREFRAMEUI_H_
 #define UI_W_WIREFRAMEUI_H_
 

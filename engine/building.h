@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef ENGINE_BUILDING_H_
 #define ENGINE_BUILDING_H_
 

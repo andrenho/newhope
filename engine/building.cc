@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #include "engine/building.h"
 
 Building::Building(Point const& pos, BuildingType type, int n)

@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #include "ui/w/wireframeui.h"
 
 #include <chipmunk.h>

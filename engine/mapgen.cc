@@ -1,12 +1,8 @@
-// Copyright 2014 <Imperial Software>
-
 #include <vector>
 
 #include "engine/mapgen.h"
 #include "engine/point.h"
 #include "engine/rectangle.h"
-
-using namespace boost::polygon;
 
 MapGen::MapGen(int x1, int y1, int x2, int y2)
 	: MapGen(x1, y1, x2, y2, 0)
@@ -29,40 +25,41 @@ MapGen::~MapGen()
 void
 MapGen::Create()
 {
-	CreateVoronoi(3);
+	CreateVoronoi(2000);
 }
 
 /**************************************************************************/
 
 void
-MapGen::CreateVoronoi(int points)
+MapGen::CreateVoronoi(int npoints)
 {
+	/*
 	std::uniform_int_distribution<int> dx(rect.P1().X(), rect.P2().X()),
 		                           dy(rect.P1().Y(), rect.P2().Y());
 
-	std::vector<point_data<int>> pts(points);
-	for(int i=0; i<points; i++) {
+	std::vector<point_data<int>> pts(npoints);
+	for(int i=0; i<npoints; i++) {
 		int x = dx(generator), y = dy(generator);
 		pts.push_back(point_data<int>(x, y));
 	}
 
 	construct_voronoi(pts.begin(), pts.end(), &vd);
+	printf("%d %d\n", vd.num_cells(), vd.num_edges());
 
-	int result = 0;
-	for (voronoi_diagram<double>::const_vertex_iterator it = vd.vertices().begin(); 
-			it != vd.vertices().end(); ++it) {
-		const voronoi_diagram<double>::vertex_type &vertex = *it;
-		const voronoi_diagram<double>::edge_type *edge = vertex.incident_edge();
+	int finites = 0;
+	std::vector<boost::polygon::point_data<int>> points;
+	for(voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin();
+			it != vd.cells().end(); ++it) {
+		const voronoi_diagram<double>::cell_type& cell = *it;
+		const voronoi_diagram<double>::edge_type* edge = cell.incident_edge();
 		do {
-			if (edge->is_primary()) {
-				//printf("**\n");
-				if(edge->vertex0())
-					printf("** %0.2f %0.2f\n", edge->vertex0()->x(), edge->vertex0()->y());
-				++result;
-			}
+			if(!edge->is_finite())
+				goto next;
 			edge = edge->next();
-		} while (edge != vertex.incident_edge());
-		printf("%0.2f %0.2f\n", vertex.x(), vertex.y());
+		} while(edge != cell.incident_edge());
+		finites++;
+next: 0;
 	}
-	printf("%d\n", result);
+	printf("%d\n", finites);
+	*/
 }

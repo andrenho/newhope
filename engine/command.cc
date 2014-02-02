@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #include "engine/command.h"
 
 #include "./globals.h"

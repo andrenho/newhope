@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef UI_UI_H_
 #define UI_UI_H_
 

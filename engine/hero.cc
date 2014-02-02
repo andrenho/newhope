@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #include "engine/hero.h"
 #include "engine/vehicle.h"
 
