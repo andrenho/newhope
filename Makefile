@@ -25,7 +25,8 @@ SRC = main.cc			\
       engine/vehicle.cc		\
       engine/world.cc		\
       ui/minimap.cc		\
-      ui/w/wireframeui.cc
+      ui/w/wireframeui.cc	\
+      ui/w/wminimap.cc
 
 OBJ = ${SRC:.cc=.o}
 HEADERS = ${SRC:.cc=.h} ui/ui.h engine/point.h engine/rectangle.h
@@ -65,6 +66,9 @@ lint:
 
 check:
 	cppcheck --include=all --inconclusive ${HEADERS} ${SRC}
+
+findleaks:
+	build/findleaks.sh
 
 clean:
 	@echo cleaning

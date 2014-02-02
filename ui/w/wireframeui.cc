@@ -11,6 +11,7 @@
 #include "engine/rectangle.h"
 #include "engine/vehicle.h"
 #include "engine/world.h"
+#include "ui/w/wminimap.h"
 
 WireframeUI::WireframeUI()
 	: active(true), win(nullptr), ren(nullptr), main_font(nullptr),
@@ -53,6 +54,10 @@ WireframeUI::WireframeUI()
 
 WireframeUI::~WireframeUI()
 {
+	if(minimap) {
+		delete minimap;
+	}
+
 	TTF_CloseFont(main_font);
 	TTF_Quit();
 	SDL_DestroyRenderer(ren);
@@ -64,6 +69,7 @@ WireframeUI::~WireframeUI()
 void 
 WireframeUI::Initialize()
 {
+	minimap = new WMinimap(300, 300);
 }
 
 
@@ -107,15 +113,29 @@ WireframeUI::GetEvents(std::vector<Command*>& cmds) const
 }
 
 
+Rectangle& 
+WireframeUI::GetVisibleArea(Rectangle& r) const
+{
+	int win_w, win_h;
+	SDL_GetWindowSize(win, &win_w, &win_h);
+
+	Point p1((-rx) / Z - 5, (-ry) / Z - 5);
+	Point p2((-rx + (win_w)) / Z + 5, (-ry + (win_h)) / Z + 5);
+	r.setP1(p1);
+	r.setP2(p2);
+	return r;
+}
+
+
 void
 WireframeUI::RedrawScene() const
 {
 	Point hero_pos = world->Hero().Position();
 	CenterScreen(hero_pos);
 
-	Rectangle const* visible_area = GetVisibleArea();
-	RenderScene(*visible_area);
-	delete visible_area;
+	Rectangle visible_area;
+	GetVisibleArea(visible_area);
+	RenderScene(visible_area);
 }
 
 
@@ -130,18 +150,6 @@ WireframeUI::CenterScreen(Point const& p) const
 
 	rx = -p.X() * Z + (win_w/2);
 	ry = -p.Y() * Z + (win_h/2);
-}
-
-
-Rectangle const*
-WireframeUI::GetVisibleArea() const
-{
-	int win_w, win_h;
-	SDL_GetWindowSize(win, &win_w, &win_h);
-
-	Point p1((-rx) / Z - 5, (-ry) / Z - 5);
-	Point p2((-rx + (win_w)) / Z + 5, (-ry + (win_h)) / Z + 5);
-	return new Rectangle(p1, p2);
 }
 
 
@@ -259,13 +267,13 @@ void
 WireframeUI::DrawStaticShape(cpBody *body, cpShape *shape, void* data)
 {
 	WireframeUI* self = static_cast<WireframeUI*>(data);
-	Rectangle const* r = self->GetVisibleArea(); // TODO - faster
+	Rectangle r;
+	self->GetVisibleArea(r);
 
 	cpBB bb = cpShapeGetBB(shape);
-	if(bb.l < r->P1().X() || bb.l > r->P2().X() || 
-			bb.t < r->P1().Y() || bb.t > r->P2().Y()) {
+	if(bb.l < r.P1().X() || bb.l > r.P2().X() || 
+			bb.t < r.P1().Y() || bb.t > r.P2().Y()) {
 		// out of bounds
-		delete r;
 		return;
 	}
 
@@ -277,8 +285,6 @@ WireframeUI::DrawStaticShape(cpBody *body, cpShape *shape, void* data)
 		static_cast<int>((bb.t - bb.b) * self->Z) 
 	};
 	SDL_RenderDrawRect(self->ren, &rect);
-
-	delete r;
 }
 
 

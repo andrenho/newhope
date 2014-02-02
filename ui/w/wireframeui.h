@@ -25,11 +25,11 @@ public:
 
 	void GetEvents(std::vector<Command*>& commands) const;
 
+	Rectangle& GetVisibleArea(Rectangle& r) const;
 	void RedrawScene() const;
 
 private:
 	void CenterScreen(Point const& p) const;
-	Rectangle const* GetVisibleArea() const;
 	void GetVisibleTiles(std::vector<Block[10]>& tiles,
 			Rectangle const& area) const;
 	void RenderScene(Rectangle const& rect) const;

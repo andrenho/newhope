@@ -17,8 +17,9 @@ public:
 	void Initialize();
 	void Step();
 
-	int Tiles(const Block* (&block)[10], int x, int y);
-	bool IsTileWalkable(int x, int y);
+	int Tiles(const Block* (&block)[10], int x, int y) const;
+	bool IsTileWalkable(int x, int y) const;
+	void Limits(int& x1, int& y1, int& x2, int& y2) const;
 
 	inline class Hero& Hero() const { return *hero; }
 	inline std::vector<Object*> const& Objects() { return objects; }

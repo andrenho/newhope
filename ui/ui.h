@@ -4,6 +4,9 @@
 #include <cstdint>
 #include <vector>
 
+#include "engine/rectangle.h"
+#include "ui/minimap.h"
+
 class Command;
 
 class UI {
@@ -19,10 +22,13 @@ public:
 
 	virtual void GetEvents(std::vector<Command*>& commands) const = 0;
 
+	virtual Rectangle& GetVisibleArea(Rectangle& r) const = 0;
 	virtual void RedrawScene() const = 0;
 
 protected:
-	UI() { }
+	UI() : minimap(nullptr) { }
+
+	const Minimap* minimap;
 
 private:
 	UI(const UI&);

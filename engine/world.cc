@@ -72,7 +72,7 @@ World::Step()
 
 
 int
-World::Tiles(const Block* (&block)[10], int x, int y)
+World::Tiles(const Block* (&block)[10], int x, int y) const
 {
 	// TODO - check from cache
 
@@ -95,7 +95,7 @@ World::Tiles(const Block* (&block)[10], int x, int y)
 
 
 bool 
-World::IsTileWalkable(int x, int y)
+World::IsTileWalkable(int x, int y) const
 {
 	const Block* block[10];
 	int n = Tiles(block, x, y);
@@ -108,6 +108,16 @@ World::IsTileWalkable(int x, int y)
 	}
 
 	return true;
+}
+
+
+void 
+World::Limits(int& x1, int& y1, int& x2, int& y2) const
+{
+	x1 = this->x1;
+	y1 = this->y1;
+	x2 = this->x2;
+	y2 = this->y2;
 }
 
 
