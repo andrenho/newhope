@@ -25,10 +25,12 @@ public:
 	virtual Rectangle& GetVisibleArea(Rectangle& r) const = 0;
 	virtual void RedrawScene() const = 0;
 
+	virtual void ShowMinimap() const = 0;
+
 protected:
 	UI() : minimap(nullptr) { }
 
-	const Minimap* minimap;
+	Minimap* minimap;
 
 private:
 	UI(const UI&);

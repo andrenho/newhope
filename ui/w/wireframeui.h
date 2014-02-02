@@ -28,6 +28,8 @@ public:
 	Rectangle& GetVisibleArea(Rectangle& r) const;
 	void RedrawScene() const;
 
+	void ShowMinimap() const;
+
 private:
 	void CenterScreen(Point const& p) const;
 	void GetVisibleTiles(std::vector<Block[10]>& tiles,

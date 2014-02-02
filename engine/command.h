@@ -32,4 +32,10 @@ private:
 	bool up, down, left, right;
 };
 
+
+class ShowMinimapCommand : public Command {
+public:
+	void Execute() const;
+};
+
 #endif  // ENGINE_COMMAND_H_

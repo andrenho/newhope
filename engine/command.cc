@@ -34,3 +34,10 @@ MoveCommand::Execute() const
 		}
 	}
 }
+
+
+void
+ShowMinimapCommand::Execute() const
+{
+	ui->ShowMinimap();
+}

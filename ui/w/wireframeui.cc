@@ -48,15 +48,16 @@ WireframeUI::WireframeUI()
 		fprintf(stderr, "\nUnable to load font: %s\n", TTF_GetError());
 		exit(1);
 	}
-
+	
+	// create minimap
+	minimap = new WMinimap(300, 300, *ren);
 }
 
 
 WireframeUI::~WireframeUI()
 {
-	if(minimap) {
-		delete minimap;
-	}
+	minimap->DestroyImage();
+	delete minimap;
 
 	TTF_CloseFont(main_font);
 	TTF_Quit();
@@ -69,7 +70,7 @@ WireframeUI::~WireframeUI()
 void 
 WireframeUI::Initialize()
 {
-	minimap = new WMinimap(300, 300);
+	minimap->Initialize();
 }
 
 
@@ -103,6 +104,12 @@ WireframeUI::GetEvents(std::vector<Command*>& cmds) const
 		case SDL_QUIT:
 			cmds.push_back(new QuitCommand());
 			break;
+		case SDL_KEYDOWN:
+			switch(e.key.keysym.sym) {
+			case SDLK_m:
+				cmds.push_back(new ShowMinimapCommand());
+				break;
+			}
 		}
 	}
 
@@ -136,6 +143,34 @@ WireframeUI::RedrawScene() const
 	Rectangle visible_area;
 	GetVisibleArea(visible_area);
 	RenderScene(visible_area);
+}
+
+
+void 
+WireframeUI::ShowMinimap() const
+{
+	int win_w, win_h;
+	SDL_GetWindowSize(win, &win_w, &win_h);
+
+	// border
+	SDL_SetRenderDrawColor(ren, 0x96, 0x4b, 0x00, SDL_ALPHA_OPAQUE);
+	SDL_Rect r = { win_w/2 - minimap->W/2 - 5, win_h/2 - minimap->H/2 - 5, 
+		minimap->W + 10, minimap->H + 10 };
+	SDL_RenderFillRect(ren, &r);
+
+	// minimap
+	minimap->Draw(win_w/2 - minimap->W/2, win_h/2 - minimap->H/2);
+
+	// wait for keypress
+	SDL_Event e;
+	for(;;) {
+		while(SDL_PollEvent(&e)) {
+			if(e.type == SDL_KEYDOWN) {
+				return;
+			}
+		}
+		SDL_Delay(100);
+	}
 }
 
 
