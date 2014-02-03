@@ -6,6 +6,7 @@
 #include <map>
 #include <random>
 #include <set>
+#include <vector>
 
 #include "engine/rectangle.h"
 #include "engine/point.h"
@@ -34,7 +35,7 @@ private:
 	const Rectangle rect;
 	//boost::polygon::voronoi_diagram<double> vd;
 	std::default_random_engine generator;
-	std::set<Point> points;
+	std::vector<Point> points;
 	std::map<Point,PointData> data;
 
 	std::map<const Rectangle,std::set<Point>> quadrants;

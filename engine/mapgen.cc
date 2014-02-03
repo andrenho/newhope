@@ -58,7 +58,7 @@ MapGen::CreatePoints(int npoints)
 
 	for(int i=0; i<npoints; i++) {
 		int x = dx(generator), y = dy(generator);
-		points.insert(Point(x,y));
+		points.push_back(Point(x,y));
 		data[Point(x,y)] = PointData();
 		if(i < 5) { data[Point(x,y)].Biome = Block::OCEAN; }
 	}
