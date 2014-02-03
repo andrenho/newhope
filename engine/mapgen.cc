@@ -1,10 +1,11 @@
 #include <cfloat>
-#include <vector>
 
+#include "./globals.h"
 #include "engine/block.h"
 #include "engine/mapgen.h"
 #include "engine/point.h"
 #include "engine/rectangle.h"
+#include "engine/world.h"
 
 MapGen::MapGen(int x1, int y1, int x2, int y2)
 	: MapGen(x1, y1, x2, y2, 0)
@@ -27,7 +28,8 @@ MapGen::~MapGen()
 void
 MapGen::Create()
 {
-	CreatePoints(500);
+	CreatePoints(NUMPOINTS);
+	//CreateQuadrants(sqrt(NUMPOINTS) * 3);
 }
 
 
@@ -40,7 +42,7 @@ MapGen::Terrain(int x, int y) const
 	} else {
 		Point p = ClosestPoint(x, y);
 		Block const* b = data.at(p).Biome;
-		tile_cache[Point(x,y)] = b;
+		tile_cache[Point(x,y)] = b; // XXX - remove to deactivate cache
 		return b;
 	}
 }
@@ -56,9 +58,28 @@ MapGen::CreatePoints(int npoints)
 
 	for(int i=0; i<npoints; i++) {
 		int x = dx(generator), y = dy(generator);
-		points.push_back(Point(x,y));
+		points.insert(Point(x,y));
 		data[Point(x,y)] = PointData();
 		if(i < 5) { data[Point(x,y)].Biome = Block::OCEAN; }
+	}
+}
+
+
+void 
+MapGen::CreateQuadrants(int size)
+{
+	int x1, y1, x2, y2;
+	world->Limits(x1, y1, x2, y2);
+
+	for(int x=x1; x<x2; x+=size/3) {
+		for(int y=y1; y<y2; y+=size/3) {
+			for(auto const& p : points) {
+				if(p.X() >= x && p.X() < (x+size)
+				&& p.Y() >= y && p.Y() < (y+size)) {
+					quadrants[Rectangle(Point(x,y), Point(x+size, y+size))].insert(p);
+				}
+			}
+		}
 	}
 }
 
@@ -66,17 +87,51 @@ MapGen::CreatePoints(int npoints)
 Point
 MapGen::ClosestPoint(int x, int y) const
 {
+	/*
+	// find all points in quadrants
+	Point my = Point(x, y);
+
+	Point const* closest = nullptr;
+	double min_dist = DBL_MAX;
+
+	for(auto& quad : quadrants) {
+		if(quad.first.ContainsPoint(my)) {
+			for(auto const& p: quad.second) {
+				double dist = p.Distance(my);
+				if(dist < min_dist) {
+					min_dist = dist;
+					closest = &p;
+				}
+			}
+		}
+	}
+
+	return *closest;
+	*/
+
+	int quad = 600;
+
 	Point my = Point(x, y);
 	Point const* closest = nullptr;
 	double min_dist = DBL_MAX;
-	for(auto const& p: points) {
-		double dist = p.Distance(my);
-		if(dist < min_dist) {
-			min_dist = dist;
-			closest = &p;
+	for(;;) {
+		for(auto const& p: points) {
+			if (p.X() > (x-quad) && p.X() < (x+quad) 
+			&&  p.Y() > (y-quad) && p.Y() < (y+quad)) {
+				double dist = p.Distance(my);
+				if(dist < min_dist) {
+					min_dist = dist;
+					closest = &p;
+				}
+			}
+		}
+		
+		if(!closest) {
+			quad *= 2;
+		} else {
+			return *closest;
 		}
 	}
-	return *closest;
 }
 
 

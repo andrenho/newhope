@@ -5,7 +5,7 @@
 //#include <boost/polygon/voronoi.hpp>
 #include <map>
 #include <random>
-#include <vector>
+#include <set>
 
 #include "engine/rectangle.h"
 #include "engine/point.h"
@@ -27,15 +27,21 @@ public:
 
 private:
 	void CreatePoints(int points);
+	void CreateQuadrants(int size);
+
 	Point ClosestPoint(int x, int y) const;
 
 	const Rectangle rect;
 	//boost::polygon::voronoi_diagram<double> vd;
 	std::default_random_engine generator;
-	std::vector<Point> points;
+	std::set<Point> points;
 	std::map<Point,PointData> data;
 
+	std::map<const Rectangle,std::set<Point>> quadrants;
+
 	mutable std::map<Point,Block const*> tile_cache;
+
+	const int NUMPOINTS = 500;
 };
 
 #endif  // ENGINE_MAPGEN_H_

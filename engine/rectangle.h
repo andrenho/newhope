@@ -19,9 +19,13 @@ public:
 	void setP1(Point const& p) { p1 = p; }
 	void setP2(Point const& p) { p2 = p; }
 
-	bool IsInside(Point const& p) const {
+	bool ContainsPoint(Point const& p) const {
 		return p.X() >= p1.X() && p.Y() >= p1.Y() 
 		    && p.X() <= p2.X() && p.Y() <= p2.Y();
+	}
+
+	bool operator<(const Rectangle& rhs) const {
+		return (p1.Id()+p2.Id()) < (rhs.p1.Id()+rhs.p2.Id());
 	}
 
 private:

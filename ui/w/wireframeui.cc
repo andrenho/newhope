@@ -146,6 +146,13 @@ WireframeUI::RedrawScene() const
 }
 
 
+void
+WireframeUI::PresentScene() const
+{
+	SDL_RenderPresent(ren);
+}
+
+
 void 
 WireframeUI::ShowMinimap() const
 {
@@ -208,12 +215,10 @@ WireframeUI::RenderScene(Rectangle const& rect) const
 	// draw objects
 	for(auto const& object: world->Objects()) {
 		Point pos = object->Position();
-		if(rect.IsInside(pos)) {
+		if(rect.ContainsPoint(pos)) {
 			DrawObject(*object);
 		}
 	}
-	
-	SDL_RenderPresent(ren);
 }
 
 

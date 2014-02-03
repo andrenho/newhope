@@ -18,20 +18,25 @@ public:
 		return *this;
 	} 
 
-	bool operator<(const Point& rhs) const {
+	inline bool operator<(const Point& rhs) const {
 		return id < rhs.id;
 	}
 
-	double MH_Distance(Point const& p) const {
+	inline bool operator==(const Point& rhs) const {
+		return id == rhs.id;
+	}
+
+	inline double MH_Distance(Point const& p) const {
 		return abs(x-p.X()) + abs(y-p.Y());
 	}
 
-	double Distance(Point const& p) const {
+	inline double Distance(Point const& p) const {
 		return sqrt(pow(x-p.X(), 2) + pow(y-p.Y(), 2));
 	}
 
-	double X() const { return x; }
-	double Y() const { return y; }
+	inline double X() const { return x; }
+	inline double Y() const { return y; }
+	inline double Id() const { return id; }
 
 private:
 	double x, y;

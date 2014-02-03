@@ -27,6 +27,7 @@ public:
 
 	Rectangle& GetVisibleArea(Rectangle& r) const;
 	void RedrawScene() const;
+	void PresentScene() const;
 
 	void ShowMinimap() const;
 
