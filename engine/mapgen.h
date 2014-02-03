@@ -1,10 +1,7 @@
 #ifndef ENGINE_MAPGEN_H_
 #define ENGINE_MAPGEN_H_
 
-//#include <boost/polygon/polygon.hpp>
-//#include <boost/polygon/voronoi.hpp>
 #include <map>
-#include <random>
 #include <set>
 #include <vector>
 
@@ -12,8 +9,9 @@
 #include "engine/point.h"
 
 struct PointData {
-	PointData() : Biome(Block::GRASS) {}
+	PointData() : Biome(Block::GRASS), Altitude(0) {}
 	Block const* Biome;
+	int Altitude;
 };
 
 class MapGen {
@@ -28,17 +26,19 @@ public:
 
 private:
 	void CreatePoints(int points);
-	void CreateQuadrants(int size);
+	void CreateHeightmap();
+	void ApplyHeightmap();
 
 	Point ClosestPoint(int x, int y) const;
+	void RandomOffcentre(int& x, int& y, double& r) const;
+	void CreateHill(int x, int y, double r);
+
+	double Random() const;
 
 	const Rectangle rect;
-	//boost::polygon::voronoi_diagram<double> vd;
-	std::default_random_engine generator;
 	std::vector<Point> points;
 	std::map<Point,PointData> data;
-
-	std::map<const Rectangle,std::set<Point>> quadrants;
+	int hm[255][255]; // heightmap
 
 	mutable std::map<Point,Block const*> tile_cache;
 
