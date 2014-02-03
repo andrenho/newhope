@@ -42,7 +42,7 @@ private:
 
 	mutable std::map<Point,Block const*> tile_cache;
 
-	const int NUMPOINTS = 500;
+	const int NUMPOINTS = 1000;
 };
 
 #endif  // ENGINE_MAPGEN_H_

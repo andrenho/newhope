@@ -29,7 +29,6 @@ void
 MapGen::Create()
 {
 	CreatePoints(NUMPOINTS);
-	//CreateQuadrants(sqrt(NUMPOINTS) * 3);
 }
 
 
@@ -60,26 +59,7 @@ MapGen::CreatePoints(int npoints)
 		int x = dx(generator), y = dy(generator);
 		points.push_back(Point(x,y));
 		data[Point(x,y)] = PointData();
-		if(i < 5) { data[Point(x,y)].Biome = Block::OCEAN; }
-	}
-}
-
-
-void 
-MapGen::CreateQuadrants(int size)
-{
-	int x1, y1, x2, y2;
-	world->Limits(x1, y1, x2, y2);
-
-	for(int x=x1; x<x2; x+=size/3) {
-		for(int y=y1; y<y2; y+=size/3) {
-			for(auto const& p : points) {
-				if(p.X() >= x && p.X() < (x+size)
-				&& p.Y() >= y && p.Y() < (y+size)) {
-					quadrants[Rectangle(Point(x,y), Point(x+size, y+size))].insert(p);
-				}
-			}
-		}
+		if(i < 100) { data[Point(x,y)].Biome = Block::OCEAN; }
 	}
 }
 
@@ -87,28 +67,6 @@ MapGen::CreateQuadrants(int size)
 Point
 MapGen::ClosestPoint(int x, int y) const
 {
-	/*
-	// find all points in quadrants
-	Point my = Point(x, y);
-
-	Point const* closest = nullptr;
-	double min_dist = DBL_MAX;
-
-	for(auto& quad : quadrants) {
-		if(quad.first.ContainsPoint(my)) {
-			for(auto const& p: quad.second) {
-				double dist = p.Distance(my);
-				if(dist < min_dist) {
-					min_dist = dist;
-					closest = &p;
-				}
-			}
-		}
-	}
-
-	return *closest;
-	*/
-
 	int quad = 600;
 
 	Point my = Point(x, y);
@@ -133,37 +91,3 @@ MapGen::ClosestPoint(int x, int y) const
 		}
 	}
 }
-
-
-/*
-void
-MapGen::CreateVoronoi(int npoints)
-{
-	std::uniform_int_distribution<int> dx(rect.P1().X(), rect.P2().X()),
-		                           dy(rect.P1().Y(), rect.P2().Y());
-
-	std::vector<point_data<int>> pts(npoints);
-	for(int i=0; i<npoints; i++) {
-		int x = dx(generator), y = dy(generator);
-		pts.push_back(point_data<int>(x, y));
-	}
-
-	construct_voronoi(pts.begin(), pts.end(), &vd);
-	printf("%d %d\n", vd.num_cells(), vd.num_edges());
-
-	int finites = 0;
-	std::vector<boost::polygon::point_data<int>> points;
-	for(voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin();
-			it != vd.cells().end(); ++it) {
-		const voronoi_diagram<double>::cell_type& cell = *it;
-		const voronoi_diagram<double>::edge_type* edge = cell.incident_edge();
-		do {
-			if(!edge->is_finite())
-				goto next;
-			edge = edge->next();
-		} while(edge != cell.incident_edge());
-		finites++;
-next: 0;
-	}
-	printf("%d\n", finites);
-}*/
