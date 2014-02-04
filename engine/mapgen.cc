@@ -84,6 +84,7 @@ MapGen::CreateHeightmap()
 	}
 
 	// normalize
+	/*
 	int max_alt = 0;
 	for(int x=0; x<255; x++) {
 		for(int y=0; y<255; y++) {
@@ -94,11 +95,11 @@ MapGen::CreateHeightmap()
 	}
 	for(int x=0; x<255; x++) {
 		for(int y=0; y<255; y++) {
-			if(hm[x][y] != 0) {
+			if(hm[x][y] > 1) {
 				hm[x][y] /= max_alt;
 			}
 		}
-	}
+	}*/
 }
 
 
@@ -109,10 +110,10 @@ MapGen::ApplyHeightmap()
 	       prop_h = rect.P1().Y() / (rect.P2().Y() - rect.P1().Y());
 
 	for(auto const& p : points) {
-		double prop_x = (p.X() / (rect.P2().X() - rect.P1().X() - prop_w)) * 255,
-		       prop_y = (p.Y() / (rect.P2().Y() - rect.P1().Y() - prop_h)) * 255;
+		double prop_x = (p.X() / (rect.P2().X() - rect.P1().X()) - prop_w) * 255,
+		       prop_y = (p.Y() / (rect.P2().Y() - rect.P1().Y()) - prop_h) * 255;
 		data[p].Altitude = hm[int(prop_x)][int(prop_y)];
-		printf("%d\n", data[p].Altitude);
+		printf("%d %d %d\n", int(prop_x), int(prop_y), data[p].Altitude);
 		if(data[p].Altitude <= 0)
 			data[p].Biome = Block::OCEAN;
 	}
@@ -162,7 +163,7 @@ MapGen::RandomOffcentre(int& x, int& y, double& r) const
 	double theta = Random() * 2 * M_PI + Random();
 	double distance = Random() * (128 - r * 2);
 	x = floor(128 + cos(theta) * distance);
-	y = floor(128 + cos(theta) * distance);
+	y = floor(128 + sin(theta) * distance);
 }
 
 
