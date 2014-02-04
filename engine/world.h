@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include "engine/block.h"
+#include "engine/mapgen.h"
 
 class Object;
 
@@ -24,6 +25,7 @@ public:
 	inline class Hero& Hero() const { return *hero; }
 	inline std::vector<Object*> const& Objects() { return objects; }
 	inline struct cpSpace* SpacePhysics() const { return space; }
+	inline std::vector<std::vector<Point>> const& Rivers() const { return mapgen->Rivers(); }
 
 private:
 	void AddObject(Object* obj);

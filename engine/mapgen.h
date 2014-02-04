@@ -11,7 +11,7 @@
 struct PointData {
 	PointData() : Biome(Block::GRASS), Altitude(0) {}
 	Block const* Biome;
-	int Altitude;
+	double Altitude;  // between 0 and 1
 };
 
 class MapGen {
@@ -22,23 +22,30 @@ public:
 	void Create();
 	Block const* Terrain(int x, int y) const;
 
+	inline std::vector<std::vector<Point>> const& Rivers() const { return rivers; }
+
 	virtual ~MapGen();
 
 private:
 	void CreatePoints(int points);
 	void CreateHeightmap();
-	void ApplyHeightmap();
+	void CreateRivers(int nrivers);
 
 	Point ClosestPoint(int x, int y) const;
 	void RandomOffcentre(int& x, int& y, double& r) const;
 	void CreateHill(int x, int y, double r);
 
+	double PointAltitude(Point const& p) const;
 	double Random() const;
+	Point RandomPoint() const;
 
 	const Rectangle rect;
+	mutable unsigned int seedp;
+
 	std::vector<Point> points;
 	std::map<Point,PointData> data;
-	int hm[255][255]; // heightmap
+	std::vector<std::vector<Point>> rivers;
+	double hm[255][255]; // heightmap
 
 	mutable std::map<Point,Block const*> tile_cache;
 

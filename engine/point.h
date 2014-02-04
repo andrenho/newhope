@@ -15,6 +15,7 @@ public:
 	Point& operator=(const Point& other) { 
 		x = other.X(); 
 		y = other.Y(); 
+		id = other.Id();
 		return *this;
 	} 
 
@@ -40,7 +41,7 @@ public:
 
 private:
 	double x, y;
-	double const id;
+	double id;
 };
 
 #endif  // ENGINE_POINT_H_

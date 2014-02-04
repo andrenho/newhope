@@ -13,6 +13,8 @@ public:
 protected:
 	void CreateImage(int w, int h);
 	void DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b);
+	void DrawPoints(std::vector<Point> const& pts, 
+			uint8_t r, uint8_t g, uint8_t b);
 	void FinishImage();
 	void PresentImage(int x, int y) const;
 

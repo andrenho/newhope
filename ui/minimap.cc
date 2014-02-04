@@ -21,6 +21,9 @@ Minimap::Initialize()
 	int limit_x1, limit_y1, limit_x2, limit_y2;
 	world->Limits(limit_x1, limit_y1, limit_x2, limit_y2);
 
+	int prop_w = limit_x1 / (limit_x2 - limit_x1),
+	    prop_h = limit_y1 / (limit_y2 - limit_y1);
+
 	CreateImage(W, H);
 
 	// draw tiles
@@ -31,7 +34,16 @@ Minimap::Initialize()
 		DrawPoint(x, y, b[0]->R, b[0]->G, b[0]->B);
 	}
 
-	// TODO - draw rivers
+	// draw rivers
+	for(auto const& river : world->Rivers()) {
+		std::vector<Point> pts;
+		for(auto const& p : river) {
+			pts.push_back(Point(
+				(p.X() / (limit_x2 - limit_x1) - prop_w) * W + W/2,
+				(p.Y() / (limit_y2 - limit_y1) - prop_h) * H + H/2));
+		}
+		DrawPoints(pts, 0, 0, 255);
+	}
 	
 	// TODO - draw cities
 	FinishImage();
