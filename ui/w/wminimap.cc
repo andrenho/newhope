@@ -52,6 +52,8 @@ WMinimap::DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b)
 void 
 WMinimap::DrawPoints(std::vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b)
 {
+	SDL_Renderer* sr = SDL_CreateSoftwareRenderer(sf);
+	SDL_SetRenderDrawColor(sr, 54, 54, 97, SDL_ALPHA_OPAQUE);
 	// TODO
 }
 
