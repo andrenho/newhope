@@ -31,7 +31,7 @@ MapGen::Create()
 {
 	CreatePoints(NUMPOINTS);
 	CreateHeightmap();
-	CreateRivers(1);
+	CreateRivers(12);
 }
 
 
@@ -117,27 +117,40 @@ MapGen::CreateRivers(int nrivers)
 	for(int i=0; i<nrivers; i++) {
 
 		// get random point
-		Point p = RandomPoint();
+try_again:
+		double theta = Random() * 2 * M_PI;
+		double distance = Random() * 8000;
+		double x = cos(theta) * distance;
+		double y = sin(theta) * distance;
+		Point p(x, y);
+		//Point p = RandomPoint();
+		if(PointAltitude(p) <= 0)
+			goto try_again;
+		if(i == 0) {
+			p = Point(0, 0);
+		}
 
 		// create a new river
 		rivers.push_back(std::vector<Point>());
+		double angle = Random() * 2 * M_PI;
 		for(;;) {
 			// add point to river
 			rivers[i].push_back(p);
 
 			// find if this point is under water, then finish
-			if(PointAltitude(p) < 0) {
+			if(PointAltitude(p) <= 0) {
 				break;
 			}
 
 			// find next point
 			Point next = p;
 			double min_altitude = 1;
-			for(int j=0; j<12; j++) {
-				double angle = Random() * 2 * M_PI;
-				double length = Random() * 100 + 100;
-				Point np(p.X() + cos(angle) * length,
-				         p.Y() + sin(angle) * length);
+			double ang = 0;
+			for(int j=0; j<30; j++) {
+				ang = angle + Random() * 0.5 * M_PI;
+				double length = Random() * 200 + 200;
+				Point np(p.X() + cos(ang) * length,
+				         p.Y() + sin(ang) * length);
 				if(!rect.ContainsPoint(np)) {
 					continue;
 				}
@@ -147,6 +160,8 @@ MapGen::CreateRivers(int nrivers)
 					next = np;
 				}
 			}
+			angle += ang;
+
 			if(next == p) { // no next point found
 				break;
 			}
@@ -279,8 +294,8 @@ MapGen::RandomOffcentre(int& x, int& y, double& r) const
 	r = Random() * 24 + 6;
 	double theta = Random() * 2 * M_PI + Random();
 	double distance = Random() * (128 - r * 2);
-	x = floor(128 + cos(theta) * distance);
-	y = floor(128 + sin(theta) * distance);
+	x = 128 + cos(theta) * distance;
+	y = 128 + sin(theta) * distance;
 }
 
 

@@ -53,8 +53,16 @@ void
 WMinimap::DrawPoints(std::vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b)
 {
 	SDL_Renderer* sr = SDL_CreateSoftwareRenderer(sf);
-	SDL_SetRenderDrawColor(sr, 54, 54, 97, SDL_ALPHA_OPAQUE);
-	// TODO
+	SDL_SetRenderDrawColor(sr, r, g, b, SDL_ALPHA_OPAQUE);
+	SDL_Point* points = 
+		static_cast<SDL_Point*>(calloc(sizeof(SDL_Point), pts.size()));
+	int i = 0;
+	for(auto const& p : pts) {
+		points[i++] = { static_cast<int>(p.X()), static_cast<int>(p.Y()) };
+	}
+	SDL_RenderDrawLines(sr, points, i);
+	SDL_RenderPresent(sr);
+	SDL_DestroyRenderer(sr);
 }
 
 
