@@ -32,6 +32,9 @@ public:
 	void ShowMinimap() const;
 
 private:
+	WireframeUI(const WireframeUI&);
+	WireframeUI& operator=(const WireframeUI&);
+
 	void CenterScreen(Point const& p) const;
 	void GetVisibleTiles(std::vector<Block[10]>& tiles,
 			Rectangle const& area) const;

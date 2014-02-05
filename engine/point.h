@@ -5,11 +5,15 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <cstdint>
+#include <cstdio>
 
 class Point {
 public:
 	Point(double x, double y)
-		: x(x), y(y), id(x * 1000000 + y) {} // TODO
+		: x(static_cast<double>(floor(x*100)/100.0)),
+		  y(static_cast<double>(floor(y*100)/100.0)),
+		  id(static_cast<int64_t>(x * 100 * 100000 + y * 100)) {}
 
 	// automatic copy constructor
 	Point& operator=(const Point& other) { 
@@ -28,7 +32,7 @@ public:
 	}
 
 	inline double MH_Distance(Point const& p) const {
-		return abs(x-p.X()) + abs(y-p.Y());
+		return fabs(x-p.X()) + fabs(y-p.Y());
 	}
 
 	inline double Distance(Point const& p) const {
@@ -37,11 +41,11 @@ public:
 
 	inline double X() const { return x; }
 	inline double Y() const { return y; }
-	inline double Id() const { return id; }
+	inline int64_t Id() const { return id; }
 
 private:
 	double x, y;
-	double id;
+	int64_t id;
 };
 
 #endif  // ENGINE_POINT_H_

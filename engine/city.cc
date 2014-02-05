@@ -1,11 +1,13 @@
 #include "engine/city.h"
 
-City::City(Point const& pos, CityType type, int n)
-	: Position(pos), layout(CityLayouts[CityPair(type, n)]),
+City::City(int x, int y, CityType type, int n)
+	: X(x), Y(y), layout(CityLayouts[CityPair(type, n)]),
 	  buildings(std::vector<const Building*>())
 {
 	for(auto const& bpos : layout.buildings) {
-		const Building* b = new Building(bpos.second, 
+		const Building* b = new Building(
+				static_cast<int>(bpos.second.X()), 
+				static_cast<int>(bpos.second.Y()), 
 				bpos.first.first, bpos.first.second);
 		buildings.push_back(b);
 	}
@@ -24,8 +26,8 @@ int
 City::Tiles(const Block* (&block)[10], int x, int y) const
 {
 	for(auto const& b : buildings) {
-		if(x >= b->Position.X() && x < b->Position.X()+b->W()
-		&& y >= b->Position.Y() && y < b->Position.Y()+b->H()) {
+		if(x >= b->X && x < b->X+b->W()
+		&& y >= b->Y && y < b->Y+b->H()) {
 			return b->Tiles(block, x, y);
 		}
 	}

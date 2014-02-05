@@ -15,6 +15,8 @@ UI*    ui    = nullptr;
 
 int main(int argc, char** argv)
 {
+	(void) argc; (void) argv;
+
 	ui = new WireframeUI();
 	world = new World(-10000, -10000, 10000, 10000);
 
@@ -22,7 +24,7 @@ int main(int argc, char** argv)
 	ui->Initialize();
 
 	while(ui->Active()) {
-		uint32_t next_frame = ui->Now() + 1000.0/60.0;
+		uint32_t next_frame = ui->Now() + static_cast<int>(1000.0/60.0);
 
 		// process keyboard
 		std::vector<Command*> commands;

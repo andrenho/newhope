@@ -109,7 +109,11 @@ WireframeUI::GetEvents(std::vector<Command*>& cmds) const
 			case SDLK_m:
 				cmds.push_back(new ShowMinimapCommand());
 				break;
+			default:
+				break;
 			}
+		default:
+			break;
 		}
 	}
 
@@ -202,8 +206,8 @@ WireframeUI::RenderScene(Rectangle const& rect) const
 	SDL_RenderClear(ren);
 
 	// draw tiles
-	for(int x=rect.P1().X(); x<rect.P2().X(); x++) {
-		for(int y=rect.P1().Y(); y<rect.P2().Y(); y++) {
+	for(int x=static_cast<int>(rect.P1().X()); x<static_cast<int>(rect.P2().X()); x++) {
+		for(int y=static_cast<int>(rect.P1().Y()); y<static_cast<int>(rect.P2().Y()); y++) {
 			DrawTile(x, y);
 		}
 	}

@@ -38,7 +38,7 @@ WARNINGS=-Wall -Weffc++ -pedantic  \
     -Wunknown-pragmas  -Wunreachable-code -Wunused \
     -Wunused-function  -Wunused-label  -Wunused-parameter \
     -Wunused-value  -Wunused-variable  -Wvariadic-macros \
-    -Wvolatile-register-var  -Wwrite-strings
+    -Wvolatile-register-var  -Wwrite-strings -Werror
 CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${DATAPREFIX}\" ${WARNINGS} -I. -I/usr/include -std=c++11
 LDFLAGS = -L/usr/lib
 

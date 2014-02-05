@@ -16,7 +16,8 @@ MapGen::MapGen(int x1, int y1, int x2, int y2)
 
 
 MapGen::MapGen(int x1, int y1, int x2, int y2, unsigned int seed)
-	: rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed)
+	: rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed),
+	  points({}), data({}), rivers({}), tile_cache({})
 {
 }
 
@@ -55,8 +56,8 @@ void
 MapGen::CreatePoints(int npoints)
 {
 	for(int i=0; i<npoints; i++) {
-		int x = Random() * (-rect.P1().X()+rect.P2().X()) + rect.P1().X();
-		int y = Random() * (-rect.P1().Y()+rect.P2().Y()) + rect.P1().Y();
+		double x = Random() * (-rect.P1().X()+rect.P2().X()) + rect.P1().X();
+		double y = Random() * (-rect.P1().Y()+rect.P2().Y()) + rect.P1().Y();
 		points.push_back(Point(x,y));
 		data[Point(x,y)] = PointData();
 	}
@@ -237,8 +238,8 @@ MapGen::PointAltitude(Point const& p) const
 {
 	double prop_w = rect.P1().X() / (rect.P2().X() - rect.P1().X()),
 	       prop_h = rect.P1().Y() / (rect.P2().Y() - rect.P1().Y());
-	int prop_x = (p.X() / (rect.P2().X() - rect.P1().X()) - prop_w) * 255,
-	    prop_y = (p.Y() / (rect.P2().Y() - rect.P1().Y()) - prop_h) * 255;
+	int prop_x = static_cast<int>((p.X() / (rect.P2().X() - rect.P1().X()) - prop_w) * 255),
+	    prop_y = static_cast<int>((p.Y() / (rect.P2().Y() - rect.P1().Y()) - prop_h) * 255);
 	return hm[prop_x][prop_y];
 }
 
@@ -293,8 +294,8 @@ MapGen::RandomOffcentre(int& x, int& y, double& r) const
 	r = Random() * 24 + 6;
 	double theta = Random() * 2 * M_PI + Random();
 	double distance = Random() * (128 - r * 2);
-	x = 128 + cos(theta) * distance;
-	y = 128 + sin(theta) * distance;
+	x = static_cast<int>(128 + cos(theta) * distance);
+	y = static_cast<int>(128 + sin(theta) * distance);
 }
 
 
@@ -303,7 +304,7 @@ MapGen::CreateHill(int x, int y, double r)
 {
 	for(int xx=0; xx<255; xx++) {
 		for(int yy=0; yy<255; yy++) {
-			int alt = pow(r,2) - (pow(xx-x,2) + pow(yy-y,2));
+			int alt = static_cast<int>(pow(r,2) - (pow(xx-x,2) + pow(yy-y,2)));
 			if(alt > -1) {
 				hm[xx][yy] += alt;
 			}

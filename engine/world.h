@@ -24,7 +24,6 @@ public:
 
 	inline class Hero& Hero() const { return *hero; }
 	inline std::vector<Object*> const& Objects() { return objects; }
-	inline struct cpSpace* SpacePhysics() const { return space; }
 	inline std::vector<std::vector<Point>> const& Rivers() const { return mapgen->Rivers(); }
 
 private:
@@ -43,11 +42,13 @@ private:
 	int x1, y1, x2, y2;
 	class Hero* hero;
 	struct cpSpace* space;
+
+	class MapGen* mapgen;
+
 	std::vector<Object*> objects;
 	std::vector<class City*> cities;
 
 	std::map<struct cpBody*, Object*> physics_ptr;
-	class MapGen* mapgen;
 };
 
 #endif  // ENGINE_WORLD_H_

@@ -20,6 +20,9 @@ protected:
 	void PresentImage(int x, int y) const;
 
 private:
+	WMinimap(const WMinimap&);
+	WMinimap& operator=(const WMinimap&);
+
 	struct SDL_Renderer& ren;
 	struct SDL_Surface* sf;
 	struct SDL_Texture* texture;

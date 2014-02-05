@@ -7,10 +7,16 @@ class Object {
 public:
 	virtual ~Object() { }
 
-	virtual void InitializePhysics(struct cpSpace* space) { }
-	virtual void DestroyPhysics(struct cpSpace* space) { }
+	virtual void InitializePhysics(struct cpSpace* space) { 
+		(void) space;
+	}
+	virtual void DestroyPhysics(struct cpSpace* space) {
+		(void) space;
+	}
 
-	virtual void Collision(Object& obj) { }
+	virtual void Collision(Object& obj) {
+		(void) obj;
+	}
 
 	virtual struct cpBody* PhysicsBodyPtr() const = 0;
 	virtual Point Position() const = 0;

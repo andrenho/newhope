@@ -47,6 +47,9 @@ public:
 	VehicleSteering Steering;
 
 private:
+	Vehicle(const Vehicle&);
+	Vehicle& operator=(const Vehicle&);
+
 	void UpdateFriction(struct cpBody* body);
 	void UpdateDrive(struct cpBody* wheel, double maxForce);
 	void UpdateTurn(struct cpBody* wheel);

@@ -7,7 +7,7 @@
 
 class Building {
 public:
-	Building(Point const& pos, BuildingType type, int n);
+	Building(int x, int y, BuildingType type, int n);
 	virtual ~Building() { }
 
 	int Tiles(const Block* (&block)[10], int x, int y) const;
@@ -15,7 +15,7 @@ public:
 	inline int W() const { return layout.w; }
 	inline int H() const { return layout.h; }
 
-	const Point Position;
+	const int X, Y;
 
 private:
 	Building(const Building&);

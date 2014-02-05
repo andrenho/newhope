@@ -9,7 +9,7 @@
 
 class City {
 public:
-	City(Point const& pos, CityType type, int n);
+	City(int x, int y, CityType type, int n);
 	virtual ~City();
 
 	int Tiles(const Block* (&block)[10], int x, int y) const;
@@ -17,7 +17,7 @@ public:
 	inline int W() const { return layout.w; }
 	inline int H() const { return layout.h; }
 
-	const Point Position;
+	const int X, Y;
 
 private:
 	City(const City&);

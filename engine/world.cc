@@ -12,7 +12,8 @@
 
 World::World(int x1, int y1, int x2, int y2)
 	: x1(x1), y1(y1), x2(x2), y2(y2), hero(nullptr), space(nullptr),
-	  mapgen(new MapGen(x1, y1, x2, y2))
+	  mapgen(new MapGen(x1, y1, x2, y2)), objects({}), cities({}),
+	  physics_ptr({})
 { 
 }
 
@@ -56,7 +57,7 @@ World::Initialize()
 	AddObject(hero);
 
 	// initialize cities
-	cities.push_back(new City(Point(0, 0), CityType::AGRICULTURAL, 1));
+	cities.push_back(new City(0, 0, CityType::AGRICULTURAL, 1));
 	AddStaticObjects();
 }
 
@@ -77,8 +78,8 @@ World::Tiles(const Block* (&block)[10], int x, int y) const
 	// TODO - check from cache
 
 	for(auto const& city: cities) {
-		if(x >= city->Position.X() && x<(city->Position.X()+city->W())
-		&& y >= city->Position.Y() && y<(city->Position.Y()+city->H())) {
+		if(x >= city->X && x<(city->X+city->W())
+		&& y >= city->Y && y<(city->Y+city->H())) {
 			int n = city->Tiles(block, x, y);
 			if(block[0] == Block::EMPTY) {
 				block[0] = mapgen->Terrain(x, y);
@@ -135,8 +136,8 @@ void
 World::AddStaticObjects()
 {
 	for(auto const& city : cities) {
-		for(int x=city->Position.X(); x<city->Position.X()+city->W(); x++) {
-			for(int y=city->Position.Y(); y<city->Position.Y()+city->H(); y++) {
+		for(int x=city->X; x<city->X+city->W(); x++) {
+			for(int y=city->Y; y<city->Y+city->H(); y++) {
 				if(!IsTileWalkable(x, y)) {
 					AddStaticObject(x+0.5, y+0.5, 1, 1);
 				}
@@ -159,6 +160,8 @@ World::AddStaticObject(double x, double y, double w, double h)
 void 
 World::FreeStaticShape(cpBody *body, cpShape *shape, void* data)
 {
+	(void) body;
+
 	World *object = static_cast<World*>(data);
 	cpSpaceRemoveShape(object->space, shape);
 	cpShapeFree(shape);

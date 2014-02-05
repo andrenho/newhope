@@ -7,7 +7,11 @@
 const VehicleModel* VehicleModel::GENERIC = new VehicleModel(3, 7);
 
 Vehicle::Vehicle(Point init_pos, const VehicleModel* model)
-	: Steering({false, false, 0}), model(*model), init_pos(init_pos)
+	: Steering({false, false, 0}), model(*model), init_pos(init_pos),
+	body(nullptr), rear_wheel_body(nullptr), front_wheel_body(nullptr),
+	shape(nullptr), rear_wheel_shape(nullptr), front_wheel_shape(nullptr),
+	rear_wheel_joint1(nullptr), rear_wheel_joint2(nullptr),
+	front_wheel_joint1(nullptr), front_wheel_joint2(nullptr)
 {
 }
 
@@ -23,8 +27,8 @@ Vehicle::InitializePhysics(struct cpSpace* space)
 	// create vehicle
 	cpFloat mass = 150;
 	cpFloat moment = cpMomentForBox(mass, model.W, model.H);
-	body = cpSpaceAddBody(world->SpacePhysics(), cpBodyNew(mass, moment));
-	shape = cpSpaceAddShape(world->SpacePhysics(), cpBoxShapeNew2(body, 
+	body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
+	shape = cpSpaceAddShape(space, cpBoxShapeNew2(body, 
 				cpBBNew(-(model.W/2), -(model.H/2), 
 					(model.W/2), (model.H/2))));
 	cpBodySetPos(body, cpv(init_pos.X(), init_pos.Y()));
@@ -36,34 +40,34 @@ Vehicle::InitializePhysics(struct cpSpace* space)
 	cpFloat wheel_moment = cpMomentForBox(wheel_mass, ww, wh);
 
 	// create rear wheel
-	rear_wheel_body = cpSpaceAddBody(world->SpacePhysics(), 
+	rear_wheel_body = cpSpaceAddBody(space, 
 			cpBodyNew(mass, wheel_moment));
-	rear_wheel_shape = cpSpaceAddShape(world->SpacePhysics(), 
+	rear_wheel_shape = cpSpaceAddShape(space, 
 			cpBoxShapeNew2(rear_wheel_body,
 				cpBBNew(-(ww/2), -(wh/2), (ww/2), (wh/2))));
 	cpShapeSetGroup(rear_wheel_shape, 1);
 	cpBodySetPos(rear_wheel_body, 
 			cpv(init_pos.X(), init_pos.Y()-(model.H/2)+1.5));
-	rear_wheel_joint1 = cpSpaceAddConstraint(world->SpacePhysics(), 
+	rear_wheel_joint1 = cpSpaceAddConstraint(space, 
 			cpPivotJointNew(body, rear_wheel_body, 
 				cpBodyGetPos(rear_wheel_body)));
-	rear_wheel_joint2 = cpSpaceAddConstraint(world->SpacePhysics(), 
+	rear_wheel_joint2 = cpSpaceAddConstraint(space, 
 			cpRotaryLimitJointNew(body, rear_wheel_body, 
 				0, 0));
 
 	// create front wheel
-	front_wheel_body = cpSpaceAddBody(world->SpacePhysics(), 
+	front_wheel_body = cpSpaceAddBody(space, 
 			cpBodyNew(mass, wheel_moment));
-	front_wheel_shape = cpSpaceAddShape(world->SpacePhysics(), 
+	front_wheel_shape = cpSpaceAddShape(space, 
 			cpBoxShapeNew2(front_wheel_body,
 				cpBBNew(-(ww/2), -(wh/2), (ww/2), (wh/2))));
 	cpShapeSetGroup(front_wheel_shape, 1);
 	cpBodySetPos(front_wheel_body, 
 			cpv(init_pos.X(), init_pos.Y()+(model.H/2)-1.5));
-	front_wheel_joint1 = cpSpaceAddConstraint(world->SpacePhysics(), 
+	front_wheel_joint1 = cpSpaceAddConstraint(space, 
 			cpPivotJointNew(body, front_wheel_body, 
 				cpBodyGetPos(front_wheel_body)));
-	front_wheel_joint2 = cpSpaceAddConstraint(world->SpacePhysics(), 
+	front_wheel_joint2 = cpSpaceAddConstraint(space, 
 			cpRotaryLimitJointNew(body, front_wheel_body, 
 				-M_PI/6, M_PI/6));
 }
@@ -72,16 +76,16 @@ Vehicle::InitializePhysics(struct cpSpace* space)
 void 
 Vehicle::DestroyPhysics(struct cpSpace* space)
 {
-	cpSpaceRemoveShape(world->SpacePhysics(), shape);
-	cpSpaceRemoveShape(world->SpacePhysics(), rear_wheel_shape);
-	cpSpaceRemoveShape(world->SpacePhysics(), front_wheel_shape);
-	cpSpaceRemoveConstraint(world->SpacePhysics(), rear_wheel_joint1);
-	cpSpaceRemoveConstraint(world->SpacePhysics(), rear_wheel_joint2);
-	cpSpaceRemoveConstraint(world->SpacePhysics(), front_wheel_joint1);
-	cpSpaceRemoveConstraint(world->SpacePhysics(), front_wheel_joint2);
-	cpSpaceRemoveBody(world->SpacePhysics(), body);
-	cpSpaceRemoveBody(world->SpacePhysics(), rear_wheel_body);
-	cpSpaceRemoveBody(world->SpacePhysics(), front_wheel_body);
+	cpSpaceRemoveShape(space, shape);
+	cpSpaceRemoveShape(space, rear_wheel_shape);
+	cpSpaceRemoveShape(space, front_wheel_shape);
+	cpSpaceRemoveConstraint(space, rear_wheel_joint1);
+	cpSpaceRemoveConstraint(space, rear_wheel_joint2);
+	cpSpaceRemoveConstraint(space, front_wheel_joint1);
+	cpSpaceRemoveConstraint(space, front_wheel_joint2);
+	cpSpaceRemoveBody(space, body);
+	cpSpaceRemoveBody(space, rear_wheel_body);
+	cpSpaceRemoveBody(space, front_wheel_body);
 
 	cpShapeFree(shape);
 	cpShapeFree(rear_wheel_shape);
@@ -163,7 +167,7 @@ Vehicle::UpdateFriction(struct cpBody* body)
 	// kill angular velocity?
 	// cpFloat inertia = cpBodyGetMoment(body);
 	cpFloat av = cpBodyGetAngVel(body);
-	if(av != 0)
+	if(av < 0.0001 || av > 0.0001)
 		cpBodySetAngVel(body, av / 1.2);
 	
 	// apply drag
