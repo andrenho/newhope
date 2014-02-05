@@ -7,6 +7,10 @@
 # vinterm version
 VERSION = 0.0.1
 
+# compiler and linker
+CPP = g++
+#CPP = clang++
+
 # add debugging info
 DEBUG = yes
 DUMA = no
@@ -18,8 +22,8 @@ PREFIX = /usr/local
 DATAPREFIX="data"
 
 # basic flags
-WARNINGS=-Wall -Weffc++ -pedantic  \
-    -pedantic-errors -Wextra  -Wall -Wcast-align \
+WARNINGS=-Weffc++ -pedantic  \
+    -Wextra  -Wall -Wcast-align \
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion \
     -Wdisabled-optimization \
     -Wfloat-equal  -Wformat  -Wformat=2 \
@@ -27,7 +31,7 @@ WARNINGS=-Wall -Weffc++ -pedantic  \
     -Wformat-y2k \
     -Wimport  -Winit-self  -Winline \
     -Winvalid-pch   \
-    -Wunsafe-loop-optimizations  -Wlong-long -Wmissing-braces \
+    -Wlong-long -Wmissing-braces \
     -Wmissing-field-initializers -Wmissing-format-attribute   \
     -Wmissing-include-dirs -Wmissing-noreturn \
     -Wpacked -Wparentheses  -Wpointer-arith \
@@ -38,7 +42,10 @@ WARNINGS=-Wall -Weffc++ -pedantic  \
     -Wunknown-pragmas  -Wunreachable-code -Wunused \
     -Wunused-function  -Wunused-label  -Wunused-parameter \
     -Wunused-value  -Wunused-variable  -Wvariadic-macros \
-    -Wvolatile-register-var  -Wwrite-strings -Werror
+    -Wvolatile-register-var  -Wwrite-strings
+ifeq (${CPP},g++)
+  WARNINGS += -Wunsafe-loop-optimizations
+endif
 CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${DATAPREFIX}\" ${WARNINGS} -I. -I/usr/include -std=c++11
 LDFLAGS = -L/usr/lib
 
@@ -53,7 +60,7 @@ ifeq (${DEBUG},yes)
   LDFLAGS += -g
 else
   # production flags
-  CPPFLAGS += -Os -DNDEBUG
+  CPPFLAGS += -O3 -DNDEBUG
   LDFLAGS += -s
 endif
 
@@ -62,6 +69,3 @@ ifeq (${PROFILING},yes)
   LDFLAGS += -pg
 endif
 
-# compiler and linker
-CPP = g++
-#CPP = clang++

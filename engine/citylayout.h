@@ -17,13 +17,14 @@ typedef std::pair<CityType, int> CityPair;
 typedef std::pair<BuildingPair, Point> BuildingPosition;
 
 struct CityLayout {
-	CityLayout(int w, int h, std::vector<BuildingPosition> buildings)
+	CityLayout(int w, int h, 
+		   std::vector<BuildingPosition> buildings)
 		: w(w), h(h), buildings(buildings) {}
 
 	CityLayout()
 		: w(0), h(0), buildings({}) {}
 
-	int w, h;
+	const int w, h;
 	std::vector<BuildingPosition> buildings;
 };
 

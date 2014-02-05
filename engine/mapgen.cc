@@ -7,6 +7,7 @@
 #include "engine/mapgen.h"
 #include "engine/point.h"
 #include "engine/rectangle.h"
+#include "engine/rivergen.h"
 #include "engine/world.h"
 
 MapGen::MapGen(int x1, int y1, int x2, int y2)
@@ -30,8 +31,15 @@ MapGen::~MapGen()
 void
 MapGen::Create()
 {
+	// create land
 	CreatePoints(NUMPOINTS);
 	CreateHeightmap();
+	
+	// create rivers
+	Rivergen rivergen(hm, rect);
+	for(int i=0; i<1; i++) {
+		rivers.push_back(rivergen.CreateRiver());
+	}
 }
 
 

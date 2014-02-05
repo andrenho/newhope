@@ -44,8 +44,8 @@ void
 WMinimap::DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b)
 {
 	Uint8* pixel = reinterpret_cast<Uint8*>(sf->pixels);
-	pixel += (y * sf->pitch) + (x * sizeof(Uint32));
-	*(reinterpret_cast<Uint32*>(pixel)) = (r<<16) | (g<<8) | (b);
+	pixel += (y * static_cast<int>(sf->pitch)) + (x * static_cast<int>(sizeof(Uint32)));
+	*(reinterpret_cast<Uint32*>(pixel)) = static_cast<Uint32>((r<<16) | (g<<8) | (b));
 }
 
 
