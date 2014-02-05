@@ -18,7 +18,9 @@ public:
 	const uint8_t R, G, B;
 
 	// terrain
-	static const Block *EMPTY, *GRASS, *OCEAN;
+	static const Block *EMPTY, *GRASS, *WATER, *DESERT, *SAVANNAH, *BARE,
+		           *TROPICAL_FOREST, *TEMPERATE_FOREST, *SHRUBLAND,
+			   *TUNDRA, *SNOW;
 	
 	// objects
 	static const Block *FLOOR, *WOODEN_WALL, *DOOR_OPEN;

@@ -9,9 +9,10 @@
 #include "engine/point.h"
 
 struct PointData final {
-	PointData() : Biome(Block::GRASS), Altitude(0) {}
+	PointData() : Biome(Block::GRASS), Altitude(0), Moisture(0) {}
 	Block const* Biome;
 	double Altitude;  // between 0 and 1
+	double Moisture;
 };
 
 class MapGen final {
@@ -29,10 +30,13 @@ public:
 private:
 	void CreatePoints(int points);
 	void CreateHeightmap();
+	void CalculateMoisture();
+	void CreateBiomes();
 
 	Point ClosestPoint(int x, int y) const;
 	void RandomOffcentre(int& x, int& y, double& r) const;
 	void CreateHill(int x, int y, double r);
+	double DistanceFromWater(Point const& p) const;
 
 	double PointAltitude(Point const& p) const;
 	double Random() const;

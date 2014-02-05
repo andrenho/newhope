@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cfloat>
 #include <cmath>
 #include <ctime>
@@ -37,13 +38,13 @@ MapGen::Create()
 	
 	// create rivers
 	Rivergen rivergen(hm, rect, seedp);
-	for(int i=0; i<1; i++) {
+	for(int i=0; i<12; i++) {
 		rivers.push_back(rivergen.CreateRiver());
-		/*
-		for(auto& r : rivergen.CreateRiver()) {
-			printf("%0.2f %0.2f\n", r.X(), r.Y());
-		}*/
 	}
+
+	// find biomes
+	CalculateMoisture();
+	CreateBiomes();
 }
 
 
@@ -115,10 +116,65 @@ MapGen::CreateHeightmap()
 	// apply heightmap
 	for(auto const& p : points) {
 		data[p].Altitude = PointAltitude(p);
+	}
+}
 
-		// TODO
-		if(data[p].Altitude <= 0)
-			data[p].Biome = Block::OCEAN;
+
+void 
+MapGen::CalculateMoisture()
+{
+	// calculate
+	double max_moisture = 0;
+	for(auto const& p : points) {
+		data[p].Moisture = DistanceFromWater(p);
+		if(data[p].Moisture > max_moisture) {
+			max_moisture = data[p].Moisture;
+		}
+	}
+
+	// normalize
+	for(auto const& p : points) {
+		data[p].Moisture = max_moisture - data[p].Moisture;
+		data[p].Moisture /= max_moisture;
+	}
+}
+
+
+void 
+MapGen::CreateBiomes()
+{
+	/* ALT MOIST 1---------------------------0
+ 	    1        snow       tundra      bare
+            |        temperF    shurbland  savannah
+            0        tropF      grass      desert */
+	for(auto const& p : points) {
+		if(data[p].Altitude <= 0) {
+			data[p].Biome = Block::WATER;
+		} else if(data[p].Altitude < 0.3) {
+			if(data[p].Moisture < 0.65) {
+				data[p].Biome = Block::DESERT;
+			} else if(data[p].Moisture < 0.85) {
+				data[p].Biome = Block::GRASS;
+			} else {
+				data[p].Biome = Block::TROPICAL_FOREST;
+			}
+		} else if(data[p].Altitude < 0.55) {
+			if(data[p].Moisture < 0.8) {
+				data[p].Biome = Block::SAVANNAH;
+			} else if(data[p].Moisture < 0.9) {
+				data[p].Biome = Block::SHRUBLAND;
+			} else {
+				data[p].Biome = Block::TEMPERATE_FOREST;
+			}
+		} else {
+			if(data[p].Moisture < 0.8) {
+				data[p].Biome = Block::BARE;
+			} else if(data[p].Moisture < 0.9) {
+				data[p].Biome = Block::TUNDRA;
+			} else {
+				data[p].Biome = Block::SNOW;
+			}
+		}
 	}
 }
 
@@ -131,6 +187,19 @@ MapGen::PointAltitude(Point const& p) const
 	int prop_x = static_cast<int>((p.X() / (rect.P2().X() - rect.P1().X()) - prop_w) * 255),
 	    prop_y = static_cast<int>((p.Y() / (rect.P2().Y() - rect.P1().Y()) - prop_h) * 255);
 	return hm[prop_x][prop_y];
+}
+
+
+double 
+MapGen::DistanceFromWater(Point const& p) const
+{
+	double min_distance = DBL_MAX;
+	for(auto const& river : rivers) {
+		for(auto const& pt : river) {
+			min_distance = std::min(pt.MH_Distance(p), min_distance);
+		}
+	}
+	return min_distance;
 }
 
 

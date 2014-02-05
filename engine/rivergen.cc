@@ -42,6 +42,7 @@ try_again:
 		river.push_back(p);
 	}
 	if(river.size() < 5) {
+		river.clear();
 		goto try_again;
 	}
 
@@ -59,7 +60,7 @@ Rivergen::Random() const
 Point 
 Rivergen::RandomPoint() const
 {
-	return points.at(static_cast<int>(Random() * points.size()));
+	return points.at(static_cast<int>(Random() * static_cast<double>(points.size())));
 }
 
 
@@ -90,8 +91,6 @@ Rivergen::NextPoint(Point& p, std::vector<Point> ignore) const
 			next = pt;
 		}
 	}
-
-	printf("%0.2f %0.2f %f\n", next.X(), next.Y(), r);
 
 	return next;
 }
