@@ -1,6 +1,7 @@
 #ifndef UI_W_WMINIMAP_H_
 #define UI_W_WMINIMAP_H_
 
+#include <vector>
 #include "ui/minimap.h"
 
 class WMinimap : public Minimap {

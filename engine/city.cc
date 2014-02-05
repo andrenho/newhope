@@ -1,7 +1,8 @@
 #include "engine/city.h"
 
 City::City(Point const& pos, CityType type, int n)
-	: Position(pos), layout(CityLayouts[CityPair(type, n)])
+	: Position(pos), layout(CityLayouts[CityPair(type, n)]),
+	  buildings(std::vector<const Building*>())
 {
 	for(auto const& bpos : layout.buildings) {
 		const Building* b = new Building(bpos.second, 

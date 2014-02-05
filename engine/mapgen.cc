@@ -31,7 +31,6 @@ MapGen::Create()
 {
 	CreatePoints(NUMPOINTS);
 	CreateHeightmap();
-	CreateRivers(12);
 }
 
 

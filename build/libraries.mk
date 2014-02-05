@@ -10,5 +10,5 @@ else
 endif
 
 # chipmkunk library
-CPPFLAGS += -I/usr/include/chipmunk
+CPPFLAGS += -isystem/usr/include/chipmunk
 LDFLAGS += -lchipmunk -lm

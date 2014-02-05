@@ -15,6 +15,14 @@ enum BuildingType {
 typedef std::pair<BuildingType, int> BuildingPair;
 
 struct BuildingLayout {
+	BuildingLayout()
+		: w(0), h(0), floors(0), floor({}), label({}) {}
+
+	BuildingLayout(int w, int h, int floors,
+			std::vector<std::vector<std::string>> floor,
+			std::map<const char, const Block*> label)
+		: w(w), h(h), floors(floors), floor(floor), label(label) {}
+
 	int w, h, floors;
 	std::vector<std::vector<std::string>> floor;
 	std::map<const char, const Block*> label;

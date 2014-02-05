@@ -4,7 +4,7 @@ std::map<BuildingPair, BuildingLayout> BuildingLayouts = {
 { 
 	BuildingPair(BuildingType::GENERAL_STORE, 1), 
 	{
-		8, 5, 4,
+		BuildingLayout(8, 5, 4,
 		{
 			{
 				"        ",
@@ -38,7 +38,7 @@ std::map<BuildingPair, BuildingLayout> BuildingLayouts = {
 			{ 'f', Block::FLOOR },
 			{ 'w', Block::WOODEN_WALL },
 			{ 'd', Block::DOOR_OPEN },
-		},
+		}),
 	},
 },
 };
