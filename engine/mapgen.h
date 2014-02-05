@@ -29,7 +29,6 @@ public:
 private:
 	void CreatePoints(int points);
 	void CreateHeightmap();
-	void CreateRivers(int nrivers);
 
 	Point ClosestPoint(int x, int y) const;
 	void RandomOffcentre(int& x, int& y, double& r) const;

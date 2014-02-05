@@ -26,6 +26,8 @@ public:
 	inline std::vector<Object*> const& Objects() { return objects; }
 	inline std::vector<std::vector<Point>> const& Rivers() const { return mapgen->Rivers(); }
 
+	inline struct cpSpace* SpacePhysics() const { return space; }
+
 private:
 	void AddObject(Object* obj);
 	void AddStaticObjects();

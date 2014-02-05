@@ -310,6 +310,8 @@ WireframeUI::DrawShape(cpBody* body, cpShape* shape) const
 void 
 WireframeUI::DrawStaticShape(cpBody *body, cpShape *shape, void* data)
 {
+	(void) body;
+
 	WireframeUI* self = static_cast<WireframeUI*>(data);
 	Rectangle r;
 	self->GetVisibleArea(r);
@@ -336,7 +338,7 @@ void
 WireframeUI::RenderCircle(double x1, double y1, double r) const
 {
 	double x=r, y=0;
-	int radiusError = 1-x;
+	int radiusError = 1-static_cast<int>(x);
 	int i = 0;
 	static SDL_Point circle_pixel[1000];
 
@@ -351,10 +353,10 @@ WireframeUI::RenderCircle(double x1, double y1, double r) const
 		circle_pixel[i++] = SDL_Point{static_cast<int>( y + x1), static_cast<int>(-x + y1) };
 		y++;
 		if(radiusError<0) {
-			radiusError += 2*y+1;
+			radiusError += static_cast<int>(2*y+1);
 		} else {
 			x--;
-			radiusError += 2*(y-x+1);
+			radiusError += static_cast<int>(2*(y-x+1));
 		}
 	}
 
