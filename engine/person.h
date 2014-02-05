@@ -5,7 +5,6 @@
 
 class Person : public Object {
 public:
-	explicit Person(Point init);
 	virtual ~Person() { }
 
 	virtual void InitializePhysics(struct cpSpace* space);
@@ -21,6 +20,8 @@ public:
 	inline struct cpBody* PhysicsBodyPtr() const { return body; }
 
 protected:
+	explicit Person(Point init);
+
 	const Point init;
 	struct cpBody *body, *target;
 	struct cpShape* shape;
@@ -31,7 +32,6 @@ protected:
 private:
 	Person(const Person&);
 	Person& operator=(const Person&);
-
 };
 
 #endif  // ENGINE_PERSON_H_

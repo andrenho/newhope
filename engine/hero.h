@@ -4,7 +4,7 @@
 #include "engine/person.h"
 #include "engine/point.h"
 
-class Hero : public Person {
+class Hero final : public Person {
 public:
 	explicit Hero(Point init);
 	Hero(Point init, class Vehicle* vehicle);

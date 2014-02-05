@@ -5,7 +5,7 @@
 
 #include "engine/point.h"
 
-class Rectangle {
+class Rectangle final {
 public:
 	Rectangle()
 		: p1(Point(0,0)), p2(Point(0,0)) {}

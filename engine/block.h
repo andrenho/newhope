@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-class Block {
+class Block final {
 public:
 	static void StaticInitialization();
 	static void StaticDeletion();

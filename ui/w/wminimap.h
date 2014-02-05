@@ -4,10 +4,10 @@
 #include <vector>
 #include "ui/minimap.h"
 
-class WMinimap : public Minimap {
+class WMinimap final : public Minimap {
 public:
 	WMinimap(int w, int h, struct SDL_Renderer& ren);
-	virtual ~WMinimap();
+	~WMinimap();
 
 	void DestroyImage();
 

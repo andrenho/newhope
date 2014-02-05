@@ -14,7 +14,7 @@ enum BuildingType {
 
 typedef std::pair<BuildingType, int> BuildingPair;
 
-struct BuildingLayout {
+struct BuildingLayout final {
 	BuildingLayout()
 		: w(0), h(0), floors(0), floor({}), label({}) {}
 

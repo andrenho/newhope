@@ -17,13 +17,13 @@ private:
 };
 
 
-class QuitCommand : public Command {
+class QuitCommand final : public Command {
 public:
 	void Execute() const;
 };
 
 
-class MoveCommand : public Command {
+class MoveCommand final : public Command {
 public:
 	MoveCommand(bool up, bool down, bool left, bool right) : 
 		up(up), down(down), left(left), right(right) { }
@@ -33,7 +33,7 @@ private:
 };
 
 
-class ShowMinimapCommand : public Command {
+class ShowMinimapCommand final : public Command {
 public:
 	void Execute() const;
 };

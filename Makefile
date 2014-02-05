@@ -45,14 +45,14 @@ options:
 	@echo "LDFLAGS  = ${LDFLAGS}"
 	@echo "CPP       = ${CPP}"
 
+-include ${OBJ:.o=.d}
+
 .cc.o:
 	@echo CPP $<
 	@${CPP} -c ${CPPFLAGS} -o $@ $<
-	@${CPP} -MM ${CPPFLAGS} $*.cc > $*.d
+	@${CPP} -MM -MT $*.o ${CPPFLAGS} $*.cc > $*.d
 
 ${OBJ}: build/config.mk build/libraries.mk
-
--include ${OBJ:.o=.d}
 
 newhope: ${OBJ}
 	@echo CPP -o $@

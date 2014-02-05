@@ -8,13 +8,13 @@
 #include "engine/rectangle.h"
 #include "engine/point.h"
 
-struct PointData {
+struct PointData final {
 	PointData() : Biome(Block::GRASS), Altitude(0) {}
 	Block const* Biome;
 	double Altitude;  // between 0 and 1
 };
 
-class MapGen {
+class MapGen final {
 public:
 	MapGen(int x1, int y1, int x2, int y2);
 	MapGen(int x1, int y1, int x2, int y2, unsigned int seed);
@@ -24,7 +24,7 @@ public:
 
 	inline std::vector<std::vector<Point>> const& Rivers() const { return rivers; }
 
-	virtual ~MapGen();
+	~MapGen();
 
 private:
 	void CreatePoints(int points);

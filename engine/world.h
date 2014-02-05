@@ -10,7 +10,7 @@
 
 class Object;
 
-class World {
+class World final {
 public:
 	World(int x1, int y1, int x2, int y2);
 	~World();

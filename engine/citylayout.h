@@ -16,7 +16,7 @@ enum CityType {
 typedef std::pair<CityType, int> CityPair;
 typedef std::pair<BuildingPair, Point> BuildingPosition;
 
-struct CityLayout {
+struct CityLayout final {
 	CityLayout(int w, int h, 
 		   std::vector<BuildingPosition> buildings)
 		: w(w), h(h), buildings(buildings) {}

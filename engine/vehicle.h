@@ -6,7 +6,7 @@
 #include "engine/object.h"
 #include "engine/point.h"
 
-class VehicleModel {
+class VehicleModel final {
 public:
 	VehicleModel(double w, double h) : W(w), H(h) {}
 
@@ -16,17 +16,17 @@ public:
 };
 
 
-struct VehicleSteering {
+struct VehicleSteering final {
 	bool accelerate;
 	bool reverse;
 	double wheel;
 };
 
 
-class Vehicle : public Object {
+class Vehicle final : public Object {
 public:
 	Vehicle(Point init_pos, const VehicleModel* model);
-	virtual ~Vehicle();
+	~Vehicle();
 
 	void InitializePhysics(struct cpSpace* space);
 	void DestroyPhysics(struct cpSpace* space);

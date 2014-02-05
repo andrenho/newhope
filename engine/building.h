@@ -5,10 +5,10 @@
 #include "engine/block.h"
 #include "engine/point.h"
 
-class Building {
+class Building final {
 public:
 	Building(int x, int y, BuildingType type, int n);
-	virtual ~Building() { }
+	~Building() { }
 
 	int Tiles(const Block* (&block)[10], int x, int y) const;
 

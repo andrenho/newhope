@@ -11,7 +11,7 @@ class Object;
 class Point;
 class Rectangle;
 
-class WireframeUI : public UI {
+class WireframeUI final : public UI {
 public:
 	WireframeUI();
 	~WireframeUI();

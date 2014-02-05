@@ -7,10 +7,10 @@
 #include "engine/citylayout.h"
 #include "engine/point.h"
 
-class City {
+class City final {
 public:
 	City(int x, int y, CityType type, int n);
-	virtual ~City();
+	~City();
 
 	int Tiles(const Block* (&block)[10], int x, int y) const;
 

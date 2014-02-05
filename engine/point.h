@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <cstdio>
 
-class Point {
+class Point final {
 public:
 	Point(double x, double y)
 		: x(static_cast<double>(floor(x*100)/100.0)),
@@ -29,6 +29,10 @@ public:
 
 	inline bool operator==(const Point& rhs) const {
 		return id == rhs.id;
+	}
+
+	inline bool operator!=(const Point& rhs) const {
+		return id != rhs.id;
 	}
 
 	inline double MH_Distance(Point const& p) const {

@@ -36,9 +36,13 @@ MapGen::Create()
 	CreateHeightmap();
 	
 	// create rivers
-	Rivergen rivergen(hm, rect);
+	Rivergen rivergen(hm, rect, seedp);
 	for(int i=0; i<1; i++) {
 		rivers.push_back(rivergen.CreateRiver());
+		/*
+		for(auto& r : rivergen.CreateRiver()) {
+			printf("%0.2f %0.2f\n", r.X(), r.Y());
+		}*/
 	}
 }
 
