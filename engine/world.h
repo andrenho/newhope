@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include "engine/block.h"
+#include "engine/city.h"
 #include "engine/mapgen.h"
 
 class Object;
@@ -23,7 +24,8 @@ public:
 	void Limits(int& x1, int& y1, int& x2, int& y2) const;
 
 	inline class Hero& Hero() const { return *hero; }
-	inline std::vector<Object*> const& Objects() { return objects; }
+	inline std::vector<Object*> const& Objects() const { return objects; }
+	inline std::vector<City*> const& Cities() const { return cities; }
 	inline std::vector<std::vector<Point>> const& Rivers() const { return mapgen->Rivers(); }
 
 	inline struct cpSpace* SpacePhysics() const { return space; }

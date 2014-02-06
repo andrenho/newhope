@@ -22,6 +22,7 @@ void
 WMinimap::CreateImage(int w, int h)
 {
 	sf = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+	sr = SDL_CreateSoftwareRenderer(sf);
 }
 
 
@@ -31,6 +32,7 @@ WMinimap::DestroyImage()
 	if(sf) {
 		SDL_FreeSurface(sf);
 		sf = nullptr;
+		SDL_DestroyRenderer(sr);
 	}
 
 	if(texture) {
@@ -52,7 +54,6 @@ WMinimap::DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b)
 void 
 WMinimap::DrawPoints(std::vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b)
 {
-	SDL_Renderer* sr = SDL_CreateSoftwareRenderer(sf);
 	SDL_SetRenderDrawColor(sr, r, g, b, SDL_ALPHA_OPAQUE);
 	SDL_Point* points = 
 		static_cast<SDL_Point*>(calloc(sizeof(SDL_Point), pts.size()));
@@ -61,13 +62,11 @@ WMinimap::DrawPoints(std::vector<Point> const& pts, uint8_t r, uint8_t g, uint8_
 		points[i++] = { static_cast<int>(p.X()), static_cast<int>(p.Y()) };
 	}
 	SDL_RenderDrawLines(sr, points, i);
-	SDL_RenderPresent(sr);
-	SDL_DestroyRenderer(sr);
 }
 
 
 void 
-WMinimap::DrawRectangle(int x1, int y1, int x2, int y2, bool fill, 
+WMinimap::DrawRectangleScreen(int x1, int y1, int x2, int y2, bool fill, 
 		uint8_t r, uint8_t g, uint8_t b) const
 {
 	SDL_SetRenderDrawColor(&ren, r, g, b, SDL_ALPHA_OPAQUE);
@@ -81,8 +80,23 @@ WMinimap::DrawRectangle(int x1, int y1, int x2, int y2, bool fill,
 
 
 void 
+WMinimap::DrawRectangle(int x1, int y1, int x2, int y2, bool fill, 
+		uint8_t r, uint8_t g, uint8_t b) const
+{
+	SDL_SetRenderDrawColor(&ren, r, g, b, SDL_ALPHA_OPAQUE);
+	SDL_Rect rect = { x1, y1, x2, y2 };
+	if(fill) {
+		SDL_RenderFillRect(sr, &rect);
+	} else {
+		SDL_RenderDrawRect(sr, &rect);
+	}
+}
+
+
+void 
 WMinimap::FinishImage()
 {
+	SDL_RenderPresent(sr);
 	texture = SDL_CreateTextureFromSurface(&ren, sf);
 }
 

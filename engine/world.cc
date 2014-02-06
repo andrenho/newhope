@@ -136,11 +136,10 @@ World::Random() const
 void
 World::CreateCities()
 {
-	std::unordered_set<Point> positions = mapgen->CitiesPositions(1);
+	std::unordered_set<Point> positions = mapgen->CitiesPositions(20);
 	for(auto const& pos : positions) {
 		int x = static_cast<int>(pos.X()),
 		    y = static_cast<int>(pos.Y());
-		std::cout << x << " " << y << std::endl;
 		double r = Random();
 		CityType type;
 		if(r < 0.1) {

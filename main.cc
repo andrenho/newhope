@@ -1,5 +1,6 @@
 // Copyright 2014 <Imperial Software>
 
+#include <ctime>
 #include <cstdlib>
 #include <cstdint>
 #include <cstdio>
@@ -17,14 +18,16 @@ int main(int argc, char** argv)
 {
 	(void) argc; (void) argv;
 
-	unsigned int seedp = 0;
+	// initialize seed
+	unsigned int seedp = static_cast<unsigned int>(time(nullptr));
 
+	// initialize engine and UI
 	ui = new WireframeUI();
 	world = new World(-10000, -10000, 10000, 10000, seedp);
-
 	world->Initialize();
 	ui->Initialize();
 
+	// main loop
 	while(ui->Active()) {
 		uint32_t next_frame = ui->Now() + static_cast<int>(1000.0/60.0);
 

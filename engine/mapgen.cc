@@ -77,9 +77,11 @@ MapGen::CitiesPositions(unsigned int n) const
 
 	while(positions.size() < n) {
 		for(auto const& biome : Block::TerrainList()) {
+			if(positions.size() == n) {
+				break;
+			}
 			Point p(0, 0);
 			if(RandomPointWithBiome(p, biome, positions)) {
-				std::cout << "# " << p.X() << " " << p.Y() << std::endl;
 				positions.insert(p);
 			} else {
 				continue;
@@ -230,8 +232,6 @@ MapGen::CreateBeaches()
 void
 MapGen::AddRiverTiles()
 {
-	river_tiles.insert(Point(-1, -1));
-
 	for(auto const& river : rivers) {
 		for(unsigned int i=0; i<river.size()-1; i++) {
 			int x1 = static_cast<int>(river[i].X()),   
@@ -353,8 +353,15 @@ MapGen::RandomPointWithBiome(Point& pt, Block const* biome,
 	for(auto const& p : points) {
 		int x = static_cast<int>(p.X()),
 		    y = static_cast<int>(p.Y());
-		if(ignore.find(p) == ignore.end() && Terrain(x, y) == biome) {
-			pts.push_back(p);
+		if(Terrain(x, y) == biome) {
+			// not too close to the other points
+			double min_distance = DBL_MAX;
+			for(auto const& pos : ignore) {
+				min_distance = std::min(min_distance, pos.MH_Distance(p));
+			}
+			if(min_distance > 2500) {
+				pts.push_back(p);
+			}
 		}
 	}
 
@@ -362,8 +369,8 @@ MapGen::RandomPointWithBiome(Point& pt, Block const* biome,
 		return false;
 	} else {
 		// choose a random point
-		int idx = static_cast<int>(world->Random() * points.size());
-		std::cout << "<--" << world->Random() << " " << pts.size() << " .. " << idx << "\n";
+		double r = world->Random();
+		int idx = static_cast<int>(r * static_cast<double>(pts.size()));
 		pt = pts[idx];
 		return true;
 	}

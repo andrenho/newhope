@@ -1,5 +1,7 @@
 #include "ui/minimap.h"
 
+#include <iostream>
+
 #include "./globals.h"
 #include "engine/hero.h"
 #include "engine/world.h"
@@ -46,7 +48,14 @@ Minimap::Initialize()
 		DrawPoints(pts, Block::WATER->R, Block::WATER->G, Block::WATER->B);
 	}
 	
-	// TODO - draw cities
+	// draw cities
+	for(auto const& city : world->Cities()) {
+		int px = static_cast<int>((static_cast<double>(city->X) / (limit_x2 - limit_x1) - prop_w) * W + W/2);
+		int py = static_cast<int>((static_cast<double>(city->Y) / (limit_y2 - limit_y1) - prop_h) * H + H/2);
+		DrawRectangle(px-2, py-2, 5, 5, true, 148, 69, 53);
+		DrawRectangle(px-4, py-4, 9, 9, false, 148, 69, 53);
+	}
+
 	FinishImage();
 }
 
@@ -67,8 +76,8 @@ Minimap::Draw(int x, int y) const
 	Point const& pos = world->Hero().Position();
 	int px = static_cast<int>((pos.X() / (limit_x2 - limit_x1) - prop_w) * W + x + W/2);
 	int py = static_cast<int>((pos.Y() / (limit_y2 - limit_y1) - prop_h) * H + y + H/2);
-	DrawRectangle(px-2, py-2, 5, 5, true, 255, 255, 0);
-	DrawRectangle(px-3, py-3, 7, 7, false, 0, 0, 0);
+	DrawRectangleScreen(px-2, py-2, 5, 5, true, 255, 255, 0);
+	DrawRectangleScreen(px-3, py-3, 7, 7, false, 0, 0, 0);
 
 	UpdateScreen();
 }
