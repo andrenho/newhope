@@ -19,7 +19,7 @@ MapGen::MapGen(int x1, int y1, int x2, int y2)
 
 MapGen::MapGen(int x1, int y1, int x2, int y2, unsigned int seed)
 	: rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed),
-	  points({}), data({}), rivers({}), tile_cache({})
+	  points({}), data({}), rivers({}), tile_cache({}), river_tiles({})
 {
 }
 
@@ -41,19 +41,24 @@ MapGen::Create()
 	for(int i=0; i<12; i++) {
 		rivers.push_back(rivergen.CreateRiver());
 	}
+	AddRiverTiles();
 
 	// find biomes
 	CalculateMoisture();
 	CreateBiomes();
+	CreateBeaches();
 }
 
 
 Block const* 
 MapGen::Terrain(int x, int y) const
 {
-	std::map<Point,Block const*>::const_iterator it = tile_cache.find(Point(x,y));
+	Point pt(x, y);
+	std::map<Point,Block const*>::const_iterator it = tile_cache.find(pt);
 	if(it != tile_cache.end()) {
 		return it->second;
+	} else if(river_tiles.find(pt) != river_tiles.end()) {
+		return Block::WATER;
 	} else {
 		Point p = ClosestPoint(x, y);
 		Block const* b = data.at(p).Biome;
@@ -176,6 +181,80 @@ MapGen::CreateBiomes()
 			}
 		}
 	}
+}
+
+
+void
+MapGen::CreateBeaches()
+{
+	const double r = 1100; // radius
+
+	// find all points in a circle
+	for(auto& p : points) {
+		if(data[p].Biome == Block::WATER) {
+			continue;
+		}
+		for(auto& pt : points) {
+			if(data[pt].Biome == Block::WATER 
+			&& pow(pt.X() - p.X(), 2) + pow(pt.Y() - p.Y(), 2) < pow(r, 2)) {
+				data[p].Biome = Block::BEACH;
+			}
+		}
+	}
+}
+
+
+void
+MapGen::AddRiverTiles()
+{
+	for(auto const& river : rivers) {
+		for(unsigned int i=0; i<river.size()-1; i++) {
+			int x1 = static_cast<int>(river[i].X()),   
+			    y1 = static_cast<int>(river[i].Y()),
+			    x2 = static_cast<int>(river[i+1].X()), 
+			    y2 = static_cast<int>(river[i+1].Y());
+			int dx = x2-x1, dy = y2-y1;
+			for(int x=x1; x<x2; x+=((x1>x2) ? -1 : 1)) {
+				int y = y1 + dy * (x-x1) / dx;
+				PlotRiverCircle(x, y, 
+					static_cast<int>(Random() * 10 + 5));
+			}
+		}
+	}
+}
+
+
+void 
+MapGen::PlotRiverCircle(int x0, int y0, int r)
+{
+	int x = r, y = 0;
+	int radius_error = 1-x;
+
+	while(x >= y) {
+		AddRiverTile(x + x0, y + y0);
+		AddRiverTile(y + x0, x + y0);
+		AddRiverTile(-x + x0, y + y0);
+		AddRiverTile(-y + x0, x + y0);
+		AddRiverTile(-x + x0, -y + y0);
+		AddRiverTile(-y + x0, -x + y0);
+		AddRiverTile(x + x0, -y + y0);
+		AddRiverTile(y + x0, -x + y0);
+
+		y++;
+		if(radius_error < 0) {
+			radius_error += 2*y+1;
+		} else {
+			--x;
+			radius_error += 2*(y-x+1);
+		}
+	}
+}
+
+
+void 
+MapGen::AddRiverTile(int x, int y)
+{
+	river_tiles.insert(Point(x,y));
 }
 
 

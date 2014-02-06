@@ -32,6 +32,11 @@ private:
 	void CreateHeightmap();
 	void CalculateMoisture();
 	void CreateBiomes();
+	void CreateBeaches();
+
+	void AddRiverTiles();
+	void PlotRiverCircle(int x, int y, int r);
+	void AddRiverTile(int x, int y);
 
 	Point ClosestPoint(int x, int y) const;
 	void RandomOffcentre(int& x, int& y, double& r) const;
@@ -51,8 +56,9 @@ private:
 	double hm[255][255]; // heightmap
 
 	mutable std::map<Point,Block const*> tile_cache;
+	std::set<Point> river_tiles;
 
-	const int NUMPOINTS = 1000;
+	const int NUMPOINTS = 1250;
 };
 
 #endif  // ENGINE_MAPGEN_H_

@@ -9,7 +9,7 @@ public:
 	static void StaticDeletion();
 
 	explicit Block(bool crossable)
-		: Block(crossable, 0, 0, 0) {}
+		: Block(crossable, 255, 255, 255) {}
 
 	Block(bool crossable, uint8_t r, uint8_t g, uint8_t b)
 		: Crossable(crossable), R(r), G(g), B(b) {}
@@ -20,7 +20,7 @@ public:
 	// terrain
 	static const Block *EMPTY, *GRASS, *WATER, *DESERT, *SAVANNAH, *BARE,
 		           *TROPICAL_FOREST, *TEMPERATE_FOREST, *SHRUBLAND,
-			   *TUNDRA, *SNOW;
+			   *TUNDRA, *SNOW, *BEACH;
 	
 	// objects
 	static const Block *FLOOR, *WOODEN_WALL, *DOOR_OPEN;

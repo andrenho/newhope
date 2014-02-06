@@ -16,8 +16,11 @@ protected:
 	void DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b);
 	void DrawPoints(std::vector<Point> const& pts, 
 			uint8_t r, uint8_t g, uint8_t b);
+	void DrawRectangle(int x1, int y1, int x2, int y2, 
+			bool fill, uint8_t r, uint8_t g, uint8_t b) const;
 	void FinishImage();
 	void PresentImage(int x, int y) const;
+	void UpdateScreen() const;
 
 private:
 	WMinimap(const WMinimap&);

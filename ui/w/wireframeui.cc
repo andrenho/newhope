@@ -1,8 +1,10 @@
 #include "ui/w/wireframeui.h"
 
+#include <cstdlib>
 #include <chipmunk.h>
 #include <SDL2/SDL.h>
-#include <cstdlib>
+
+#include <algorithm>
 
 #include "./globals.h"
 #include "engine/command.h"
@@ -233,13 +235,11 @@ WireframeUI::DrawTile(int x, int y) const
 	int n = world->Tiles(b, x, y);
 	if(n > 0) {
 		const Block* block = b[0];
-		if(block == Block::GRASS) {
-			SDL_SetRenderDrawColor(ren, 230, 255, 230, 255);
-		} else if(block == Block::FLOOR) {
-			SDL_SetRenderDrawColor(ren, 255, 230, 230, 255);
-		} else {
-			SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
-		}
+		SDL_SetRenderDrawColor(ren,
+			static_cast<Uint8>(std::min(block->R + 50, 255)),
+			static_cast<Uint8>(std::min(block->G + 50, 255)),
+			static_cast<Uint8>(std::min(block->B + 50, 255)),
+			SDL_ALPHA_OPAQUE);
 
 		SDL_Rect rect = { 
 			static_cast<int>(x*Z+rx), 

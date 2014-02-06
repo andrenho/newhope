@@ -12,6 +12,7 @@ const Block* Block::TEMPERATE_FOREST	= new Block(false,  85, 139, 112);
 const Block* Block::SHRUBLAND	 	= new Block(false, 196, 204 ,187);
 const Block* Block::TUNDRA	 	= new Block(false, 193, 193, 180);
 const Block* Block::SNOW	 	= new Block(false, 248, 248, 248);
+const Block* Block::BEACH 		= new Block(false, 182, 162, 125);
 
 //blocks
 const Block* Block::FLOOR 	= new Block(false);

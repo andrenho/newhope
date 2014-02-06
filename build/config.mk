@@ -12,7 +12,7 @@ CPP = g++
 #CPP = clang++
 
 # add debugging info
-DEBUG = yes
+DEBUG = no
 DUMA = no
 PROFILING = no
 
@@ -29,7 +29,7 @@ WARNINGS=-Weffc++ -pedantic  \
     -Wfloat-equal  -Wformat  -Wformat=2 \
     -Wformat-nonliteral -Wformat-security  \
     -Wformat-y2k \
-    -Wimport  -Winit-self  -Winline \
+    -Wimport  -Winit-self \
     -Winvalid-pch   \
     -Wlong-long -Wmissing-braces \
     -Wmissing-field-initializers -Wmissing-format-attribute   \
@@ -43,9 +43,6 @@ WARNINGS=-Weffc++ -pedantic  \
     -Wunused-function  -Wunused-label  -Wunused-parameter \
     -Wunused-value  -Wunused-variable  -Wvariadic-macros \
     -Wvolatile-register-var  -Wwrite-strings
-ifeq (${CPP},g++)
-  WARNINGS += -Wunsafe-loop-optimizations
-endif
 CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${DATAPREFIX}\" ${WARNINGS} -I. -I/usr/include -std=c++11
 LDFLAGS = -L/usr/lib
 

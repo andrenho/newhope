@@ -67,6 +67,20 @@ WMinimap::DrawPoints(std::vector<Point> const& pts, uint8_t r, uint8_t g, uint8_
 
 
 void 
+WMinimap::DrawRectangle(int x1, int y1, int x2, int y2, bool fill, 
+		uint8_t r, uint8_t g, uint8_t b) const
+{
+	SDL_SetRenderDrawColor(&ren, r, g, b, SDL_ALPHA_OPAQUE);
+	SDL_Rect rect = { x1, y1, x2, y2 };
+	if(fill) {
+		SDL_RenderFillRect(&ren, &rect);
+	} else {
+		SDL_RenderDrawRect(&ren, &rect);
+	}
+}
+
+
+void 
 WMinimap::FinishImage()
 {
 	texture = SDL_CreateTextureFromSurface(&ren, sf);
@@ -78,5 +92,12 @@ WMinimap::PresentImage(int x, int y) const
 {
 	SDL_Rect dest = { x, y, sf->w, sf->h };
 	SDL_RenderCopy(&ren, texture, NULL, &dest);
+	SDL_RenderPresent(&ren);
+}
+
+
+void
+WMinimap::UpdateScreen() const
+{
 	SDL_RenderPresent(&ren);
 }
