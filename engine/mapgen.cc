@@ -54,11 +54,11 @@ Block const*
 MapGen::Terrain(int x, int y) const
 {
 	Point pt(x, y);
-	std::map<Point,Block const*>::const_iterator it = tile_cache.find(pt);
-	if(it != tile_cache.end()) {
-		return it->second;
-	} else if(river_tiles.find(pt) != river_tiles.end()) {
+	std::map<Point,Block const*>::const_iterator it;
+	if(river_tiles.find(pt) != river_tiles.end()) {
 		return Block::WATER;
+	} else if((it = tile_cache.find(pt)) != tile_cache.end()) {
+		return it->second;
 	} else {
 		Point p = ClosestPoint(x, y);
 		Block const* b = data.at(p).Biome;
@@ -207,6 +207,8 @@ MapGen::CreateBeaches()
 void
 MapGen::AddRiverTiles()
 {
+	river_tiles.insert(Point(-1, -1));
+
 	for(auto const& river : rivers) {
 		for(unsigned int i=0; i<river.size()-1; i++) {
 			int x1 = static_cast<int>(river[i].X()),   
@@ -231,14 +233,14 @@ MapGen::PlotRiverCircle(int x0, int y0, int r)
 	int radius_error = 1-x;
 
 	while(x >= y) {
-		AddRiverTile(x + x0, y + y0);
-		AddRiverTile(y + x0, x + y0);
-		AddRiverTile(-x + x0, y + y0);
-		AddRiverTile(-y + x0, x + y0);
-		AddRiverTile(-x + x0, -y + y0);
-		AddRiverTile(-y + x0, -x + y0);
-		AddRiverTile(x + x0, -y + y0);
-		AddRiverTile(y + x0, -x + y0);
+		for(int nx=-x; nx<=x; nx++) {
+			AddRiverTile(nx+x0, y+y0);
+			AddRiverTile(nx+x0, -y+y0);
+		}
+		for(int ny=-y; ny<=y; ny++) {
+			AddRiverTile(x+x0, ny+y0);
+			AddRiverTile(-x+x0, ny+y0);
+		}
 
 		y++;
 		if(radius_error < 0) {
