@@ -1,7 +1,9 @@
-#include <algorithm>
 #include <cfloat>
 #include <cmath>
 #include <ctime>
+
+#include <algorithm>
+#include <iostream>
 
 #include "./globals.h"
 #include "engine/block.h"
@@ -77,6 +79,7 @@ MapGen::CitiesPositions(unsigned int n) const
 		for(auto const& biome : Block::TerrainList()) {
 			Point p(0, 0);
 			if(RandomPointWithBiome(p, biome, positions)) {
+				std::cout << "# " << p.X() << " " << p.Y() << std::endl;
 				positions.insert(p);
 			} else {
 				continue;
@@ -359,8 +362,9 @@ MapGen::RandomPointWithBiome(Point& pt, Block const* biome,
 		return false;
 	} else {
 		// choose a random point
-		auto it = pts.begin();
-		pt = *(it + static_cast<int>(world->Random() * points.size()));
+		int idx = static_cast<int>(world->Random() * points.size());
+		std::cout << "<--" << world->Random() << " " << pts.size() << " .. " << idx << "\n";
+		pt = pts[idx];
 		return true;
 	}
 }

@@ -1,7 +1,9 @@
 // Copyright 2014 <Imperial Software>
 
-#include <cstdlib>
 #include <chipmunk.h>
+
+#include <cstdlib>
+#include <iostream>
 
 #include "engine/world.h"
 
@@ -138,6 +140,7 @@ World::CreateCities()
 	for(auto const& pos : positions) {
 		int x = static_cast<int>(pos.X()),
 		    y = static_cast<int>(pos.Y());
+		std::cout << x << " " << y << std::endl;
 		double r = Random();
 		CityType type;
 		if(r < 0.1) {
