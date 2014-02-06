@@ -2,11 +2,13 @@
 
 #include <SDL2/SDL.h>
 
+#include <iostream>
+
 #include "./globals.h"
 #include "ui/w/wireframeui.h"
 
 WMinimap::WMinimap(int w, int h, SDL_Renderer& ren)
-	: Minimap(w, h), ren(ren), sf(nullptr), texture(nullptr)
+	: Minimap(w, h), ren(ren), sr(nullptr), sf(nullptr), texture(nullptr)
 {
 }
 
@@ -83,7 +85,7 @@ void
 WMinimap::DrawRectangle(int x1, int y1, int x2, int y2, bool fill, 
 		uint8_t r, uint8_t g, uint8_t b) const
 {
-	SDL_SetRenderDrawColor(&ren, r, g, b, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(sr, r, g, b, SDL_ALPHA_OPAQUE);
 	SDL_Rect rect = { x1, y1, x2, y2 };
 	if(fill) {
 		SDL_RenderFillRect(sr, &rect);

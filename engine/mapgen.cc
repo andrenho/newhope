@@ -77,6 +77,9 @@ MapGen::CitiesPositions(unsigned int n) const
 
 	while(positions.size() < n) {
 		for(auto const& biome : Block::TerrainList()) {
+			if(biome == Block::WATER) {
+				continue;
+			}
 			if(positions.size() == n) {
 				break;
 			}

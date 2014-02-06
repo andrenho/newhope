@@ -52,7 +52,7 @@ WireframeUI::WireframeUI()
 	}
 	
 	// create minimap
-	minimap = new WMinimap(300, 300, *ren);
+	minimap = new WMinimap(600, 600, *ren);
 }
 
 
