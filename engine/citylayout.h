@@ -10,7 +10,8 @@
 #include "engine/point.h"
 
 enum CityType {
-	AGRICULTURAL,
+	AGRICULTURAL, REFINERY, MINING, FORESTAL, CHEMICAL, CAPITAL, FRONTIER,
+	__COUNT__
 };
 
 typedef std::pair<CityType, int> CityPair;

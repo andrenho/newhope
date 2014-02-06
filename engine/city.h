@@ -17,6 +17,8 @@ public:
 	inline int W() const { return layout.w; }
 	inline int H() const { return layout.h; }
 
+	static CityType Type(Block const* biome);
+
 	const int X, Y;
 
 private:

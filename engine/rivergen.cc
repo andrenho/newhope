@@ -3,6 +3,9 @@
 #include <cfloat>
 #include <algorithm>
 
+#include "./globals.h"
+#include "engine/world.h"
+
 Rivergen::Rivergen(const double (&hm)[255][255], const Rectangle rect,
 	unsigned int& seedp)
 	: hm(hm), rect(rect), seedp(seedp), points({}), altitude({})
@@ -11,8 +14,8 @@ Rivergen::Rivergen(const double (&hm)[255][255], const Rectangle rect,
 	       prop_h = rect.P1().Y() / (rect.P2().Y() - rect.P1().Y());
 	for(int i=0; i<1000; i++) {
 		// create point
-		double x = Random() * (-rect.P1().X()+rect.P2().X()) + rect.P1().X();
-		double y = Random() * (-rect.P1().Y()+rect.P2().Y()) + rect.P1().Y();
+		double x = world->Random() * (-rect.P1().X()+rect.P2().X()) + rect.P1().X();
+		double y = world->Random() * (-rect.P1().Y()+rect.P2().Y()) + rect.P1().Y();
 		Point p = Point(x, y);
 		points.push_back(p);
 
@@ -50,17 +53,10 @@ try_again:
 }
 
 
-double 
-Rivergen::Random() const
-{
-	return (static_cast<double>(rand_r(&seedp)) / static_cast<double>(RAND_MAX));
-}
-
-
 Point 
 Rivergen::RandomPoint() const
 {
-	return points.at(static_cast<int>(Random() * static_cast<double>(points.size())));
+	return points.at(static_cast<int>(world->Random() * static_cast<double>(points.size())));
 }
 
 

@@ -2,6 +2,7 @@
 #define ENGINE_BLOCK_H_
 
 #include <cstdint>
+#include <vector>
 
 class Block final {
 public:
@@ -13,6 +14,8 @@ public:
 
 	Block(bool crossable, uint8_t r, uint8_t g, uint8_t b)
 		: Crossable(crossable), R(r), G(g), B(b) {}
+
+	static std::vector<Block const*> TerrainList();
 
 	const bool Crossable;
 	const uint8_t R, G, B;

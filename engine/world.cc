@@ -1,5 +1,6 @@
 // Copyright 2014 <Imperial Software>
 
+#include <cstdlib>
 #include <chipmunk.h>
 
 #include "engine/world.h"
@@ -10,10 +11,10 @@
 #include "engine/mapgen.h"
 #include "engine/vehicle.h"
 
-World::World(int x1, int y1, int x2, int y2)
-	: x1(x1), y1(y1), x2(x2), y2(y2), hero(nullptr), space(nullptr),
-	  mapgen(new MapGen(x1, y1, x2, y2)), objects({}), cities({}),
-	  physics_ptr({})
+World::World(int x1, int y1, int x2, int y2, unsigned int seedp)
+	: x1(x1), y1(y1), x2(x2), y2(y2), seedp(seedp), hero(nullptr), 
+	  space(nullptr), mapgen(new MapGen(x1, y1, x2, y2)), objects({}), 
+	  cities({}), physics_ptr({})
 { 
 }
 
@@ -57,7 +58,7 @@ World::Initialize()
 	AddObject(hero);
 
 	// initialize cities
-	cities.push_back(new City(0, 0, CityType::AGRICULTURAL, 1));
+	CreateCities();
 	AddStaticObjects();
 }
 
@@ -121,6 +122,34 @@ World::Limits(int& x1, int& y1, int& x2, int& y2) const
 
 
 /*****************************************************************************/
+
+
+double 
+World::Random() const
+{
+	return (static_cast<double>(rand_r(&seedp)) / static_cast<double>(RAND_MAX));
+}
+
+
+void
+World::CreateCities()
+{
+	std::unordered_set<Point> positions = mapgen->CitiesPositions(1);
+	for(auto const& pos : positions) {
+		int x = static_cast<int>(pos.X()),
+		    y = static_cast<int>(pos.Y());
+		double r = Random();
+		CityType type;
+		if(r < 0.1) {
+			type = CityType::CAPITAL;
+		} else if(r < 0.2) {
+			type = CityType::FRONTIER;
+		} else {
+			type = City::Type(mapgen->Terrain(x, y));
+		}
+		cities.push_back(new City(x, y, type, 1));
+	}
+}
 
 
 void 

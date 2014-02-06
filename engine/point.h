@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <cstdint>
 #include <cstdio>
+#include <functional>
 
 class Point final {
 public:
@@ -51,5 +52,15 @@ private:
 	double x, y;
 	int64_t id;
 };
+
+namespace std {
+	template <>
+	struct hash<Point> {
+	public:
+		int64_t operator()(Point const& p) const noexcept {
+			return p.Id();
+		}
+	};
+}
 
 #endif  // ENGINE_POINT_H_

@@ -54,11 +54,11 @@ Block const*
 MapGen::Terrain(int x, int y) const
 {
 	Point pt(x, y);
-	std::map<Point,Block const*>::const_iterator it;
-	if(river_tiles.find(pt) != river_tiles.end()) {
-		return Block::WATER;
-	} else if((it = tile_cache.find(pt)) != tile_cache.end()) {
+	std::unordered_map<Point,Block const*>::const_iterator it;
+	if((it = tile_cache.find(pt)) != tile_cache.end()) {
 		return it->second;
+	} else if(river_tiles.find(pt) != river_tiles.end()) {
+		return Block::WATER;
 	} else {
 		Point p = ClosestPoint(x, y);
 		Block const* b = data.at(p).Biome;
@@ -68,15 +68,35 @@ MapGen::Terrain(int x, int y) const
 }
 
 
+std::unordered_set<Point> 
+MapGen::CitiesPositions(unsigned int n) const
+{
+	std::unordered_set<Point> positions;
+
+	while(positions.size() < n) {
+		for(auto const& biome : Block::TerrainList()) {
+			Point p(0, 0);
+			if(RandomPointWithBiome(p, biome, positions)) {
+				positions.insert(p);
+			} else {
+				continue;
+			}
+		}
+	}
+
+	return positions;
+}
+
+
 /**************************************************************************/
 
 void 
 MapGen::CreatePoints(int npoints)
 {
 	for(int i=0; i<npoints; i++) {
-		double x = Random() * (-rect.P1().X()+rect.P2().X()) + rect.P1().X();
-		double y = Random() * (-rect.P1().Y()+rect.P2().Y()) + rect.P1().Y();
-		points.push_back(Point(x,y));
+		double x = world->Random() * (-rect.P1().X()+rect.P2().X()) + rect.P1().X();
+		double y = world->Random() * (-rect.P1().Y()+rect.P2().Y()) + rect.P1().Y();
+		points.insert(Point(x,y));
 		data[Point(x,y)] = PointData();
 	}
 }
@@ -219,7 +239,7 @@ MapGen::AddRiverTiles()
 			for(int x=x1; x<x2; x+=((x1>x2) ? -1 : 1)) {
 				int y = y1 + dy * (x-x1) / dx;
 				PlotRiverCircle(x, y, 
-					static_cast<int>(Random() * 10 + 5));
+					static_cast<int>(world->Random() * 10 + 5));
 			}
 		}
 	}
@@ -313,27 +333,45 @@ MapGen::ClosestPoint(int x, int y) const
 }
 
 
-double 
-MapGen::Random() const
-{
-	return (static_cast<double>(rand_r(&seedp)) / static_cast<double>(RAND_MAX));
-}
-
-
 Point
 MapGen::RandomPoint() const
 {
-	return Point(Random() * (-rect.P1().X()+rect.P2().X()) + rect.P1().X(),
-		     Random() * (-rect.P1().Y()+rect.P2().Y()) + rect.P1().Y());
+	return Point(world->Random() * (-rect.P1().X()+rect.P2().X()) + rect.P1().X(),
+		     world->Random() * (-rect.P1().Y()+rect.P2().Y()) + rect.P1().Y());
+}
+
+
+bool 
+MapGen::RandomPointWithBiome(Point& pt, Block const* biome, 
+		std::unordered_set<Point> ignore) const
+{
+	// create vector only with point in biome, and not ignored
+	std::vector<Point> pts;
+	for(auto const& p : points) {
+		int x = static_cast<int>(p.X()),
+		    y = static_cast<int>(p.Y());
+		if(ignore.find(p) == ignore.end() && Terrain(x, y) == biome) {
+			pts.push_back(p);
+		}
+	}
+
+	if(pts.empty()) {
+		return false;
+	} else {
+		// choose a random point
+		auto it = pts.begin();
+		pt = *(it + static_cast<int>(world->Random() * points.size()));
+		return true;
+	}
 }
 
 
 void 
 MapGen::RandomOffcentre(int& x, int& y, double& r) const
 {
-	r = Random() * 24 + 6;
-	double theta = Random() * 2 * M_PI + Random();
-	double distance = Random() * (128 - r * 2);
+	r = world->Random() * 24 + 6;
+	double theta = world->Random() * 2 * M_PI + world->Random();
+	double distance = world->Random() * (128 - r * 2);
 	x = static_cast<int>(128 + cos(theta) * distance);
 	y = static_cast<int>(128 + sin(theta) * distance);
 }

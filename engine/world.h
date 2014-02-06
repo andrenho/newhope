@@ -12,7 +12,7 @@ class Object;
 
 class World final {
 public:
-	World(int x1, int y1, int x2, int y2);
+	World(int x1, int y1, int x2, int y2, unsigned int seedp);
 	~World();
 
 	void Initialize();
@@ -28,7 +28,10 @@ public:
 
 	inline struct cpSpace* SpacePhysics() const { return space; }
 
+	double Random() const;
+
 private:
+	void CreateCities();
 	void AddObject(Object* obj);
 	void AddStaticObjects();
 	void AddStaticObject(double x, double y, double w, double h);
@@ -42,6 +45,7 @@ private:
 	World& operator=(const World&);
 
 	int x1, y1, x2, y2;
+	mutable unsigned int seedp;
 	class Hero* hero;
 	struct cpSpace* space;
 

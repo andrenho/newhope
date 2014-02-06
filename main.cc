@@ -17,8 +17,10 @@ int main(int argc, char** argv)
 {
 	(void) argc; (void) argv;
 
+	unsigned int seedp = 0;
+
 	ui = new WireframeUI();
-	world = new World(-10000, -10000, 10000, 10000);
+	world = new World(-10000, -10000, 10000, 10000, seedp);
 
 	world->Initialize();
 	ui->Initialize();

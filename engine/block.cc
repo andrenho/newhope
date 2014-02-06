@@ -18,3 +18,12 @@ const Block* Block::BEACH 		= new Block(false, 182, 162, 125);
 const Block* Block::FLOOR 	= new Block(false);
 const Block* Block::WOODEN_WALL = new Block(false);
 const Block* Block::DOOR_OPEN 	= new Block(true );
+
+
+std::vector<Block const*> 
+Block::TerrainList()
+{
+	return std::vector<Block const*>({ GRASS, WATER, DESERT, SAVANNAH, 
+		 BARE, TROPICAL_FOREST, TEMPERATE_FOREST, SHRUBLAND,
+		 TUNDRA, SNOW, BEACH });
+}

@@ -18,7 +18,6 @@ private:
 
 	Point RandomPoint() const;
 	Point NextPoint(Point& p, std::vector<Point> ignore) const;
-	double Random() const;
 
 	const double (&hm)[255][255];
 	const Rectangle rect;
