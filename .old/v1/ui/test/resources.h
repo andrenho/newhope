@@ -18,3 +18,6 @@ void resources_person_rect(Person* p, SDL_Rect* person, SDL_Rect* arrow);
 void resources_car_rect(Car* c, SDL_Rect* car);
 
 #endif
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

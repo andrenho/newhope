@@ -14,3 +14,6 @@ int physics_finish(lua_State* L);
 int physics_obj_pos(lua_State* L);
 
 #endif
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

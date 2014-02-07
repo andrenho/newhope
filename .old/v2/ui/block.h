@@ -10,3 +10,6 @@
 #define DOOR_CLOSED 6
 
 #endif
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

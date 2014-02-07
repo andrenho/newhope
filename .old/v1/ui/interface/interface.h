@@ -9,23 +9,23 @@
 typedef uint16_t BLOCK;
 
 typedef struct Person {
-	double x, y;
-	double direction;
-	int image;
+    double x, y;
+    double direction;
+    int image;
 } Person;
 
 typedef struct Car {
-	double x, y;
-	int model;
-	double direction;
-	double w, h;
+    double x, y;
+    int model;
+    double direction;
+    double w, h;
 } Car;
 
 typedef struct CarMovement {
-	bool accelerate;
-	bool brk;
-	double left;
-	double right;
+    bool accelerate;
+    bool brk;
+    double left;
+    double right;
 } CarMovement;
 
 extern bool if_reload_engine;
@@ -64,15 +64,15 @@ void if_error(const char *fmt, ...);
 void check_stack();
 
 #define LUA_FIELD(c_field, field, type) { 	\
-	lua_pushstring(L, field);	\
-	lua_gettable(L, -2);		\
-	(c_field) = lua_to ## type(L, -1); \
-	lua_pop(L, 1); }
+    lua_pushstring(L, field);	\
+    lua_gettable(L, -2);		\
+    (c_field) = lua_to ## type(L, -1); \
+    lua_pop(L, 1); }
 
 #define LUA_SET_FIELD(c_field, field, type) { \
-	lua_pushstring(L, field); \
-	lua_push ## type(L, c_field); \
-	lua_settable(L, -3); }
+    lua_pushstring(L, field); \
+    lua_push ## type(L, c_field); \
+    lua_settable(L, -3); }
 
 #define LUA_PUSH_WORLD() { lua_getglobal(L, "world"); }
 #define LUA_PUSH_PLAYER() { LUA_PUSH_WORLD(); lua_pushstring(L, "player"); lua_gettable(L, -2); lua_remove(L, -2); }
@@ -81,3 +81,6 @@ void check_stack();
 #define LUA_PUSH_MEMBER(f) { LUA_PUSH_FUNCTION(f); }
 
 #endif
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

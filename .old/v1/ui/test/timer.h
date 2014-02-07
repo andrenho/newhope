@@ -5,11 +5,11 @@
 #include <stdint.h>
 
 typedef struct Timer {
-	bool active;
-	float avg;
-	uint32_t max;
-	uint32_t _count;
-	uint32_t _time;
+    bool active;
+    float avg;
+    uint32_t max;
+    uint32_t _count;
+    uint32_t _time;
 } Timer;
 
 Timer* timer_init(int argc, char** argv);
@@ -18,3 +18,6 @@ void timer_stop(Timer* t);
 void timer_finish(Timer* t);
 
 #endif
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

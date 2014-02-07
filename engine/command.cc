@@ -7,37 +7,40 @@
 void
 QuitCommand::Execute() const
 {
-	ui->Quit();
+    ui->Quit();
 }
 
 
 void
 MoveCommand::Execute() const
 {
-	if(!world->Hero().InVehicle()) {
-		Point pos = world->Hero().Position();
-		double x = pos.X(), y = pos.Y();
+    if(!world->Hero().InVehicle()) {
+        Point pos = world->Hero().Position();
+        double x = pos.X(), y = pos.Y();
 
-		if(up) { y -= 100; } else if(down) { y += 100; }
-		if(left) { x -= 100; } else if(right) { x += 100; }
-		world->Hero().SetTarget(Point(x,y));
-	} else {
-		Vehicle& v = *world->Hero().Vehicle();
-		v.Steering.accelerate = up;
-		v.Steering.reverse = down;
-		if(left) {
-			v.Steering.wheel = -1;
-		} else if(right) {
-			v.Steering.wheel = 1;
-		} else {
-			v.Steering.wheel = 0;
-		}
-	}
+        if(up) { y -= 100; } else if(down) { y += 100; }
+        if(left) { x -= 100; } else if(right) { x += 100; }
+        world->Hero().SetTarget(Point(x,y));
+    } else {
+        Vehicle& v = *world->Hero().Vehicle();
+        v.Steering.accelerate = up;
+        v.Steering.reverse = down;
+        if(left) {
+            v.Steering.wheel = -1;
+        } else if(right) {
+            v.Steering.wheel = 1;
+        } else {
+            v.Steering.wheel = 0;
+        }
+    }
 }
 
 
 void
 ShowMinimapCommand::Execute() const
 {
-	ui->ShowMinimap();
+    ui->ShowMinimap();
 }
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

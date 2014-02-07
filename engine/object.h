@@ -5,31 +5,34 @@
 
 class Object {
 public:
-	virtual ~Object() { }
+    virtual ~Object() { }
 
-	virtual void InitializePhysics(struct cpSpace* space) { 
-		(void) space;
-	}
-	virtual void DestroyPhysics(struct cpSpace* space) {
-		(void) space;
-	}
+    virtual void InitializePhysics(struct cpSpace* space) { 
+        (void) space;
+    }
+    virtual void DestroyPhysics(struct cpSpace* space) {
+        (void) space;
+    }
 
-	virtual void Collision(Object& obj) {
-		(void) obj;
-	}
+    virtual void Collision(Object& obj) {
+        (void) obj;
+    }
 
-	virtual struct cpBody* PhysicsBodyPtr() const = 0;
-	virtual Point Position() const = 0;
+    virtual struct cpBody* PhysicsBodyPtr() const = 0;
+    virtual Point Position() const = 0;
 
-	virtual void Step() {}
+    virtual void Step() {}
 
 protected:
-	Object() { }
+    Object() { }
 
 private:
-	Object(const Object&);
-	Object& operator=(const Object&);
+    Object(const Object&);
+    Object& operator=(const Object&);
 
 };
 
 #endif  // ENGINE_OBJECT_H_
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

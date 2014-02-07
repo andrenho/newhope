@@ -7,22 +7,25 @@
 
 class Building final {
 public:
-	Building(int x, int y, BuildingType type, int n);
-	~Building() { }
+    Building(int x, int y, BuildingType type, int n);
+    ~Building() { }
 
-	int Tiles(const Block* (&block)[10], int x, int y) const;
+    int Tiles(const Block* (&block)[10], int x, int y) const;
 
-	inline int W() const { return layout.w; }
-	inline int H() const { return layout.h; }
+    inline int W() const { return layout.w; }
+    inline int H() const { return layout.h; }
 
-	const int X, Y;
+    const int X, Y;
 
 private:
-	Building(const Building&);
-	Building& operator=(const Building&);
+    Building(const Building&);
+    Building& operator=(const Building&);
 
-	const BuildingType type;
-	BuildingLayout const& layout;
+    const BuildingType type;
+    BuildingLayout const& layout;
 };
 
 #endif  // ENGINE_BUILDING_H_
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

@@ -10,10 +10,10 @@
 #include "minimap.h"
 
 typedef struct UI {
-	SDL_Window* win;
-	SDL_Renderer* ren;
-	TTF_Font* main_font;
-	Minimap* mm;
+    SDL_Window* win;
+    SDL_Renderer* ren;
+    TTF_Font* main_font;
+    Minimap* mm;
 } UI;
 extern UI ui;
 
@@ -31,3 +31,6 @@ int ui_clean_up(lua_State* L);
 int ui_wrap_text(char* text, int chars);
 
 #endif
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

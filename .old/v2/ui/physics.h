@@ -26,3 +26,6 @@ int cb_set_dynamic_person_target(lua_State* L);
 int cb_setup_player_collision_handler(lua_State* L);
 
 #endif
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

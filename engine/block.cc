@@ -23,7 +23,10 @@ const Block* Block::DOOR_OPEN 	= new Block(true );
 std::vector<Block const*> 
 Block::TerrainList()
 {
-	return std::vector<Block const*>({ GRASS, WATER, DESERT, SAVANNAH, 
-		 BARE, TROPICAL_FOREST, TEMPERATE_FOREST, SHRUBLAND,
-		 TUNDRA, SNOW, BEACH });
+    return std::vector<Block const*>({ GRASS, WATER, DESERT, SAVANNAH, 
+         BARE, TROPICAL_FOREST, TEMPERATE_FOREST, SHRUBLAND,
+         TUNDRA, SNOW, BEACH });
 }
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

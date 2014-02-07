@@ -7,35 +7,38 @@
 
 class Command {
 public:
-	Command() { }
-	virtual ~Command() { }
+    Command() { }
+    virtual ~Command() { }
 
-	virtual void Execute() const = 0;
+    virtual void Execute() const = 0;
 private:
-	Command(const Command&);
-	Command& operator=(const Command&);
+    Command(const Command&);
+    Command& operator=(const Command&);
 };
 
 
 class QuitCommand final : public Command {
 public:
-	void Execute() const;
+    void Execute() const;
 };
 
 
 class MoveCommand final : public Command {
 public:
-	MoveCommand(bool up, bool down, bool left, bool right) : 
-		up(up), down(down), left(left), right(right) { }
-	void Execute() const;
+    MoveCommand(bool up, bool down, bool left, bool right) : 
+        up(up), down(down), left(left), right(right) { }
+    void Execute() const;
 private:
-	bool up, down, left, right;
+    bool up, down, left, right;
 };
 
 
 class ShowMinimapCommand final : public Command {
 public:
-	void Execute() const;
+    void Execute() const;
 };
 
 #endif  // ENGINE_COMMAND_H_
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

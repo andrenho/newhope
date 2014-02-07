@@ -5,33 +5,36 @@
 
 class Person : public Object {
 public:
-	virtual ~Person() { }
+    virtual ~Person() { }
 
-	virtual void InitializePhysics(struct cpSpace* space);
-	virtual void SetTarget(Point const& p);
-	virtual void SetPosition(Point const& p);
-	virtual void DestroyPhysics(struct cpSpace* space);
+    virtual void InitializePhysics(struct cpSpace* space);
+    virtual void SetTarget(Point const& p);
+    virtual void SetPosition(Point const& p);
+    virtual void DestroyPhysics(struct cpSpace* space);
 
-	inline bool InVehicle() const { return in_vehicle; }
-	inline class Vehicle* Vehicle() const { return vehicle; }
+    inline bool InVehicle() const { return in_vehicle; }
+    inline class Vehicle* Vehicle() const { return vehicle; }
 
-	inline virtual double Radius() const { return 0.5; }
-	virtual Point Position() const;
-	inline struct cpBody* PhysicsBodyPtr() const { return body; }
+    inline virtual double Radius() const { return 0.5; }
+    virtual Point Position() const;
+    inline struct cpBody* PhysicsBodyPtr() const { return body; }
 
 protected:
-	explicit Person(Point init);
+    explicit Person(Point init);
 
-	const Point init;
-	struct cpBody *body, *target;
-	struct cpShape* shape;
-	struct cpConstraint* joint;
-	class Vehicle* vehicle;
-	bool in_vehicle;
+    const Point init;
+    struct cpBody *body, *target;
+    struct cpShape* shape;
+    struct cpConstraint* joint;
+    class Vehicle* vehicle;
+    bool in_vehicle;
 
 private:
-	Person(const Person&);
-	Person& operator=(const Person&);
+    Person(const Person&);
+    Person& operator=(const Person&);
 };
 
 #endif  // ENGINE_PERSON_H_
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

@@ -10,25 +10,28 @@
 #include "engine/point.h"
 
 enum CityType {
-	AGRICULTURAL, REFINERY, MINING, FORESTAL, CHEMICAL, CAPITAL, FRONTIER,
-	__COUNT__
+    AGRICULTURAL, REFINERY, MINING, FORESTAL, CHEMICAL, CAPITAL, FRONTIER,
+    __COUNT__
 };
 
 typedef std::pair<CityType, int> CityPair;
 typedef std::pair<BuildingPair, Point> BuildingPosition;
 
 struct CityLayout final {
-	CityLayout(int w, int h, 
-		   std::vector<BuildingPosition> buildings)
-		: w(w), h(h), buildings(buildings) {}
+    CityLayout(int w, int h, 
+           std::vector<BuildingPosition> buildings)
+        : w(w), h(h), buildings(buildings) {}
 
-	CityLayout()
-		: w(0), h(0), buildings({}) {}
+    CityLayout()
+        : w(0), h(0), buildings({}) {}
 
-	const int w, h;
-	std::vector<BuildingPosition> buildings;
+    const int w, h;
+    std::vector<BuildingPosition> buildings;
 };
 
 extern std::map<CityPair, CityLayout> CityLayouts;
 
 #endif  // ENGINE_CITYLAYOUT_H_
+
+
+// vim: ts=4:sw=4:sts=4:expandtab

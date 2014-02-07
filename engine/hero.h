@@ -6,17 +6,20 @@
 
 class Hero final : public Person {
 public:
-	explicit Hero(Point init);
-	Hero(Point init, class Vehicle* vehicle);
-	virtual ~Hero() { }
+    explicit Hero(Point init);
+    Hero(Point init, class Vehicle* vehicle);
+    virtual ~Hero() { }
 
-	void Collision(Object& obj);
+    void Collision(Object& obj);
 
-	Point Position() const;
+    Point Position() const;
 
 private:
-	Hero(const Hero&);
-	Hero& operator=(const Hero&);
+    Hero(const Hero&);
+    Hero& operator=(const Hero&);
 };
 
 #endif  // ENGINE_HERO_H_
+
+
+// vim: ts=4:sw=4:sts=4:expandtab
