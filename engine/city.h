@@ -18,6 +18,7 @@ public:
 	inline int H() const { return layout.h; }
 
 	static CityType Type(Block const* biome);
+	const std::vector<WorkerPair> Workers() const;
 
 	const int X, Y;
 

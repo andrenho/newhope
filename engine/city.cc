@@ -56,3 +56,10 @@ City::Type(Block const* b)
 		return static_cast<CityType>(world->Random() * CityType::__COUNT__);
 	}
 }
+
+
+const std::vector<WorkerPair> 
+City::Workers() const
+{
+
+}

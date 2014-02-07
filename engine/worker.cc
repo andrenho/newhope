@@ -1,7 +1,9 @@
 #include "engine/worker.h"
 
-Worker::Worker(Point init)
-	: Person(init)
+#include "engine/city.h"
+
+Worker::Worker(Point init, City& city, WorkerJob job)
+	: Person(init), city(city), job(job)
 {
 }
 

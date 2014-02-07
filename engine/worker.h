@@ -9,12 +9,15 @@ enum WorkerJob {
 
 class Worker : public Person {
 public:
-	Worker(Point init);
+	Worker(Point init, class City& city, WorkerJob job);
 	~Worker();
 
 private:
 	Worker(const Worker&);
 	Worker& operator=(const Worker&);
+
+	class City& city;
+	WorkerJob job;
 };
 
 #endif  // ENGINE_WORKER_H_

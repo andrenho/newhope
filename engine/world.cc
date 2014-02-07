@@ -61,6 +61,7 @@ World::Initialize()
 
 	// initialize cities
 	CreateCities();
+	AddWorkers();
 	AddStaticObjects();
 }
 
@@ -160,6 +161,18 @@ World::AddObject(Object* obj)
 	obj->InitializePhysics(space);
 	objects.push_back(obj);
 	physics_ptr[obj->PhysicsBodyPtr()] = obj;
+}
+
+
+void
+World::AddWorkers()
+{
+	for(auto& city: cities) {
+		for(auto& worker : city->Workers()) {
+			Worker* wk = new Worker(worker.first, city, worker.second);
+			AddObject(wk);
+		}
+	}
 }
 
 

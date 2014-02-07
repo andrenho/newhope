@@ -31,8 +31,12 @@ public:
 	double Random() const;
 
 private:
+	World(const World&);
+	World& operator=(const World&);
+
 	void CreateCities();
 	void AddObject(Object* obj);
+	void AddWorkers();
 	void AddStaticObjects();
 	void AddStaticObject(double x, double y, double w, double h);
 
@@ -40,9 +44,6 @@ private:
 			void* data);
 	static int CollisionCallback(struct cpArbiter *arb, 
 			struct cpSpace *space, void *data);
-
-	World(const World&);
-	World& operator=(const World&);
 
 	int x1, y1, x2, y2;
 	mutable unsigned int seedp;
