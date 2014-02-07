@@ -20,6 +20,7 @@ PROFILING = no
 PREFIX = /usr/local
 #DATAPREFIX = ${PREFIX}/share/newhope
 DATAPREFIX="data"
+LOCALEPREFIX="i18n"
 
 # errors ignored on cpplint
 LINT_IGNORE=-whitespace,-runtime/references,-legal/copyright,-readability/todo,-readability/streams
@@ -46,7 +47,7 @@ WARNINGS=-Weffc++ -pedantic  \
     -Wunused-function  -Wunused-label  -Wunused-parameter \
     -Wunused-value  -Wunused-variable  -Wvariadic-macros \
     -Wvolatile-register-var  -Wwrite-strings
-CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${DATAPREFIX}\" ${WARNINGS} -I. -I/usr/include -std=c++11
+CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${DATAPREFIX}\" -DLOCALEDIR=\"${LOCALEPREFIX}\" ${WARNINGS} -I. -I/usr/include -std=c++11
 LDFLAGS = -L/usr/lib
 
 # Duma libraries

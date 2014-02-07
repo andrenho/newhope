@@ -82,6 +82,14 @@ dist: clean
 	@gzip newhope-${VERSION}.tar
 	@rm -rf newhope-${VERSION}
 
+create_translation_file:
+	xgettext -d newhope -C -s -o i18n/newhope.po --keyword=_ ${SRC} ${HEADERS}
+	msginit -l pt_BR.utf8 -o i18n/pt.po -i i18n/newhope.po
+
+translation:
+	xgettext -d newhope -C -j -s -o i18n/newhope.po --keyword=_ ${SRC} ${HEADERS}
+	msgfmt -c -o i18n/pt_BR/LC_MESSAGES/newhope.mo i18n/pt.po
+
 install: all
 	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
 	@mkdir -p ${DESTDIR}${PREFIX}/bin

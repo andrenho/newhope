@@ -1,9 +1,14 @@
+#include <libintl.h>
+#include <locale.h>
+
 #include <ctime>
 #include <cstdlib>
 #include <cstdint>
 #include <cstdio>
+#include <iostream>
 #include <vector>
 
+#include "./globals.h"
 #include "engine/command.h"
 #include "engine/world.h"
 #include "ui/ui.h"
@@ -18,6 +23,13 @@ int main(int argc, char** argv)
 
     // initialize seed
     unsigned int seedp = 0;//static_cast<unsigned int>(time(nullptr));
+
+    // initialize gettext
+    setlocale(LC_ALL, "");
+    bindtextdomain("newhope", "./" LOCALEDIR);
+    textdomain("newhope");
+
+    std::cout << _("Test") << std::endl;
 
     // initialize engine and UI
     ui = new WireframeUI();
