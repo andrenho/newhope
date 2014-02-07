@@ -32,6 +32,7 @@ SRC = main.cc			\
 
 OBJ = ${SRC:.cc=.o}
 HEADERS = ${SRC:.cc=.h} ui/ui.h engine/point.h engine/rectangle.h
+HEADERS = ${HEADERS/main.h/}
 DIST = 
 DATA = data/PressStart2P.ttf
 
@@ -83,11 +84,12 @@ dist: clean
 	@rm -rf newhope-${VERSION}
 
 create_translation_file:
-	xgettext -d newhope -C -s -o i18n/newhope.po --keyword=_ ${SRC} ${HEADERS}
+	xgettext -d newhope -C -o i18n/newhope.po --keyword=_ ${SRC} ${HEADERS}
 	msginit -l pt_BR.utf8 -o i18n/pt.po -i i18n/newhope.po
 
 translation:
-	xgettext -d newhope -C -j -s -o i18n/newhope.po --keyword=_ ${SRC} ${HEADERS}
+	xgettext -d newhope -C -j -o i18n/newhope.po --keyword=_ ${SRC} ${HEADERS}
+	msgmerge i18n/pt.po i18n/newhope.po -o i18n/pt.po
 	msgfmt -c -o i18n/pt_BR/LC_MESSAGES/newhope.mo i18n/pt.po
 
 install: all

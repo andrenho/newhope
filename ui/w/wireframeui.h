@@ -31,6 +31,10 @@ public:
 
     void ShowMinimap() const;
 
+    // dialogs
+    void Speech(class Person const& person, std::string message) const;
+    void DialogShopkeeper(class City& city) const;
+
 private:
     WireframeUI(const WireframeUI&);
     WireframeUI& operator=(const WireframeUI&);

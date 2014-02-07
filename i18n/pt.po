@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-07 20:24-0200\n"
+"POT-Creation-Date: 2014-02-07 20:51-0200\n"
 "PO-Revision-Date: 2014-02-07 20:24-0200\n"
 "Last-Translator:  <andre.nho@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -25,3 +25,8 @@ msgstr "Olá herói!"
 #: main.cc:32
 msgid "Test"
 msgstr "Teste"
+
+#: engine/worker.cc:25
+msgid "Welcome, sir! Please take a look at our fine merchindisings!"
+msgstr ""
+"Seja bem-vindo, senhor! Por favor, dê uma olhada em nossas belas mercadorias!"

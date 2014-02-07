@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-07 20:26-0200\n"
+"POT-Creation-Date: 2014-02-07 20:51-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,4 +23,8 @@ msgstr ""
 
 #: main.cc:32
 msgid "Test"
+msgstr ""
+
+#: engine/worker.cc:25
+msgid "Welcome, sir! Please take a look at our fine merchindisings!"
 msgstr ""

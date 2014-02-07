@@ -2,6 +2,7 @@
 #define UI_UI_H_
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include "engine/rectangle.h"
@@ -27,6 +28,10 @@ public:
     virtual void PresentScene() const = 0;
 
     virtual void ShowMinimap() const = 0;
+
+    // dialogs
+    virtual void Speech(class Person const& person, std::string message) const = 0;
+    virtual void DialogShopkeeper(class City& city) const = 0;
 
 protected:
     UI() : minimap(nullptr) { }
