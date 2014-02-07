@@ -12,6 +12,8 @@ public:
     virtual void SetPosition(Point const& p);
     virtual void DestroyPhysics(struct cpSpace* space);
 
+    virtual void TalkToHero() {}
+
     inline bool InVehicle() const { return in_vehicle; }
     inline class Vehicle* Vehicle() const { return vehicle; }
 

@@ -17,12 +17,18 @@ Hero::Hero(Point init, class Vehicle* vehicle)
 void 
 Hero::Collision(Object& obj)
 {
-    class Vehicle* vehicle;
+    class Vehicle* vehicle = nullptr;
+    class Person* person = nullptr;
+
+    // if it's a car, enter in it
     if((vehicle = dynamic_cast<class Vehicle*>(&obj)) != nullptr) {
         if(vehicle == this->vehicle) {  // is my car?
             in_vehicle = true;
             SetPosition(Point(-100000, -100000));
         }
+    // if it's a person, talk to him
+    } else if((person = dynamic_cast<class Person*>(&obj)) != nullptr) {
+        person->TalkToHero();
     }
 }
 

@@ -61,7 +61,17 @@ City::Type(Block const* b)
 const std::vector<WorkerPair> 
 City::Workers() const
 {
+    std::vector<WorkerPair> pairs;
 
+    for(auto const& building: buildings) {
+        for(auto const& worker: building->Workers()) {
+            pairs.push_back({ worker.first,
+                    Point(worker.second.X() + building->X + X,
+                          worker.second.Y() + building->Y + Y) });
+        }
+    }
+
+    return pairs;
 }
 
 

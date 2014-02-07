@@ -19,15 +19,17 @@ echo -e "#ifndef $DEF
 
 class $CLASS {
 public:
-\t$CLASS();
-\t~$CLASS();
+    $CLASS();
+    ~$CLASS();
 
 private:
-\t$CLASS(const $CLASS&);
-\t$CLASS& operator=(const $CLASS&);
+    $CLASS(const $CLASS&);
+    $CLASS& operator=(const $CLASS&);
 };
 
-#endif  // $DEF" > $DIR/${CLASS,,}.h
+#endif  // $DEF
+
+// vim: ts=4:sw=4:sts=4:expandtab" > $DIR/${CLASS,,}.h
 
 
 echo -e "#include \"$DIR/${CLASS,,}.h\"
@@ -38,7 +40,9 @@ $CLASS::$CLASS()
 
 $CLASS::~$CLASS()
 {
-}" > $DIR/${CLASS,,}.cc
+}
+
+// vim: ts=4:sw=4:sts=4:expandtab" > $DIR/${CLASS,,}.cc
 
 git add $DIR/${CLASS,,}.h $DIR/${CLASS,,}.cc
 

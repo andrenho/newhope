@@ -1,6 +1,8 @@
 #ifndef ENGINE_BUILDING_H_
 #define ENGINE_BUILDING_H_
 
+#include <vector>
+
 #include "engine/buildinglayout.h"
 #include "engine/block.h"
 #include "engine/point.h"
@@ -14,6 +16,8 @@ public:
 
     inline int W() const { return layout.w; }
     inline int H() const { return layout.h; }
+
+    inline const std::vector<WorkerPair> Workers() const { return layout.workers; }
 
     const int X, Y;
 

@@ -20,11 +20,11 @@ SRC = main.cc			\
       engine/citylayout.cc	\
       engine/command.cc		\
       engine/hero.cc		\
-      engine/worker.cc		\
       engine/mapgen.cc		\
       engine/rivergen.cc	\
       engine/person.cc		\
       engine/vehicle.cc		\
+      engine/worker.cc		\
       engine/world.cc		\
       ui/minimap.cc		\
       ui/w/wireframeui.cc	\

@@ -7,10 +7,12 @@ enum WorkerJob {
     SHOPKEEPER,
 };
 
-class Worker : public Person {
+class Worker final : public Person {
 public:
     Worker(Point init, class City& city, WorkerJob job);
     ~Worker();
+
+    void TalkToHero();
 
 private:
     Worker(const Worker&);

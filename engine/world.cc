@@ -150,6 +150,8 @@ World::CreateCities()
         }
         cities.push_back(new City(x, y, type, 1));
     }
+
+    cities.push_back(new City(0, 0, CityType::AGRICULTURAL, 1)); // TODO
 }
 
 
@@ -166,8 +168,8 @@ void
 World::AddWorkers()
 {
     for(auto& city: cities) {
-        for(auto& worker : city->Workers()) {
-            Worker* wk = new Worker(worker.first, city, worker.second);
+        for(auto const& worker : city->Workers()) {
+            Worker* wk = new Worker(worker.second, *city, worker.first);
             AddObject(wk);
         }
     }
