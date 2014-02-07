@@ -21,6 +21,9 @@ PREFIX = /usr/local
 #DATAPREFIX = ${PREFIX}/share/newhope
 DATAPREFIX="data"
 
+# errors ignored on cpplint
+LINT_IGNORE=-whitespace,-runtime/references,-legal/copyright,-readability/todo,-readability/streams
+
 # basic flags
 WARNINGS=-Weffc++ -pedantic  \
     -Wextra  -Wall -Wcast-align \

@@ -34,8 +34,6 @@ HEADERS = ${SRC:.cc=.h} ui/ui.h engine/point.h engine/rectangle.h
 DIST = 
 DATA = data/PressStart2P.ttf
 
-LINT_IGNORE=-whitespace,-runtime/references,-legal/copyright,-readability/todo
-
 all: options newhope
 
 options:

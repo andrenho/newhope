@@ -241,8 +241,12 @@ MapGen::AddRiverTiles()
 			    y1 = static_cast<int>(river[i].Y()),
 			    x2 = static_cast<int>(river[i+1].X()), 
 			    y2 = static_cast<int>(river[i+1].Y());
+			if(x1 > x2) {
+				std::swap(x1, x2);
+				std::swap(y1, y2);
+			}
 			int dx = x2-x1, dy = y2-y1;
-			for(int x=x1; x<x2; x+=((x1>x2) ? -1 : 1)) {
+			for(int x=x1; x<x2; x++) {
 				int y = y1 + dy * (x-x1) / dx;
 				PlotRiverCircle(x, y, 
 					static_cast<int>(world->Random() * 10 + 5));

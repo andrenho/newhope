@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 	(void) argc; (void) argv;
 
 	// initialize seed
-	unsigned int seedp = static_cast<unsigned int>(time(nullptr));
+	unsigned int seedp = 0;//static_cast<unsigned int>(time(nullptr));
 
 	// initialize engine and UI
 	ui = new WireframeUI();
