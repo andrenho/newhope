@@ -38,6 +38,9 @@ std::map<BuildingPair, BuildingLayout> BuildingLayouts = {
 			{ 'f', Block::FLOOR },
 			{ 'w', Block::WOODEN_WALL },
 			{ 'd', Block::DOOR_OPEN },
+		},
+		{
+			{ WorkerJob::SHOPKEEPER, Point(1.5, 1.5) },
 		}),
 	},
 },

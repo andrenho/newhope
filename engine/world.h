@@ -1,5 +1,3 @@
-// Copyright 2014 <Imperial Software>
-
 #ifndef ENGINE_WORLD_H_
 #define ENGINE_WORLD_H_
 
