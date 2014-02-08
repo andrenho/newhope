@@ -26,8 +26,9 @@ SRC = main.cc			\
       engine/vehicle.cc		\
       engine/worker.cc		\
       engine/world.cc		\
+      ui/dialogmanager.cc	\
       ui/minimap.cc		\
-      ui/ui.cc			\
+      ui/w/wdialogmanager.cc 	\
       ui/w/wireframeui.cc	\
       ui/w/wminimap.cc
 

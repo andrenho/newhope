@@ -29,8 +29,6 @@ int main(int argc, char** argv)
     bindtextdomain("newhope", "./" LOCALEDIR);
     textdomain("newhope");
 
-    std::cout << _("Test") << std::endl;
-
     // initialize engine and UI
     ui = new WireframeUI();
     world = new World(-10000, -10000, 10000, 10000, seedp);

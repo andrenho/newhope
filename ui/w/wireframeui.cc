@@ -16,10 +16,10 @@
 #include "engine/vehicle.h"
 #include "engine/world.h"
 #include "ui/w/wminimap.h"
+#include "ui/w/wdialogmanager.h"
 
 WireframeUI::WireframeUI()
-    : active(true), win(nullptr), ren(nullptr), main_font(nullptr),
-      rx(0), ry(0)
+    : active(true), win(nullptr), ren(nullptr), rx(0), ry(0)
 {
     // initialize SDL
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -40,31 +40,21 @@ WireframeUI::WireframeUI()
         exit(1);
     }
 
-    // initialize TTF_Init
-    if(TTF_Init() == -1) {
-        fprintf(stderr, "\nError initializing SDL2_ttf: %s\n", TTF_GetError());
-        exit(1);
-    }
-
-    // load font
-    main_font = TTF_OpenFont(DATADIR "/PressStart2P.ttf", 16);
-    if(!main_font) {
-        fprintf(stderr, "\nUnable to load font: %s\n", TTF_GetError());
-        exit(1);
-    }
-    
     // create minimap
     minimap = new WMinimap(600, 600, *ren);
+
+    // create dialog
+    dialog = new WDialogManager(win, ren);
 }
 
 
 WireframeUI::~WireframeUI()
 {
+    delete dialog;
+
     minimap->DestroyImage();
     delete minimap;
 
-    TTF_CloseFont(main_font);
-    TTF_Quit();
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();
@@ -369,47 +359,6 @@ WireframeUI::RenderCircle(double x1, double y1, double r) const
 }
 
 
-void 
-WireframeUI::Speech(class Person const& person, std::string message) const
-{
-    (void) person;
-
-    // get screen size
-    int win_w, win_h;
-    SDL_GetWindowSize(win, &win_w, &win_h);
-
-    // find font size
-    int advance;
-    TTF_GlyphMetrics(main_font, 'A', NULL, NULL, NULL, NULL, &advance);
-    
-    std::vector<std::string> lines = Wrap(message, (win_w-50) / advance);
-    int nlines = static_cast<int>(lines.size());
-    
-    // draw black box
-    SDL_Rect r = { 
-        0, win_h - (nlines * TTF_FontLineSkip(main_font)) - 50, 
-        win_w, (nlines * TTF_FontLineSkip(main_font)) + 50 
-    };
-    SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
-    SDL_RenderFillRect(ren, &r);
-    int y = win_h - (nlines * TTF_FontLineSkip(main_font)) - 25;
-    
-    // write text on screen
-    for(auto const& line: lines) {
-		SDL_Surface* sf = TTF_RenderUTF8_Solid(main_font, line.c_str(), 
-				SDL_Color{255,255,255,0});
-		SDL_Texture* txt = SDL_CreateTextureFromSurface(ren, sf);
-        SDL_Rect r = { 25, y, sf->w, sf->h };
-		SDL_RenderCopy(ren, txt, NULL, &r);
-		SDL_FreeSurface(sf);
-		SDL_DestroyTexture(txt);
-		y += TTF_FontLineSkip(main_font);
-	}
-	SDL_RenderPresent(ren);
-	
-    WaitForKeypress();
-}
-
 void
 WireframeUI::WaitForKeypress() const
 {
@@ -430,13 +379,6 @@ WireframeUI::WaitForKeypress() const
 			break;
 		SDL_Delay(1000/60);
 	}
-}
-
-
-void 
-WireframeUI::DialogShopkeeper(class City& city) const
-{
-    (void) city;
 }
 
 

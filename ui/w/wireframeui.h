@@ -1,7 +1,6 @@
 #ifndef UI_W_WIREFRAMEUI_H_
 #define UI_W_WIREFRAMEUI_H_
 
-#include <SDL2/SDL_ttf.h>
 #include <vector>
 
 #include "engine/block.h"
@@ -35,6 +34,8 @@ public:
     void Speech(class Person const& person, std::string message) const;
     void DialogShopkeeper(class City& city) const;
 
+    void WaitForKeypress() const;
+
 private:
     WireframeUI(const WireframeUI&);
     WireframeUI& operator=(const WireframeUI&);
@@ -50,13 +51,10 @@ private:
             void* data);
     void RenderCircle(double x1, double y1, double r) const;
     
-    void WaitForKeypress() const;
-
     bool active;
     
     struct SDL_Window* win;
     struct SDL_Renderer* ren;
-    TTF_Font* main_font;
 
     mutable double rx, ry;
 

@@ -1,5 +1,7 @@
 #include <chipmunk.h>
 
+#include <algorithm>
+
 #include "./globals.h"
 #include "engine/person.h"
 #include "engine/vehicle.h"
@@ -69,13 +71,17 @@ Person::ExitVehicle()
         Point vpos = vehicle->Position(),
               ppos = Position();
         double fx = vpos.X() + std::max(vehicle->Model().W/2, vehicle->Model().H/2) + 1;
-        while(!world->IsTileWalkable(fx, ppos.Y())) {
+        while(!world->IsTileWalkable(
+                    static_cast<int>(fx), 
+                    static_cast<int>(ppos.Y()))) {
             ++fx;
             if(fx > 5) {
                 return false;
             }
         }
         in_vehicle = false;
+        vehicle->Steering.accelerate = false;
+        vehicle->Steering.reverse = false;
         SetPosition(Point(fx, vpos.Y()));
         return true;
     }

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "engine/rectangle.h"
+#include "ui/dialogmanager.h"
 #include "ui/minimap.h"
 
 class Command;
@@ -29,17 +30,15 @@ public:
 
     virtual void ShowMinimap() const = 0;
 
-    // dialogs
-    virtual void Speech(class Person const& person, std::string message) const = 0;
-    virtual void DialogShopkeeper(class City& city) const = 0;
+    inline DialogManager const& Dialog() const { return *dialog; }
 
-protected:
-    UI() : minimap(nullptr) { }
-
-    static std::vector<std::string> Wrap(std::string text, int nchars);
     virtual void WaitForKeypress() const = 0;
 
+protected:
+    UI() : minimap(nullptr), dialog(nullptr) { }
+
     Minimap* minimap;
+    DialogManager* dialog;
 
 private:
     UI(const UI&);

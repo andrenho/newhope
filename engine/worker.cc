@@ -22,8 +22,8 @@ Worker::TalkToHero()
 {
     switch(job) {
     case WorkerJob::SHOPKEEPER:
-        ui->Speech(*this, _("Welcome, sir! Please take a look at our fine merchindisings!"));
-        ui->DialogShopkeeper(city);
+        ui->Dialog().Speech(*this, _("Welcome, sir! Please take a look at our fine merchindisings!"));
+        ui->Dialog().Shopkeeper(city);
         break;
     default:
         abort();
