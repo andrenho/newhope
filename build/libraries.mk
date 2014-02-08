@@ -1,3 +1,7 @@
+# pthreads
+CPPFLAGS += -pthread
+LDFLAGS += -pthread
+
 # system libraries
 SDL2 = $(shell sdl2-config --cflags > /dev/null 2> /dev/null; echo $$?)
 
@@ -8,6 +12,10 @@ ifeq (${SDL2},0)
 else
   $(error The SDL2 library was not detected in the system. Please install it and try again)
 endif
+
+# google-glog
+CPPFLAGS += `pkg-config --cflags libglog`
+LDFLAGS += `pkg-config --libs libglog`
 
 # chipmkunk library
 CPPFLAGS += -isystem/usr/include/chipmunk

@@ -63,6 +63,10 @@ else
   # production flags
   CPPFLAGS += -O3 -DNDEBUG
   LDFLAGS += -s
+  ifeq (${DEBUG},leaks)
+    CPPFLAGS += -g
+    LDFLAGS += -g
+  endif
 endif
 
 ifeq (${PROFILING},yes)

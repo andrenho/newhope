@@ -1,3 +1,6 @@
+#include "engine/mapgen.h"
+
+#include <glog/logging.h>
 #include <cfloat>
 #include <cmath>
 #include <ctime>
@@ -7,7 +10,6 @@
 
 #include "./globals.h"
 #include "engine/block.h"
-#include "engine/mapgen.h"
 #include "engine/point.h"
 #include "engine/rectangle.h"
 #include "engine/rivergen.h"
@@ -34,21 +36,32 @@ MapGen::~MapGen()
 void
 MapGen::Create()
 {
+    LOG(INFO) << "Creating new map...\n";
+
     // create land
+    LOG(INFO) << "Creating points...\n";
     CreatePoints(NUMPOINTS);
+    LOG(INFO) << "Creating and applying heightmap...\n";
     CreateHeightmap();
     
     // create rivers
+    LOG(INFO) << "Creating rivers...\n";
     Rivergen rivergen(hm, rect, seedp);
     for(int i=0; i<12; i++) {
         rivers.push_back(rivergen.CreateRiver());
     }
+    LOG(INFO) << "Creating river tiles...\n";
     AddRiverTiles();
 
     // find biomes
+    LOG(INFO) << "Calculating moisture...\n";
     CalculateMoisture();
+    LOG(INFO) << "Creating biomes...\n";
     CreateBiomes();
+    LOG(INFO) << "Creating beaches...\n";
     CreateBeaches();
+
+    LOG(INFO) << "World creation complete.\n";
 }
 
 
@@ -113,6 +126,7 @@ MapGen::CreatePoints(int npoints)
 void
 MapGen::CreateHeightmap()
 {
+    LOG(INFO) << "  Clearing heightmap...\n";
     // clear up
     for(int x=0; x<255; x++) {
         for(int y=0; y<255; y++) {
@@ -121,7 +135,9 @@ MapGen::CreateHeightmap()
     }
 
     // create hills
+    LOG(INFO) << "  Creating hills...\n";
     for(int i=0; i<500; i++) {
+        LOG(INFO) << "    Hill " << i << "...\n";
         int x, y;
         double r;
         RandomOffcentre(x, y, r);
@@ -129,6 +145,7 @@ MapGen::CreateHeightmap()
     }
 
     // normalize
+    LOG(INFO) << "  Normalizing heightmap...\n";
     double max_alt = 0;
     for(int x=0; x<255; x++) {
         for(int y=0; y<255; y++) {
@@ -147,6 +164,7 @@ MapGen::CreateHeightmap()
     }
 
     // apply heightmap
+    LOG(INFO) << "  Applying heightmap...\n";
     for(auto const& p : points) {
         data[p].Altitude = PointAltitude(p);
     }
@@ -235,9 +253,12 @@ MapGen::CreateBeaches()
 void
 MapGen::AddRiverTiles()
 {
+    int j=0;
     for(auto const& river : rivers) {
+        LOG(INFO) << "  Creating tiles for river " << j++ << ".\n";
         int river_width = static_cast<int>(world->Random() * 10 + 5);
         for(unsigned int i=0; i<river.size()-1; i++) {
+            LOG(INFO) << "    Point " << i << "/" << river.size() << ".\n";
             int x1 = static_cast<int>(river[i].X()),   
                 y1 = static_cast<int>(river[i].Y()),
                 x2 = static_cast<int>(river[i+1].X()), 

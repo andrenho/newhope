@@ -1,5 +1,6 @@
 #include "ui/minimap.h"
 
+#include <glog/logging.h>
 #include <iostream>
 
 #include "./globals.h"
@@ -8,39 +9,46 @@
 #include "ui/ui.h"
 
 Minimap::Minimap(int w, int h)
-    : W(w), H(h), init_thread(nullptr), minimap_built(false), thread_killed(false)
+    : W(w), H(h), minimap_built(false), thread_killed(false), thread(0)
 {
 }
 
 
 Minimap::~Minimap()
 {
-    if(init_thread) {
-        delete init_thread;
-    }
 }
 
 
 void
 Minimap::Initialize()
 {
-    init_thread = new std::thread(&Minimap::InitializationThread, this);
+    //InitializationThread();
+    pthread_create(&thread, 0, Minimap::ThreadInvoker, this);
 }
 
 
 void
-Minimap::StopThreadExecution()
+Minimap::Finalize()
 {
     thread_killed = true;
-    if(!minimap_built) {
-        init_thread->join();
-    }
+    pthread_join(thread, nullptr);
+    DestroyImage();
+}
+
+
+void* 
+Minimap::ThreadInvoker(void* self)
+{
+    static_cast<Minimap*>(self)->InitializationThread();
+    return 0;
 }
 
 
 void
 Minimap::InitializationThread()
 {
+    LOG(INFO) << "Minimap creation thread initialized.\n";
+
     int limit_x1, limit_y1, limit_x2, limit_y2;
     world->Limits(limit_x1, limit_y1, limit_x2, limit_y2);
 
@@ -81,6 +89,8 @@ Minimap::InitializationThread()
 
     FinishImage();
     minimap_built = true;
+
+    LOG(INFO) << "Minimap creation thread finished.\n";
 }
 
 
@@ -89,8 +99,8 @@ Minimap::Draw(int x, int y) const
 {
     if(!minimap_built) {
         DrawWaitingScreen();
-        init_thread->join();
     }
+    pthread_join(thread, nullptr);
 
     // present image
     PresentImage(x, y);

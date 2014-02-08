@@ -1,5 +1,6 @@
 #include <chipmunk.h>
 
+#include <glog/logging.h>
 #include <cstdlib>
 #include <iostream>
 
@@ -45,21 +46,27 @@ World::Initialize()
     mapgen->Create();
 
     // initialize physics
+    LOG(INFO) << "Initializing physics.\n";
     space = cpSpaceNew();
     cpSpaceSetDefaultCollisionHandler(space, CollisionCallback, 
             NULL, NULL, NULL, this);
 
     // initialize vehicles
+    LOG(INFO) << "Initializing vehicles.\n";
     Vehicle* car = new Vehicle(Point(10, 10), VehicleModel::GENERIC);
     AddObject(car);
 
     // initialize people
+    LOG(INFO) << "Initializing hero.\n";
     hero = new class Hero(Point(0, 0), car);
     AddObject(hero);
 
     // initialize cities
+    LOG(INFO) << "Creating cities.\n";
     CreateCities();
+    LOG(INFO) << "Creating workers.\n";
     AddWorkers();
+    LOG(INFO) << "Adding static objects.\n";
     AddStaticObjects();
 }
 

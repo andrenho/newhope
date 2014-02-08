@@ -1,14 +1,20 @@
 #ifndef ENGINE_VEHICLE_H_
 #define ENGINE_VEHICLE_H_
 
+#include <utility>
+#include <vector>
+
 #include "engine/object.h"
 #include "engine/point.h"
+#include "engine/resources.h"
 
 class VehicleModel final {
 public:
-    VehicleModel(double w, double h) : W(w), H(h) {}
+    VehicleModel(double w, double h, int cargo_slots) 
+        : W(w), H(h), CargoSlots(cargo_slots) {}
 
     const double W, H;
+    const int CargoSlots;
 
     static const VehicleModel* GENERIC;
 };
@@ -19,6 +25,9 @@ struct VehicleSteering final {
     bool reverse;
     double wheel;
 };
+
+
+typedef std::pair<Resource,int> CargoSlot;
 
 
 class Vehicle final : public Object {
@@ -58,6 +67,7 @@ private:
 
     VehicleModel const& model;
     const Point init_pos;
+    std::vector<CargoSlot> cargo_slots;
 
     struct cpBody *body, *rear_wheel_body, *front_wheel_body;
     struct cpShape *shape, *rear_wheel_shape, *front_wheel_shape;

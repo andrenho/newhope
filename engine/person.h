@@ -15,7 +15,7 @@ public:
     virtual void TalkToHero() {}
 
     inline bool InVehicle() const { return in_vehicle; }
-    inline class Vehicle* Vehicle() const { return vehicle; }
+    inline class Vehicle& Vehicle() const { return *vehicle; }
     bool ExitVehicle();
 
     inline virtual double Radius() const { return 0.5; }

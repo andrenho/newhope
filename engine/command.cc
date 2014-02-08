@@ -22,7 +22,7 @@ MoveCommand::Execute() const
         if(left) { x -= 100; } else if(right) { x += 100; }
         world->Hero().SetTarget(Point(x,y));
     } else {
-        Vehicle& v = *world->Hero().Vehicle();
+        Vehicle& v = world->Hero().Vehicle();
         v.Steering.accelerate = up;
         v.Steering.reverse = down;
         if(left) {

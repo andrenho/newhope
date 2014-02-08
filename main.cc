@@ -1,5 +1,6 @@
 #include <libintl.h>
 #include <locale.h>
+#include <glog/logging.h>
 
 #include <ctime>
 #include <cstdlib>
@@ -19,15 +20,20 @@ UI*    ui    = nullptr;
 
 int main(int argc, char** argv)
 {
-    (void) argc; (void) argv;
+    (void) argc;
+
+    // initialize glog
+    google::InitGoogleLogging(argv[0]);
 
     // initialize seed
-    unsigned int seedp = 0;//static_cast<unsigned int>(time(nullptr));
+    unsigned int seedp = static_cast<unsigned int>(time(nullptr));
+    LOG(INFO) << "Seed initialized to " << 0 << ".\n";
 
     // initialize gettext
-    setlocale(LC_ALL, "");
+    char* locale = setlocale(LC_ALL, "");
     bindtextdomain("newhope", "./" LOCALEDIR);
     textdomain("newhope");
+    LOG(INFO) << "Locale set to " << locale << ".\n";
 
     // initialize engine and UI
     ui = new WireframeUI();

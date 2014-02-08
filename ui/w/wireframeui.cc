@@ -50,11 +50,13 @@ WireframeUI::WireframeUI()
 
 WireframeUI::~WireframeUI()
 {
-    delete dialog;
-
-    minimap->StopThreadExecution();
-    minimap->DestroyImage();
-    delete minimap;
+    if(dialog) {
+        delete dialog;
+    }
+    if(minimap) {
+        minimap->Finalize();
+        delete minimap;
+    }
 
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);

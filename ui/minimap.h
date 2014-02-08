@@ -1,10 +1,11 @@
 #ifndef UI_MINIMAP_H_
 #define UI_MINIMAP_H_
 
+#include <pthread.h>
+
 #include <cstdint>
 #include <cstdio>
 #include <vector>
-#include <thread>
 
 #include "engine/point.h"
 
@@ -14,7 +15,7 @@ public:
     virtual ~Minimap();
 
     void Initialize();
-    void StopThreadExecution();
+    void Finalize();
     void Draw(int x, int y) const;
     virtual void DestroyImage() = 0;
 
@@ -39,10 +40,11 @@ private:
     Minimap(const Minimap&);
     Minimap& operator=(const Minimap&);
 
-    std::thread* init_thread;
-    bool minimap_built, thread_killed;
-
+    static void* ThreadInvoker(void* arg);
     void InitializationThread();
+    
+    bool minimap_built, thread_killed;
+    pthread_t thread;
 };
 
 #endif  // UI_MINIMAP_H_

@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "engine/block.h"
 #include "engine/rectangle.h"
 #include "engine/point.h"
 

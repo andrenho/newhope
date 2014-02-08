@@ -4,10 +4,10 @@
 #include "engine/vehicle.h"
 #include "engine/world.h"
 
-const VehicleModel* VehicleModel::GENERIC = new VehicleModel(3, 7);
+const VehicleModel* VehicleModel::GENERIC = new VehicleModel(3, 7, 4);
 
 Vehicle::Vehicle(Point init_pos, const VehicleModel* model)
-    : Steering({false, false, 0}), model(*model), init_pos(init_pos),
+    : Steering({false, false, 0}), model(*model), init_pos(init_pos), cargo_slots({}),
     body(nullptr), rear_wheel_body(nullptr), front_wheel_body(nullptr),
     shape(nullptr), rear_wheel_shape(nullptr), front_wheel_shape(nullptr),
     rear_wheel_joint1(nullptr), rear_wheel_joint2(nullptr),

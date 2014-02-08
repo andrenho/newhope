@@ -3,9 +3,20 @@
 
 #include <array>
 
-enum Resource {
-   GRAIN, WOOD, OIL, HERBS, SILICON, IRON, URANIUM, ELECRONICS, MACHINES,
-   WEAPONS, MEDICINE, DRUGS, __RCOUNT__
+enum Resource : char {
+   GRAIN      = 'G', 
+   WOOD       = 'W', 
+   OIL        = 'O', 
+   HERBS      = 'H', 
+   SILICON    = 'S', 
+   IRON       = 'I', 
+   URANIUM    = 'U', 
+   ELECRONICS = 'E',
+   MACHINES   = 'M',
+   WEAPONS    = 'W', 
+   MEDICINE   = '+', 
+   DRUGS      = 'D', 
+   __RCOUNT__ = 12,
 };
 
 extern std::array<Resource, Resource::__RCOUNT__> ResourceList;
