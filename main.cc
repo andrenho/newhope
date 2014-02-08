@@ -64,8 +64,8 @@ int main(int argc, char** argv)
         }
     }
 
-    delete world;
     delete ui;
+    delete world;
 
     return EXIT_SUCCESS;
 }

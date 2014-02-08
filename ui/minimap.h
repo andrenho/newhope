@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <vector>
+#include <thread>
 
 #include "engine/point.h"
 
@@ -13,6 +14,7 @@ public:
     virtual ~Minimap();
 
     void Initialize();
+    void StopThreadExecution();
     void Draw(int x, int y) const;
     virtual void DestroyImage() = 0;
 
@@ -27,10 +29,20 @@ protected:
             bool fill, uint8_t r, uint8_t g, uint8_t b) const = 0;
     virtual void DrawRectangleScreen(int x1, int y1, int x2, int y2, 
             bool fill, uint8_t r, uint8_t g, uint8_t b) const = 0;
+    virtual void DrawWaitingScreen() const = 0;
     virtual void FinishImage() = 0;
     virtual void UpdateScreen() const = 0;
     
     virtual void PresentImage(int x, int y) const = 0;
+
+private:
+    Minimap(const Minimap&);
+    Minimap& operator=(const Minimap&);
+
+    std::thread* init_thread;
+    bool minimap_built, thread_killed;
+
+    void InitializationThread();
 };
 
 #endif  // UI_MINIMAP_H_

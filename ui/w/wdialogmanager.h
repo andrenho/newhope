@@ -4,6 +4,7 @@
 #include "ui/dialogmanager.h"
 
 #include <SDL2/SDL_ttf.h>
+#include <cstdint>
 
 #include <string>
 
@@ -19,9 +20,12 @@ private:
     WDialogManager(const WDialogManager&);
     WDialogManager& operator=(const WDialogManager&);
 
+    int WriteTextOnScreen(TTF_Font* font, std::string text, int x, int y, 
+            uint8_t r, uint8_t g, uint8_t b) const;
+
     struct SDL_Window* win;
     struct SDL_Renderer* ren;
-    TTF_Font* main_font;
+    TTF_Font *small_font, *main_font;
 };
 
 #endif  // UI_W_WDIALOGMANAGER_H_

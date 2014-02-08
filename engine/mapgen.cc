@@ -236,6 +236,7 @@ void
 MapGen::AddRiverTiles()
 {
     for(auto const& river : rivers) {
+        int river_width = static_cast<int>(world->Random() * 10 + 5);
         for(unsigned int i=0; i<river.size()-1; i++) {
             int x1 = static_cast<int>(river[i].X()),   
                 y1 = static_cast<int>(river[i].Y()),
@@ -248,8 +249,7 @@ MapGen::AddRiverTiles()
             int dx = x2-x1, dy = y2-y1;
             for(int x=x1; x<x2; x++) {
                 int y = y1 + dy * (x-x1) / dx;
-                PlotRiverCircle(x, y, 
-                    static_cast<int>(world->Random() * 10 + 5));
+                PlotRiverCircle(x, y, river_width);
             }
         }
     }

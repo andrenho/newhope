@@ -5,7 +5,7 @@
 
 City::City(int x, int y, CityType type, int n)
     : X(x), Y(y), layout(CityLayouts[CityPair(type, n)]),
-      buildings(std::vector<const Building*>())
+      buildings({}), resources({})
 {
     for(auto const& bpos : layout.buildings) {
         const Building* b = new Building(
@@ -13,6 +13,9 @@ City::City(int x, int y, CityType type, int n)
                 static_cast<int>(bpos.second.Y()), 
                 bpos.first.first, bpos.first.second);
         buildings.push_back(b);
+    }
+    for(Resource res: ResourceList) {
+        resources[res] = 0;
     }
 }
 

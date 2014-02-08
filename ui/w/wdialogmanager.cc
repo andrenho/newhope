@@ -8,7 +8,7 @@
 #include "ui/ui.h"
 
 WDialogManager::WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren)
-    : win(win), ren(ren), main_font(nullptr)
+    : win(win), ren(ren), small_font(nullptr), main_font(nullptr)
 {
     // initialize TTF_Init
     if(TTF_Init() == -1) {
@@ -18,7 +18,8 @@ WDialogManager::WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren)
 
     // load font
     main_font = TTF_OpenFont(DATADIR "/PressStart2P.ttf", 16);
-    if(!main_font) {
+    small_font = TTF_OpenFont(DATADIR "/PressStart2P.ttf", 8);
+    if(!main_font || !small_font) {
         fprintf(stderr, "\nUnable to load font: %s\n", TTF_GetError());
         exit(1);
     }
@@ -58,14 +59,7 @@ WDialogManager::Speech(class Person const& person, std::string message) const
     
     // write text on screen
     for(auto const& line: lines) {
-		SDL_Surface* sf = TTF_RenderUTF8_Solid(main_font, line.c_str(), 
-				SDL_Color{255,255,255,0});
-		SDL_Texture* txt = SDL_CreateTextureFromSurface(ren, sf);
-        SDL_Rect r = { 25, y, sf->w, sf->h };
-		SDL_RenderCopy(ren, txt, NULL, &r);
-		SDL_FreeSurface(sf);
-		SDL_DestroyTexture(txt);
-		y += TTF_FontLineSkip(main_font);
+        y += WriteTextOnScreen(main_font, line, 25, y, 255, 255, 255);
 	}
 	SDL_RenderPresent(ren);
 	
@@ -76,8 +70,36 @@ WDialogManager::Speech(class Person const& person, std::string message) const
 void 
 WDialogManager::Shopkeeper(class City& city) const
 {
+    // draw box
+    SDL_Rect r1{ 98, 98, 604, 404 };
+    SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+    SDL_RenderFillRect(ren, &r1);
+    SDL_Rect r2{ 100, 100, 600, 400 };
+    SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+    SDL_RenderFillRect(ren, &r2);
+    WriteTextOnScreen(small_font, "Shopkeeper:", 150, 150, 0, 0, 0);
+    WriteTextOnScreen(small_font, "Hero:", 150, 270, 0, 0, 0);
+    
     (void) city;
     // TODO
+
+	SDL_RenderPresent(ren);
+    ui->WaitForKeypress();
+}
+
+
+int
+WDialogManager::WriteTextOnScreen(TTF_Font* font, std::string text, 
+        int x, int y, uint8_t r, uint8_t g, uint8_t b) const
+{
+		SDL_Surface* sf = TTF_RenderUTF8_Solid(font, text.c_str(), 
+				SDL_Color{r,g,b,0});
+		SDL_Texture* txt = SDL_CreateTextureFromSurface(ren, sf);
+        SDL_Rect rect = { x, y, sf->w, sf->h };
+		SDL_RenderCopy(ren, txt, NULL, &rect);
+		SDL_FreeSurface(sf);
+		SDL_DestroyTexture(txt);
+		return TTF_FontLineSkip(main_font);
 }
 
 

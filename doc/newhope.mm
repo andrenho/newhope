@@ -39,8 +39,9 @@
 <node CREATED="1390226297080" ID="ID_1209935528" MODIFIED="1390227173631" STYLE="fork" TEXT="Roads">
 <font NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1390226327912" ID="ID_76343545" MODIFIED="1390227173631" STYLE="fork" TEXT="Terrain caching">
+<node CREATED="1390226327912" ID="ID_76343545" MODIFIED="1391862732336" STYLE="fork" TEXT="Terrain caching">
 <font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

@@ -1,11 +1,13 @@
 #ifndef ENGINE_CITY_H_
 #define ENGINE_CITY_H_
 
+#include <map>
 #include <vector>
 
 #include "engine/building.h"
 #include "engine/citylayout.h"
 #include "engine/point.h"
+#include "engine/resources.h"
 
 class City final {
 public:
@@ -28,6 +30,7 @@ private:
 
     CityLayout const& layout;
     std::vector<const Building*> buildings;
+    std::map<Resource, int> resources;
 };
 
 #endif  // ENGINE_CITY_H_

@@ -20,6 +20,7 @@ protected:
             bool fill, uint8_t r, uint8_t g, uint8_t b) const;
     void DrawRectangleScreen(int x1, int y1, int x2, int y2, 
             bool fill, uint8_t r, uint8_t g, uint8_t b) const;
+    void DrawWaitingScreen() const {}
     void FinishImage();
     void PresentImage(int x, int y) const;
     void UpdateScreen() const;

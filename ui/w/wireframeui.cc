@@ -52,6 +52,7 @@ WireframeUI::~WireframeUI()
 {
     delete dialog;
 
+    minimap->StopThreadExecution();
     minimap->DestroyImage();
     delete minimap;
 

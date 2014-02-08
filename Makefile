@@ -22,6 +22,7 @@ SRC = main.cc			\
       engine/hero.cc		\
       engine/mapgen.cc		\
       engine/rivergen.cc	\
+      engine/resources.cc	\
       engine/person.cc		\
       engine/vehicle.cc		\
       engine/worker.cc		\
