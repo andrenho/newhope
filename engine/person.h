@@ -21,6 +21,7 @@ public:
     inline virtual double Radius() const { return 0.5; }
     virtual Point Position() const;
     inline struct cpBody* PhysicsBodyPtr() const { return body; }
+    inline int Money() const { return money; }
 
 protected:
     explicit Person(Point init);
@@ -31,6 +32,7 @@ protected:
     struct cpConstraint* joint;
     class Vehicle* vehicle;
     bool in_vehicle;
+    int money;
 
 private:
     Person(const Person&);

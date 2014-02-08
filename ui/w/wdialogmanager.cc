@@ -5,6 +5,8 @@
 #include <vector>
 
 #include "./globals.h"
+#include "engine/world.h"
+#include "engine/hero.h"
 #include "ui/ui.h"
 
 WDialogManager::WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren)
@@ -70,6 +72,8 @@ WDialogManager::Speech(class Person const& person, std::string message) const
 void 
 WDialogManager::Shopkeeper(class City& city) const
 {
+    Hero& hero = world->Hero();
+
     // draw box
     SDL_Rect r1{ 98, 98, 604, 404 };
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
@@ -78,10 +82,23 @@ WDialogManager::Shopkeeper(class City& city) const
     SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
     SDL_RenderFillRect(ren, &r2);
     WriteTextOnScreen(small_font, "Shopkeeper:", 150, 150, 0, 0, 0);
-    WriteTextOnScreen(small_font, "Hero:", 150, 270, 0, 0, 0);
-    
-    (void) city;
-    // TODO
+    WriteTextOnScreen(small_font, "Hero ($ " + std::to_string(hero.Money()) + "):", 
+            150, 270, 0, 0, 0);
+ 
+    // draw shopkeeper merchinizing
+    int x = 150;
+    std::map<Resource, SDL_Rect> mrects;
+    for(auto const& res : ResourceList) {
+        mrects[res] = { x, 170, 25, 25 };
+        SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+        SDL_RenderFillRect(ren, &mrects[res]);
+        SDL_Rect r3 = { mrects[res].x+2, 172, 21, 21 };
+        SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+        SDL_RenderFillRect(ren, &r3);
+        WriteTextOnScreen(small_font, std::to_string(city.ResourceAmount(res)), x, 200, 0, 0, 0);
+        
+        x += 35;
+    }
 
 	SDL_RenderPresent(ren);
     ui->WaitForKeypress();

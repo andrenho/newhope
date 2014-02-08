@@ -11,6 +11,7 @@ Hero::Hero(Point init, class Vehicle* vehicle)
     : Hero(init)
 {
     this->vehicle = vehicle;
+    money = 250;
 }
 
 

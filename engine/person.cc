@@ -9,7 +9,7 @@
 
 Person::Person(Point init)
     : init(init), body(nullptr), target(nullptr), shape(nullptr), 
-      joint(nullptr), vehicle(nullptr), in_vehicle(false)
+      joint(nullptr), vehicle(nullptr), in_vehicle(false), money(0)
 { 
 }
 
