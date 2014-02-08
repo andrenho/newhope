@@ -1,6 +1,7 @@
 #include "engine/command.h"
 
 #include "./globals.h"
+#include "engine/hero.h"
 #include "engine/vehicle.h"
 #include "ui/ui.h"
 
@@ -33,6 +34,13 @@ MoveCommand::Execute() const
             v.Steering.wheel = 0;
         }
     }
+}
+
+
+void
+ExitVehicleCommand::Execute() const
+{
+    world->Hero().ExitVehicle();
 }
 
 

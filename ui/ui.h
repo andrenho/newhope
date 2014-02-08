@@ -36,6 +36,9 @@ public:
 protected:
     UI() : minimap(nullptr) { }
 
+    static std::vector<std::string> Wrap(std::string text, int nchars);
+    virtual void WaitForKeypress() const = 0;
+
     Minimap* minimap;
 
 private:

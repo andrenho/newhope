@@ -1,7 +1,9 @@
 #include <chipmunk.h>
 
+#include "./globals.h"
 #include "engine/person.h"
 #include "engine/vehicle.h"
+#include "engine/world.h"
 
 Person::Person(Point init)
     : init(init), body(nullptr), target(nullptr), shape(nullptr), 
@@ -57,6 +59,27 @@ Person::Position() const
 {
     cpVect pos = cpBodyGetPos(body);
     return Point(pos.x, pos.y);
+}
+
+
+bool
+Person::ExitVehicle()
+{
+    if(in_vehicle) {
+        Point vpos = vehicle->Position(),
+              ppos = Position();
+        double fx = vpos.X() + std::max(vehicle->Model().W/2, vehicle->Model().H/2) + 1;
+        while(!world->IsTileWalkable(fx, ppos.Y())) {
+            ++fx;
+            if(fx > 5) {
+                return false;
+            }
+        }
+        in_vehicle = false;
+        SetPosition(Point(fx, vpos.Y()));
+        return true;
+    }
+    return false;
 }
 
 

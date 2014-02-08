@@ -33,6 +33,12 @@ private:
 };
 
 
+class ExitVehicleCommand final : public Command {
+public:
+    void Execute() const;
+};
+
+
 class ShowMinimapCommand final : public Command {
 public:
     void Execute() const;

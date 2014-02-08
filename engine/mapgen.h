@@ -41,12 +41,11 @@ private:
     void AddRiverTile(int x, int y);
 
     Point ClosestPoint(int x, int y) const;
-    void RandomOffcentre(int& x, int& y, double& r) const;
+    static void RandomOffcentre(int& x, int& y, double& r);
     void CreateHill(int x, int y, double r);
     double DistanceFromWater(Point const& p) const;
 
     double PointAltitude(Point const& p) const;
-    Point RandomPoint() const;
     bool RandomPointWithBiome(Point& p, Block const* biome,
         std::unordered_set<Point> ignore) const;
 

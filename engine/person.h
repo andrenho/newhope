@@ -16,6 +16,7 @@ public:
 
     inline bool InVehicle() const { return in_vehicle; }
     inline class Vehicle* Vehicle() const { return vehicle; }
+    bool ExitVehicle();
 
     inline virtual double Radius() const { return 0.5; }
     virtual Point Position() const;

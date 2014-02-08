@@ -33,6 +33,7 @@ public:
 
     Point Position() const;
     double Angle() const;
+    inline VehicleModel const& Model() const { return model; }
 
     void PhysicsBodies(struct cpBody*& body, 
             struct cpBody*& rear_wheel_body, 

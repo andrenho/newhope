@@ -49,6 +49,8 @@ private:
     static void DrawStaticShape(struct cpBody *body, struct cpShape *shape, 
             void* data);
     void RenderCircle(double x1, double y1, double r) const;
+    
+    void WaitForKeypress() const;
 
     bool active;
     

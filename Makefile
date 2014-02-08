@@ -27,6 +27,7 @@ SRC = main.cc			\
       engine/worker.cc		\
       engine/world.cc		\
       ui/minimap.cc		\
+      ui/ui.cc			\
       ui/w/wireframeui.cc	\
       ui/w/wminimap.cc
 
@@ -66,7 +67,7 @@ lint:
 	cpplint --filter=${LINT_IGNORE} ${HEADERS} ${SRC}
 
 check:
-	cppcheck --include=all --inconclusive ${HEADERS} ${SRC}
+	cppcheck --enable=all --inconclusive ${HEADERS} ${SRC}
 
 findleaks:
 	build/findleaks.sh

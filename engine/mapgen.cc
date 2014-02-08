@@ -21,7 +21,7 @@ MapGen::MapGen(int x1, int y1, int x2, int y2)
 
 MapGen::MapGen(int x1, int y1, int x2, int y2, unsigned int seed)
     : rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed),
-      points({}), data({}), rivers({}), tile_cache({}), river_tiles({})
+      points({}), data({}), rivers({}), hm{}, tile_cache({}), river_tiles({})
 {
 }
 
@@ -343,14 +343,6 @@ MapGen::ClosestPoint(int x, int y) const
 }
 
 
-Point
-MapGen::RandomPoint() const
-{
-    return Point(world->Random() * (-rect.P1().X()+rect.P2().X()) + rect.P1().X(),
-             world->Random() * (-rect.P1().Y()+rect.P2().Y()) + rect.P1().Y());
-}
-
-
 bool 
 MapGen::RandomPointWithBiome(Point& pt, Block const* biome, 
         std::unordered_set<Point> ignore) const
@@ -385,7 +377,7 @@ MapGen::RandomPointWithBiome(Point& pt, Block const* biome,
 
 
 void 
-MapGen::RandomOffcentre(int& x, int& y, double& r) const
+MapGen::RandomOffcentre(int& x, int& y, double& r)
 {
     r = world->Random() * 24 + 6;
     double theta = world->Random() * 2 * M_PI + world->Random();
