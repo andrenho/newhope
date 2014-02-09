@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <iostream>
 
 #include "./globals.h"
 #include "engine/world.h"
@@ -38,6 +39,82 @@ WDialogManager::~WDialogManager()
 void 
 WDialogManager::Speech(class Person const& person, std::string message) const
 {
+    MessageBox(person, message);
+
+    ui->WaitForKeypress();
+    ui->RedrawScene();
+    ui->PresentScene();
+}
+
+
+std::string 
+WDialogManager::Question(class Person const& person, std::string message) const
+{
+    std::string reply;
+
+    // get parameters
+    int win_w, win_h;
+    SDL_GetWindowSize(win, &win_w, &win_h);
+    int h = TTF_FontLineSkip(main_font);
+
+    // print message
+    int y = MessageBox(person, message + "\n");
+
+    // draw edit text
+    auto redraw_text = [&]() -> void {
+        SDL_Rect r1{ 25, y, win_w-25, h };
+        SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+        SDL_RenderFillRect(ren, &r1);
+        WriteTextOnScreen(main_font, reply, 25, y, 255, 255, 255);
+    };
+
+    // input from user
+    SDL_Event e;
+    SDL_StartTextInput();
+    for(;;) {
+        while(SDL_PollEvent(&e)) {
+            switch(e.type) {
+            case SDL_TEXTINPUT:
+                reply.append(e.text.text);
+                redraw_text();
+                break;
+            case SDL_KEYDOWN:
+                if(e.key.keysym.sym == SDLK_BACKSPACE && reply.size() > 0) {
+                    reply.resize(reply.size() - 1);
+                    redraw_text();
+                } else if(e.key.keysym.sym == SDLK_RETURN) {
+                    SDL_StopTextInput();
+                    return reply;
+                }
+                break;
+            default:
+                ;
+            }
+        }
+    }
+}
+
+
+void 
+WDialogManager::Shopkeeper(class City& city) const
+{
+    
+    bool closed = false;
+    std::map<Resource, SDL_Rect> mrects;
+    std::vector<SDL_Rect> crects;
+    while(!closed) {
+        ShopKeeperDraw(city, mrects, crects);
+        closed = ShopKeeperEvents(city, mrects, crects);
+    }
+}
+
+
+/************************************************************************/
+
+
+int 
+WDialogManager::MessageBox(class Person const& person, std::string message) const
+{
     (void) person;
 
     // get screen size
@@ -66,30 +143,7 @@ WDialogManager::Speech(class Person const& person, std::string message) const
 	}
 	SDL_RenderPresent(ren);
 	
-    ui->WaitForKeypress();
-    ui->RedrawScene();
-    ui->PresentScene();
-}
-
-
-std::string 
-WDialogManager::Question(class Person const& person, std::string message) const
-{
-    
-}
-
-
-void 
-WDialogManager::Shopkeeper(class City& city) const
-{
-    
-    bool closed = false;
-    std::map<Resource, SDL_Rect> mrects;
-    std::vector<SDL_Rect> crects;
-    while(!closed) {
-        ShopKeeperDraw(city, mrects, crects);
-        closed = ShopKeeperEvents(city, mrects, crects);
-    }
+    return y - TTF_FontLineSkip(main_font);
 }
 
 

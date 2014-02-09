@@ -10,6 +10,8 @@ public:
     virtual ~DialogManager() {}
 
     virtual void Speech(class Person const& person, std::string message) const = 0;
+    virtual std::string Question(class Person const& person, std::string message) const = 0;
+
     virtual void Shopkeeper(class City& city) const = 0;
 
 protected:

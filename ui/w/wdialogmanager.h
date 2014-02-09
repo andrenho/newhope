@@ -25,6 +25,8 @@ private:
     WDialogManager(const WDialogManager&);
     WDialogManager& operator=(const WDialogManager&);
 
+    int MessageBox(class Person const& person, std::string message) const;
+
     void ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const;
     bool ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const;
 
