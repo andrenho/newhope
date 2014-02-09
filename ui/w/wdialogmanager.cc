@@ -49,7 +49,7 @@ WDialogManager::Speech(class Person const& person, std::string message) const
     int advance;
     TTF_GlyphMetrics(main_font, 'A', NULL, NULL, NULL, NULL, &advance);
     
-    std::vector<std::string> lines = Wrap(message, (win_w-50) / advance);
+    std::vector<std::string> lines = Wrap(message, static_cast<unsigned int>((win_w-50) / advance));
     int nlines = static_cast<int>(lines.size());
     
     // draw black box
@@ -106,7 +106,7 @@ WDialogManager::Shopkeeper(class City& city) const
     // draw vehicle cargo slots
     x = 150;
     std::vector<SDL_Rect> crects;
-    for(int i=0; i<hero.Vehicle().Model().CargoSlots; ++i) {
+    for(unsigned int i=0; i<hero.Vehicle().Model().CargoSlots; ++i) {
         crects.push_back({ x, 290, 25, 25 });
         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
         SDL_RenderFillRect(ren, &crects[i]);

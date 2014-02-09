@@ -10,11 +10,11 @@
 
 class VehicleModel final {
 public:
-    VehicleModel(double w, double h, int cargo_slots) 
+    VehicleModel(double w, double h, unsigned int cargo_slots) 
         : W(w), H(h), CargoSlots(cargo_slots) {}
 
     const double W, H;
-    const int CargoSlots;
+    const unsigned int CargoSlots;
 
     static const VehicleModel* GENERIC;
 };
@@ -28,6 +28,7 @@ struct VehicleSteering final {
 
 
 typedef std::pair<Resource,int> CargoSlot;
+const CargoSlot EmptySlot = { NOTHING, 0 };
 
 
 class Vehicle final : public Object {
@@ -42,6 +43,7 @@ public:
 
     Point Position() const;
     double Angle() const;
+    CargoSlot const& Cargo(unsigned int slot) const;
     inline VehicleModel const& Model() const { return model; }
 
     void PhysicsBodies(struct cpBody*& body, 

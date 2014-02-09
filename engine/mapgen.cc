@@ -390,7 +390,7 @@ MapGen::RandomPointWithBiome(Point& pt, Block const* biome,
     } else {
         // choose a random point
         double r = world->Random();
-        int idx = static_cast<int>(r * static_cast<double>(pts.size()));
+        unsigned int idx = static_cast<unsigned int>(r * static_cast<double>(pts.size()));
         pt = pts[idx];
         return true;
     }

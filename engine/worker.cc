@@ -26,7 +26,7 @@ Worker::TalkToHero()
         ui->Dialog().Shopkeeper(city);
         break;
     default:
-        abort();
+        ;
     }
 }
 

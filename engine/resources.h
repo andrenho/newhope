@@ -17,6 +17,7 @@ enum Resource : char {
    MEDICINE   = '+', 
    DRUGS      = 'D', 
    __RCOUNT__ = 12,
+   NOTHING    = '.',
 };
 
 extern std::array<Resource, Resource::__RCOUNT__> ResourceList;

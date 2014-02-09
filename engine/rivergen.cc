@@ -56,7 +56,7 @@ try_again:
 Point 
 Rivergen::RandomPoint() const
 {
-    return points.at(static_cast<int>(world->Random() * static_cast<double>(points.size())));
+    return points.at(static_cast<unsigned long>(world->Random() * static_cast<double>(points.size())));
 }
 
 

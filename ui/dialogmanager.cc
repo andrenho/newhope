@@ -1,7 +1,7 @@
 #include "ui/dialogmanager.h"
 
 std::vector<std::string>
-DialogManager::Wrap(std::string text, int nchars)
+DialogManager::Wrap(std::string text, unsigned int nchars)
 {
     unsigned int ptr = 0, last_ptr = 0;
     std::vector<std::string> lines;

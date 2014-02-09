@@ -13,7 +13,7 @@ public:
     virtual void Shopkeeper(class City& city) const = 0;
 
 protected:
-    static std::vector<std::string> Wrap(std::string text, int nchars);
+    static std::vector<std::string> Wrap(std::string text, unsigned int nchars);
 
 private:
     DialogManager(const DialogManager&);
