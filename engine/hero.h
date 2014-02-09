@@ -3,6 +3,7 @@
 
 #include "engine/person.h"
 #include "engine/point.h"
+#include "engine/resources.h"
 
 class Hero final : public Person {
 public:

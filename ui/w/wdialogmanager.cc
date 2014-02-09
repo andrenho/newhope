@@ -1,14 +1,13 @@
 #include "ui/w/wdialogmanager.h"
 
-#include <SDL2/SDL.h>
-
-#include <map>
-#include <vector>
+#include <algorithm>
+#include <cstdint>
 
 #include "./globals.h"
 #include "engine/world.h"
 #include "engine/hero.h"
 #include "engine/vehicle.h"
+#include "engine/resources.h"
 #include "ui/ui.h"
 
 WDialogManager::WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren)
@@ -74,6 +73,20 @@ WDialogManager::Speech(class Person const& person, std::string message) const
 void 
 WDialogManager::Shopkeeper(class City& city) const
 {
+    
+    bool closed = false;
+    std::map<Resource, SDL_Rect> mrects;
+    std::vector<SDL_Rect> crects;
+    while(!closed) {
+        ShopKeeperDraw(city, mrects, crects);
+        closed = ShopKeeperEvents(city, mrects, crects);
+    }
+}
+
+
+void 
+WDialogManager::ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const
+{
     Hero& hero = world->Hero();
 
     // draw box
@@ -89,7 +102,6 @@ WDialogManager::Shopkeeper(class City& city) const
  
     // draw shopkeeper merchindising
     int x = 150;
-    std::map<Resource, SDL_Rect> mrects;
     for(auto const& res : ResourceList) {
         mrects[res] = { x, 170, 25, 25 };
         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
@@ -105,7 +117,6 @@ WDialogManager::Shopkeeper(class City& city) const
 
     // draw vehicle cargo slots
     x = 150;
-    std::vector<SDL_Rect> crects;
     for(unsigned int i=0; i<hero.Vehicle().Model().CargoSlots; ++i) {
         crects.push_back({ x, 290, 25, 25 });
         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
@@ -113,14 +124,95 @@ WDialogManager::Shopkeeper(class City& city) const
         SDL_Rect r3 = { crects[i].x+2, 292, 21, 21 };
         SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
         SDL_RenderFillRect(ren, &r3);
-        WriteTextOnScreen(small_font, "0" /*TODO*/, x, 320, 0, 0, 0);
+        CargoSlot const& cs = hero.Vehicle().Cargo(i);
+        if(cs.Cargo != Resource::NOTHING) {
+            WriteTextOnScreen(main_font, std::string(1, static_cast<char>(cs.Cargo)), x+5, 295, 0, 0, 0);
+            WriteTextOnScreen(small_font, std::to_string(cs.Amount), x, 320, 0, 0, 0);
+        }
         
         x += 35;
     }
 
-
 	SDL_RenderPresent(ren);
-    ui->WaitForKeypress();
+}
+
+
+bool
+WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const
+{
+    Resource dragging = Resource::NOTHING;
+    int cargo_slot = -1;
+    enum { BUYING, SELLING, NOTHING } action = NOTHING;
+
+    auto in_rect = [](int32_t& x, int32_t& y, SDL_Rect const& rect) -> bool {
+        return (x >= rect.x && x < rect.x+rect.w && y >= rect.y && y < rect.y+rect.h);
+    };
+
+    for(;;) {
+        SDL_Event e;
+        while(SDL_PollEvent(&e)) {
+            switch(e.type) {
+
+            case SDL_KEYDOWN:
+                if(e.key.keysym.sym == SDLK_ESCAPE) {
+                    return true;
+                }
+                break;
+
+            case SDL_MOUSEBUTTONDOWN:
+                if(e.button.button == SDL_BUTTON_LEFT) {
+                    // check if dragging from shopkeeper
+                    for(auto const& mrect: mrects) {
+                        if(in_rect(e.button.x, e.button.y, mrect.second)) {
+                            dragging = mrect.first;
+                            action = BUYING;
+                        }
+                    }
+                    // check if dragging from cargo
+                    int slot = 0;
+                    for(auto const& crect: crects) {
+                        if(in_rect(e.button.x, e.button.y, crect)) {
+                            cargo_slot = slot;
+                            action = BUYING;
+                        }
+                        ++slot;
+                    }
+                }
+                break;
+
+            case SDL_MOUSEBUTTONUP:
+                if(e.button.button == SDL_BUTTON_LEFT) {
+                    // check if dropping on vehicle cargo (buying)
+                    if(action == BUYING) {
+                        int slot = 0;
+                        for(auto const& crect: crects) {
+                            if(in_rect(e.button.x, e.button.y, crect)) {
+                                // TODO - shift
+                                world->Hero().Buy(city, dragging, std::min(100U, city.ResourceAmount(dragging)));
+                            }
+                            ++slot;
+                        }
+
+                    // check if dropping on shopkeeper (selling)
+                    } else if(action == SELLING) {
+                        for(auto const& mrect: mrects) {
+                            if(in_rect(e.button.x, e.button.y, mrect.second)) {
+                                // TODO - shift
+                                world->Hero().Sell(city, cargo_slot, std::min(100U, world->Hero().Vehicle().Cargo(cargo_slot).Amount));
+                            }
+                        }
+                    }
+
+                    action = NOTHING;
+                }
+                break;
+
+            default:
+                ;
+            }
+        }
+    }
+    return false;
 }
 
 

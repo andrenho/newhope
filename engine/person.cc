@@ -1,8 +1,11 @@
 #include <chipmunk.h>
 
+#include <glog/logging.h>
+
 #include <algorithm>
 
 #include "./globals.h"
+#include "engine/city.h"
 #include "engine/person.h"
 #include "engine/vehicle.h"
 #include "engine/world.h"
@@ -100,6 +103,20 @@ Person::DestroyPhysics(struct cpSpace* space)
     cpConstraintFree(joint);
     cpBodyFree(body);
     cpBodyFree(target);
+}
+
+
+void 
+Person::Buy(City const& city, Resource const& resource, unsigned int amount)
+{
+    LOG(INFO) << "Buy\n";
+}
+
+
+void 
+Person::Sell(City const& city, unsigned int cargo_slot, unsigned int amount)
+{
+    LOG(INFO) << "Sell\n";
 }
 
 

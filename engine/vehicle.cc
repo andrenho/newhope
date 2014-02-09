@@ -120,7 +120,7 @@ Vehicle::Cargo(unsigned int slot) const
 {
     if(slot > Model().CargoSlots) {
         abort();
-    } else if(slot > cargo_slots.size()) {
+    } else if(slot >= cargo_slots.size()) {
         return EmptySlot;
     } else {
         return cargo_slots[slot];

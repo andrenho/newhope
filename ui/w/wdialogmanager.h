@@ -1,12 +1,16 @@
 #ifndef UI_W_WDIALOGMANAGER_H_
 #define UI_W_WDIALOGMANAGER_H_
 
+#include "engine/resources.h"
 #include "ui/dialogmanager.h"
 
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <cstdint>
 
+#include <map>
 #include <string>
+#include <vector>
 
 class WDialogManager final : public DialogManager {
 public:
@@ -19,6 +23,9 @@ public:
 private:
     WDialogManager(const WDialogManager&);
     WDialogManager& operator=(const WDialogManager&);
+
+    void ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const;
+    bool ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const;
 
     int WriteTextOnScreen(TTF_Font* font, std::string text, int x, int y, 
             uint8_t r, uint8_t g, uint8_t b) const;

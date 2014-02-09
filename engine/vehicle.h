@@ -27,7 +27,10 @@ struct VehicleSteering final {
 };
 
 
-typedef std::pair<Resource,int> CargoSlot;
+struct CargoSlot final {
+    enum Resource Cargo;
+    unsigned int Amount;
+};
 const CargoSlot EmptySlot = { NOTHING, 0 };
 
 

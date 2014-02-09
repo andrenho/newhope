@@ -22,7 +22,7 @@ public:
     static CityType Type(Block const* biome);
     const std::vector<WorkerPair> Workers() const;
 
-    inline int ResourceAmount(Resource r) const { return resources.at(r); }
+    inline unsigned int ResourceAmount(Resource r) const { return resources.at(r); }
 
     const int X, Y;
 
