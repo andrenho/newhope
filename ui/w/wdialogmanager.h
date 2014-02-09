@@ -18,6 +18,7 @@ public:
     ~WDialogManager();
 
     void Speech(class Person const& person, std::string message) const;
+    std::string Question(class Person const& person, std::string message) const;
     void Shopkeeper(class City& city) const;
 
 private:

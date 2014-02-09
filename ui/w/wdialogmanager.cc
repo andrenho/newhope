@@ -67,6 +67,15 @@ WDialogManager::Speech(class Person const& person, std::string message) const
 	SDL_RenderPresent(ren);
 	
     ui->WaitForKeypress();
+    ui->RedrawScene();
+    ui->PresentScene();
+}
+
+
+std::string 
+WDialogManager::Question(class Person const& person, std::string message) const
+{
+    
 }
 
 
@@ -220,6 +229,7 @@ int
 WDialogManager::WriteTextOnScreen(TTF_Font* font, std::string text, 
         int x, int y, uint8_t r, uint8_t g, uint8_t b) const
 {
+    if(text != "") {
 		SDL_Surface* sf = TTF_RenderUTF8_Solid(font, text.c_str(), 
 				SDL_Color{r,g,b,0});
 		SDL_Texture* txt = SDL_CreateTextureFromSurface(ren, sf);
@@ -227,7 +237,8 @@ WDialogManager::WriteTextOnScreen(TTF_Font* font, std::string text,
 		SDL_RenderCopy(ren, txt, NULL, &rect);
 		SDL_FreeSurface(sf);
 		SDL_DestroyTexture(txt);
-		return TTF_FontLineSkip(main_font);
+    }
+	return TTF_FontLineSkip(main_font);
 }
 
 

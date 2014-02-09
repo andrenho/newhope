@@ -8,10 +8,22 @@ DialogManager::Wrap(std::string text, unsigned int nchars)
 
     for(;;) {
         ptr += nchars;
-        if(ptr > text.length()) {
+
+        // check for 'enters', and break it
+        std::string::size_type pos;
+        if((pos = text.substr(last_ptr, ptr).find('\n')) != std::string::npos) {
+            lines.push_back(text.substr(last_ptr, pos));
+            last_ptr = ptr = last_ptr + static_cast<int>(pos)+1;
+            continue;
+        }
+
+        // if less than `nchars` left, add it and end it
+        if(ptr >= text.length()) {
             lines.push_back(text.substr(last_ptr));
             return lines;
         }
+
+        // advance `nchars` and go back until a space is found
         while(text[ptr] != ' ' && ptr > 0) {
             --ptr;
         }
