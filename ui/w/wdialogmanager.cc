@@ -173,7 +173,7 @@ WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> 
                     for(auto const& crect: crects) {
                         if(in_rect(e.button.x, e.button.y, crect)) {
                             cargo_slot = slot;
-                            action = BUYING;
+                            action = SELLING;
                         }
                         ++slot;
                     }
