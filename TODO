@@ -5,3 +5,7 @@ Next:
 - buy/sell
 
 Eventually:
+
+Done:
+
+- fix river generation 4ae3fd4 (BEFORE: 16 / 4 / 0) -> a8aa38d
