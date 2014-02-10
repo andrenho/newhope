@@ -8,10 +8,10 @@ class Person : public Object {
 public:
     virtual ~Person() { }
 
-    virtual void InitializePhysics(struct cpSpace* space);
+    virtual void InitializePhysics(struct cpSpace* space) override;
     virtual void SetTarget(Point const& p);
     virtual void SetPosition(Point const& p);
-    virtual void DestroyPhysics(struct cpSpace* space);
+    virtual void DestroyPhysics(struct cpSpace* space) override;
 
     virtual void TalkToHero() {}
 

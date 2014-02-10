@@ -11,9 +11,9 @@ public:
     Hero(Point init, class Vehicle* vehicle);
     virtual ~Hero() { }
 
-    void Collision(Object& obj);
+    void Collision(Object& obj) override;
 
-    Point Position() const;
+    Point Position() const override;
 
 private:
     Hero(const Hero&);

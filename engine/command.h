@@ -19,7 +19,7 @@ private:
 
 class QuitCommand final : public Command {
 public:
-    void Execute() const;
+    void Execute() const override;
 };
 
 
@@ -27,7 +27,7 @@ class MoveCommand final : public Command {
 public:
     MoveCommand(bool up, bool down, bool left, bool right) : 
         up(up), down(down), left(left), right(right) { }
-    void Execute() const;
+    void Execute() const override;
 private:
     bool up, down, left, right;
 };
@@ -35,13 +35,13 @@ private:
 
 class ExitVehicleCommand final : public Command {
 public:
-    void Execute() const;
+    void Execute() const override;
 };
 
 
 class ShowMinimapCommand final : public Command {
 public:
-    void Execute() const;
+    void Execute() const override;
 };
 
 #endif  // ENGINE_COMMAND_H_

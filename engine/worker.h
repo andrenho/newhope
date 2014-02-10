@@ -12,7 +12,7 @@ public:
     Worker(Point init, class City& city, WorkerJob job);
     ~Worker();
 
-    void TalkToHero();
+    void TalkToHero() override;
 
 private:
     Worker(const Worker&);

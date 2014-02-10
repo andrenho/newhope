@@ -39,12 +39,12 @@ public:
     Vehicle(Point init_pos, const VehicleModel* model);
     ~Vehicle();
 
-    void InitializePhysics(struct cpSpace* space);
-    void DestroyPhysics(struct cpSpace* space);
+    void InitializePhysics(struct cpSpace* space) override;
+    void DestroyPhysics(struct cpSpace* space) override;
 
-    void Step();
+    void Step() override;
 
-    Point Position() const;
+    Point Position() const override;
     double Angle() const;
     CargoSlot const& Cargo(unsigned int slot) const;
     inline VehicleModel const& Model() const { return model; }

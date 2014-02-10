@@ -15,26 +15,22 @@ public:
     WireframeUI();
     ~WireframeUI();
 
-    void Initialize();
-    inline bool Active() const { return active; }
-    void Quit();
+    void Initialize() override;
+    inline bool Active() const override { return active; }
+    void Quit() override;
 
-    uint32_t Now() const;
-    void Wait(uint32_t tm) const;
+    uint32_t Now() const override;
+    void Wait(uint32_t tm) const override;
 
-    void GetEvents(std::vector<Command*>& commands) const;
+    void GetEvents(std::vector<Command*>& commands) const override;
 
-    Rectangle& GetVisibleArea(Rectangle& r) const;
-    void RedrawScene() const;
-    void PresentScene() const;
+    Rectangle& GetVisibleArea(Rectangle& r) const override;
+    void RedrawScene() const override;
+    void PresentScene() const override;
 
-    void ShowMinimap() const;
+    void ShowMinimap() const override;
 
-    // dialogs
-    void Speech(class Person const& person, std::string message) const;
-    void DialogShopkeeper(class City& city) const;
-
-    void WaitForKeypress() const;
+    void WaitForKeypress() const override;
 
 private:
     WireframeUI(const WireframeUI&);

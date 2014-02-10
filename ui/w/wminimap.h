@@ -12,18 +12,15 @@ public:
     void DestroyImage();
 
 protected:
-    void CreateImage(int w, int h);
-    void DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b);
-    void DrawPoints(std::vector<Point> const& pts, 
-            uint8_t r, uint8_t g, uint8_t b);
-    void DrawRectangle(int x1, int y1, int x2, int y2, 
-            bool fill, uint8_t r, uint8_t g, uint8_t b) const;
-    void DrawRectangleScreen(int x1, int y1, int x2, int y2, 
-            bool fill, uint8_t r, uint8_t g, uint8_t b) const;
-    void DrawWaitingScreen() const {}
-    void FinishImage();
-    void PresentImage(int x, int y) const;
-    void UpdateScreen() const;
+    void CreateImage(int w, int h) override;
+    void DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b) override;
+    void DrawPoints(std::vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b) override;
+    void DrawRectangle(int x1, int y1, int x2, int y2, bool fill, uint8_t r, uint8_t g, uint8_t b) const override;
+    void DrawRectangleScreen(int x1, int y1, int x2, int y2, bool fill, uint8_t r, uint8_t g, uint8_t b) const override;
+    void DrawWaitingScreen() const override {}
+    void FinishImage() override;
+    void PresentImage(int x, int y) const override;
+    void UpdateScreen() const override;
 
 private:
     WMinimap(const WMinimap&);

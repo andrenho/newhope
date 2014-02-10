@@ -17,20 +17,23 @@ public:
     WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren);
     ~WDialogManager();
 
-    void Speech(class Person const& person, std::string message) const;
-    std::string Question(class Person const& person, std::string message) const;
-    void Shopkeeper(class City& city) const;
+    void Speech(class Person const& person, std::string const& message) const override;
+    void Shopkeeper(class City& city) const override;
+
+protected:
+    std::string Question(class Person const& person, std::string const& message, bool limit_to_numbers, 
+            unsigned int digits) const override;
 
 private:
     WDialogManager(const WDialogManager&);
     WDialogManager& operator=(const WDialogManager&);
 
-    int MessageBox(class Person const& person, std::string message) const;
+    int MessageBox(class Person const& person, std::string const& message) const;
 
     void ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const;
     bool ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const;
 
-    int WriteTextOnScreen(TTF_Font* font, std::string text, int x, int y, 
+    int WriteTextOnScreen(TTF_Font* font, std::string const& text, int x, int y, 
             uint8_t r, uint8_t g, uint8_t b) const;
 
     struct SDL_Window* win;

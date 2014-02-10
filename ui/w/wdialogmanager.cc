@@ -37,7 +37,7 @@ WDialogManager::~WDialogManager()
 }
 
 void 
-WDialogManager::Speech(class Person const& person, std::string message) const
+WDialogManager::Speech(class Person const& person, std::string const& message) const
 {
     MessageBox(person, message);
 
@@ -48,7 +48,7 @@ WDialogManager::Speech(class Person const& person, std::string message) const
 
 
 std::string 
-WDialogManager::Question(class Person const& person, std::string message) const
+WDialogManager::Question(class Person const& person, std::string const& message, bool limit_to_numbers, unsigned int digits) const
 {
     std::string reply;
 
@@ -66,6 +66,7 @@ WDialogManager::Question(class Person const& person, std::string message) const
         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
         SDL_RenderFillRect(ren, &r1);
         WriteTextOnScreen(main_font, reply, 25, y, 255, 255, 255);
+        SDL_RenderPresent(ren);
     };
 
     // input from user
@@ -75,8 +76,15 @@ WDialogManager::Question(class Person const& person, std::string message) const
         while(SDL_PollEvent(&e)) {
             switch(e.type) {
             case SDL_TEXTINPUT:
-                reply.append(e.text.text);
-                redraw_text();
+                if(digits > 0 && reply.size() < digits) {
+                    if(limit_to_numbers) {
+                        if(e.text.text[0] < '0' || e.text.text[0] > '9') {
+                            break;
+                        }
+                    }
+                    reply.append(e.text.text);
+                    redraw_text();
+                }
                 break;
             case SDL_KEYDOWN:
                 if(e.key.keysym.sym == SDLK_BACKSPACE && reply.size() > 0) {
@@ -98,7 +106,6 @@ WDialogManager::Question(class Person const& person, std::string message) const
 void 
 WDialogManager::Shopkeeper(class City& city) const
 {
-    
     bool closed = false;
     std::map<Resource, SDL_Rect> mrects;
     std::vector<SDL_Rect> crects;
@@ -113,7 +120,7 @@ WDialogManager::Shopkeeper(class City& city) const
 
 
 int 
-WDialogManager::MessageBox(class Person const& person, std::string message) const
+WDialogManager::MessageBox(class Person const& person, std::string const& message) const
 {
     (void) person;
 
@@ -280,8 +287,7 @@ WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> 
 
 
 int
-WDialogManager::WriteTextOnScreen(TTF_Font* font, std::string text, 
-        int x, int y, uint8_t r, uint8_t g, uint8_t b) const
+WDialogManager::WriteTextOnScreen(TTF_Font* font, std::string const& text, int x, int y, uint8_t r, uint8_t g, uint8_t b) const
 {
     if(text != "") {
 		SDL_Surface* sf = TTF_RenderUTF8_Solid(font, text.c_str(), 
