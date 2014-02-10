@@ -19,8 +19,8 @@ public:
     inline class Vehicle& Vehicle() const { return *vehicle; }
     bool ExitVehicle();
 
-    void Buy(class City const& city, Resource const& resource, unsigned int amount);
-    void Sell(class City const& city, unsigned int cargo_slot, unsigned int amount);
+    bool Buy(class City const& city, Resource const& resource, unsigned int amount, std::string& message);
+    bool Sell(class City const& city, unsigned int cargo_slot, unsigned int amount, std::string& message);
 
     inline virtual double Radius() const { return 0.5; }
     virtual Point Position() const;

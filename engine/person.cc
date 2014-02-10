@@ -106,16 +106,38 @@ Person::DestroyPhysics(struct cpSpace* space)
 }
 
 
-void 
-Person::Buy(City const& city, Resource const& resource, unsigned int amount)
+bool
+Person::Buy(City const& city, Resource const& resource, unsigned int amount, std::string& message)
 {
+    assert(amount <= 100);
+
+    // are enough resources available in the city?
+    if(city.ResourceAmount(resource) < amount) {
+        // TODO - add message
+        return false;
+    }
+
+    // does the person has enough funds?
+    if(money < city.ResourceSellPrice(resource) * amount) {
+        // TODO - add message
+        return false;
+    }
+
+    // is there space in the vehcile?
+    // TODO
+
+    // purchase
+    // TODO
+
     LOG(INFO) << "Buy\n";
 }
 
 
-void 
-Person::Sell(City const& city, unsigned int cargo_slot, unsigned int amount)
+bool 
+Person::Sell(City const& city, unsigned int cargo_slot, unsigned int amount, std::string& message)
 {
+    // does the person has enough resources?
+    // does the seller has enough funds? (TODO)
     LOG(INFO) << "Sell\n";
 }
 

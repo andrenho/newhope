@@ -22,8 +22,7 @@ Worker::TalkToHero()
 {
     switch(job) {
     case WorkerJob::SHOPKEEPER:
-        std::cout << ui->Dialog().QuestionNumber(*this, _("Welcome, sir! Please take a look at our fine merchindisings!"), 3) << std::endl;
-        // ui->Dialog().Shopkeeper(city);
+        ui->Dialog().Shopkeeper(city);
         break;
     default:
         ;
