@@ -11,7 +11,6 @@
 
 class Minimap {
 public:
-    Minimap(int w, int h);
     virtual ~Minimap();
 
     void Initialize();
@@ -22,6 +21,8 @@ public:
     const int W, H;
 
 protected:
+    Minimap(int w, int h);
+
     virtual void CreateImage(int w, int h) = 0;
     virtual void DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b) = 0;
     virtual void DrawPoints(std::vector<Point> const& pts, 

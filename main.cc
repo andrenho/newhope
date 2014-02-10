@@ -13,7 +13,11 @@
 #include "engine/command.h"
 #include "engine/world.h"
 #include "ui/ui.h"
-#include "ui/w/wireframeui.h"
+#ifdef DUMMY
+#  include "ui/dummy.h"
+#else
+#  include "ui/w/wireframeui.h"
+#endif
 
 World* world = nullptr;
 UI*    ui    = nullptr;
@@ -26,7 +30,7 @@ int main(int argc, char** argv)
     google::InitGoogleLogging(argv[0]);
 
     // initialize seed
-    unsigned int seedp = 0; //static_cast<unsigned int>(time(nullptr));
+    unsigned int seedp = static_cast<unsigned int>(time(nullptr));
     LOG(INFO) << "Seed initialized to " << seedp << ".\n";
 
     // initialize gettext
@@ -36,7 +40,11 @@ int main(int argc, char** argv)
     LOG(INFO) << "Locale set to " << locale << ".\n";
 
     // initialize engine and UI
+#ifdef DUMMY
+    ui = new DummyUI();
+#else
     ui = new WireframeUI();
+#endif
     world = new World(-10000, -10000, 10000, 10000, seedp);
     world->Initialize();
     ui->Initialize();

@@ -60,12 +60,18 @@ ifeq (${DEBUG},yes)
   CPPFLAGS += -g -O0 -DDEBUG
   LDFLAGS += -g
 else
-  # production flags
-  CPPFLAGS += -O3 -DNDEBUG
-  LDFLAGS += -s
-  ifeq (${DEBUG},leaks)
-    CPPFLAGS += -g
+  ifeq (${DEBUG},dummy)
+    # dummy flags
+    CPPFLAGS += -g -O0 -DDEBUG -DDUMMY
     LDFLAGS += -g
+  else
+    # production flags
+    CPPFLAGS += -O3 -DNDEBUG
+    LDFLAGS += -s
+    ifeq (${DEBUG},leaks)
+      CPPFLAGS += -g
+      LDFLAGS += -g
+    endif
   endif
 endif
 

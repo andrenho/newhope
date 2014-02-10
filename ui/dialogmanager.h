@@ -6,7 +6,6 @@
 
 class DialogManager {
 public:
-    DialogManager() {}
     virtual ~DialogManager() {}
 
     virtual void Speech(class Person const& person, std::string const& message) const = 0;
@@ -16,6 +15,8 @@ public:
     virtual void Shopkeeper(class City& city) const = 0;
 
 protected:
+    DialogManager() {}
+
     virtual std::string Question(class Person const& person, std::string const& message, bool limit_to_numbers, 
             unsigned int digits) const = 0;
     static std::vector<std::string> Wrap(std::string const& text, unsigned int nchars);
