@@ -22,14 +22,17 @@ MapGen::MapGen(int x1, int y1, int x2, int y2)
 
 
 MapGen::MapGen(int x1, int y1, int x2, int y2, unsigned int seed)
-    : rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed),
-      points({}), data({}), rivers({}), hm{}, tile_cache({}), river_tiles({})
+    : rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed), points({}), data({}), rivers({}), hm{}, tile_cache({}), 
+      river_tiles({}), rivergen(nullptr)
 {
 }
 
 
 MapGen::~MapGen()
 {
+    if(rivergen) {
+        delete rivergen;
+    }
 }
 
 
@@ -46,12 +49,10 @@ MapGen::Create()
     
     // create rivers
     LOG(INFO) << "Creating rivers...\n";
-    Rivergen rivergen(hm, rect, seedp);
+    rivergen = new Rivergen(hm, rect, seedp);
     for(int i=0; i<12; i++) {
-        rivers.push_back(rivergen.CreateRiver());
+        rivers.push_back(rivergen->CreateRiver());
     }
-    LOG(INFO) << "Creating river tiles...\n";
-    AddRiverTiles();
 
     // find biomes
     LOG(INFO) << "Calculating moisture...\n";
@@ -72,7 +73,7 @@ MapGen::Terrain(int x, int y) const
     std::unordered_map<Point,Block const*>::const_iterator it;
     if((it = tile_cache.find(pt)) != tile_cache.end()) {
         return it->second;
-    } else if(river_tiles.find(pt) != river_tiles.end()) {
+    } else if(rivergen->TileIsRiver(x, y)) {
         return Block::WATER;
     } else {
         Point p = ClosestPoint(x, y);
@@ -247,67 +248,6 @@ MapGen::CreateBeaches()
             }
         }
     }
-}
-
-
-void
-MapGen::AddRiverTiles()
-{
-    int j=0;
-    for(auto const& river : rivers) {
-        LOG(INFO) << "  Creating tiles for river " << j++ << ".\n";
-        int river_width = static_cast<int>(world->Random() * 10 + 5);
-        for(unsigned int i=0; i<river.size()-1; i++) {
-            LOG(INFO) << "    Point " << i << "/" << river.size() << ".\n";
-            int x1 = static_cast<int>(river[i].X()),   
-                y1 = static_cast<int>(river[i].Y()),
-                x2 = static_cast<int>(river[i+1].X()), 
-                y2 = static_cast<int>(river[i+1].Y());
-            if(x1 > x2) {
-                std::swap(x1, x2);
-                std::swap(y1, y2);
-            }
-            int dx = x2-x1, dy = y2-y1;
-            for(int x=x1; x<x2; x++) {
-                int y = y1 + dy * (x-x1) / dx;
-                PlotRiverCircle(x, y, river_width);
-            }
-        }
-    }
-}
-
-
-void 
-MapGen::PlotRiverCircle(int x0, int y0, int r)
-{
-    int x = r, y = 0;
-    int radius_error = 1-x;
-
-    while(x >= y) {
-        for(int nx=-x; nx<=x; nx++) {
-            AddRiverTile(nx+x0, y+y0);
-            AddRiverTile(nx+x0, -y+y0);
-        }
-        for(int ny=-y; ny<=y; ny++) {
-            AddRiverTile(x+x0, ny+y0);
-            AddRiverTile(-x+x0, ny+y0);
-        }
-
-        y++;
-        if(radius_error < 0) {
-            radius_error += 2*y+1;
-        } else {
-            --x;
-            radius_error += 2*(y-x+1);
-        }
-    }
-}
-
-
-void 
-MapGen::AddRiverTile(int x, int y)
-{
-    river_tiles.insert(Point(x,y));
 }
 
 

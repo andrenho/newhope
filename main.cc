@@ -26,8 +26,8 @@ int main(int argc, char** argv)
     google::InitGoogleLogging(argv[0]);
 
     // initialize seed
-    unsigned int seedp = static_cast<unsigned int>(time(nullptr));
-    LOG(INFO) << "Seed initialized to " << 0 << ".\n";
+    unsigned int seedp = 0; //static_cast<unsigned int>(time(nullptr));
+    LOG(INFO) << "Seed initialized to " << seedp << ".\n";
 
     // initialize gettext
     char* locale = setlocale(LC_ALL, "");

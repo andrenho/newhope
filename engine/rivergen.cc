@@ -1,14 +1,15 @@
 #include "engine/rivergen.h"
 
-#include <cfloat>
 #include <algorithm>
+#include <cfloat>
+#include <cmath>
+#include <iostream>
 
 #include "./globals.h"
 #include "engine/world.h"
 
-Rivergen::Rivergen(const double (&hm)[255][255], const Rectangle rect,
-    unsigned int& seedp)
-    : hm(hm), rect(rect), seedp(seedp), points({}), altitude({})
+Rivergen::Rivergen(const double (&hm)[255][255], const Rectangle rect, unsigned int& seedp)
+    : hm(hm), rect(rect), seedp(seedp), points({}), altitude({}), segments({})
 {
     double prop_w = rect.P1().X() / (rect.P2().X() - rect.P1().X()),
            prop_h = rect.P1().Y() / (rect.P2().Y() - rect.P1().Y());
@@ -49,14 +50,32 @@ try_again:
         goto try_again;
     }
 
+    // create segments
+    int width = static_cast<int>(world->Random() * 10 + 10);
+    for(unsigned int i=0; i<river.size()-1; i++) {
+        segments.push_back(RiverSegment(river[i], river[i+1], width));
+    }
+
     return river;
+}
+
+
+bool 
+Rivergen::TileIsRiver(int x, int y) const
+{
+    for(auto const& seg: segments) {
+        if(seg.TileIsRiver(x, y)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
 Point 
 Rivergen::RandomPoint() const
 {
-    return points.at(static_cast<unsigned long>(world->Random() * static_cast<double>(points.size())));
+    return points.at(static_cast<std::vector<Point>::size_type>(world->Random() * static_cast<double>(points.size())));
 }
 
 
@@ -89,6 +108,51 @@ Rivergen::NextPoint(Point& p, std::vector<Point> ignore) const
     }
 
     return next;
+}
+
+
+RiverSegment::RiverSegment(Point const& p1, Point const& p2, int width)
+    : p1(p1), p2(p2), width(width), 
+      rect(Rectangle(
+                  Point(std::min(p1.X()-width, p2.X()-width), std::min(p1.Y()-width, p2.Y()-width)),
+                  Point(std::max(p1.X()+width, p2.X()+width), std::max(p1.Y()+width, p2.Y()+width)))),
+      polygon({})
+{
+    // create polygon
+    double dx = p2.X() - p1.X();
+    double dy = p2.Y() - p1.Y();
+    double line_length = sqrt(dx * dx + dy * dy);
+    dx /= line_length;
+    dy /= line_length;
+    const double xoff = 0.5 * static_cast<double>(width) * (dy);
+    const double yoff = 0.5 * static_cast<double>(width) * dx;
+    polygon.push_back(Point(p1.X() - xoff, p1.Y() + yoff));
+    polygon.push_back(Point(p2.X() - xoff, p2.Y() + yoff));
+    polygon.push_back(Point(p2.X() + xoff, p2.Y() - yoff));
+    polygon.push_back(Point(p1.X() + xoff, p1.Y() - yoff));
+}
+
+
+bool 
+RiverSegment::TileIsRiver(int x, int y) const
+{
+    Point p(x, y);
+
+    // coarse check
+    if(rect.ContainsPoint(p)) {
+        // fine check
+        int i, j;
+        bool c = false;
+        int nvert = polygon.size();
+        for(i=0, j=nvert-1; i < nvert; j = i++) {
+            if(((polygon[i].Y() > p.Y()) != (polygon[j].Y() > p.Y())) && 
+                        (p.X() < (polygon[j].X() - polygon[i].X()) * (p.Y() - polygon[i].Y()) / (polygon[j].Y() - polygon[i].Y()) + polygon[i].X())) {
+                c = !c;
+            }
+        }
+        return c;
+    }
+    return false;
 }
 
 

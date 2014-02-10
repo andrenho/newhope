@@ -31,6 +31,9 @@ public:
     ~MapGen();
 
 private:
+    MapGen(const MapGen&);
+    MapGen& operator=(const MapGen&);
+
     void CreatePoints(int points);
     void CreateHeightmap();
     void CalculateMoisture();
@@ -60,6 +63,8 @@ private:
 
     mutable std::unordered_map<Point,Block const*> tile_cache;
     std::unordered_set<Point> river_tiles;
+
+    class Rivergen* rivergen;
 
     const int NUMPOINTS = 1250;
 };
