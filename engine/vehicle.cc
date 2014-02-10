@@ -161,6 +161,22 @@ Vehicle::PhysicsShapes(struct cpShape*& shape,
 }
 
 
+unsigned int 
+Vehicle::SpaceLeft(Resource res) const
+{
+    unsigned int space = 0;
+    for(auto const& slot: cargo_slots) {
+        if(slot.Cargo == res) {
+            space += 100 - slot.Amount;
+        } else if(slot.Cargo == Resource::NOTHING) {
+            space += 100;
+        }
+    }
+    return space;
+}
+
+
+
 /**************************************************************************/
 
 

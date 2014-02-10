@@ -23,8 +23,8 @@ public:
     const std::vector<WorkerPair> Workers() const;
 
     inline unsigned int ResourceAmount(Resource r) const { return resources.at(r); }
-    inline unsigned int ResourceSellPrice(Resource r) const { return 10; }
-    inline unsigned int ResourceBuyPrice(Resource r) const { return 5; }
+    inline unsigned int ResourceSellPrice(Resource r) const { (void)r; return 10; }
+    inline unsigned int ResourceBuyPrice(Resource r) const { (void)r; return 5; }
 
     const int X, Y;
 

@@ -258,7 +258,9 @@ WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> 
                         for(auto const& crect: crects) {
                             if(in_rect(e.button.x, e.button.y, crect)) {
                                 // TODO - shift
-                                world->Hero().Buy(city, dragging, std::min(100U, city.ResourceAmount(dragging)));
+                                std::string message;
+                                world->Hero().Buy(city, dragging, std::min(100U, city.ResourceAmount(dragging)), message);
+                                std::cout << message << "\n";
                             }
                             ++slot;
                         }
@@ -268,7 +270,10 @@ WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> 
                         for(auto const& mrect: mrects) {
                             if(in_rect(e.button.x, e.button.y, mrect.second)) {
                                 // TODO - shift
-                                world->Hero().Sell(city, cargo_slot, std::min(100U, world->Hero().Vehicle().Cargo(cargo_slot).Amount));
+                                std::string message;
+                                world->Hero().Sell(city, cargo_slot, 
+                                        std::min(100U, world->Hero().Vehicle().Cargo(cargo_slot).Amount), message);
+                                std::cout << message << "\n";
                             }
                         }
                     }

@@ -141,9 +141,9 @@ RiverSegment::TileIsRiver(int x, int y) const
     // coarse check
     if(rect.ContainsPoint(p)) {
         // fine check
-        int i, j;
+        unsigned long int i, j;
         bool c = false;
-        int nvert = polygon.size();
+        auto nvert = polygon.size();
         for(i=0, j=nvert-1; i < nvert; j = i++) {
             if(((polygon[i].Y() > p.Y()) != (polygon[j].Y() > p.Y())) && 
                         (p.X() < (polygon[j].X() - polygon[i].X()) * (p.Y() - polygon[i].Y()) / (polygon[j].Y() - polygon[i].Y()) + polygon[i].X())) {

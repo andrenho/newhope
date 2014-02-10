@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-07 20:51-0200\n"
+"POT-Creation-Date: 2014-02-10 21:08-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,4 +27,52 @@ msgstr ""
 
 #: engine/worker.cc:25
 msgid "Welcome, sir! Please take a look at our fine merchindisings!"
+msgstr ""
+
+#: engine/resources.cc:16
+msgid "Grain"
+msgstr ""
+
+#: engine/resources.cc:18
+msgid "Wood"
+msgstr ""
+
+#: engine/resources.cc:20
+msgid "Oil"
+msgstr ""
+
+#: engine/resources.cc:22
+msgid "Herbs"
+msgstr ""
+
+#: engine/resources.cc:24
+msgid "Silicon"
+msgstr ""
+
+#: engine/resources.cc:26
+msgid "Iron"
+msgstr ""
+
+#: engine/resources.cc:28
+msgid "Uranium"
+msgstr ""
+
+#: engine/resources.cc:30
+msgid "Electronics"
+msgstr ""
+
+#: engine/resources.cc:32
+msgid "Machines"
+msgstr ""
+
+#: engine/resources.cc:34
+msgid "Weapons"
+msgstr ""
+
+#: engine/resources.cc:36
+msgid "Medicine"
+msgstr ""
+
+#: engine/resources.cc:38
+msgid "Drugs"
 msgstr ""

@@ -3,6 +3,7 @@
 #include <glog/logging.h>
 
 #include <algorithm>
+#include <cassert>
 
 #include "./globals.h"
 #include "engine/city.h"
@@ -109,8 +110,6 @@ Person::DestroyPhysics(struct cpSpace* space)
 bool
 Person::Buy(City const& city, Resource const& resource, unsigned int amount, std::string& message)
 {
-    assert(amount <= 100);
-
     // are enough resources available in the city?
     if(city.ResourceAmount(resource) < amount) {
         // TODO - add message
@@ -118,13 +117,16 @@ Person::Buy(City const& city, Resource const& resource, unsigned int amount, std
     }
 
     // does the person has enough funds?
-    if(money < city.ResourceSellPrice(resource) * amount) {
+    if(money < static_cast<int>(city.ResourceSellPrice(resource) * amount)) {
         // TODO - add message
         return false;
     }
 
     // is there space in the vehcile?
-    // TODO
+    if(amount > vehicle->SpaceLeft(resource)) {
+        // TODO - add message
+        return false;
+    }
 
     // purchase
     // TODO

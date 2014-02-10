@@ -27,7 +27,7 @@ public:
 
     void GetEvents(std::vector<Command*>& commands) const override { commands.push_back(new QuitCommand()); }
 
-    Rectangle& GetVisibleArea(Rectangle& r) const override { return r; }
+    Rectangle& GetVisibleArea(Rectangle& r) const override { r.setP1(Point(0, 0)); r.setP2(Point(100, 100)); return r; }
     void RedrawScene() const override { }
     void PresentScene() const override { }
 

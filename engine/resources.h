@@ -13,7 +13,7 @@ enum Resource : char {
    URANIUM    = 'U', 
    ELECRONICS = 'E',
    MACHINES   = 'M',
-   WEAPONS    = 'W', 
+   WEAPONS    = 'X', 
    MEDICINE   = '+', 
    DRUGS      = 'D', 
    __RCOUNT__ = 12,
@@ -21,6 +21,8 @@ enum Resource : char {
 };
 
 extern std::array<Resource, Resource::__RCOUNT__> ResourceList;
+
+std::string resource_name(Resource r);
 
 #endif  // ENGINE_RESOURCES_H_
 
