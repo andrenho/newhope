@@ -28,6 +28,8 @@ public:
 
     inline struct cpSpace* SpacePhysics() const { return space; }
 
+    void RecalculatePrices();
+
     double Random() const;
 
 private:

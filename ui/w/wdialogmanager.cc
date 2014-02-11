@@ -167,7 +167,7 @@ WDialogManager::ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& m
     SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
     SDL_RenderFillRect(ren, &r2);
     WriteTextOnScreen(small_font, "Shopkeeper:", 150, 150, 0, 0, 0);
-    WriteTextOnScreen(small_font, "Hero ($ " + std::to_string(hero.Money()) + "):", 
+    WriteTextOnScreen(small_font, "Hero ($" + std::to_string(hero.Money()) + "):", 
             150, 270, 0, 0, 0);
  
     // draw shopkeeper merchindising
@@ -181,8 +181,10 @@ WDialogManager::ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& m
         SDL_RenderFillRect(ren, &r3);
         WriteTextOnScreen(main_font, std::string(1, static_cast<char>(res)), x+5, 175, 0, 0, 0);
         WriteTextOnScreen(small_font, std::to_string(city.ResourceAmount(res)), x, 200, 0, 0, 0);
+        char s[512]; snprintf(s, 511, "%d/%d", city.ResourceBuyPrice(res), city.ResourceSellPrice(res));
+        WriteTextOnScreen(small_font, std::string(s), x, 212, 0, 0, 0);
         
-        x += 35;
+        x += 40;
     }
 
     // draw vehicle cargo slots
@@ -257,10 +259,16 @@ WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> 
                         int slot = 0;
                         for(auto const& crect: crects) {
                             if(in_rect(e.button.x, e.button.y, crect)) {
-                                // TODO - shift
                                 std::string message;
-                                world->Hero().Buy(city, dragging, std::min(100U, city.ResourceAmount(dragging)), message);
-                                std::cout << message << "\n";
+                                unsigned int amount = std::min(100U, city.ResourceAmount(dragging));
+                                if(SDL_KeyModState() & KMOD_SHIFT) {
+                                    amount = 0; // TODO
+                                }
+                                world->Hero().Buy(city, dragging, amout, message);
+                                if(!message.empty()) {
+                                    std::cout << message << "\n";
+                                }
+                                return false;
                             }
                             ++slot;
                         }
@@ -273,7 +281,10 @@ WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> 
                                 std::string message;
                                 world->Hero().Sell(city, cargo_slot, 
                                         std::min(100U, world->Hero().Vehicle().Cargo(cargo_slot).Amount), message);
-                                std::cout << message << "\n";
+                                if(!message.empty()) {
+                                    std::cout << message << "\n";
+                                }
+                                return false;
                             }
                         }
                     }

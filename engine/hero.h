@@ -13,8 +13,6 @@ public:
 
     void Collision(Object& obj) override;
 
-    Point Position() const override;
-
 private:
     Hero(const Hero&);
     Hero& operator=(const Hero&);

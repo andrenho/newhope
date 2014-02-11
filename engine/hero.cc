@@ -11,7 +11,7 @@ Hero::Hero(Point init, class Vehicle* vehicle)
     : Hero(init)
 {
     this->vehicle = vehicle;
-    money = 250;
+    money = 2500;
 }
 
 
@@ -30,17 +30,6 @@ Hero::Collision(Object& obj)
     // if it's a person, talk to him
     } else if((person = dynamic_cast<class Person*>(&obj)) != nullptr) {
         person->TalkToHero();
-    }
-}
-
-
-Point 
-Hero::Position() const
-{
-    if(in_vehicle) {
-        return vehicle->Position();
-    } else {
-        return Person::Position();
     }
 }
 

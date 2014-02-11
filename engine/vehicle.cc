@@ -1,5 +1,7 @@
 #include <chipmunk.h>
 
+#include <cassert>
+
 #include "./globals.h"
 #include "engine/vehicle.h"
 #include "engine/world.h"
@@ -13,6 +15,9 @@ Vehicle::Vehicle(Point init_pos, const VehicleModel* model)
     rear_wheel_joint1(nullptr), rear_wheel_joint2(nullptr),
     front_wheel_joint1(nullptr), front_wheel_joint2(nullptr)
 {
+    for(unsigned int i=0; i<model->CargoSlots; i++) {
+        cargo_slots.push_back(EmptySlot);
+    }
 }
 
 
@@ -120,8 +125,6 @@ Vehicle::Cargo(unsigned int slot) const
 {
     if(slot > Model().CargoSlots) {
         abort();
-    } else if(slot >= cargo_slots.size()) {
-        return EmptySlot;
     } else {
         return cargo_slots[slot];
     }
@@ -158,6 +161,23 @@ Vehicle::PhysicsShapes(struct cpShape*& shape,
     shape = this->shape;
     rear_wheel_shape = this->rear_wheel_shape;
     front_wheel_shape = this->front_wheel_shape;
+}
+
+
+void 
+Vehicle::AddCargo(Resource res, unsigned int amount)
+{
+    assert(SpaceLeft(res) >= amount);
+    
+    unsigned int left = amount;
+    for(auto& slot: cargo_slots) {
+        if(left > 0 && (slot.Cargo == res || slot.Cargo == Resource::NOTHING)) {
+            int add_to_slot = std::min(100 - slot.Amount, left);
+            left -= add_to_slot;
+            slot.Amount += add_to_slot;
+            slot.Cargo = res;
+        }
+    }
 }
 
 

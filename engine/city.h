@@ -26,6 +26,8 @@ public:
     inline unsigned int ResourceSellPrice(Resource r) const { (void)r; return 10; }
     inline unsigned int ResourceBuyPrice(Resource r) const { (void)r; return 5; }
 
+    void ChangeCargoAmount(Resource res, int amount);
+
     const int X, Y;
 
 private:

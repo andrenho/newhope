@@ -129,6 +129,13 @@ World::Limits(int& x1, int& y1, int& x2, int& y2) const
 }
 
 
+void 
+World::RecalculatePrices()
+{
+    // TODO
+}
+
+
 /*****************************************************************************/
 
 

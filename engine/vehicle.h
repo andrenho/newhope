@@ -49,6 +49,7 @@ public:
     CargoSlot const& Cargo(unsigned int slot) const;
     inline VehicleModel const& Model() const { return model; }
 
+    void AddCargo(Resource res, unsigned int amount);
     unsigned int SpaceLeft(Resource res) const;
 
     void PhysicsBodies(struct cpBody*& body, 

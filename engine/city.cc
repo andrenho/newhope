@@ -1,5 +1,7 @@
 #include "engine/city.h"
 
+#include <cassert>
+
 #include "./globals.h"
 #include "engine/world.h"
 
@@ -15,7 +17,7 @@ City::City(int x, int y, CityType type, int n)
         buildings.push_back(b);
     }
     for(Resource res: ResourceList) {
-        resources[res] = 0;
+        resources[res] = 250; // TODO
     }
 }
 
@@ -75,6 +77,14 @@ City::Workers() const
     }
 
     return pairs;
+}
+
+
+void 
+City::ChangeCargoAmount(Resource res, int amount)
+{
+    assert(resources.at(res) + amount >= 0);
+    resources[res] += amount;
 }
 
 

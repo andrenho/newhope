@@ -19,11 +19,11 @@ public:
     inline class Vehicle& Vehicle() const { return *vehicle; }
     bool ExitVehicle();
 
-    bool Buy(class City const& city, Resource const& resource, unsigned int amount, std::string& message);
-    bool Sell(class City const& city, unsigned int cargo_slot, unsigned int amount, std::string& message);
+    bool Buy(class City& city, Resource const& resource, unsigned int amount, std::string& message);
+    bool Sell(class City& city, unsigned int cargo_slot, unsigned int amount, std::string& message);
 
     inline virtual double Radius() const { return 0.5; }
-    virtual Point Position() const;
+    virtual Point Position() const override;
     inline struct cpBody* PhysicsBodyPtr() const { return body; }
     inline int Money() const { return money; }
 

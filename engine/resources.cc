@@ -13,29 +13,29 @@ std::string resource_name(Resource r)
 {
     switch(r) {
 	case Resource::GRAIN:
-        return _("Grain");
+        return _("grain");
 	case Resource::WOOD:
-        return _("Wood");
+        return _("wood");
 	case Resource::OIL:
-        return _("Oil");
+        return _("oil");
 	case Resource::HERBS:
-        return _("Herbs");
+        return _("herbs");
 	case Resource::SILICON:
-        return _("Silicon");
+        return _("silicon");
 	case Resource::IRON:
-        return _("Iron");
+        return _("iron");
 	case Resource::URANIUM:
-        return _("Uranium");
+        return _("uranium");
 	case Resource::ELECRONICS:
-        return _("Electronics");
+        return _("electronics");
 	case Resource::MACHINES:
-        return _("Machines");
+        return _("machines");
 	case Resource::WEAPONS:
-        return _("Weapons");
+        return _("weapons");
 	case Resource::MEDICINE:
-        return _("Medicine");
+        return _("medicine");
     case Resource::DRUGS:
-        return _("Drugs");
+        return _("drugs");
     default:
         abort();
     }

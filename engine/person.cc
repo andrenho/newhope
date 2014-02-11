@@ -63,8 +63,12 @@ Person::SetPosition(Point const& p)
 Point 
 Person::Position() const
 {
-    cpVect pos = cpBodyGetPos(body);
-    return Point(pos.x, pos.y);
+    if(in_vehicle) {
+        return vehicle->Position();
+    } else {
+        cpVect pos = cpBodyGetPos(body);
+        return Point(pos.x, pos.y);
+    }
 }
 
 
@@ -108,39 +112,57 @@ Person::DestroyPhysics(struct cpSpace* space)
 
 
 bool
-Person::Buy(City const& city, Resource const& resource, unsigned int amount, std::string& message)
+Person::Buy(City& city, Resource const& resource, unsigned int amount, std::string& message)
 {
+    if(amount == 0) {
+        return true;
+    }
+
+    int price = static_cast<int>(city.ResourceSellPrice(resource) * amount);
+
     // are enough resources available in the city?
     if(city.ResourceAmount(resource) < amount) {
-        // TODO - add message
+        char s[512]; snprintf(s, 511, _("Unfortunely, we don't have this much %s."), resource_name(resource).c_str());
+        message = s;
         return false;
     }
 
     // does the person has enough funds?
-    if(money < static_cast<int>(city.ResourceSellPrice(resource) * amount)) {
-        // TODO - add message
+    if(money < price) {
+        message = _("Unfortunately, you don't have enough money.");
         return false;
     }
 
     // is there space in the vehcile?
     if(amount > vehicle->SpaceLeft(resource)) {
-        // TODO - add message
+        char s[512]; snprintf(s, 511, _("There's not enough space on the vehicle for all this %s."), resource_name(resource).c_str());
+        message = s;
         return false;
     }
 
     // purchase
-    // TODO
+    vehicle->AddCargo(resource, amount);
+    city.ChangeCargoAmount(resource, -static_cast<int>(amount));
+    money -= price;
 
-    LOG(INFO) << "Buy\n";
+    // message
+    char s[512]; snprintf(s, 511, _("That'll be $%d."), price); message = s;
+    LOG(INFO) << amount << " " << resource_name(resource) << " bought for $" << price;
+
+    // world response
+    world->RecalculatePrices();
+
+    return true;
 }
 
 
 bool 
-Person::Sell(City const& city, unsigned int cargo_slot, unsigned int amount, std::string& message)
+Person::Sell(City& city, unsigned int cargo_slot, unsigned int amount, std::string& message)
 {
     // does the person has enough resources?
     // does the seller has enough funds? (TODO)
     LOG(INFO) << "Sell\n";
+    return false;
 }
 
 
