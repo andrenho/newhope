@@ -10,14 +10,14 @@
 class Point final {
 public:
     Point(double x, double y)
-        : X(static_cast<double>(floor(x*100)/100.0)),
-          Y(static_cast<double>(floor(y*100)/100.0)),
-          id(static_cast<int64_t>(X * 100 * 100000 + Y * 100)) {}
+        : x(static_cast<double>(floor(x*100)/100.0)),
+          y(static_cast<double>(floor(y*100)/100.0)),
+          id(static_cast<int64_t>(x * 100 * 100000 + y * 100)) {}
 
     // automatic copy constructor
     Point& operator=(const Point& other) { 
-        X = other.X; 
-        Y = other.Y; 
+        x = other.x; 
+        y = other.y; 
         id = other.Id();
         return *this;
     } 
@@ -35,14 +35,17 @@ public:
     }
 
     inline double MH_Distance(Point const& p) const {
-        return fabs(x-p.X) + fabs(y-p.Y);
+        return fabs(x-p.x) + fabs(x-p.y);
     }
 
     inline double Distance(Point const& p) const {
-        return sqrt(pow(x-p.X, 2) + pow(y-p.Y, 2));
+        return sqrt(pow(x-p.x, 2) + pow(y-p.y, 2));
     }
 
-    double X, Y;
+    inline double X() const { return x; }
+    inline double Y() const { return y; }
+
+    double x, y;
     inline int64_t Id() const { return id; }
 
 private:
