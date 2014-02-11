@@ -64,16 +64,16 @@ int main(int argc, char** argv)
 
         // advance time
         world->Step();
-        //printf("THI: %d    ", next_frame - ui->Now());
+        printf("THI: %d    ", next_frame - ui->Now());
 
         // redraw screen
         ui->RedrawScene();
-        //printf("RED: %d    ", next_frame - ui->Now());
+        printf("RED: %d    ", next_frame - ui->Now());
         ui->PresentScene();
 
         // wait for next frame
         uint32_t now = ui->Now();
-        //printf("PRE: %d\n", next_frame - now);
+        printf("PRE: %d\n", next_frame - now);
         if(now < next_frame) {
             ui->Wait(next_frame - now);
         }

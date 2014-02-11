@@ -186,11 +186,14 @@ Vehicle::RemoveCargo(Resource res, unsigned int amount)
     std::map<Resource, int> cargo;
 
     // check amounts
-    for(auto const& slot: cargo_slots) {
-        if(cargo.find(slot.Cargo) == cargo.end()) {
-            cargo[slot.Cargo] = 0;
+    for(auto& slot: cargo_slots) {
+        if(slot.Cargo != Resource::NOTHING) {
+            if(cargo.find(slot.Cargo) == cargo.end()) {
+                cargo[slot.Cargo] = 0;
+            }
+            cargo[slot.Cargo] += slot.Amount;
         }
-        cargo[slot.Cargo] += slot.Amount;
+        slot = { NOTHING, 0 }; // clear
     }
 
     // assertions
@@ -199,15 +202,20 @@ Vehicle::RemoveCargo(Resource res, unsigned int amount)
 
     // remove
     cargo[res] -= amount;
+    if(cargo.at(res) == 0) {
+        cargo.erase(res);
+    }
 
     // reorganize
-    int slotn = 0;
+    unsigned int slotn = 0;
     for(auto const& box: cargo) {
         int left = box.second;
         while(left > 0) {
-            cargo_slots[slotn] = { box.first, std::min(100, left) };
+            cargo_slots[slotn] = { box.first, std::min(100U, static_cast<unsigned int>(left)) };
             left -= cargo_slots[slotn].Amount;
-            ++slotn;
+            if(left > 0) {
+                ++slotn;
+            }
         }
         ++slotn;
     }

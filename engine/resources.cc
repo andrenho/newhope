@@ -36,7 +36,7 @@ std::string resource_name(Resource r)
         return _("medicine");
     case Resource::DRUGS:
         return _("drugs");
-    default:
+    case NOTHING: case __RCOUNT__: default: // satisfy compiler...
         abort();
     }
 }

@@ -187,13 +187,14 @@ Person::Sell(City& city, unsigned int cargo_slot, unsigned int amount, std::stri
     // does the seller has enough funds? (TODO)
     
     // sell
-    vehicle->RemoveCargo(slot.Cargo, amount);
-    city.ChangeCargoAmount(slot.Cargo, static_cast<int>(amount));
+    Resource res = slot.Cargo;
+    vehicle->RemoveCargo(res, amount);
+    city.ChangeCargoAmount(res, static_cast<int>(amount));
     money += price;
 
     // message
     message = mprintf(_("Here's $%d. Spend wisely."), price);
-    LOG(INFO) << amount << " " << resource_name(slot.Cargo) << " sold for $" << price;
+    LOG(INFO) << amount << " " << resource_name(res) << " sold for $" << price;
 
     // world response
     world->RecalculatePrices();

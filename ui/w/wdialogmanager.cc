@@ -286,7 +286,7 @@ WDialogManager::ShopKeeperEvents(class City& city, class Worker& shopkeeper,
                                 if(slot.Cargo != Resource::NOTHING) {
                                     int amount = std::min(100U, slot.Amount);
                                     if(SDL_GetModState() & KMOD_SHIFT) {
-                                        std::string s = mprintf(_("How much %s do you want to sell"), resource_name(slot.Cargo).c_str());
+                                        std::string s = mprintf(_("How much %s do you want to sell?"), resource_name(slot.Cargo).c_str());
                                         amount = QuestionNumber(shopkeeper, s, 5);
                                     }
                                     std::string message;
