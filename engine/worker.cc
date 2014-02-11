@@ -22,7 +22,7 @@ Worker::TalkToHero()
 {
     switch(job) {
     case WorkerJob::SHOPKEEPER:
-        ui->Dialog().Shopkeeper(city);
+        ui->Dialog().Shopkeeper(city, *this);
         break;
     default:
         ;

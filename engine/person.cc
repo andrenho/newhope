@@ -4,12 +4,14 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 
 #include "./globals.h"
 #include "engine/city.h"
 #include "engine/person.h"
 #include "engine/vehicle.h"
 #include "engine/world.h"
+#include "util/stdio.h"
 
 Person::Person(Point init)
     : init(init), body(nullptr), target(nullptr), shape(nullptr), 
@@ -118,12 +120,17 @@ Person::Buy(City& city, Resource const& resource, unsigned int amount, std::stri
         return true;
     }
 
-    int price = static_cast<int>(city.ResourceSellPrice(resource) * amount);
+    int price = static_cast<int>(city.ResourceBuyPrice(resource) * amount);
+
+    // do the player has a car?
+    if(!vehicle) {
+        message = _("Unfortunately, you don't have a vehicle to transport the cargo.");
+        return false;
+    }
 
     // are enough resources available in the city?
     if(city.ResourceAmount(resource) < amount) {
-        char s[512]; snprintf(s, 511, _("Unfortunely, we don't have this much %s."), resource_name(resource).c_str());
-        message = s;
+        message = mprintf(_("Unfortunately, you don't have this much %s."), resource_name(resource).c_str());
         return false;
     }
 
@@ -135,8 +142,7 @@ Person::Buy(City& city, Resource const& resource, unsigned int amount, std::stri
 
     // is there space in the vehcile?
     if(amount > vehicle->SpaceLeft(resource)) {
-        char s[512]; snprintf(s, 511, _("There's not enough space on the vehicle for all this %s."), resource_name(resource).c_str());
-        message = s;
+        message = mprintf(_("There's not enough space on the vehicle for all this %s."), resource_name(resource).c_str());
         return false;
     }
 
@@ -146,7 +152,7 @@ Person::Buy(City& city, Resource const& resource, unsigned int amount, std::stri
     money -= price;
 
     // message
-    char s[512]; snprintf(s, 511, _("That'll be $%d."), price); message = s;
+    message = mprintf(_("That'll be $%d."), price);
     LOG(INFO) << amount << " " << resource_name(resource) << " bought for $" << price;
 
     // world response
@@ -159,10 +165,40 @@ Person::Buy(City& city, Resource const& resource, unsigned int amount, std::stri
 bool 
 Person::Sell(City& city, unsigned int cargo_slot, unsigned int amount, std::string& message)
 {
+    if(amount == 0) {
+        return false;
+    }
+
+    // do the player has a car?
+    if(!vehicle) {
+        message = _("Unfortunately, you don't have a vehicle to transport the cargo.");
+        return false;
+    }
+
+    auto const& slot = vehicle->Cargo(cargo_slot);
+    int price = static_cast<int>(city.ResourceSellPrice(slot.Cargo) * amount);
+
     // does the person has enough resources?
+    if(amount > slot.Amount) {
+        message = mprintf(_("There are only %d of %s in this cargo slot."), slot.Amount, resource_name(slot.Cargo).c_str());
+        return false;
+    }
+
     // does the seller has enough funds? (TODO)
-    LOG(INFO) << "Sell\n";
-    return false;
+    
+    // sell
+    vehicle->RemoveCargo(slot.Cargo, amount);
+    city.ChangeCargoAmount(slot.Cargo, static_cast<int>(amount));
+    money += price;
+
+    // message
+    message = mprintf(_("Here's $%d. Spend wisely."), price);
+    LOG(INFO) << amount << " " << resource_name(slot.Cargo) << " sold for $" << price;
+
+    // world response
+    world->RecalculatePrices();
+
+    return true;
 }
 
 

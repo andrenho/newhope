@@ -50,6 +50,7 @@ public:
     inline VehicleModel const& Model() const { return model; }
 
     void AddCargo(Resource res, unsigned int amount);
+    void RemoveCargo(Resource res, unsigned int amount);
     unsigned int SpaceLeft(Resource res) const;
 
     void PhysicsBodies(struct cpBody*& body, 

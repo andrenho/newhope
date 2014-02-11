@@ -10,6 +10,7 @@
 #include "engine/vehicle.h"
 #include "engine/resources.h"
 #include "ui/ui.h"
+#include "util/stdio.h"
 
 WDialogManager::WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren)
     : win(win), ren(ren), small_font(nullptr), main_font(nullptr)
@@ -104,14 +105,16 @@ WDialogManager::Question(class Person const& person, std::string const& message,
 
 
 void 
-WDialogManager::Shopkeeper(class City& city) const
+WDialogManager::Shopkeeper(class City& city, class Worker& shopkeeper) const
 {
     bool closed = false;
     std::map<Resource, SDL_Rect> mrects;
     std::vector<SDL_Rect> crects;
     while(!closed) {
         ShopKeeperDraw(city, mrects, crects);
-        closed = ShopKeeperEvents(city, mrects, crects);
+        closed = ShopKeeperEvents(city, shopkeeper, mrects, crects);
+        crects.clear();
+        mrects.clear();
     }
 }
 
@@ -181,7 +184,7 @@ WDialogManager::ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& m
         SDL_RenderFillRect(ren, &r3);
         WriteTextOnScreen(main_font, std::string(1, static_cast<char>(res)), x+5, 175, 0, 0, 0);
         WriteTextOnScreen(small_font, std::to_string(city.ResourceAmount(res)), x, 200, 0, 0, 0);
-        char s[512]; snprintf(s, 511, "%d/%d", city.ResourceBuyPrice(res), city.ResourceSellPrice(res));
+        auto s = mprintf("%d/%d", city.ResourceBuyPrice(res), city.ResourceSellPrice(res));
         WriteTextOnScreen(small_font, std::string(s), x, 212, 0, 0, 0);
         
         x += 40;
@@ -210,7 +213,8 @@ WDialogManager::ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& m
 
 
 bool
-WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const
+WDialogManager::ShopKeeperEvents(class City& city, class Worker& shopkeeper, 
+        std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const
 {
     Resource dragging = Resource::NOTHING;
     int cargo_slot = -1;
@@ -261,10 +265,11 @@ WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> 
                             if(in_rect(e.button.x, e.button.y, crect)) {
                                 std::string message;
                                 unsigned int amount = std::min(100U, city.ResourceAmount(dragging));
-                                if(SDL_KeyModState() & KMOD_SHIFT) {
-                                    amount = 0; // TODO
+                                if(SDL_GetModState() & KMOD_SHIFT) {
+                                    std::string s = mprintf(_("How much %s do you want to buy?"), resource_name(dragging).c_str());
+                                    amount = QuestionNumber(shopkeeper, s, 5);
                                 }
-                                world->Hero().Buy(city, dragging, amout, message);
+                                world->Hero().Buy(city, dragging, amount, message);
                                 if(!message.empty()) {
                                     std::cout << message << "\n";
                                 }
@@ -277,14 +282,20 @@ WDialogManager::ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> 
                     } else if(action == SELLING) {
                         for(auto const& mrect: mrects) {
                             if(in_rect(e.button.x, e.button.y, mrect.second)) {
-                                // TODO - shift
-                                std::string message;
-                                world->Hero().Sell(city, cargo_slot, 
-                                        std::min(100U, world->Hero().Vehicle().Cargo(cargo_slot).Amount), message);
-                                if(!message.empty()) {
-                                    std::cout << message << "\n";
+                                auto& slot = world->Hero().Vehicle().Cargo(cargo_slot);
+                                if(slot.Cargo != Resource::NOTHING) {
+                                    int amount = std::min(100U, slot.Amount);
+                                    if(SDL_GetModState() & KMOD_SHIFT) {
+                                        std::string s = mprintf(_("How much %s do you want to sell"), resource_name(slot.Cargo).c_str());
+                                        amount = QuestionNumber(shopkeeper, s, 5);
+                                    }
+                                    std::string message;
+                                    world->Hero().Sell(city, cargo_slot, amount, message);
+                                    if(!message.empty()) {
+                                        std::cout << message << "\n";
+                                    }
+                                    return false;
                                 }
-                                return false;
                             }
                         }
                     }

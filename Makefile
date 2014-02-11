@@ -31,7 +31,8 @@ SRC = main.cc			\
       ui/minimap.cc		\
       ui/w/wdialogmanager.cc 	\
       ui/w/wireframeui.cc	\
-      ui/w/wminimap.cc
+      ui/w/wminimap.cc		\
+      util/stdio.cc
 
 OBJ = ${SRC:.cc=.o}
 HEADERS = ${SRC:.cc=.h} ui/ui.h engine/point.h engine/rectangle.h

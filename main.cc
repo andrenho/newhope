@@ -28,6 +28,7 @@ int main(int argc, char** argv)
 
     // initialize glog
     google::InitGoogleLogging(argv[0]);
+    google::InstallFailureSignalHandler();
 
     // initialize seed
     unsigned int seedp = static_cast<unsigned int>(time(nullptr));
@@ -41,7 +42,7 @@ int main(int argc, char** argv)
 
     // initialize engine and UI
 #ifdef DUMMY
-    ui = new DummyUI();
+    ui = new DummyUI(); // this dummy lib is used for testing memory leaks
 #else
     ui = new WireframeUI();
 #endif
@@ -80,6 +81,8 @@ int main(int argc, char** argv)
 
     delete ui;
     delete world;
+
+    google::ShutdownGoogleLogging();
 
     return EXIT_SUCCESS;
 }

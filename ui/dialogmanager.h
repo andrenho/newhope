@@ -12,7 +12,7 @@ public:
     std::string Question(class Person const& person, std::string const& message) const;
     int QuestionNumber(class Person const& person, std::string const& message, unsigned int digits) const;
 
-    virtual void Shopkeeper(class City& city) const = 0;
+    virtual void Shopkeeper(class City& city, class Worker& shopkeeper) const = 0;
 
 protected:
     DialogManager() {}

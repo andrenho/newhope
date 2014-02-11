@@ -18,7 +18,7 @@ public:
     ~WDialogManager();
 
     void Speech(class Person const& person, std::string const& message) const override;
-    void Shopkeeper(class City& city) const override;
+    void Shopkeeper(class City& city, class Worker& shopkeeper) const override;
 
 protected:
     std::string Question(class Person const& person, std::string const& message, bool limit_to_numbers, 
@@ -31,7 +31,8 @@ private:
     int MessageBox(class Person const& person, std::string const& message) const;
 
     void ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const;
-    bool ShopKeeperEvents(class City& city, std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const;
+    bool ShopKeeperEvents(class City& city, class Worker& shopkeeper, 
+            std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const;
 
     int WriteTextOnScreen(TTF_Font* font, std::string const& text, int x, int y, 
             uint8_t r, uint8_t g, uint8_t b) const;

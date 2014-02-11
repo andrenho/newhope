@@ -174,9 +174,42 @@ Vehicle::AddCargo(Resource res, unsigned int amount)
         if(left > 0 && (slot.Cargo == res || slot.Cargo == Resource::NOTHING)) {
             int add_to_slot = std::min(100 - slot.Amount, left);
             left -= add_to_slot;
-            slot.Amount += add_to_slot;
-            slot.Cargo = res;
+            slot = { res, slot.Amount + add_to_slot };
         }
+    }
+}
+
+
+void 
+Vehicle::RemoveCargo(Resource res, unsigned int amount)
+{
+    std::map<Resource, int> cargo;
+
+    // check amounts
+    for(auto const& slot: cargo_slots) {
+        if(cargo.find(slot.Cargo) == cargo.end()) {
+            cargo[slot.Cargo] = 0;
+        }
+        cargo[slot.Cargo] += slot.Amount;
+    }
+
+    // assertions
+    assert(cargo.find(res) != cargo.end());
+    assert(cargo.at(res) >= amount);
+
+    // remove
+    cargo[res] -= amount;
+
+    // reorganize
+    int slotn = 0;
+    for(auto const& box: cargo) {
+        int left = box.second;
+        while(left > 0) {
+            cargo_slots[slotn] = { box.first, std::min(100, left) };
+            left -= cargo_slots[slotn].Amount;
+            ++slotn;
+        }
+        ++slotn;
     }
 }
 
