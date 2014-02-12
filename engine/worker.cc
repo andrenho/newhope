@@ -5,6 +5,7 @@
 #include "./globals.h"
 #include "engine/city.h"
 #include "engine/workers/banker.h"
+#include "engine/workers/bartender.h"
 #include "engine/workers/shopkeeper.h"
 
 Worker::Worker(Point init, City& city)
@@ -26,6 +27,8 @@ Worker::MakeWorker(Point init, class City& city, WorkerJob job)
         return new Shopkeeper(init, city);
     case WorkerJob::BANKER:
         return new Banker(init, city);
+    case WorkerJob::BARTENDER:
+        return new Bartender(init, city);
     default:
         abort();
     }

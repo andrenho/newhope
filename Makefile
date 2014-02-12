@@ -28,6 +28,7 @@ SRC = main.cc				\
       engine/worker.cc			\
       engine/world.cc			\
       engine/workers/banker.cc		\
+      engine/workers/bartender.cc	\
       engine/workers/shopkeeper.cc 	\
       ui/dialogmanager.cc		\
       ui/minimap.cc			\
