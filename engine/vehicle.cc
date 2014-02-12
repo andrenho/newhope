@@ -198,7 +198,7 @@ Vehicle::RemoveCargo(Resource res, unsigned int amount)
 
     // assertions
     assert(cargo.find(res) != cargo.end());
-    assert(cargo.at(res) >= amount);
+    assert(cargo.at(res) >= static_cast<int>(amount));
 
     // remove
     cargo[res] -= amount;

@@ -55,24 +55,23 @@ ifeq (${DUMA}, yes)
   LDFLAGS += -lduma
 endif
 
+ifeq (${OPT},no)
+  CPPFLAGS += -O0
+else
+  CPPFLAGS += -O3
+endif
+
 ifeq (${DEBUG},yes)
   # debug flags
-  CPPFLAGS += -g -O0 -DDEBUG
+  CPPFLAGS += -g -DDEBUG
   LDFLAGS += -g
 else
-  ifeq (${DEBUG},dummy)
-    # dummy flags
-    CPPFLAGS += -g -O0 -DDEBUG -DDUMMY
-    LDFLAGS += -g
-  else
-    # production flags
-    CPPFLAGS += -O3 -DNDEBUG
-    LDFLAGS += -s
-    ifeq (${DEBUG},leaks)
-      CPPFLAGS += -g
-      LDFLAGS += -g
-    endif
-  endif
+  CPPFLAGS += -DNDEBUG
+endif
+
+ifeq (${DUMMY},yes)
+  # dummy flags
+  CPPFLAGS += -DDUMMY
 endif
 
 ifeq (${PROFILING},yes)
