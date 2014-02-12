@@ -64,16 +64,19 @@ int main(int argc, char** argv)
 
         // advance time
         world->Step();
-        printf("THI: %d    ", next_frame - ui->Now());
+        //int64_t time_step = next_frame - static_cast<int>(ui->Now());
 
         // redraw screen
         ui->RedrawScene();
-        printf("RED: %d    ", next_frame - ui->Now());
+        //int64_t redraw_time = static_cast<int>(next_frame) - static_cast<int>(ui->Now());
         ui->PresentScene();
 
         // wait for next frame
         uint32_t now = ui->Now();
-        printf("PRE: %d\n", next_frame - now);
+        //int64_t time_present = static_cast<int>(next_frame) - static_cast<int>(now);
+
+        //std::cout << "Step: " << time_step << " Redrawing: " << redraw_time << " Rendering: " << time_present << "\n";
+        
         if(now < next_frame) {
             ui->Wait(next_frame - now);
         }

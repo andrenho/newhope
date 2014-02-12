@@ -18,9 +18,9 @@
 <node CREATED="1390226796248" ID="ID_1838834623" MODIFIED="1390227173633" STYLE="fork" TEXT="Special buildings">
 <font NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1390226807568" ID="ID_694130524" MODIFIED="1390388941975" STYLE="fork" TEXT="Resources">
+<node CREATED="1390226807568" ID="ID_694130524" MODIFIED="1392205481735" STYLE="fork" TEXT="Resources">
 <font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="full-4"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1390226810369" ID="ID_511219876" MODIFIED="1390227173632" STYLE="fork" TEXT="Factions">
 <font NAME="SansSerif" SIZE="12"/>
@@ -61,9 +61,9 @@
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1390226529553" ID="ID_816922104" MODIFIED="1390388966863" STYLE="fork" TEXT="Buy stuff">
+<node CREATED="1390226529553" ID="ID_816922104" MODIFIED="1392205501110" STYLE="fork" TEXT="Buy stuff">
 <font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="full-6"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1390226546777" ID="ID_215087402" MODIFIED="1390227173630" STYLE="fork" TEXT="Combat">
 <font NAME="SansSerif" SIZE="12"/>
@@ -111,9 +111,9 @@
 <node CREATED="1390226471800" ID="ID_1016990846" MODIFIED="1390227173627" STYLE="fork" TEXT="Weapons">
 <font NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1390226474207" ID="ID_618349366" MODIFIED="1390388997591" STYLE="fork" TEXT="Cargo">
+<node CREATED="1390226474207" ID="ID_618349366" MODIFIED="1392205489391" STYLE="fork" TEXT="Cargo">
 <font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="full-6"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1390226489087" ID="ID_467280807" MODIFIED="1390227173627" STYLE="fork" TEXT="Models">
 <font NAME="SansSerif" SIZE="12"/>
