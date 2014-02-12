@@ -15,7 +15,7 @@
 
 Person::Person(Point init)
     : init(init), body(nullptr), target(nullptr), shape(nullptr), 
-      joint(nullptr), vehicle(nullptr), in_vehicle(false), money(0)
+      joint(nullptr), vehicle(nullptr), in_vehicle(false), money(0), loan(0)
 { 
 }
 
@@ -202,5 +202,30 @@ Person::Sell(City& city, unsigned int cargo_slot, unsigned int amount, std::stri
     return true;
 }
 
+
+int 
+Person::Collateral() const
+{
+    return 50000;
+}
+
+
+void 
+Person::setLoanValue(int value)
+{
+    assert(value <= MaxLoanPossible());
+    loan = value;
+    money += value;
+}
+
+
+void 
+Person::PayLoan(int value)
+{
+    assert(value <= money);
+    assert(value <= loan);
+    loan -= value;
+    money -= value;
+}
 
 // vim: ts=4:sw=4:sts=4:expandtab

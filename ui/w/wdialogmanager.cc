@@ -48,8 +48,62 @@ WDialogManager::Speech(class Person const& person, std::string const& message) c
 }
 
 
+void 
+WDialogManager::Shopkeeper(class City& city, class Worker& shopkeeper) const
+{
+    bool closed = false;
+    std::map<Resource, SDL_Rect> mrects;
+    std::vector<SDL_Rect> crects;
+    while(!closed) {
+        ShopKeeperDraw(city, mrects, crects);
+        closed = ShopKeeperEvents(city, shopkeeper, mrects, crects);
+        crects.clear();
+        mrects.clear();
+    }
+}
+
+
+void 
+WDialogManager::Banker(class Worker& banker) const
+{
+    Hero& hero = world->Hero();
+
+    if(hero.LoanValue() > 0 
+    && Question(banker, mprintf(_("You currently have a loan of $%d. Do you want to pay it now? [y/n]"), hero.LoanValue())) == "y") {
+        int value = QuestionNumber(banker, mprintf(_("How much of your loan ($%d) do you want to pay?"), hero.LoanValue()), 8);
+        if(value > hero.LoanValue()) {
+            value = hero.LoanValue();
+        }
+        if(value > hero.Money()) {
+            Speech(banker, _("You don't have enough money to pay the debt."));
+        } else {
+            hero.PayLoan(value);
+            Speech(banker, _("Very well."));
+        }
+    } else {
+        // get loan
+        int max_loan = hero.MaxLoanPossible();
+        if(max_loan <= 0) {
+            Speech(banker, _("Unfortunately, your credit wasn't approved."));
+        } else {
+            int value = QuestionNumber(banker, 
+                    mprintf(_("I can grant you a loan of up to $%d. How much do you want to apply for?"), max_loan), 8);
+            if(value > max_loan) {
+                Speech(banker, mprintf(_("Like I said, the maximum loan is %d."), max_loan));
+            } else if (value > 0) {
+                Speech(banker, _("Very well, here is your money."));
+                hero.setLoanValue(value);
+            }
+        }
+    }
+}
+
+
+/************************************************************************/
+
+
 std::string 
-WDialogManager::Question(class Person const& person, std::string const& message, bool limit_to_numbers, unsigned int digits) const
+WDialogManager::QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, unsigned int digits) const
 {
     std::string reply;
 
@@ -77,7 +131,7 @@ WDialogManager::Question(class Person const& person, std::string const& message,
         while(SDL_PollEvent(&e)) {
             switch(e.type) {
             case SDL_TEXTINPUT:
-                if(digits > 0 && reply.size() < digits) {
+                if(digits == 0 || reply.size() < digits) {
                     if(limit_to_numbers) {
                         if(e.text.text[0] < '0' || e.text.text[0] > '9') {
                             break;
@@ -91,7 +145,7 @@ WDialogManager::Question(class Person const& person, std::string const& message,
                 if(e.key.keysym.sym == SDLK_BACKSPACE && reply.size() > 0) {
                     reply.resize(reply.size() - 1);
                     redraw_text();
-                } else if(e.key.keysym.sym == SDLK_RETURN) {
+                } else if(e.key.keysym.sym == SDLK_RETURN || e.key.keysym.sym == SDLK_KP_ENTER) {
                     SDL_StopTextInput();
                     return reply;
                 }
@@ -102,24 +156,6 @@ WDialogManager::Question(class Person const& person, std::string const& message,
         }
     }
 }
-
-
-void 
-WDialogManager::Shopkeeper(class City& city, class Worker& shopkeeper) const
-{
-    bool closed = false;
-    std::map<Resource, SDL_Rect> mrects;
-    std::vector<SDL_Rect> crects;
-    while(!closed) {
-        ShopKeeperDraw(city, mrects, crects);
-        closed = ShopKeeperEvents(city, shopkeeper, mrects, crects);
-        crects.clear();
-        mrects.clear();
-    }
-}
-
-
-/************************************************************************/
 
 
 int 

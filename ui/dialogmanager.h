@@ -9,15 +9,17 @@ public:
     virtual ~DialogManager() {}
 
     virtual void Speech(class Person const& person, std::string const& message) const = 0;
-    std::string Question(class Person const& person, std::string const& message) const;
+    virtual std::string Question(class Person const& person, std::string const& message) const;
     int QuestionNumber(class Person const& person, std::string const& message, unsigned int digits) const;
 
+    // workers dialogs
     virtual void Shopkeeper(class City& city, class Worker& shopkeeper) const = 0;
+    virtual void Banker(class Worker& banker) const = 0;
 
 protected:
     DialogManager() {}
 
-    virtual std::string Question(class Person const& person, std::string const& message, bool limit_to_numbers, 
+    virtual std::string QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, 
             unsigned int digits) const = 0;
     static std::vector<std::string> Wrap(std::string const& text, unsigned int nchars);
 

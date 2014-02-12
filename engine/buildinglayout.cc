@@ -44,6 +44,51 @@ std::map<BuildingPair, BuildingLayout> BuildingLayouts = {
         }),
     },
 },
+
+{
+    BuildingPair(BuildingType::BANK, 1), 
+    {
+        BuildingLayout(8, 5, 4,
+        {
+            {
+                "        ",
+                " ffffff ",
+                " ffffff ",
+                " ffffff ",
+                "        ",
+            },{
+
+                "wwwwwwww",
+                "w      w",
+                "w      w",
+                "w      w",
+                "wwwwddw ",
+            },{
+                "wwwwwwww",
+                "w      w",
+                "w      w",
+                "w      w",
+                "wwwwddw ",
+            },{
+                "wwwwwwww",
+                "wwwwwwww",
+                "wwwwwwww",
+                "wwwwwwww",
+                "wwwwwww ",
+            },
+        },
+        {
+            { ' ', Block::EMPTY },
+            { 'f', Block::FLOOR },
+            { 'w', Block::WOODEN_WALL },
+            { 'd', Block::DOOR_OPEN },
+        },
+        {
+            { WorkerJob::BANKER, Point(1.5, 1.5) },
+        }),
+    },
+
+},
 };
 
 

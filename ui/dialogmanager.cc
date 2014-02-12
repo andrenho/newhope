@@ -37,7 +37,7 @@ DialogManager::Wrap(std::string const& text, unsigned int nchars)
 std::string 
 DialogManager::Question(class Person const& person, std::string const& message) const
 {
-    return Question(person, message, false, 0);
+    return QuestionString(person, message, false, 0);
 }
 
 
@@ -45,7 +45,7 @@ int
 DialogManager::QuestionNumber(class Person const& person, std::string const& message, unsigned int digits) const
 {
     try {
-        return std::stoi(Question(person, message, true, digits));
+        return std::stoi(QuestionString(person, message, true, digits));
     } catch(std::exception& e) {
         LOG(WARNING) << "Exception caught: '" << e.what() << "'\n";
         return 0;

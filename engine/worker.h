@@ -4,7 +4,7 @@
 #include "engine/person.h"
 
 enum WorkerJob {
-    SHOPKEEPER,
+    SHOPKEEPER, BANKER, CAR_DEALER, BARTENDER, MEDIC, SECRETARY, DISPATCHER /* ? */
 };
 
 class Worker final : public Person {

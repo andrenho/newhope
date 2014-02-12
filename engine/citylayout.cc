@@ -7,6 +7,7 @@ std::map<CityPair, CityLayout> CityLayouts = {
         CityLayout(70, 20,
         {
             BuildingPosition(BuildingPair(BuildingType::GENERAL_STORE, 1), Point(0, 0)),
+            BuildingPosition(BuildingPair(BuildingType::BANK, 1), Point(9, 0)),
         }),
     },
 },

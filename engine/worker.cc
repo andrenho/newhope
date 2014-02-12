@@ -24,6 +24,9 @@ Worker::TalkToHero()
     case WorkerJob::SHOPKEEPER:
         ui->Dialog().Shopkeeper(city, *this);
         break;
+    case WorkerJob::BANKER:
+        ui->Dialog().Banker(*this);
+        break;
     default:
         ;
     }

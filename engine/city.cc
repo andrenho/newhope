@@ -36,7 +36,7 @@ City::Tiles(const Block* (&block)[10], int x, int y) const
     for(auto const& b : buildings) {
         if(x >= b->X && x < b->X+b->W()
         && y >= b->Y && y < b->Y+b->H()) {
-            return b->Tiles(block, x, y);
+            return b->Tiles(block, x - b->X, y - b->Y);
         }
     }
     block[0] = Block::EMPTY;

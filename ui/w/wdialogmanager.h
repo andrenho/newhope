@@ -18,10 +18,13 @@ public:
     ~WDialogManager();
 
     void Speech(class Person const& person, std::string const& message) const override;
+
+    // workers
     void Shopkeeper(class City& city, class Worker& shopkeeper) const override;
+    void Banker(class Worker& banker) const override;
 
 protected:
-    std::string Question(class Person const& person, std::string const& message, bool limit_to_numbers, 
+    std::string QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, 
             unsigned int digits) const override;
 
 private:

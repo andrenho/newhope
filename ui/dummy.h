@@ -10,7 +10,7 @@ public:
     void Shopkeeper(class City& city, class Worker& shopkeeper) const override { }
 
 protected:
-    std::string Question(class Person const& person, std::string const& message, bool limit_to_numbers, 
+    std::string QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, 
             unsigned int digits) const override { return ""; }
 };
 

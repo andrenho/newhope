@@ -25,7 +25,13 @@ public:
     inline virtual double Radius() const { return 0.5; }
     virtual Point Position() const override;
     inline struct cpBody* PhysicsBodyPtr() const { return body; }
+
     inline int Money() const { return money; }
+    int Collateral() const;
+    int LoanValue() const { return loan; }
+    int MaxLoanPossible() const { return Collateral() - loan; }
+    void setLoanValue(int value);
+    void PayLoan(int value);
 
 protected:
     explicit Person(Point init);
@@ -37,6 +43,7 @@ protected:
     class Vehicle* vehicle;
     bool in_vehicle;
     int money;
+    int loan;
 
 private:
     Person(const Person&);
