@@ -4,22 +4,22 @@
 #include "engine/person.h"
 
 enum WorkerJob {
-    SHOPKEEPER, BANKER, CAR_DEALER, BARTENDER, MEDIC, SECRETARY, DISPATCHER /* ? */
+    SHOPKEEPER, BANKER, CAR_DEALER, BARTENDER, MEDIC, SECRETARY, DISPATCHER/*?*/,
 };
 
-class Worker final : public Person {
+class Worker : public Person {
 public:
-    Worker(Point init, class City& city, WorkerJob job);
-    ~Worker();
+    static Worker* MakeWorker(Point init, class City& city, WorkerJob job);
+    virtual ~Worker();
 
-    void TalkToHero() override;
+protected:
+    Worker(Point init, class City& city);
+
+    class City& city;
 
 private:
     Worker(const Worker&);
     Worker& operator=(const Worker&);
-
-    class City& city;
-    WorkerJob job;
 };
 
 #endif  // ENGINE_WORKER_H_

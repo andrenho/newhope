@@ -12,26 +12,28 @@ else
   include build/libraries_win.mk
 endif
 
-SRC = main.cc			\
-      engine/block.cc		\
-      engine/building.cc	\
-      engine/buildinglayout.cc  \
-      engine/city.cc		\
-      engine/citylayout.cc	\
-      engine/command.cc		\
-      engine/hero.cc		\
-      engine/mapgen.cc		\
-      engine/rivergen.cc	\
-      engine/resources.cc	\
-      engine/person.cc		\
-      engine/vehicle.cc		\
-      engine/worker.cc		\
-      engine/world.cc		\
-      ui/dialogmanager.cc	\
-      ui/minimap.cc		\
-      ui/w/wdialogmanager.cc 	\
-      ui/w/wireframeui.cc	\
-      ui/w/wminimap.cc		\
+SRC = main.cc				\
+      engine/block.cc			\
+      engine/building.cc		\
+      engine/buildinglayout.cc  	\
+      engine/city.cc			\
+      engine/citylayout.cc		\
+      engine/command.cc			\
+      engine/hero.cc			\
+      engine/mapgen.cc			\
+      engine/rivergen.cc		\
+      engine/resources.cc		\
+      engine/person.cc			\
+      engine/vehicle.cc			\
+      engine/worker.cc			\
+      engine/world.cc			\
+      engine/workers/banker.cc		\
+      engine/workers/shopkeeper.cc 	\
+      ui/dialogmanager.cc		\
+      ui/minimap.cc			\
+      ui/w/wdialogmanager.cc 		\
+      ui/w/wireframeui.cc		\
+      ui/w/wminimap.cc			\
       util/stdio.cc
 
 OBJ = ${SRC:.cc=.o}

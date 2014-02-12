@@ -1,13 +1,14 @@
 #include "engine/worker.h"
 
-#include <iostream>
+#include <cstdlib>
 
 #include "./globals.h"
 #include "engine/city.h"
-#include "ui/ui.h"
+#include "engine/workers/banker.h"
+#include "engine/workers/shopkeeper.h"
 
-Worker::Worker(Point init, City& city, WorkerJob job)
-    : Person(init), city(city), job(job)
+Worker::Worker(Point init, City& city)
+    : Person(init), city(city)
 {
 }
 
@@ -17,18 +18,16 @@ Worker::~Worker()
 }
 
 
-void 
-Worker::TalkToHero()
+Worker* 
+Worker::MakeWorker(Point init, class City& city, WorkerJob job)
 {
     switch(job) {
     case WorkerJob::SHOPKEEPER:
-        ui->Dialog().Shopkeeper(city, *this);
-        break;
+        return new Shopkeeper(init, city);
     case WorkerJob::BANKER:
-        ui->Dialog().Banker(*this);
-        break;
+        return new Banker(init, city);
     default:
-        ;
+        abort();
     }
 }
 

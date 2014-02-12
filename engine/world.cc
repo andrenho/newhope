@@ -183,7 +183,7 @@ World::AddWorkers()
 {
     for(auto& city: cities) {
         for(auto const& worker : city->Workers()) {
-            Worker* wk = new Worker(worker.second, *city, worker.first);
+            Worker* wk = Worker::MakeWorker(worker.second, *city, worker.first);
             AddObject(wk);
         }
     }
