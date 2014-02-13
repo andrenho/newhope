@@ -1,20 +1,18 @@
 #include "engine/city.h"
 
 #include <cassert>
-#include <memory>
 
 #include "./globals.h"
 #include "engine/world.h"
 
 City::City(int x, int y, CityType type, int n)
-    : X(x), Y(y), layout(CityLayouts[CityPair(type, n)])
+    : X(x), Y(y), layout(CityLayouts[CityPair(type, n)]), buildings()
 {
     for(auto const& bpos : layout.buildings) {
-        std::unique_ptr<Building> b(new Building(
+        buildings.emplace_back(
                 static_cast<int>(bpos.second.X()), 
                 static_cast<int>(bpos.second.Y()), 
-                bpos.first.first, bpos.first.second));
-        buildings.push_back(std::move(b));
+                bpos.first.first, bpos.first.second);
     }
 }
 
@@ -28,9 +26,9 @@ int
 City::Tiles(const Block* (&block)[10], int x, int y) const
 {
     for(auto const& b : buildings) {
-        if(x >= b->X && x < b->X+b->W()
-        && y >= b->Y && y < b->Y+b->H()) {
-            return b->Tiles(block, x - b->X, y - b->Y);
+        if(x >= b.X && x < b.X+b.W()
+        && y >= b.Y && y < b.Y+b.H()) {
+            return b.Tiles(block, x - b.X, y - b.Y);
         }
     }
     block[0] = Block::EMPTY;
@@ -63,10 +61,10 @@ City::Workers() const
     std::vector<WorkerPair> pairs;
 
     for(auto const& building: buildings) {
-        for(auto const& worker: building->Workers()) {
+        for(auto const& worker: building.Workers()) {
             pairs.push_back({ worker.first,
-                    Point(worker.second.X() + building->X + X,
-                          worker.second.Y() + building->Y + Y) });
+                    Point(worker.second.X() + building.X + X,
+                          worker.second.Y() + building.Y + Y) });
         }
     }
 

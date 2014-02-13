@@ -2,7 +2,6 @@
 #define ENGINE_CITY_H_
 
 #include <map>
-#include <memory>
 #include <vector>
 
 #include "engine/building.h"
@@ -30,7 +29,7 @@ private:
     City& operator=(const City&);
 
     CityLayout const& layout;
-    std::vector<std::unique_ptr<Building>> buildings;
+    std::vector<Building> buildings;
 };
 
 #endif  // ENGINE_CITY_H_

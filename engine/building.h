@@ -10,7 +10,9 @@
 class Building final {
 public:
     Building(int x, int y, BuildingType type, int n);
+    Building(Building&&) = default;
     ~Building() { }
+
 
     int Tiles(const Block* (&block)[10], int x, int y) const;
 
