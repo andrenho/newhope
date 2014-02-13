@@ -203,13 +203,6 @@ Person::Sell(City& city, unsigned int cargo_slot, unsigned int amount, std::stri
 }
 
 
-int 
-Person::Collateral() const
-{
-    return 50000;
-}
-
-
 void 
 Person::setLoanValue(int value)
 {
@@ -220,8 +213,10 @@ Person::setLoanValue(int value)
 
 
 void 
-Person::PayLoan(int value)
+Person::PayLoan(class Banker& banker, int value)
 {
+    (void) banker;
+
     assert(value <= money);
     assert(value <= loan);
     loan -= value;

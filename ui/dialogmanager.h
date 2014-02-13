@@ -13,8 +13,8 @@ public:
     int QuestionNumber(class Person const& person, std::string const& message, unsigned int digits) const;
 
     // workers dialogs
-    virtual void Shopkeeper(class City& city, class Worker& shopkeeper) const = 0;
-    virtual void Banker(class Worker& banker) const = 0;
+    virtual void Shopkeeper(class City& city, class Shopkeeper& shopkeeper) const = 0;
+    virtual void Banker(class Banker& banker) const = 0;
 
 protected:
     DialogManager() {}

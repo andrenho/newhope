@@ -9,6 +9,8 @@
 #include "engine/hero.h"
 #include "engine/vehicle.h"
 #include "engine/resources.h"
+#include "engine/workers/banker.h"
+#include "engine/workers/shopkeeper.h"
 #include "ui/ui.h"
 #include "util/stdio.h"
 
@@ -49,7 +51,7 @@ WDialogManager::Speech(class Person const& person, std::string const& message) c
 
 
 void 
-WDialogManager::Shopkeeper(class City& city, class Worker& shopkeeper) const
+WDialogManager::Shopkeeper(class City& city, class Shopkeeper& shopkeeper) const
 {
     bool closed = false;
     std::map<Resource, SDL_Rect> mrects;
@@ -64,7 +66,7 @@ WDialogManager::Shopkeeper(class City& city, class Worker& shopkeeper) const
 
 
 void 
-WDialogManager::Banker(class Worker& banker) const
+WDialogManager::Banker(class Banker& banker) const
 {
     Hero& hero = world->Hero();
 
@@ -77,12 +79,12 @@ WDialogManager::Banker(class Worker& banker) const
         if(value > hero.Money()) {
             Speech(banker, _("You don't have enough money to pay the debt."));
         } else {
-            hero.PayLoan(value);
+            hero.PayLoan(banker, value);
             Speech(banker, _("Very well."));
         }
     } else {
         // get loan
-        int max_loan = hero.MaxLoanPossible();
+        int max_loan = banker.MaxLoanPossible(hero);
         if(max_loan <= 0) {
             Speech(banker, _("Unfortunately, your credit wasn't approved."));
         } else {
@@ -92,7 +94,7 @@ WDialogManager::Banker(class Worker& banker) const
                 Speech(banker, mprintf(_("Like I said, the maximum loan is %d."), max_loan));
             } else if (value > 0) {
                 Speech(banker, _("Very well, here is your money."));
-                hero.setLoanValue(value);
+                banker.GiveLoan(hero, value);
             }
         }
     }
@@ -249,7 +251,7 @@ WDialogManager::ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& m
 
 
 bool
-WDialogManager::ShopKeeperEvents(class City& city, class Worker& shopkeeper, 
+WDialogManager::ShopKeeperEvents(class City& city, class Shopkeeper& shopkeeper, 
         std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const
 {
     Resource dragging = Resource::NOTHING;

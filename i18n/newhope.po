@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-10 21:08-0200\n"
+"POT-Creation-Date: 2014-02-13 08:26-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,4 +75,131 @@ msgstr ""
 
 #: engine/resources.cc:38
 msgid "Drugs"
+msgstr ""
+
+#: engine/resources.cc:16
+msgid "grain"
+msgstr ""
+
+#: engine/resources.cc:18
+msgid "wood"
+msgstr ""
+
+#: engine/resources.cc:20
+msgid "oil"
+msgstr ""
+
+#: engine/resources.cc:22
+msgid "herbs"
+msgstr ""
+
+#: engine/resources.cc:24
+msgid "silicon"
+msgstr ""
+
+#: engine/resources.cc:26
+msgid "iron"
+msgstr ""
+
+#: engine/resources.cc:28
+msgid "uranium"
+msgstr ""
+
+#: engine/resources.cc:30
+msgid "electronics"
+msgstr ""
+
+#: engine/resources.cc:32
+msgid "machines"
+msgstr ""
+
+#: engine/resources.cc:34
+msgid "weapons"
+msgstr ""
+
+#: engine/resources.cc:36
+msgid "medicine"
+msgstr ""
+
+#: engine/resources.cc:38
+msgid "drugs"
+msgstr ""
+
+#: engine/person.cc:127 engine/person.cc:174
+msgid "Unfortunately, you don't have a vehicle to transport the cargo."
+msgstr ""
+
+#: engine/person.cc:133
+#, c-format
+msgid "Unfortunately, you don't have this much %s."
+msgstr ""
+
+#: engine/person.cc:139
+msgid "Unfortunately, you don't have enough money."
+msgstr ""
+
+#: engine/person.cc:145
+#, c-format
+msgid "There's not enough space on the vehicle for all this %s."
+msgstr ""
+
+#: engine/person.cc:155
+#, c-format
+msgid "That'll be $%d."
+msgstr ""
+
+#: engine/person.cc:183
+#, c-format
+msgid "There are only %d of %s in this cargo slot."
+msgstr ""
+
+#: engine/person.cc:196
+#, c-format
+msgid "Here's $%d. Spend wisely."
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:74
+#, c-format
+msgid "You currently have a loan of $%d. Do you want to pay it now? [y/n]"
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:75
+#, c-format
+msgid "How much of your loan ($%d) do you want to pay?"
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:80
+msgid "You don't have enough money to pay the debt."
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:83
+msgid "Very well."
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:89
+msgid "Unfortunately, your credit wasn't approved."
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:92
+#, c-format
+msgid "I can grant you a loan of up to $%d. How much do you want to apply for?"
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:94
+#, c-format
+msgid "Like I said, the maximum loan is %d."
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:96
+msgid "Very well, here is your money."
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:307
+#, c-format
+msgid "How much %s do you want to buy?"
+msgstr ""
+
+#: ui/w/wdialogmanager.cc:327
+#, c-format
+msgid "How much %s do you want to sell?"
 msgstr ""

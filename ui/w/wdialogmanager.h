@@ -20,8 +20,8 @@ public:
     void Speech(class Person const& person, std::string const& message) const override;
 
     // workers
-    void Shopkeeper(class City& city, class Worker& shopkeeper) const override;
-    void Banker(class Worker& banker) const override;
+    void Shopkeeper(class City& city, class Shopkeeper& shopkeeper) const override;
+    void Banker(class Banker& banker) const override;
 
 protected:
     std::string QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, 
@@ -34,7 +34,7 @@ private:
     int MessageBox(class Person const& person, std::string const& message) const;
 
     void ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const;
-    bool ShopKeeperEvents(class City& city, class Worker& shopkeeper, 
+    bool ShopKeeperEvents(class City& city, class Shopkeeper& shopkeeper, 
             std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const;
 
     int WriteTextOnScreen(TTF_Font* font, std::string const& text, int x, int y, 

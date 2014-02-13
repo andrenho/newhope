@@ -10,7 +10,7 @@
 #include "engine/worker.h"
 
 enum BuildingType {
-    GENERAL_STORE, BANK,
+    GENERAL_STORE, BANK, BAR,
 };
 
 typedef std::pair<BuildingType, int> BuildingPair;

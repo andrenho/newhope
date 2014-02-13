@@ -27,11 +27,10 @@ public:
     inline struct cpBody* PhysicsBodyPtr() const { return body; }
 
     inline int Money() const { return money; }
-    int Collateral() const;
     int LoanValue() const { return loan; }
-    int MaxLoanPossible() const { return Collateral() - loan; }
+    void PayLoan(class Banker& banker, int value);
+
     void setLoanValue(int value);
-    void PayLoan(int value);
 
 protected:
     explicit Person(Point init);

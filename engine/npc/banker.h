@@ -11,6 +11,10 @@ public:
 
     void TalkToHero() override;
 
+    int MaxLoanPossible(class Person const& person) const { return Collateral(person) - person.LoanValue(); }
+    int Collateral(class Person const& person) const;
+    void GiveLoan(class Person& person, int value) const;
+
 private:
     Banker(const Banker&);
     Banker& operator=(const Banker&);
