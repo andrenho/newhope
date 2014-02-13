@@ -13,7 +13,7 @@ public:
     virtual ~Worker();
 
 protected:
-    Worker(Point init, class City& city);
+    Worker(Point init, class City& city, int money);
 
     class City& city;
 

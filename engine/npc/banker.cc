@@ -1,12 +1,13 @@
-#include "engine/workers/banker.h"
+#include "engine/npc/banker.h"
 
 #include <cassert>
+#include <climits>
 
 #include "./globals.h"
 #include "ui/ui.h"
 
 Banker::Banker(Point init, class City& city)
-    : Worker(init, city)
+    : Worker(init, city, INT_MAX/2)
 {
 }
 
@@ -18,15 +19,17 @@ Banker::~Banker()
 int 
 Banker::Collateral(class Person const& person) const
 {
+    (void) person;
     return 50000; // TODO
 }
 
 
 void
-Banker::GiveLoan(class Person& person, int value) const
+Banker::GiveLoan(class Person& person, int value)
 {
     assert(value + person.LoanValue() <= Collateral(person));
-    person.setLoanValue(value);
+    Pay(person, value);
+    person.setLoanValue(*this, value);
 }
 
 

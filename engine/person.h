@@ -6,7 +6,7 @@
 
 class Person : public Object {
 public:
-    virtual ~Person() { }
+    virtual ~Person();
 
     virtual void InitializePhysics(struct cpSpace* space) override;
     virtual void SetTarget(Point const& p);
@@ -19,21 +19,22 @@ public:
     inline class Vehicle& Vehicle() const { return *vehicle; }
     bool ExitVehicle();
 
-    bool Buy(class City& city, Resource const& resource, unsigned int amount, std::string& message);
-    bool Sell(class City& city, unsigned int cargo_slot, unsigned int amount, std::string& message);
-
     inline virtual double Radius() const { return 0.5; }
     virtual Point Position() const override;
     inline struct cpBody* PhysicsBodyPtr() const { return body; }
 
-    inline int Money() const { return money; }
-    int LoanValue() const { return loan; }
-    void PayLoan(class Banker& banker, int value);
+    int Money() const;
 
-    void setLoanValue(int value);
+    void GetPaid(Person& giver, int value); // TODO - should be private
+    bool Pay(Person& receiver, int value);
+
+    int LoanValue() const { return loan; }
+    bool PayLoan(class Banker& banker, int value);
+
+    void setLoanValue(Banker& banker, int value);
 
 protected:
-    explicit Person(Point init);
+    Person(Point init, int money);
 
     const Point init;
     struct cpBody *body, *target;
@@ -41,13 +42,29 @@ protected:
     struct cpConstraint* joint;
     class Vehicle* vehicle;
     bool in_vehicle;
-    int money;
     int loan;
+    class Wallet* wallet;
 
 private:
     Person(const Person&);
     Person& operator=(const Person&);
 };
+
+
+// this proxy class ensures that a person is only paid when the other one is giving money
+class Wallet {
+public:
+    explicit Wallet(int money) : money(money) {}
+
+    inline int Money() const { return money; }
+
+    friend bool Person::Pay(Person& receiver, int value);
+    friend void Person::GetPaid(Person& giver, int value);
+
+private:
+    int money;
+};
+
 
 #endif  // ENGINE_PERSON_H_
 

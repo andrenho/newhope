@@ -52,13 +52,10 @@ public:
     void AddCargo(Resource res, unsigned int amount);
     void RemoveCargo(Resource res, unsigned int amount);
     unsigned int SpaceLeft(Resource res) const;
+    unsigned int CargoAmount(Resource res) const;
 
-    void PhysicsBodies(struct cpBody*& body, 
-            struct cpBody*& rear_wheel_body, 
-            struct cpBody*& front_wheel_body) const;
-    void PhysicsShapes(struct cpShape*& shape, 
-            struct cpShape*& rear_wheel_shape, 
-            struct cpShape*& front_wheel_shape) const;
+    void PhysicsBodies(struct cpBody*& body, struct cpBody*& rear_wheel_body, struct cpBody*& front_wheel_body) const;
+    void PhysicsShapes(struct cpShape*& shape, struct cpShape*& rear_wheel_shape, struct cpShape*& front_wheel_shape) const;
     inline struct cpBody* PhysicsBodyPtr() const { return body; }
 
     VehicleSteering Steering;

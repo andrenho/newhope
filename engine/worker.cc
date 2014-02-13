@@ -4,12 +4,12 @@
 
 #include "./globals.h"
 #include "engine/city.h"
-#include "engine/workers/banker.h"
-#include "engine/workers/bartender.h"
-#include "engine/workers/shopkeeper.h"
+#include "engine/npc/banker.h"
+#include "engine/npc/bartender.h"
+#include "engine/npc/shopkeeper.h"
 
-Worker::Worker(Point init, City& city)
-    : Person(init), city(city)
+Worker::Worker(Point init, City& city, int money)
+    : Person(init, money), city(city)
 {
 }
 

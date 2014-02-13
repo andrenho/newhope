@@ -1,6 +1,8 @@
 #include <chipmunk.h>
 
+#include <algorithm>
 #include <cassert>
+#include <map>
 
 #include "./globals.h"
 #include "engine/vehicle.h"
@@ -237,6 +239,17 @@ Vehicle::SpaceLeft(Resource res) const
 }
 
 
+unsigned int 
+Vehicle::CargoAmount(Resource res) const
+{
+    unsigned int amount = 0;
+    for(auto const& slot: cargo_slots) { 
+        if(slot.Cargo == res) {
+            amount += slot.Amount;
+        }
+    }
+    return amount;
+}
 
 /**************************************************************************/
 

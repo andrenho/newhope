@@ -22,12 +22,6 @@ public:
     static CityType Type(Block const* biome);
     const std::vector<WorkerPair> Workers() const;
 
-    inline unsigned int ResourceAmount(Resource r) const { return resources.at(r); }
-    inline unsigned int ResourceSellPrice(Resource r) const { (void)r; return 5; }
-    inline unsigned int ResourceBuyPrice(Resource r) const { (void)r; return 10; }
-
-    void ChangeCargoAmount(Resource res, int amount);
-
     const int X, Y;
 
 private:
@@ -36,7 +30,6 @@ private:
 
     CityLayout const& layout;
     std::vector<const Building*> buildings;
-    std::map<Resource, int> resources;
 };
 
 #endif  // ENGINE_CITY_H_

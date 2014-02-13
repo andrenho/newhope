@@ -1,5 +1,7 @@
-#ifndef ENGINE_WORKERS_BARTENDER_H_
-#define ENGINE_WORKERS_BARTENDER_H_
+#ifndef ENGINE_NPC_BARTENDER_H_
+#define ENGINE_NPC_BARTENDER_H_
+
+#include <string>
 
 #include "engine/worker.h"
 #include "engine/point.h"
@@ -10,12 +12,13 @@ public:
     ~Bartender();
 
     void TalkToHero() override;
+    std::string News() const;
 
 private:
     Bartender(const Bartender&);
     Bartender& operator=(const Bartender&);
 };
 
-#endif  // ENGINE_WORKERS_BARTENDER_H_
+#endif  // ENGINE_NPC_BARTENDER_H_
 
 // vim: ts=4:sw=4:sts=4:expandtab

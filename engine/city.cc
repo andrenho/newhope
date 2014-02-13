@@ -7,7 +7,7 @@
 
 City::City(int x, int y, CityType type, int n)
     : X(x), Y(y), layout(CityLayouts[CityPair(type, n)]),
-      buildings({}), resources({})
+      buildings({})
 {
     for(auto const& bpos : layout.buildings) {
         const Building* b = new Building(
@@ -15,9 +15,6 @@ City::City(int x, int y, CityType type, int n)
                 static_cast<int>(bpos.second.Y()), 
                 bpos.first.first, bpos.first.second);
         buildings.push_back(b);
-    }
-    for(Resource res: ResourceList) {
-        resources[res] = 250; // TODO
     }
 }
 
@@ -77,14 +74,6 @@ City::Workers() const
     }
 
     return pairs;
-}
-
-
-void 
-City::ChangeCargoAmount(Resource res, int amount)
-{
-    assert(resources.at(res) + amount >= 0);
-    resources[res] += amount;
 }
 
 

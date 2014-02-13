@@ -9,8 +9,8 @@
 #include "engine/hero.h"
 #include "engine/vehicle.h"
 #include "engine/resources.h"
-#include "engine/workers/banker.h"
-#include "engine/workers/shopkeeper.h"
+#include "engine/npc/banker.h"
+#include "engine/npc/shopkeeper.h"
 #include "ui/ui.h"
 #include "util/stdio.h"
 
@@ -51,14 +51,14 @@ WDialogManager::Speech(class Person const& person, std::string const& message) c
 
 
 void 
-WDialogManager::Shopkeeper(class City& city, class Shopkeeper& shopkeeper) const
+WDialogManager::Shopkeeper(class Shopkeeper& shopkeeper) const
 {
     bool closed = false;
     std::map<Resource, SDL_Rect> mrects;
     std::vector<SDL_Rect> crects;
     while(!closed) {
-        ShopKeeperDraw(city, mrects, crects);
-        closed = ShopKeeperEvents(city, shopkeeper, mrects, crects);
+        ShopKeeperDraw(shopkeeper, mrects, crects);
+        closed = ShopKeeperEvents(shopkeeper, mrects, crects);
         crects.clear();
         mrects.clear();
     }
@@ -196,7 +196,8 @@ WDialogManager::MessageBox(class Person const& person, std::string const& messag
 
 
 void 
-WDialogManager::ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const
+WDialogManager::ShopKeeperDraw(class Shopkeeper& shopkeeper, 
+        std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const
 {
     Hero& hero = world->Hero();
 
@@ -221,8 +222,8 @@ WDialogManager::ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& m
         SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
         SDL_RenderFillRect(ren, &r3);
         WriteTextOnScreen(main_font, std::string(1, static_cast<char>(res)), x+5, 175, 0, 0, 0);
-        WriteTextOnScreen(small_font, std::to_string(city.ResourceAmount(res)), x, 200, 0, 0, 0);
-        auto s = mprintf("%d/%d", city.ResourceBuyPrice(res), city.ResourceSellPrice(res));
+        WriteTextOnScreen(small_font, std::to_string(shopkeeper.ResourceAmount(res)), x, 200, 0, 0, 0);
+        auto s = mprintf("%d/%d", shopkeeper.ResourceBuyPrice(res), shopkeeper.ResourceSellPrice(res));
         WriteTextOnScreen(small_font, std::string(s), x, 212, 0, 0, 0);
         
         x += 40;
@@ -251,7 +252,7 @@ WDialogManager::ShopKeeperDraw(class City& city, std::map<Resource, SDL_Rect>& m
 
 
 bool
-WDialogManager::ShopKeeperEvents(class City& city, class Shopkeeper& shopkeeper, 
+WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper, 
         std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const
 {
     Resource dragging = Resource::NOTHING;
@@ -302,12 +303,12 @@ WDialogManager::ShopKeeperEvents(class City& city, class Shopkeeper& shopkeeper,
                         for(auto const& crect: crects) {
                             if(in_rect(e.button.x, e.button.y, crect)) {
                                 std::string message;
-                                unsigned int amount = std::min(100U, city.ResourceAmount(dragging));
+                                unsigned int amount = std::min(100U, shopkeeper.ResourceAmount(dragging));
                                 if(SDL_GetModState() & KMOD_SHIFT) {
                                     std::string s = mprintf(_("How much %s do you want to buy?"), resource_name(dragging).c_str());
                                     amount = QuestionNumber(shopkeeper, s, 5);
                                 }
-                                world->Hero().Buy(city, dragging, amount, message);
+                                shopkeeper.Sell(world->Hero(), dragging, amount, message);
                                 if(!message.empty()) {
                                     std::cout << message << "\n";
                                 }
@@ -328,7 +329,7 @@ WDialogManager::ShopKeeperEvents(class City& city, class Shopkeeper& shopkeeper,
                                         amount = QuestionNumber(shopkeeper, s, 5);
                                     }
                                     std::string message;
-                                    world->Hero().Sell(city, cargo_slot, amount, message);
+                                    shopkeeper.Buy(world->Hero(), slot.Cargo, amount, message);
                                     if(!message.empty()) {
                                         std::cout << message << "\n";
                                     }

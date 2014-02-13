@@ -7,7 +7,7 @@
 class DummyDialogManager : public DialogManager {
 public:
     void Speech(class Person const& person, std::string const& message) const override { }
-    void Shopkeeper(class City& city, class Worker& shopkeeper) const override { }
+    void Shopkeeper(class Shopkeeper& shopkeeper) const override { }
 
 protected:
     std::string QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, 

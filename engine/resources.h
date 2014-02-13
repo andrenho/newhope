@@ -2,6 +2,7 @@
 #define ENGINE_RESOURCES_H_
 
 #include <array>
+#include <string>
 
 enum Resource : char {
    GRAIN      = 'G', 

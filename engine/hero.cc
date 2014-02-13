@@ -2,7 +2,7 @@
 #include "engine/vehicle.h"
 
 Hero::Hero(Point init) 
-    : Person(init)
+    : Person(init, 2500)
 { 
 }
 
@@ -11,7 +11,6 @@ Hero::Hero(Point init, class Vehicle* vehicle)
     : Hero(init)
 {
     this->vehicle = vehicle;
-    money = 2500;
 }
 
 

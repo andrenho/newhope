@@ -1,6 +1,7 @@
 #include "engine/resources.h"
 
 #include <cstdlib>
+#include <string>
 
 #include "./globals.h"
 

@@ -11,12 +11,22 @@
 #include "engine/person.h"
 #include "engine/vehicle.h"
 #include "engine/world.h"
+#include "engine/npc/banker.h"
+#include "engine/npc/shopkeeper.h"
 #include "util/stdio.h"
 
-Person::Person(Point init)
+Person::Person(Point init, int money)
     : init(init), body(nullptr), target(nullptr), shape(nullptr), 
-      joint(nullptr), vehicle(nullptr), in_vehicle(false), money(0), loan(0)
-{ 
+      joint(nullptr), vehicle(nullptr), in_vehicle(false), loan(0), wallet(new Wallet(money))
+{
+}
+
+
+Person::~Person()
+{
+    if(wallet) {
+        delete wallet;
+    }
 }
 
 
@@ -113,114 +123,54 @@ Person::DestroyPhysics(struct cpSpace* space)
 }
 
 
-bool
-Person::Buy(City& city, Resource const& resource, unsigned int amount, std::string& message)
-{
-    if(amount == 0) {
-        return true;
-    }
-
-    int price = static_cast<int>(city.ResourceBuyPrice(resource) * amount);
-
-    // do the player has a car?
-    if(!vehicle) {
-        message = _("Unfortunately, you don't have a vehicle to transport the cargo.");
-        return false;
-    }
-
-    // are enough resources available in the city?
-    if(city.ResourceAmount(resource) < amount) {
-        message = mprintf(_("Unfortunately, you don't have this much %s."), resource_name(resource).c_str());
-        return false;
-    }
-
-    // does the person has enough funds?
-    if(money < price) {
-        message = _("Unfortunately, you don't have enough money.");
-        return false;
-    }
-
-    // is there space in the vehcile?
-    if(amount > vehicle->SpaceLeft(resource)) {
-        message = mprintf(_("There's not enough space on the vehicle for all this %s."), resource_name(resource).c_str());
-        return false;
-    }
-
-    // purchase
-    vehicle->AddCargo(resource, amount);
-    city.ChangeCargoAmount(resource, -static_cast<int>(amount));
-    money -= price;
-
-    // message
-    message = mprintf(_("That'll be $%d."), price);
-    LOG(INFO) << amount << " " << resource_name(resource) << " bought for $" << price;
-
-    // world response
-    world->RecalculatePrices();
-
-    return true;
+int 
+Person::Money() const 
+{ 
+    return wallet->Money(); 
 }
 
 
 bool 
-Person::Sell(City& city, unsigned int cargo_slot, unsigned int amount, std::string& message)
+Person::Pay(Person& receiver, int value)
 {
-    if(amount == 0) {
+    if(value > wallet->money) {
         return false;
+    } else {
+        wallet->money -= value;
+        receiver.GetPaid(*this, value);
+        return true;
     }
-
-    // do the player has a car?
-    if(!vehicle) {
-        message = _("Unfortunately, you don't have a vehicle to transport the cargo.");
-        return false;
-    }
-
-    auto const& slot = vehicle->Cargo(cargo_slot);
-    int price = static_cast<int>(city.ResourceSellPrice(slot.Cargo) * amount);
-
-    // does the person has enough resources?
-    if(amount > slot.Amount) {
-        message = mprintf(_("There are only %d of %s in this cargo slot."), slot.Amount, resource_name(slot.Cargo).c_str());
-        return false;
-    }
-
-    // does the seller has enough funds? (TODO)
-    
-    // sell
-    Resource res = slot.Cargo;
-    vehicle->RemoveCargo(res, amount);
-    city.ChangeCargoAmount(res, static_cast<int>(amount));
-    money += price;
-
-    // message
-    message = mprintf(_("Here's $%d. Spend wisely."), price);
-    LOG(INFO) << amount << " " << resource_name(res) << " sold for $" << price;
-
-    // world response
-    world->RecalculatePrices();
-
-    return true;
 }
 
 
 void 
-Person::setLoanValue(int value)
+Person::GetPaid(Person& giver, int value)
 {
-    assert(value <= MaxLoanPossible());
+    (void) giver;
+    wallet->money += value;
+}
+
+
+void 
+Person::setLoanValue(Banker& banker, int value)
+{
+    (void) banker;
     loan = value;
-    money += value;
 }
 
 
-void 
+bool
 Person::PayLoan(class Banker& banker, int value)
 {
     (void) banker;
 
-    assert(value <= money);
     assert(value <= loan);
-    loan -= value;
-    money -= value;
+    if(Pay(banker, value)) {
+       loan -= value;
+       return true;
+    } else {
+        return false;
+    }
 }
 
 // vim: ts=4:sw=4:sts=4:expandtab
