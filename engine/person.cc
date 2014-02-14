@@ -6,7 +6,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/city.h"
 #include "engine/person.h"
 #include "engine/vehicle.h"

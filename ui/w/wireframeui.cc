@@ -8,7 +8,7 @@
 #include <iostream>
 #include <string>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/command.h"
 #include "engine/hero.h"
 #include "engine/point.h"

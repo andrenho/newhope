@@ -5,7 +5,7 @@
 #include <climits>
 #include <string>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/vehicle.h"
 #include "engine/world.h"
 #include "ui/ui.h"

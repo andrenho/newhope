@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/city.h"
 #include "engine/npc/banker.h"
 #include "engine/npc/bartender.h"

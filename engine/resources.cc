@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <string>
 
-#include "./globals.h"
+#include "./main.h"
 
 std::array<Resource, Resource::__RCOUNT__> ResourceList {{ 
    GRAIN, WOOD, OIL, HERBS, SILICON, IRON, URANIUM, ELECRONICS, MACHINES,

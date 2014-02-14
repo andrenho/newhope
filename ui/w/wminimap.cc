@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "./globals.h"
+#include "./main.h"
 #include "ui/w/wireframeui.h"
 
 WMinimap::WMinimap(int w, int h, SDL_Renderer& ren)

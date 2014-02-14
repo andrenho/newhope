@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/world.h"
 
 City::City(int x, int y, CityType type, int n)

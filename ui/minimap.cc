@@ -3,7 +3,7 @@
 #include <glog/logging.h>
 #include <iostream>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/hero.h"
 #include "engine/world.h"
 #include "ui/ui.h"

@@ -5,7 +5,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/world.h"
 
 Rivergen::Rivergen(const double (&hm)[255][255], const Rectangle rect, unsigned int& seedp)

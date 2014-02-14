@@ -2,11 +2,12 @@
 #define GLOBALS_H
 
 #include <libintl.h>
+#include <memory>
 
 #define _(STRING) gettext(STRING)
 
-extern class World* world;
-extern class UI* ui;
+extern std::unique_ptr<class World> world;
+extern std::unique_ptr<class UI> ui;
 
 #endif
 

@@ -3,7 +3,7 @@
 #include <cassert>
 #include <climits>
 
-#include "./globals.h"
+#include "./main.h"
 #include "ui/ui.h"
 
 Banker::Banker(Point init, class City& city)

@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <iostream>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/block.h"
 #include "engine/point.h"
 #include "engine/rectangle.h"

@@ -1,6 +1,6 @@
 #include "engine/command.h"
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/hero.h"
 #include "engine/vehicle.h"
 #include "ui/ui.h"

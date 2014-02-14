@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <iostream>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/world.h"
 #include "engine/hero.h"
 #include "engine/vehicle.h"

@@ -4,7 +4,7 @@
 #include <cassert>
 #include <map>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/vehicle.h"
 #include "engine/world.h"
 

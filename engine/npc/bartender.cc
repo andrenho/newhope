@@ -1,6 +1,6 @@
 #include "engine/npc/bartender.h"
 
-#include "./globals.h"
+#include "./main.h"
 #include "ui/ui.h"
 #include "ui/dialogmanager.h"
 

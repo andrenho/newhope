@@ -10,7 +10,7 @@
 #include <memory>
 #include <vector>
 
-#include "./globals.h"
+#include "./main.h"
 #include "engine/command.h"
 #include "engine/world.h"
 #include "ui/ui.h"
@@ -20,8 +20,8 @@
 #  include "ui/w/wireframeui.h"
 #endif
 
-World* world = nullptr;
-UI*    ui    = nullptr;
+std::unique_ptr<World> world = nullptr;
+std::unique_ptr<UI> ui = nullptr;
 
 int main(int argc, char** argv)
 {
@@ -43,11 +43,11 @@ int main(int argc, char** argv)
 
     // initialize engine and UI
 #ifdef DUMMY
-    ui = new DummyUI(); // this dummy lib is used for testing memory leaks
+    ui = std::unique_ptr<UI>(new DummyUI()); // this dummy lib is used for testing memory leaks
 #else
-    ui = new WireframeUI();
+    ui = std::unique_ptr<UI>(new WireframeUI());
 #endif
-    world = new World(-10000, -10000, 10000, 10000, seedp);
+    world = std::unique_ptr<World>(new World(-10000, -10000, 10000, 10000, seedp));
     world->Initialize();
     ui->Initialize();
 
@@ -82,9 +82,6 @@ int main(int argc, char** argv)
             ui->Wait(next_frame - now);
         }
     }
-
-    delete ui;
-    delete world;
 
     google::ShutdownGoogleLogging();
 

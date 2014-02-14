@@ -38,7 +38,7 @@ SRC = main.cc			\
       util/stdio.cc
 
 OBJ = ${SRC:.cc=.o}
-HEADERS = $(subst main.h,,${SRC:.cc=.h} ui/ui.h engine/point.h engine/rectangle.h)
+HEADERS = ${SRC:.cc=.h} ui/ui.h engine/point.h engine/rectangle.h
 DIST = 
 DATA = data/PressStart2P.ttf
 
