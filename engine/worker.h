@@ -1,6 +1,8 @@
 #ifndef ENGINE_WORKER_H_
 #define ENGINE_WORKER_H_
 
+#include <memory>
+
 #include "engine/person.h"
 
 enum WorkerJob {
@@ -9,7 +11,7 @@ enum WorkerJob {
 
 class Worker : public Person {
 public:
-    static Worker* MakeWorker(Point init, class City& city, WorkerJob job);
+    static std::shared_ptr<Worker> MakeWorker(Point init, class City& city, WorkerJob job);
     virtual ~Worker();
 
 protected:

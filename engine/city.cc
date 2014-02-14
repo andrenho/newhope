@@ -17,13 +17,8 @@ City::City(int x, int y, CityType type, int n)
 }
 
 
-City::~City() 
-{
-}
-
-
 int 
-City::Tiles(const Block* (&block)[10], int x, int y) const
+City::Tiles(Block (&block)[10], int x, int y) const
 {
     for(auto const& b : buildings) {
         if(x >= b.X && x < b.X+b.W()
@@ -37,7 +32,7 @@ City::Tiles(const Block* (&block)[10], int x, int y) const
 
 
 CityType 
-City::Type(Block const* b)
+City::Type(Block b)
 {
     if(b == Block::GRASS) {
         return CityType::AGRICULTURAL;

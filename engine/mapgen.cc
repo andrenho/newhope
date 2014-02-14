@@ -30,17 +30,12 @@ MapGen::MapGen(int x1, int y1, int x2, int y2, unsigned int seed)
 
 MapGen::~MapGen()
 {
-    if(rivergen) {
-        delete rivergen;
-    }
 }
 
 
 void
 MapGen::Create()
 {
-    LOG(INFO) << "Creating new map...\n";
-
     // create land
     LOG(INFO) << "Creating points...\n";
     CreatePoints(NUMPOINTS);
@@ -49,7 +44,7 @@ MapGen::Create()
     
     // create rivers
     LOG(INFO) << "Creating rivers...\n";
-    rivergen = new Rivergen(hm, rect, seedp);
+    rivergen = std::unique_ptr<Rivergen>(new Rivergen(hm, rect, seedp));
     for(int i=0; i<12; i++) {
         rivers.push_back(rivergen->CreateRiver());
     }
@@ -66,18 +61,18 @@ MapGen::Create()
 }
 
 
-Block const* 
+Block
 MapGen::Terrain(int x, int y) const
 {
     Point pt(x, y);
-    std::unordered_map<Point,Block const*>::const_iterator it;
+    std::unordered_map<Point,Block>::const_iterator it;
     if((it = tile_cache.find(pt)) != tile_cache.end()) {
         return it->second;
     } else if(rivergen->TileIsRiver(x, y)) {
         return Block::WATER;
     } else {
         Point p = ClosestPoint(x, y);
-        Block const* b = data.at(p).Biome;
+        Block b = data.at(p).Biome;
         tile_cache[Point(x,y)] = b; // XXX - remove to deactivate cache
         return b;
     }
@@ -90,7 +85,7 @@ MapGen::CitiesPositions(unsigned int n) const
     std::unordered_set<Point> positions;
 
     while(positions.size() < n) {
-        for(auto const& biome : Block::TerrainList()) {
+        for(auto const& biome : world->Blocks.TerrainList()) {
             if(biome == Block::WATER) {
                 continue;
             }
@@ -305,7 +300,7 @@ MapGen::ClosestPoint(int x, int y) const
 
 
 bool 
-MapGen::RandomPointWithBiome(Point& pt, Block const* biome, 
+MapGen::RandomPointWithBiome(Point& pt, Block biome, 
         std::unordered_set<Point> ignore) const
 {
     // create vector only with point in biome, and not ignored

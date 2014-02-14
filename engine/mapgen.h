@@ -1,6 +1,7 @@
 #ifndef ENGINE_MAPGEN_H_
 #define ENGINE_MAPGEN_H_
 
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -8,10 +9,11 @@
 #include "engine/block.h"
 #include "engine/rectangle.h"
 #include "engine/point.h"
+#include "engine/rivergen.h"
 
 struct PointData final {
     PointData() : Biome(Block::GRASS), Altitude(0), Moisture(0) {}
-    Block const* Biome;
+    Block Biome;
     double Altitude;  // between 0 and 1
     double Moisture;
 };
@@ -21,9 +23,11 @@ public:
     MapGen(int x1, int y1, int x2, int y2);
     MapGen(int x1, int y1, int x2, int y2, unsigned int seed);
 
+    MapGen(MapGen&&) = default;
+
     void Create();
     
-    Block const* Terrain(int x, int y) const;
+    Block Terrain(int x, int y) const;
     std::unordered_set<Point> CitiesPositions(unsigned int n) const;
 
     inline std::vector<std::vector<Point>> const& Rivers() const { return rivers; }
@@ -50,7 +54,7 @@ private:
     double DistanceFromWater(Point const& p) const;
 
     double PointAltitude(Point const& p) const;
-    bool RandomPointWithBiome(Point& p, Block const* biome,
+    bool RandomPointWithBiome(Point& p, Block biome,
         std::unordered_set<Point> ignore) const;
 
     const Rectangle rect;
@@ -61,10 +65,10 @@ private:
     std::vector<std::vector<Point>> rivers;
     double hm[255][255]; // heightmap
 
-    mutable std::unordered_map<Point,Block const*> tile_cache;
+    mutable std::unordered_map<Point,Block> tile_cache;
     std::unordered_set<Point> river_tiles;
 
-    class Rivergen* rivergen;
+    std::unique_ptr<class Rivergen> rivergen;
 
     const int NUMPOINTS = 1250;
 };

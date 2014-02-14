@@ -1,6 +1,8 @@
 #ifndef ENGINE_PERSON_H_
 #define ENGINE_PERSON_H_
 
+#include <memory>
+
 #include "engine/object.h"
 #include "engine/resources.h"
 
@@ -8,10 +10,8 @@ class Person : public Object {
 public:
     virtual ~Person();
 
-    virtual void InitializePhysics(struct cpSpace* space) override;
     virtual void SetTarget(Point const& p);
     virtual void SetPosition(Point const& p);
-    virtual void DestroyPhysics(struct cpSpace* space) override;
 
     virtual void TalkToHero() {}
 
@@ -40,10 +40,10 @@ protected:
     struct cpBody *body, *target;
     struct cpShape* shape;
     struct cpConstraint* joint;
-    class Vehicle* vehicle;
+    std::shared_ptr<class Vehicle> vehicle;
     bool in_vehicle;
     int loan;
-    class Wallet* wallet;
+    std::unique_ptr<class Wallet> wallet;
 
 private:
     Person(const Person&);

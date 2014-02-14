@@ -2,34 +2,46 @@
 #define ENGINE_BLOCK_H_
 
 #include <cstdint>
+#include <map>
+#include <memory>
 #include <vector>
 
-class Block final {
-public:
-    static void StaticInitialization();
-    static void StaticDeletion();
 
-    explicit Block(bool crossable)
-        : Block(crossable, 255, 255, 255) {}
+enum Block : uint8_t { 
+    // terrain
+    EMPTY, GRASS, WATER, DESERT, SAVANNAH, BARE, TROPICAL_FOREST, 
+    TEMPERATE_FOREST, SHRUBLAND, TUNDRA, SNOW, BEACH,
 
-    Block(bool crossable, uint8_t r, uint8_t g, uint8_t b)
+    // objects
+    FLOOR, WOODEN_WALL, DOOR_OPEN,
+};
+
+
+struct BlockType final {
+    explicit BlockType(bool crossable)
+        : BlockType(crossable, 255, 255, 255) {}
+
+    BlockType(bool crossable, uint8_t r, uint8_t g, uint8_t b)
         : Crossable(crossable), R(r), G(g), B(b) {}
 
-    static std::vector<Block const*> TerrainList();
+    BlockType(BlockType&&) = default;
 
     const bool Crossable;
     const uint8_t R, G, B;
+};
 
-    // terrain
-    static const Block *EMPTY, *GRASS, *WATER, *DESERT, *SAVANNAH, *BARE,
-                   *TROPICAL_FOREST, *TEMPERATE_FOREST, *SHRUBLAND,
-               *TUNDRA, *SNOW, *BEACH;
-    
-    // objects
-    static const Block *FLOOR, *WOODEN_WALL, *DOOR_OPEN;
+
+class BlockManager final {
+public:
+    BlockManager();
+
+    inline BlockType const& Examine(Block b) const { return blocks.at(b); }
+    std::vector<Block> TerrainList() const;
+
+private:
+    std::map<Block, BlockType> blocks;
 };
 
 #endif  // ENGINE_BLOCK_H_
-
 
 // vim: ts=4:sw=4:sts=4:expandtab

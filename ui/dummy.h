@@ -25,7 +25,9 @@ public:
     uint32_t Now() const override { return 0; }
     void Wait(uint32_t tm) const override { }
 
-    void GetEvents(std::vector<Command*>& commands) const override { commands.push_back(new QuitCommand()); }
+    std::vector<std::unique_ptr<Command>> GetEvents() const override { 
+        std::vector<std::unique_ptr<Command>> a; a.push_back(std::unique_ptr<Command>(new QuitCommand())); return a;
+    }
 
     Rectangle& GetVisibleArea(Rectangle& r) const override { r.setP1(Point(0, 0)); r.setP2(Point(100, 100)); return r; }
     void RedrawScene() const override { }

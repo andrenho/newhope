@@ -11,10 +11,8 @@ class Building final {
 public:
     Building(int x, int y, BuildingType type, int n);
     Building(Building&&) = default;
-    ~Building() { }
 
-
-    int Tiles(const Block* (&block)[10], int x, int y) const;
+    int Tiles(Block (&block)[10], int x, int y) const;
 
     inline int W() const { return layout.w; }
     inline int H() const { return layout.h; }

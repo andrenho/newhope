@@ -8,10 +8,10 @@
 #include "engine/vehicle.h"
 #include "engine/world.h"
 
-const VehicleModel* VehicleModel::GENERIC = new VehicleModel(3, 7, 4);
+const VehicleModelP VehicleModel::GENERIC = VehicleModelP(new VehicleModel(3, 7, 4));
 
-Vehicle::Vehicle(Point init_pos, const VehicleModel* model)
-    : Steering({false, false, 0}), model(*model), init_pos(init_pos), cargo_slots({}),
+Vehicle::Vehicle(Point init_pos, const VehicleModelP model)
+    : Steering({false, false, 0}), model(model), init_pos(init_pos), cargo_slots({}),
     body(nullptr), rear_wheel_body(nullptr), front_wheel_body(nullptr),
     shape(nullptr), rear_wheel_shape(nullptr), front_wheel_shape(nullptr),
     rear_wheel_joint1(nullptr), rear_wheel_joint2(nullptr),
@@ -20,24 +20,14 @@ Vehicle::Vehicle(Point init_pos, const VehicleModel* model)
     for(unsigned int i=0; i<model->CargoSlots; i++) {
         cargo_slots.push_back(EmptySlot);
     }
-}
 
-
-Vehicle::~Vehicle()
-{
-}
-
-
-void
-Vehicle::InitializePhysics(struct cpSpace* space)
-{
     // create vehicle
     cpFloat mass = 150;
-    cpFloat moment = cpMomentForBox(mass, model.W, model.H);
+    cpFloat moment = cpMomentForBox(mass, model->W, model->H);
     body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
     shape = cpSpaceAddShape(space, cpBoxShapeNew2(body, 
-                cpBBNew(-(model.W/2), -(model.H/2), 
-                    (model.W/2), (model.H/2))));
+                cpBBNew(-(model->W/2), -(model->H/2), 
+                    (model->W/2), (model->H/2))));
     cpBodySetPos(body, cpv(init_pos.X(), init_pos.Y()));
     cpShapeSetGroup(shape, 1);
 
@@ -54,7 +44,7 @@ Vehicle::InitializePhysics(struct cpSpace* space)
                 cpBBNew(-(ww/2), -(wh/2), (ww/2), (wh/2))));
     cpShapeSetGroup(rear_wheel_shape, 1);
     cpBodySetPos(rear_wheel_body, 
-            cpv(init_pos.X(), init_pos.Y()-(model.H/2)+1.5));
+            cpv(init_pos.X(), init_pos.Y()-(model->H/2)+1.5));
     rear_wheel_joint1 = cpSpaceAddConstraint(space, 
             cpPivotJointNew(body, rear_wheel_body, 
                 cpBodyGetPos(rear_wheel_body)));
@@ -70,7 +60,7 @@ Vehicle::InitializePhysics(struct cpSpace* space)
                 cpBBNew(-(ww/2), -(wh/2), (ww/2), (wh/2))));
     cpShapeSetGroup(front_wheel_shape, 1);
     cpBodySetPos(front_wheel_body, 
-            cpv(init_pos.X(), init_pos.Y()+(model.H/2)-1.5));
+            cpv(init_pos.X(), init_pos.Y()+(model->H/2)-1.5));
     front_wheel_joint1 = cpSpaceAddConstraint(space, 
             cpPivotJointNew(body, front_wheel_body, 
                 cpBodyGetPos(front_wheel_body)));
@@ -80,8 +70,7 @@ Vehicle::InitializePhysics(struct cpSpace* space)
 }
 
 
-void 
-Vehicle::DestroyPhysics(struct cpSpace* space)
+Vehicle::~Vehicle()
 {
     cpSpaceRemoveShape(space, shape);
     cpSpaceRemoveShape(space, rear_wheel_shape);

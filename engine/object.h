@@ -1,20 +1,17 @@
 #ifndef ENGINE_OBJECT_H_
 #define ENGINE_OBJECT_H_
 
+#include <memory>
+
 #include "engine/point.h"
 
 class Object {
 public:
+    typedef std::shared_ptr<Object> Ptr;
+
     virtual ~Object() { }
 
-    virtual void InitializePhysics(struct cpSpace* space) { 
-        (void) space;
-    }
-    virtual void DestroyPhysics(struct cpSpace* space) {
-        (void) space;
-    }
-
-    virtual void Collision(Object& obj) {
+    virtual void Collision(std::shared_ptr<Object> obj) {
         (void) obj;
     }
 

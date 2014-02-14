@@ -19,20 +19,6 @@ Person::Person(Point init, int money)
     : init(init), body(nullptr), target(nullptr), shape(nullptr), 
       joint(nullptr), vehicle(nullptr), in_vehicle(false), loan(0), wallet(new Wallet(money))
 {
-}
-
-
-Person::~Person()
-{
-    if(wallet) {
-        delete wallet;
-    }
-}
-
-
-void 
-Person::InitializePhysics(struct cpSpace* space)
-{
     // get object fields
     cpFloat x = init.X(), y = init.Y();
     
@@ -54,6 +40,19 @@ Person::InitializePhysics(struct cpSpace* space)
             cpPivotJointNew2(target, body, cpvzero, cpvzero));
     joint->maxBias = 15.0f;
     joint->maxForce = 30000.0f;
+}
+
+
+Person::~Person()
+{
+    cpSpaceRemoveShape(space, shape);
+    cpSpaceRemoveConstraint(space, joint);
+    cpSpaceRemoveBody(space, body);
+
+    cpShapeFree(shape);
+    cpConstraintFree(joint);
+    cpBodyFree(body);
+    cpBodyFree(target);
 }
 
 
@@ -106,20 +105,6 @@ Person::ExitVehicle()
         return true;
     }
     return false;
-}
-
-
-void 
-Person::DestroyPhysics(struct cpSpace* space)
-{
-    cpSpaceRemoveShape(space, shape);
-    cpSpaceRemoveConstraint(space, joint);
-    cpSpaceRemoveBody(space, body);
-
-    cpShapeFree(shape);
-    cpConstraintFree(joint);
-    cpBodyFree(body);
-    cpBodyFree(target);
 }
 
 

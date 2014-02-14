@@ -22,14 +22,14 @@ struct BuildingLayout final {
 
     BuildingLayout(int w, int h, int floors,
             std::vector<std::vector<std::string>> floor,
-            std::map<const char, const Block*> label,
+            std::map<const char, const Block> label,
             std::vector<WorkerPair> workers)
         : w(w), h(h), floors(floors), floor(floor), label(label),
               workers(workers){}
 
     int w, h, floors;
     std::vector<std::vector<std::string>> floor;
-    std::map<const char, const Block*> label;
+    std::map<const char, const Block> label;
     std::vector<WorkerPair> workers;
 };
 

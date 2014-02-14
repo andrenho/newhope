@@ -60,10 +60,11 @@ Minimap::InitializationThread()
     // draw tiles
     for(int x=0; x<W; x++) for(int y=0; y<H; y++) {
         if(thread_killed) { return; }
-        Block const* b[10];
+        Block b[10];
         world->Tiles(b, (-limit_x1+limit_x2) / W * (x-W/2),
                 (-limit_y1+limit_y2) / H * (y-H/2));
-        DrawPoint(x, y, b[0]->R, b[0]->G, b[0]->B);
+        BlockType const& bp = world->Blocks.Examine(b[0]);
+        DrawPoint(x, y, bp.R, bp.G, bp.B);
     }
 
     // draw rivers
@@ -75,14 +76,15 @@ Minimap::InitializationThread()
                 (p.X() / (limit_x2 - limit_x1) - prop_w) * W + W/2,
                 (p.Y() / (limit_y2 - limit_y1) - prop_h) * H + H/2));
         }
-        DrawPoints(pts, Block::WATER->R, Block::WATER->G, Block::WATER->B);
+        BlockType const& bp = world->Blocks.Examine(Block::WATER);
+        DrawPoints(pts, bp.R, bp.G, bp.B);
     }
     
     // draw cities
     for(auto const& city : world->Cities()) {
         if(thread_killed) { return; }
-        int px = static_cast<int>((static_cast<double>(city->X) / (limit_x2 - limit_x1) - prop_w) * W + W/2);
-        int py = static_cast<int>((static_cast<double>(city->Y) / (limit_y2 - limit_y1) - prop_h) * H + H/2);
+        int px = static_cast<int>((static_cast<double>(city.X) / (limit_x2 - limit_x1) - prop_w) * W + W/2);
+        int py = static_cast<int>((static_cast<double>(city.Y) / (limit_y2 - limit_y1) - prop_h) * H + H/2);
         DrawRectangle(px-2, py-2, 5, 5, true, 148, 69, 53);
         DrawRectangle(px-4, py-4, 9, 9, false, 148, 69, 53);
     }

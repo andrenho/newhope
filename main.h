@@ -1,5 +1,5 @@
-#ifndef GLOBALS_H
-#define GLOBALS_H
+#ifndef MAIN_H_
+#define MAIN_H_
 
 #include <libintl.h>
 #include <memory>
@@ -8,8 +8,9 @@
 
 extern std::unique_ptr<class World> world;
 extern std::unique_ptr<class UI> ui;
+extern struct cpSpace* space;
 
-#endif
+#endif  // MAIN_H_
 
 
 // vim: ts=4:sw=4:sts=4:expandtab

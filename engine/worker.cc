@@ -19,16 +19,16 @@ Worker::~Worker()
 }
 
 
-Worker* 
+std::shared_ptr<Worker>
 Worker::MakeWorker(Point init, class City& city, WorkerJob job)
 {
     switch(job) {
     case WorkerJob::SHOPKEEPER:
-        return new Shopkeeper(init, city);
+        return std::shared_ptr<Worker>(new Shopkeeper(init, city));
     case WorkerJob::BANKER:
-        return new Banker(init, city);
+        return std::shared_ptr<Worker>(new Banker(init, city));
     case WorkerJob::BARTENDER:
-        return new Bartender(init, city);
+        return std::shared_ptr<Worker>(new Bartender(init, city));
     default:
         abort();
     }

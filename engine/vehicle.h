@@ -8,6 +8,8 @@
 #include "engine/point.h"
 #include "engine/resources.h"
 
+typedef std::shared_ptr<const class VehicleModel> VehicleModelP;
+
 class VehicleModel final {
 public:
     VehicleModel(double w, double h, unsigned int cargo_slots) 
@@ -16,7 +18,7 @@ public:
     const double W, H;
     const unsigned int CargoSlots;
 
-    static const VehicleModel* GENERIC;
+    static const VehicleModelP GENERIC;
 };
 
 
@@ -36,18 +38,15 @@ const CargoSlot EmptySlot = { NOTHING, 0 };
 
 class Vehicle final : public Object {
 public:
-    Vehicle(Point init_pos, const VehicleModel* model);
+    Vehicle(Point init_pos, const VehicleModelP model);
     ~Vehicle();
-
-    void InitializePhysics(struct cpSpace* space) override;
-    void DestroyPhysics(struct cpSpace* space) override;
 
     void Step() override;
 
     Point Position() const override;
     double Angle() const;
     CargoSlot const& Cargo(unsigned int slot) const;
-    inline VehicleModel const& Model() const { return model; }
+    inline VehicleModel const& Model() const { return *model; }
 
     void AddCargo(Resource res, unsigned int amount);
     void RemoveCargo(Resource res, unsigned int amount);
@@ -71,7 +70,7 @@ private:
     struct cpVect LateralVelocity(struct cpBody* body);
     struct cpVect ForwardVelocity(struct cpBody* body);
 
-    VehicleModel const& model;
+    VehicleModelP const model;
     const Point init_pos;
     std::vector<CargoSlot> cargo_slots;
 

@@ -1,6 +1,7 @@
 #ifndef UI_W_WIREFRAMEUI_H_
 #define UI_W_WIREFRAMEUI_H_
 
+#include <memory>
 #include <vector>
 
 #include "engine/block.h"
@@ -22,7 +23,7 @@ public:
     uint32_t Now() const override;
     void Wait(uint32_t tm) const override;
 
-    void GetEvents(std::vector<Command*>& commands) const override;
+    std::vector<std::unique_ptr<Command>> GetEvents() const override;
 
     Rectangle& GetVisibleArea(Rectangle& r) const override;
     void RedrawScene() const override;

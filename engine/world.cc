@@ -6,6 +6,7 @@
 
 #include "engine/world.h"
 
+#include "./main.h"
 #include "engine/city.h"
 #include "engine/citylayout.h"
 #include "engine/hero.h"
@@ -13,52 +14,34 @@
 #include "engine/vehicle.h"
 
 World::World(int x1, int y1, int x2, int y2, unsigned int seedp)
-    : x1(x1), y1(y1), x2(x2), y2(y2), seedp(seedp), hero(nullptr), 
-      space(nullptr), mapgen(new MapGen(x1, y1, x2, y2)), objects({}), 
-      cities({}), physics_ptr({})
+    : Blocks(), x1(x1), y1(y1), x2(x2), y2(y2), seedp(seedp), hero(nullptr), 
+      mapgen(MapGen(x1, y1, x2, y2)), objects({}), cities(), physics_ptr({})
 { 
+    cpSpaceSetDefaultCollisionHandler(space, CollisionCallback, 
+            NULL, NULL, NULL, this);
 }
 
 
 World::~World()
 {
-    delete mapgen;
-
-    // delete objects
-    for(auto& city : cities) {
-        delete city;
-    }
-
-    for(auto& obj : objects) {
-        obj->DestroyPhysics(space);
-        delete obj;
-    }
-
     // cleanup physics
     cpBodyEachShape(space->staticBody, FreeStaticShape, this);
-    cpSpaceFree(space);
 }
 
 void
 World::Initialize()
 {
     // create map
-    mapgen->Create();
-
-    // initialize physics
-    LOG(INFO) << "Initializing physics.\n";
-    space = cpSpaceNew();
-    cpSpaceSetDefaultCollisionHandler(space, CollisionCallback, 
-            NULL, NULL, NULL, this);
+    mapgen.Create();
 
     // initialize vehicles
     LOG(INFO) << "Initializing vehicles.\n";
-    Vehicle* car = new Vehicle(Point(10, 10), VehicleModel::GENERIC);
+    std::shared_ptr<Vehicle> car(new Vehicle(Point(10, 10), VehicleModel::GENERIC));
     AddObject(car);
 
     // initialize people
     LOG(INFO) << "Initializing hero.\n";
-    hero = new class Hero(Point(0, 0), car);
+    hero = std::shared_ptr<class Hero>(new class Hero(Point(0, 0) , car));
     AddObject(hero);
 
     // initialize cities
@@ -82,22 +65,22 @@ World::Step()
 
 
 int
-World::Tiles(const Block* (&block)[10], int x, int y) const
+World::Tiles(Block (&block)[10], int x, int y) const
 {
     // TODO - check from cache
 
     for(auto const& city: cities) {
-        if(x >= city->X && x<(city->X+city->W())
-        && y >= city->Y && y<(city->Y+city->H())) {
-            int n = city->Tiles(block, x, y);
+        if(x >= city.X && x<(city.X+city.W())
+        && y >= city.Y && y<(city.Y+city.H())) {
+            int n = city.Tiles(block, x, y);
             if(block[0] == Block::EMPTY) {
-                block[0] = mapgen->Terrain(x, y);
+                block[0] = mapgen.Terrain(x, y);
             }
             return n;
         }
     }
 
-    block[0] = mapgen->Terrain(x, y);
+    block[0] = mapgen.Terrain(x, y);
     return 1;
 }
 
@@ -105,13 +88,13 @@ World::Tiles(const Block* (&block)[10], int x, int y) const
 bool 
 World::IsTileWalkable(int x, int y) const
 {
-    const Block* block[10];
+    Block block[10];
     int n = Tiles(block, x, y);
 
-    if(n == 2 && !block[1]->Crossable) {
+    if(n == 2 && !Blocks.Examine(block[1]).Crossable) {
         return false;
     }
-    if(n >= 3 && !block[2]->Crossable) {
+    if(n >= 3 && !Blocks.Examine(block[1]).Crossable) {
         return false;
     }
 
@@ -149,7 +132,7 @@ World::Random() const
 void
 World::CreateCities()
 {
-    std::unordered_set<Point> positions = mapgen->CitiesPositions(30);
+    std::unordered_set<Point> positions = mapgen.CitiesPositions(30);
     for(auto const& pos : positions) {
         int x = static_cast<int>(pos.X()),
             y = static_cast<int>(pos.Y());
@@ -160,19 +143,18 @@ World::CreateCities()
         } else if(r < 0.2) {
             type = CityType::FRONTIER;
         } else {
-            type = City::Type(mapgen->Terrain(x, y));
+            type = City::Type(mapgen.Terrain(x, y));
         }
-        cities.push_back(new City(x, y, type, 1));
+        cities.emplace_back(x, y, type, 1);
     }
 
-    cities.push_back(new City(0, 0, CityType::AGRICULTURAL, 1)); // TODO
+    cities.emplace_back(0, 0, CityType::AGRICULTURAL, 1); // TODO
 }
 
 
 void 
-World::AddObject(Object* obj)
+World::AddObject(Object::Ptr obj)
 {
-    obj->InitializePhysics(space);
     objects.push_back(obj);
     physics_ptr[obj->PhysicsBodyPtr()] = obj;
 }
@@ -182,8 +164,8 @@ void
 World::AddWorkers()
 {
     for(auto& city: cities) {
-        for(auto const& worker : city->Workers()) {
-            Worker* wk = Worker::MakeWorker(worker.second, *city, worker.first);
+        for(auto const& worker : city.Workers()) {
+            std::shared_ptr<Worker> wk = Worker::MakeWorker(worker.second, city, worker.first);
             AddObject(wk);
         }
     }
@@ -194,8 +176,8 @@ void
 World::AddStaticObjects()
 {
     for(auto const& city : cities) {
-        for(int x=city->X; x<city->X+city->W(); x++) {
-            for(int y=city->Y; y<city->Y+city->H(); y++) {
+        for(int x=city.X; x<city.X+city.W(); x++) {
+            for(int y=city.Y; y<city.Y+city.H(); y++) {
                 if(!IsTileWalkable(x, y)) {
                     AddStaticObject(x+0.5, y+0.5, 1, 1);
                 }
@@ -218,10 +200,9 @@ World::AddStaticObject(double x, double y, double w, double h)
 void 
 World::FreeStaticShape(cpBody *body, cpShape *shape, void* data)
 {
-    (void) body;
+    (void) body; (void) data;
 
-    World *object = static_cast<World*>(data);
-    cpSpaceRemoveShape(object->space, shape);
+    cpSpaceRemoveShape(space, shape);
     cpShapeFree(shape);
 }
 
@@ -240,8 +221,8 @@ World::CollisionCallback(struct cpArbiter *arb, struct cpSpace *space,
         return 1;
 
     // call both objects 'collision'
-    world->physics_ptr[a]->Collision(*world->physics_ptr[b]);
-    world->physics_ptr[b]->Collision(*world->physics_ptr[a]);
+    world->physics_ptr[a]->Collision(world->physics_ptr[b]);
+    world->physics_ptr[b]->Collision(world->physics_ptr[a]);
 
     return 1;
 }

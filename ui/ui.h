@@ -2,6 +2,7 @@
 #define UI_UI_H_
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -22,7 +23,7 @@ public:
     virtual uint32_t Now() const = 0;
     virtual void Wait(uint32_t tm) const = 0;
 
-    virtual void GetEvents(std::vector<Command*>& commands) const = 0;
+    virtual std::vector<std::unique_ptr<Command>> GetEvents() const = 0;
 
     virtual Rectangle& GetVisibleArea(Rectangle& r) const = 0;
     virtual void RedrawScene() const = 0;
@@ -37,8 +38,8 @@ public:
 protected:
     UI() : minimap(nullptr), dialog(nullptr) { }
 
-    Minimap* minimap;
-    DialogManager* dialog;
+    std::unique_ptr<Minimap> minimap;
+    std::unique_ptr<DialogManager> dialog;
 
 private:
     UI(const UI&);

@@ -12,14 +12,14 @@
 class City final {
 public:
     City(int x, int y, CityType type, int n);
-    ~City();
+    City(City&&) = default;
 
-    int Tiles(const Block* (&block)[10], int x, int y) const;
+    int Tiles(Block (&block)[10], int x, int y) const;
 
     inline int W() const { return layout.w; }
     inline int H() const { return layout.h; }
 
-    static CityType Type(Block const* biome);
+    static CityType Type(Block biome);
     const std::vector<WorkerPair> Workers() const;
 
     const int X, Y;

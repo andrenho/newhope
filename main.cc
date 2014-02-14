@@ -1,3 +1,4 @@
+#include <chipmunk.h>
 #include <libintl.h>
 #include <locale.h>
 #include <glog/logging.h>
@@ -22,6 +23,7 @@
 
 std::unique_ptr<World> world = nullptr;
 std::unique_ptr<UI> ui = nullptr;
+cpSpace* space = nullptr;
 
 int main(int argc, char** argv)
 {
@@ -41,6 +43,9 @@ int main(int argc, char** argv)
     textdomain("newhope");
     LOG(INFO) << "Locale set to " << locale << ".\n";
 
+    // initialize physics
+    space = cpSpaceNew();
+
     // initialize engine and UI
 #ifdef DUMMY
     ui = std::unique_ptr<UI>(new DummyUI()); // this dummy lib is used for testing memory leaks
@@ -56,12 +61,11 @@ int main(int argc, char** argv)
         uint32_t next_frame = ui->Now() + static_cast<int>(1000.0/60.0);
 
         // process keyboard
-        std::vector<Command*> commands;
-        ui->GetEvents(commands);
+        std::vector<std::unique_ptr<Command>> commands = ui->GetEvents();
         for(auto const& command : commands) {
             command->Execute();
-            delete command;
         }
+        commands.clear();
 
         // advance time
         world->Step();
@@ -83,6 +87,9 @@ int main(int argc, char** argv)
         }
     }
 
+    ui.reset();
+    world.reset();
+    cpSpaceFree(space);
     google::ShutdownGoogleLogging();
 
     return EXIT_SUCCESS;

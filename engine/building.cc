@@ -8,7 +8,7 @@ Building::Building(int x, int y, BuildingType type, int n)
 
 
 int 
-Building::Tiles(const Block* (&block)[10], int x, int y) const
+Building::Tiles(Block (&block)[10], int x, int y) const
 {
     for(int i=0; i<layout.floors; i++) {
         unsigned int ui = static_cast<unsigned int>(i),
