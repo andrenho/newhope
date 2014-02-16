@@ -1,4 +1,7 @@
 #include "engine/hero.h"
+
+#include <iostream>
+
 #include "engine/vehicle.h"
 
 Hero::Hero(Point init) 
