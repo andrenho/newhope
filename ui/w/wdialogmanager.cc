@@ -35,6 +35,7 @@ WDialogManager::WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren)
 
 WDialogManager::~WDialogManager()
 {
+    TTF_CloseFont(small_font);
     TTF_CloseFont(main_font);
     TTF_Quit();
 }

@@ -1,0 +1,58 @@
+@startuml
+
+package engine {
+	class BlockType <<(S,orchid)>> {
+		+BlockType(crossable)
+		+BlockType(crossable,r,g,b)
+		+crossable
+		+r,g,b
+	}
+
+	class BlockManager {
+		+BlockManager()
+		+TerrainList()
+	}
+
+	enum Block {
+	  EMPTY
+		GRASS
+		. . .
+	}
+	
+	enum BuildingType {
+		GENERAL_STORE
+		BANK
+		. . . 
+	}
+
+	class BuildingLayout <<(S,orchid)>> {
+		+BuildingLayout(w,h,floors,floor,label,workers)
+		+w,h
+		+floor
+		+label
+		+workers
+	}
+
+	class Building {
+	  +Building(x,y,type,n)
+		+Tiles(b[10],x,y)
+		+W()
+		+H()
+		+Workers()
+		+X
+		+Y
+	}
+
+	class City {
+
+	}
+
+	BlockManager --> BlockType : Examine(b)
+	BlockManager .. Block
+	BuildingLayout .. BuildingType
+	Building --> BuildingLayout : layout
+}
+
+hide enum methods
+
+@enduml

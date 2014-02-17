@@ -64,7 +64,7 @@ newhope: ${OBJ}
 	@echo CPP -o $@
 	@${CPP} -o $@ ${OBJ} ${LDFLAGS}
 
-docs: doc/classes.txt
+docs: doc/newhope.uml
 	@echo plantuml $<
 	@java -jar doc/plantuml.jar $<
 
