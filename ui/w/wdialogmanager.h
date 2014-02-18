@@ -20,8 +20,9 @@ public:
     void Speech(class Person const& person, std::string const& message) const override;
 
     // workers
-    void Shopkeeper(class Shopkeeper& shopkeeper) const override;
     void Banker(class Banker& banker) const override;
+    void Bartender(class Bartender& bartender) const override;
+    void Shopkeeper(class Shopkeeper& shopkeeper) const override;
 
 protected:
     std::string QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, 

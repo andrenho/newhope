@@ -10,7 +10,7 @@
 
 const VehicleModelP VehicleModel::GENERIC = VehicleModelP(new VehicleModel(3, 7, 4));
 
-Vehicle::Vehicle(Point init_pos, const VehicleModelP model)
+Vehicle::Vehicle(Point init_pos, const VehicleModelP& model)
     : Steering({false, false, 0}), model(model), init_pos(init_pos), cargo_slots({}),
     body(nullptr), rear_wheel_body(nullptr), front_wheel_body(nullptr),
     shape(nullptr), rear_wheel_shape(nullptr), front_wheel_shape(nullptr),

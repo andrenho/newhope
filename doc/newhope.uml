@@ -1,58 +1,89 @@
 @startuml
 
 package engine {
-	class BlockType <<(S,orchid)>> {
-		+BlockType(crossable)
-		+BlockType(crossable,r,g,b)
-		+crossable
-		+r,g,b
+	class BlockType <<(S,orchid)>>
+	class BlockManager
+	enum Block
+	enum BuildingType
+	class BuildingLayout <<(S,orchid)>>
+	class Building
+	class City
+	class CityLayout
+	enum CityType
+	class Object
+	class Person
+	class Hero
+	class Vehicle
+	class Wallet
+	enum Resource
+	class VehicleSteering <<(S,orchid)>>
+	class CargoSlot <<(S,orchid)>>
+	class VehicleModel
+	class Worker
+	class World
+
+	package geo {
+		Point <-- Rectange : p1,p2
 	}
 
-	class BlockManager {
-		+BlockManager()
-		+TerrainList()
+	package mapgen {
+	  Mapgen --> Rivergen
+		Mapgen --> Roadgen
+		Seggen <|-- Rivergen : rivergen
+		Seggen <|-- Roadgen : roadgen
+		Seggen --> Segment : segments[]
 	}
 
-	enum Block {
-	  EMPTY
-		GRASS
-		. . .
-	}
-	
-	enum BuildingType {
-		GENERAL_STORE
-		BANK
-		. . . 
+	package npc {
+	  class Banker
+		class Bartender
+		class Shopkeeper
 	}
 
-	class BuildingLayout <<(S,orchid)>> {
-		+BuildingLayout(w,h,floors,floor,label,workers)
-		+w,h
-		+floor
-		+label
-		+workers
-	}
+	Object <|-- Person
+	Object <|-- Vehicle
+	Person <|-- Hero
+	Person <|-- Worker
+	Worker <|-- Banker
+	Worker <|-- Bartender
+	Worker <|-- Shopkeeper
 
-	class Building {
-	  +Building(x,y,type,n)
-		+Tiles(b[10],x,y)
-		+W()
-		+H()
-		+Workers()
-		+X
-		+Y
-	}
-
-	class City {
-
-	}
-
-	BlockManager --> BlockType : Examine(b)
+	BlockManager .. BlockType : Examine(b)
 	BlockManager .. Block
 	BuildingLayout .. BuildingType
-	Building --> BuildingLayout : layout
+	BuildingLayout .. Block
+	Building -- BuildingLayout : layout
+	Worker ..> City : city
+	City -- CityLayout : layout
+	City --> Building : buildings
+	CityLayout .. CityType
+	CityType ..> BuildingType
+	Person --> Vehicle : vehicle
+	Person --> Wallet : wallet
+	City .. Resource
+	CargoSlot .. Resource
+	Vehicle -- CargoSlot : cargo_slots[]
+	Vehicle -- VehicleSteering : steering
+	Vehicle -- VehicleModel : model
+	World --> Object : objects[]
+	World --> City : cities[]
+	World --> Mapgen : mapgen
 }
 
-hide enum methods
+package ui {
+  UI <-- Minimap
+	UI <-- DialogManager
+
+	package w {
+	  UI <|-- WireframeUI
+		Minimap <|-- WMinimap
+		DialogManager <|-- WDialogManager
+
+  	WireframeUI <-- WMinimap
+		WireframeUI <-- WDialogManager
+	}
+}
+
+hide empty members
 
 @enduml

@@ -38,7 +38,7 @@ const CargoSlot EmptySlot = { NOTHING, 0 };
 
 class Vehicle final : public Object {
 public:
-    Vehicle(Point init_pos, const VehicleModelP model);
+    Vehicle(Point init_pos, const VehicleModelP& model);
     ~Vehicle();
 
     void Step() override;
@@ -70,7 +70,7 @@ private:
     struct cpVect LateralVelocity(struct cpBody* body);
     struct cpVect ForwardVelocity(struct cpBody* body);
 
-    VehicleModelP const model;
+    VehicleModelP const& model;
     const Point init_pos;
     std::vector<CargoSlot> cargo_slots;
 

@@ -20,13 +20,15 @@ SRC = main.cc			\
       engine/citylayout.cc	\
       engine/command.cc		\
       engine/hero.cc		\
-      engine/mapgen.cc		\
-      engine/rivergen.cc	\
       engine/resources.cc	\
       engine/person.cc		\
       engine/vehicle.cc		\
       engine/worker.cc		\
       engine/world.cc		\
+      engine/mapgen/mapgen.cc	\
+      engine/mapgen/seggen.cc	\
+      engine/mapgen/roadgen.cc	\
+      engine/mapgen/rivergen.cc	\
       engine/npc/banker.cc	\
       engine/npc/bartender.cc	\
       engine/npc/shopkeeper.cc 	\

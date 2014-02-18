@@ -7,7 +7,7 @@
 
 #include "engine/block.h"
 #include "engine/city.h"
-#include "engine/mapgen.h"
+#include "engine/mapgen/mapgen.h"
 #include "engine/object.h"
 
 class Object;

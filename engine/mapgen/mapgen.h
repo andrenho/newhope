@@ -1,5 +1,5 @@
-#ifndef ENGINE_MAPGEN_H_
-#define ENGINE_MAPGEN_H_
+#ifndef ENGINE_MAPGEN_MAPGEN_H_
+#define ENGINE_MAPGEN_MAPGEN_H_
 
 #include <memory>
 #include <unordered_map>
@@ -9,7 +9,7 @@
 #include "engine/block.h"
 #include "engine/rectangle.h"
 #include "engine/point.h"
-#include "engine/rivergen.h"
+#include "engine/mapgen/rivergen.h"
 
 struct PointData final {
     PointData() : Biome(Block::GRASS), Altitude(0), Moisture(0) {}
@@ -44,10 +44,6 @@ private:
     void CreateBiomes();
     void CreateBeaches();
 
-    void AddRiverTiles();
-    void PlotRiverCircle(int x, int y, int r);
-    void AddRiverTile(int x, int y);
-
     Point ClosestPoint(int x, int y) const;
     static void RandomOffcentre(int& x, int& y, double& r);
     void CreateHill(int x, int y, double r);
@@ -66,14 +62,13 @@ private:
     double hm[255][255]; // heightmap
 
     mutable std::unordered_map<Point,Block> tile_cache;
-    std::unordered_set<Point> river_tiles;
 
     std::unique_ptr<class Rivergen> rivergen;
 
     const int NUMPOINTS = 1250;
 };
 
-#endif  // ENGINE_MAPGEN_H_
+#endif  // ENGINE_MAPGEN_MAPGEN_H_
 
 
 // vim: ts=4:sw=4:sts=4:expandtab

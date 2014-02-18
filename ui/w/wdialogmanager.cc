@@ -9,6 +9,7 @@
 #include "engine/hero.h"
 #include "engine/vehicle.h"
 #include "engine/resources.h"
+#include "engine/npc/bartender.h"
 #include "engine/npc/banker.h"
 #include "engine/npc/shopkeeper.h"
 #include "ui/ui.h"
@@ -100,6 +101,14 @@ WDialogManager::Banker(class Banker& banker) const
         }
     }
 }
+
+
+void 
+WDialogManager::Bartender(class Bartender& bartender) const
+{
+    Speech(bartender, bartender.News());
+}
+
 
 
 /************************************************************************/

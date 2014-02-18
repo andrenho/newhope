@@ -33,9 +33,9 @@ public:
         return id != rhs.id;
     }
 
-    inline double MH_Distance(Point const& p) const {
+    /*inline double MH_Distance(Point const& p) const {
         return fabs(x-p.x) + fabs(x-p.y);
-    }
+    }*/
 
     inline double Distance(Point const& p) const {
         return sqrt(pow(x-p.x, 2) + pow(y-p.y, 2));

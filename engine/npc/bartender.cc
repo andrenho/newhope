@@ -1,5 +1,7 @@
 #include "engine/npc/bartender.h"
 
+#include <memory>
+
 #include "./main.h"
 #include "ui/ui.h"
 #include "ui/dialogmanager.h"
@@ -17,7 +19,7 @@ Bartender::~Bartender()
 void
 Bartender::TalkToHero()
 {
-    //ui->Dialog.Bartender(*this);
+    ui->Dialog().Bartender(*this);
 }
 
 
