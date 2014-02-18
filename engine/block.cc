@@ -19,6 +19,7 @@ BlockManager::BlockManager()
     blocks.emplace(TUNDRA,           BlockType(false, 193, 193, 180));
     blocks.emplace(SNOW,             BlockType(false, 248, 248, 248));
     blocks.emplace(BEACH,            BlockType(false, 182, 162, 125));
+    blocks.emplace(ASPHALT,          BlockType(false,  54,  54,  54));
 
     blocks.emplace(FLOOR,            BlockType(false));
     blocks.emplace(WOODEN_WALL,      BlockType(false));

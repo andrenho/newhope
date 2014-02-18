@@ -8,7 +8,7 @@ public:
     Rivergen(const double (&hm)[255][255], const Rectangle rect,
             unsigned int& seedp);
 
-    virtual std::vector<Point> CreateSegment() override;
+    std::vector<Point> CreateSegment() override;
 
 private:
     Point RandomPoint() const;

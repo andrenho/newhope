@@ -1,10 +1,13 @@
 #ifndef ENGINE_MAPGEN_ROADGEN_H_
 #define ENGINE_MAPGEN_ROADGEN_H_
 
-class Roadgen {
+#include "engine/mapgen/seggen.h"
+
+class Roadgen final : public Seggen {
 public:
-    Roadgen();
-    ~Roadgen();
+    Roadgen(const double (&hm)[255][255], const Rectangle rect,
+            unsigned int& seedp);
+    std::vector<Point> CreateSegment() override;
 
 private:
     Roadgen(const Roadgen&);

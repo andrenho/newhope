@@ -14,6 +14,7 @@
 #include "engine/rectangle.h"
 #include "engine/world.h"
 #include "engine/mapgen/rivergen.h"
+#include "engine/mapgen/roadgen.h"
 
 MapGen::MapGen(int x1, int y1, int x2, int y2)
     : MapGen(x1, y1, x2, y2, static_cast<unsigned int>(time(0)))
@@ -23,7 +24,7 @@ MapGen::MapGen(int x1, int y1, int x2, int y2)
 
 MapGen::MapGen(int x1, int y1, int x2, int y2, unsigned int seed)
     : rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed), points({}), data({}), rivers({}), hm{}, tile_cache({}), 
-      rivergen(nullptr)
+      rivergen(nullptr), roadgen(nullptr)
 {
 }
 
@@ -49,6 +50,9 @@ MapGen::Create()
         rivers.push_back(rivergen->CreateSegment());
     }
 
+    // create roads
+    // TODO
+
     // find biomes
     LOG(INFO) << "Calculating moisture...\n";
     CalculateMoisture();
@@ -70,6 +74,8 @@ MapGen::Terrain(int x, int y) const
         return it->second;
     } else if(rivergen->TileInSegment(x, y)) {
         return Block::WATER;
+    } else if(roadgen->TileInSegment(x, y)) {
+        return Block::ASPHALT;
     } else {
         Point p = ClosestPoint(x, y);
         Block b = data.at(p).Biome;

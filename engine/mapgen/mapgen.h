@@ -10,6 +10,7 @@
 #include "engine/rectangle.h"
 #include "engine/point.h"
 #include "engine/mapgen/rivergen.h"
+#include "engine/mapgen/roadgen.h"
 
 struct PointData final {
     PointData() : Biome(Block::GRASS), Altitude(0), Moisture(0) {}
@@ -64,6 +65,7 @@ private:
     mutable std::unordered_map<Point,Block> tile_cache;
 
     std::unique_ptr<class Rivergen> rivergen;
+    std::unique_ptr<class Roadgen> roadgen;
 
     const int NUMPOINTS = 1250;
 };
