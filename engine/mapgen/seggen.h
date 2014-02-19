@@ -21,21 +21,18 @@ private:
 
 class Seggen {
 public:
-    virtual std::vector<Point> CreateSegment() = 0;
     bool TileInSegment(int x, int y) const;
+    void AddSegment(std::vector<Point> points, int width);
 
 protected:
-    Seggen(const double (&hm)[255][255], const Rectangle rect, unsigned int& seedp);
+    Seggen(const Rectangle rect, unsigned int& seedp);
     virtual ~Seggen() {}
 
     virtual void CreatePoints();
-    void CalculateAltitudes();
 
-    const double (&hm)[255][255];
     const Rectangle rect;
     unsigned int& seedp;
     std::vector<Point> points;
-    std::map<Point,double> altitude;
     std::vector<Segment> segments;
     
 private:

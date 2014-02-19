@@ -47,6 +47,11 @@ World::Initialize()
     // initialize cities
     LOG(INFO) << "Creating cities.\n";
     CreateCities();
+
+    // create roads
+    mapgen.CreateRoads(cities);
+
+    // create people
     LOG(INFO) << "Creating workers.\n";
     AddWorkers();
     LOG(INFO) << "Adding static objects.\n";

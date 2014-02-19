@@ -1,17 +1,23 @@
 #ifndef ENGINE_MAPGEN_ROADGEN_H_
 #define ENGINE_MAPGEN_ROADGEN_H_
 
+#include <set>
+#include <vector>
+using namespace std;
+
 #include "engine/mapgen/seggen.h"
 
 class Roadgen final : public Seggen {
 public:
-    Roadgen(const double (&hm)[255][255], const Rectangle rect,
-            unsigned int& seedp);
-    std::vector<Point> CreateSegment() override;
+    Roadgen(const Rectangle rect, unsigned int& seedp);
+    vector<vector<Point>> CreateRoads(vector<class City>& cities);
 
 private:
-    Roadgen(const Roadgen&);
-    Roadgen& operator=(const Roadgen&);
+    vector<Point> ConnectCities(class City const& city1, class City const& city2);
+    set<pair<const City*, const City*>> already_connected = {};
+
+    Roadgen(const Roadgen&) = delete;
+    Roadgen& operator=(const Roadgen&) = delete;
 };
 
 #endif  // ENGINE_MAPGEN_ROADGEN_H_

@@ -23,8 +23,8 @@ MapGen::MapGen(int x1, int y1, int x2, int y2)
 
 
 MapGen::MapGen(int x1, int y1, int x2, int y2, unsigned int seed)
-    : rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed), points({}), data({}), rivers({}), hm{}, tile_cache({}), 
-      rivergen(nullptr), roadgen(nullptr)
+    : rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed), points({}), data({}), rivers({}), roads({}), hm{}, 
+      tile_cache({}), rivergen(nullptr), roadgen(nullptr)
 {
 }
 
@@ -47,11 +47,9 @@ MapGen::Create()
     LOG(INFO) << "Creating rivers...\n";
     rivergen = std::unique_ptr<Rivergen>(new Rivergen(hm, rect, seedp));
     for(int i=0; i<12; i++) {
-        rivers.push_back(rivergen->CreateSegment());
+        rivers.push_back(rivergen->CreateRiver());
     }
-
-    // create roads
-    // TODO
+    roadgen = std::unique_ptr<Roadgen>(new Roadgen(rect, seedp));
 
     // find biomes
     LOG(INFO) << "Calculating moisture...\n";
@@ -62,6 +60,15 @@ MapGen::Create()
     CreateBeaches();
 
     LOG(INFO) << "World creation complete.\n";
+}
+
+
+void 
+MapGen::CreateRoads(std::vector<class City>& cities)
+{
+    // create roads
+    LOG(INFO) << "Creating roads...\n";
+    roads = roadgen->CreateRoads(cities);
 }
 
 

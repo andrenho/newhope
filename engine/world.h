@@ -28,6 +28,7 @@ public:
     inline std::vector<Object::Ptr> const& Objects() const { return objects; }
     inline std::vector<City> const& Cities() const { return cities; }
     inline std::vector<std::vector<Point>> const& Rivers() const { return mapgen.Rivers(); }
+    inline std::vector<std::vector<Point>> const& Roads() const { return mapgen.Roads(); }
 
     void RecalculatePrices();
 

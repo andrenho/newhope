@@ -80,6 +80,19 @@ Minimap::InitializationThread()
         DrawPoints(pts, bp.R, bp.G, bp.B);
     }
     
+    // draw roads
+    for(auto const& road : world->Roads()) {
+        if(thread_killed) { return; }
+        std::vector<Point> pts;
+        for(auto const& p : road) {
+            pts.push_back(Point(
+                (p.X() / (limit_x2 - limit_x1) - prop_w) * W + W/2,
+                (p.Y() / (limit_y2 - limit_y1) - prop_h) * H + H/2));
+        }
+        BlockType const& bp = world->Blocks.Examine(Block::ASPHALT);
+        DrawPoints(pts, bp.R, bp.G, bp.B);
+    }
+
     // draw cities
     for(auto const& city : world->Cities()) {
         if(thread_killed) { return; }

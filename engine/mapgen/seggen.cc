@@ -8,11 +8,10 @@
 #include "./main.h"
 #include "engine/world.h"
 
-Seggen::Seggen(const double (&hm)[255][255], const Rectangle rect, unsigned int& seedp)
-    : hm(hm), rect(rect), seedp(seedp), points({}), altitude({}), segments({})
+Seggen::Seggen(const Rectangle rect, unsigned int& seedp)
+    : rect(rect), seedp(seedp), points({}), segments({})
 {
     CreatePoints();
-    CalculateAltitudes();
 }
 
 
@@ -28,20 +27,6 @@ Seggen::CreatePoints()
 }
 
 
-void
-Seggen::CalculateAltitudes()
-{
-    double prop_w = rect.P1().X() / (rect.P2().X() - rect.P1().X()),
-           prop_h = rect.P1().Y() / (rect.P2().Y() - rect.P1().Y());
-    for(auto const& p : points) {
-        // find altitude
-        int prop_x = static_cast<int>((p.X() / (rect.P2().X() - rect.P1().X()) - prop_w) * 255),
-            prop_y = static_cast<int>((p.Y() / (rect.P2().Y() - rect.P1().Y()) - prop_h) * 255);
-        altitude[p] = hm[prop_x][prop_y];
-    }
-}
-
-
 bool 
 Seggen::TileInSegment(int x, int y) const
 {
@@ -51,6 +36,15 @@ Seggen::TileInSegment(int x, int y) const
         }
     }
     return false;
+}
+
+
+void 
+Seggen::AddSegment(std::vector<Point> segment, int width)
+{
+    for(unsigned int i=0; i<segment.size()-1; i++) {
+        segments.push_back(Segment(segment[i], segment[i+1], width));
+    }
 }
 
 
