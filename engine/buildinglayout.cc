@@ -1,6 +1,9 @@
 #include "engine/buildinglayout.h"
 
-std::map<BuildingPair, BuildingLayout> BuildingLayouts = {
+#include <map>
+using namespace std;
+
+map<BuildingPair, BuildingLayout> BuildingLayouts = {
 { 
     BuildingPair(BuildingType::GENERAL_STORE, 1), 
     {

@@ -3,8 +3,9 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+using namespace std;
 
-std::string mprintf(std::string fmt, ...)
+string mprintf(string fmt, ...)
 {
     char* str;
     va_list ap;
@@ -13,7 +14,7 @@ std::string mprintf(std::string fmt, ...)
     vasprintf(&str, fmt.c_str(), ap);
     va_end(ap);
 
-    std::string s = str;
+    string s = str;
     free(str);
     return s;
 }

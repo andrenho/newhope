@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+using namespace std;
 
 #include "engine/rectangle.h"
 #include "ui/dialogmanager.h"
@@ -23,7 +24,7 @@ public:
     virtual uint32_t Now() const = 0;
     virtual void Wait(uint32_t tm) const = 0;
 
-    virtual std::vector<std::unique_ptr<Command>> GetEvents() const = 0;
+    virtual vector<unique_ptr<Command>> GetEvents() const = 0;
 
     virtual Rectangle& GetVisibleArea(Rectangle& r) const = 0;
     virtual void RedrawScene() const = 0;
@@ -38,8 +39,8 @@ public:
 protected:
     UI() : minimap(nullptr), dialog(nullptr) { }
 
-    std::unique_ptr<Minimap> minimap;
-    std::unique_ptr<DialogManager> dialog;
+    unique_ptr<Minimap> minimap;
+    unique_ptr<DialogManager> dialog;
 
 private:
     UI(const UI&);

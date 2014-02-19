@@ -2,6 +2,7 @@
 #define UI_W_WMINIMAP_H_
 
 #include <vector>
+using namespace std;
 #include "ui/minimap.h"
 
 class WMinimap final : public Minimap {
@@ -14,7 +15,7 @@ public:
 protected:
     void CreateImage(int w, int h) override;
     void DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b) override;
-    void DrawPoints(std::vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b) override;
+    void DrawPoints(vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b) override;
     void DrawRectangle(int x1, int y1, int x2, int y2, bool fill, uint8_t r, uint8_t g, uint8_t b) const override;
     void DrawRectangleScreen(int x1, int y1, int x2, int y2, bool fill, uint8_t r, uint8_t g, uint8_t b) const override;
     void DrawWaitingScreen() const override {}

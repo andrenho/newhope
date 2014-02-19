@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+using namespace std;
 #include "engine/point.h"
 #include "engine/rectangle.h"
 
@@ -15,14 +16,14 @@ private:
     Point const& p1, p2;
     const int width;
     Rectangle const rect;
-    std::vector<Point> polygon;
+    vector<Point> polygon;
 };
 
 
 class Seggen {
 public:
     bool TileInSegment(int x, int y) const;
-    void AddSegment(std::vector<Point> points, int width);
+    void AddSegment(vector<Point> points, int width);
 
 protected:
     Seggen(const Rectangle rect, unsigned int& seedp);
@@ -32,8 +33,8 @@ protected:
 
     const Rectangle rect;
     unsigned int& seedp;
-    std::vector<Point> points;
-    std::vector<Segment> segments;
+    vector<Point> points;
+    vector<Segment> segments;
     
 private:
     Seggen(const Seggen&);

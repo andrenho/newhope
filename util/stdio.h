@@ -2,8 +2,9 @@
 #define UTIL_STDIO_H_
 
 #include <string>
+using namespace std;
 
-std::string mprintf(std::string fmt, ...);
+string mprintf(string fmt, ...);
 
 #endif  // UTIL_STDIO_H_
 

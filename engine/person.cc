@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+using namespace std;
+
 
 #include "./main.h"
 #include "engine/city.h"
@@ -89,7 +91,7 @@ Person::ExitVehicle()
     if(in_vehicle) {
         Point vpos = vehicle->Position(),
               ppos = Position();
-        double fx = vpos.X() + std::max(vehicle->Model().W/2, vehicle->Model().H/2) + 1;
+        double fx = vpos.X() + max(vehicle->Model().W/2, vehicle->Model().H/2) + 1;
         while(!world->IsTileWalkable(
                     static_cast<int>(fx), 
                     static_cast<int>(ppos.Y()))) {

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+using namespace std;
 
 #include "engine/block.h"
 #include "ui/ui.h"
@@ -23,7 +24,7 @@ public:
     uint32_t Now() const override;
     void Wait(uint32_t tm) const override;
 
-    std::vector<std::unique_ptr<Command>> GetEvents() const override;
+    vector<unique_ptr<Command>> GetEvents() const override;
 
     Rectangle& GetVisibleArea(Rectangle& r) const override;
     void RedrawScene() const override;
@@ -38,7 +39,7 @@ private:
     WireframeUI& operator=(const WireframeUI&);
 
     void CenterScreen(Point const& p) const;
-    void GetVisibleTiles(std::vector<Block[10]>& tiles,
+    void GetVisibleTiles(vector<Block[10]>& tiles,
             Rectangle const& area) const;
     void RenderScene(Rectangle const& rect) const;
     void DrawTile(int x, int y) const;

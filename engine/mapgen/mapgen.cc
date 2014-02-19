@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <iostream>
+using namespace std;
 
 #include "./main.h"
 #include "engine/block.h"
@@ -45,11 +46,11 @@ MapGen::Create()
     
     // create rivers
     LOG(INFO) << "Creating rivers...\n";
-    rivergen = std::unique_ptr<Rivergen>(new Rivergen(hm, rect, seedp));
+    rivergen = unique_ptr<Rivergen>(new Rivergen(hm, rect, seedp));
     for(int i=0; i<12; i++) {
         rivers.push_back(rivergen->CreateRiver());
     }
-    roadgen = std::unique_ptr<Roadgen>(new Roadgen(rect, seedp));
+    roadgen = unique_ptr<Roadgen>(new Roadgen(rect, seedp));
 
     // find biomes
     LOG(INFO) << "Calculating moisture...\n";
@@ -64,7 +65,7 @@ MapGen::Create()
 
 
 void 
-MapGen::CreateRoads(std::vector<class City>& cities)
+MapGen::CreateRoads(vector<class City>& cities)
 {
     // create roads
     LOG(INFO) << "Creating roads...\n";
@@ -76,7 +77,7 @@ Block
 MapGen::Terrain(int x, int y) const
 {
     Point pt(x, y);
-    std::unordered_map<Point,Block>::const_iterator it;
+    unordered_map<Point,Block>::const_iterator it;
     if((it = tile_cache.find(pt)) != tile_cache.end()) {
         return it->second;
     } else if(rivergen->TileInSegment(x, y)) {
@@ -92,10 +93,10 @@ MapGen::Terrain(int x, int y) const
 }
 
 
-std::unordered_set<Point> 
+unordered_set<Point> 
 MapGen::CitiesPositions(unsigned int n) const
 {
-    std::unordered_set<Point> positions;
+    unordered_set<Point> positions;
 
     while(positions.size() < n) {
         for(auto const& biome : world->Blocks.TerrainList()) {
@@ -276,7 +277,7 @@ MapGen::DistanceFromWater(Point const& p) const
     double min_distance = DBL_MAX;
     for(auto const& river : rivers) {
         for(auto const& pt : river) {
-            min_distance = std::min(pt.Distance(p), min_distance);
+            min_distance = min(pt.Distance(p), min_distance);
         }
     }
     return min_distance;
@@ -314,12 +315,12 @@ MapGen::ClosestPoint(int x, int y) const
 
 bool 
 MapGen::RandomPointWithBiome(Point& pt, Block biome, 
-        std::unordered_set<Point> ignore) const
+        unordered_set<Point> ignore) const
 {
     // ignore == cities already present
 
     // create vector only with points in biome, and not ignored
-    std::vector<Point> pts;
+    vector<Point> pts;
     for(auto const& p : points) {
         int x = static_cast<int>(p.X()),
             y = static_cast<int>(p.Y());
@@ -327,7 +328,7 @@ MapGen::RandomPointWithBiome(Point& pt, Block biome,
             // not too close to the other points
             double min_distance = DBL_MAX;
             for(auto const& pos : ignore) {
-                min_distance = std::min(min_distance, pos.Distance(p));
+                min_distance = min(min_distance, pos.Distance(p));
             }
             if(min_distance > 2000) {
                 pts.push_back(p);

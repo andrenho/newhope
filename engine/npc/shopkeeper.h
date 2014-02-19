@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+using namespace std;
 
 #include "engine/worker.h"
 #include "engine/point.h"
@@ -17,8 +18,8 @@ public:
     inline unsigned int ResourceSellPrice(Resource r) const { (void)r; return 5; }
     inline unsigned int ResourceBuyPrice(Resource r) const { (void)r; return 10; }
 
-    bool Sell(class Person& person, Resource resource, unsigned int amount, std::string& message);
-    bool Buy(class Person& person, Resource resource, unsigned int amount, std::string& message);
+    bool Sell(class Person& person, Resource resource, unsigned int amount, string& message);
+    bool Buy(class Person& person, Resource resource, unsigned int amount, string& message);
 
     void TalkToHero() override;
 
@@ -28,7 +29,7 @@ private:
 
     void ChangeCargoAmount(Resource res, int amount);
 
-    std::map<Resource, int> resources;
+    map<Resource, int> resources;
 };
 
 #endif  // ENGINE_NPC_SHOPKEEPER_H_

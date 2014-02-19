@@ -1,19 +1,20 @@
 #include "ui/dialogmanager.h"
 
 #include <glog/logging.h>
+using namespace std;
 
-std::vector<std::string>
-DialogManager::Wrap(std::string const& text, unsigned int nchars)
+vector<string>
+DialogManager::Wrap(string const& text, unsigned int nchars)
 {
     unsigned int ptr = 0, last_ptr = 0;
-    std::vector<std::string> lines;
+    vector<string> lines;
 
     for(;;) {
         ptr += nchars;
 
         // check for 'enters', and break it
-        std::string::size_type pos;
-        if((pos = text.substr(last_ptr, ptr).find('\n')) != std::string::npos) {
+        string::size_type pos;
+        if((pos = text.substr(last_ptr, ptr).find('\n')) != string::npos) {
             lines.push_back(text.substr(last_ptr, pos));
             last_ptr = ptr = last_ptr + static_cast<int>(pos)+1;
             continue;
@@ -34,19 +35,19 @@ DialogManager::Wrap(std::string const& text, unsigned int nchars)
     }
 }
 
-std::string 
-DialogManager::Question(class Person const& person, std::string const& message) const
+string 
+DialogManager::Question(class Person const& person, string const& message) const
 {
     return QuestionString(person, message, false, 0);
 }
 
 
 int 
-DialogManager::QuestionNumber(class Person const& person, std::string const& message, unsigned int digits) const
+DialogManager::QuestionNumber(class Person const& person, string const& message, unsigned int digits) const
 {
     try {
-        return std::stoi(QuestionString(person, message, true, digits));
-    } catch(std::exception& e) {
+        return stoi(QuestionString(person, message, true, digits));
+    } catch(exception& e) {
         LOG(WARNING) << "Exception caught: '" << e.what() << "'\n";
         return 0;
     }

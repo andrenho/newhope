@@ -8,6 +8,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+using namespace std;
 
 #include "./main.h"
 #include "engine/command.h"
@@ -42,10 +43,10 @@ WireframeUI::WireframeUI()
     }
 
     // create minimap
-    minimap = std::unique_ptr<Minimap>(new WMinimap(600, 600, *ren));
+    minimap = unique_ptr<Minimap>(new WMinimap(600, 600, *ren));
 
     // create dialog
-    dialog = std::unique_ptr<DialogManager>(new WDialogManager(win, ren));
+    dialog = unique_ptr<DialogManager>(new WDialogManager(win, ren));
 }
 
 
@@ -87,24 +88,24 @@ WireframeUI::Wait(uint32_t tm) const
 }
 
 
-std::vector<std::unique_ptr<Command>>
+vector<unique_ptr<Command>>
 WireframeUI::GetEvents() const
 {
-    std::vector<std::unique_ptr<Command>> cmds;
+    vector<unique_ptr<Command>> cmds;
     
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
         switch(e.type) {
         case SDL_QUIT:
-            cmds.push_back(std::unique_ptr<Command>(new QuitCommand()));
+            cmds.push_back(unique_ptr<Command>(new QuitCommand()));
             break;
         case SDL_KEYDOWN:
             switch(e.key.keysym.sym) {
             case SDLK_m:
-                cmds.push_back(std::unique_ptr<Command>(new ShowMinimapCommand()));
+                cmds.push_back(unique_ptr<Command>(new ShowMinimapCommand()));
                 break;
             case SDLK_e:
-                cmds.push_back(std::unique_ptr<Command>(new ExitVehicleCommand()));
+                cmds.push_back(unique_ptr<Command>(new ExitVehicleCommand()));
                 break;
             default:
                 break;
@@ -115,7 +116,7 @@ WireframeUI::GetEvents() const
     }
 
     const Uint8* k = SDL_GetKeyboardState(NULL);
-    cmds.push_back(std::unique_ptr<Command>(new MoveCommand(
+    cmds.push_back(unique_ptr<Command>(new MoveCommand(
             k[SDL_SCANCODE_UP], k[SDL_SCANCODE_DOWN],
             k[SDL_SCANCODE_LEFT], k[SDL_SCANCODE_RIGHT])));
 
@@ -232,9 +233,9 @@ WireframeUI::DrawTile(int x, int y) const
     if(n > 0) {
         BlockType const& bp = world->Blocks.Examine(b[0]);
         SDL_SetRenderDrawColor(ren,
-            static_cast<Uint8>(std::min(bp.R + 50, 255)),
-            static_cast<Uint8>(std::min(bp.G + 50, 255)),
-            static_cast<Uint8>(std::min(bp.B + 50, 255)),
+            static_cast<Uint8>(min(bp.R + 50, 255)),
+            static_cast<Uint8>(min(bp.G + 50, 255)),
+            static_cast<Uint8>(min(bp.B + 50, 255)),
             SDL_ALPHA_OPAQUE);
 
         SDL_Rect rect = { 

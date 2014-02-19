@@ -3,14 +3,15 @@
 
 #include <string>
 #include <vector>
+using namespace std;
 
 class DialogManager {
 public:
     virtual ~DialogManager() {}
 
-    virtual void Speech(class Person const& person, std::string const& message) const = 0;
-    virtual std::string Question(class Person const& person, std::string const& message) const;
-    int QuestionNumber(class Person const& person, std::string const& message, unsigned int digits) const;
+    virtual void Speech(class Person const& person, string const& message) const = 0;
+    virtual string Question(class Person const& person, string const& message) const;
+    int QuestionNumber(class Person const& person, string const& message, unsigned int digits) const;
 
     // workers dialogs
     virtual void Banker(class Banker& banker) const = 0;
@@ -20,9 +21,9 @@ public:
 protected:
     DialogManager() {}
 
-    virtual std::string QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, 
+    virtual string QuestionString(class Person const& person, string const& message, bool limit_to_numbers, 
             unsigned int digits) const = 0;
-    static std::vector<std::string> Wrap(std::string const& text, unsigned int nchars);
+    static vector<string> Wrap(string const& text, unsigned int nchars);
 
 private:
     DialogManager(const DialogManager&);

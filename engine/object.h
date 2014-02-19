@@ -2,16 +2,17 @@
 #define ENGINE_OBJECT_H_
 
 #include <memory>
+using namespace std;
 
 #include "engine/point.h"
 
 class Object {
 public:
-    typedef std::shared_ptr<Object> Ptr;
+    typedef shared_ptr<Object> Ptr;
 
     virtual ~Object() { }
 
-    virtual void Collision(std::shared_ptr<Object> obj) {
+    virtual void Collision(shared_ptr<Object> obj) {
         (void) obj;
     }
 

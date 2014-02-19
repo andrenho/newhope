@@ -1,6 +1,7 @@
 #include "engine/city.h"
 
 #include <cassert>
+using namespace std;
 
 #include "./main.h"
 #include "engine/world.h"
@@ -50,10 +51,10 @@ City::Type(Block b)
 }
 
 
-const std::vector<WorkerPair> 
+const vector<WorkerPair> 
 City::Workers() const
 {
-    std::vector<WorkerPair> pairs;
+    vector<WorkerPair> pairs;
 
     for(auto const& building: buildings) {
         for(auto const& worker: building.Workers()) {

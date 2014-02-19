@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+using namespace std;
 
 #include "engine/buildinglayout.h"
 #include "engine/point.h"
@@ -14,21 +15,21 @@ enum CityType {
     __COUNT__
 };
 
-typedef std::pair<CityType, int> CityPair;
-typedef std::pair<BuildingPair, Point> BuildingPosition;
+typedef pair<CityType, int> CityPair;
+typedef pair<BuildingPair, Point> BuildingPosition;
 
 struct CityLayout final {
-    CityLayout(int w, int h, std::vector<BuildingPosition> buildings)
+    CityLayout(int w, int h, vector<BuildingPosition> buildings)
         : w(w), h(h), buildings(buildings) {}
 
     CityLayout()
         : w(0), h(0), buildings({}) {}
 
     const int w, h;
-    std::vector<BuildingPosition> buildings;
+    vector<BuildingPosition> buildings;
 };
 
-extern std::map<CityPair, CityLayout> CityLayouts;
+extern map<CityPair, CityLayout> CityLayouts;
 
 #endif  // ENGINE_CITYLAYOUT_H_
 

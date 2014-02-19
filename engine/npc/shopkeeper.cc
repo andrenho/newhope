@@ -4,6 +4,7 @@
 #include <cassert>
 #include <climits>
 #include <string>
+using namespace std;
 
 #include "./main.h"
 #include "engine/vehicle.h"
@@ -40,7 +41,7 @@ Shopkeeper::ChangeCargoAmount(Resource res, int amount)
 
 
 bool
-Shopkeeper::Sell(Person& person, Resource resource, unsigned int amount, std::string& message)
+Shopkeeper::Sell(Person& person, Resource resource, unsigned int amount, string& message)
 {
     if(amount == 0) {
         return true;
@@ -89,7 +90,7 @@ Shopkeeper::Sell(Person& person, Resource resource, unsigned int amount, std::st
 
 
 bool 
-Shopkeeper::Buy(Person& person, Resource resource, unsigned int amount, std::string& message)
+Shopkeeper::Buy(Person& person, Resource resource, unsigned int amount, string& message)
 {
     if(amount == 0) {
         return false;

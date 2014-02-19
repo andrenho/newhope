@@ -2,6 +2,7 @@
 
 #include <glog/logging.h>
 #include <iostream>
+using namespace std;
 
 #include "./main.h"
 #include "engine/hero.h"
@@ -70,7 +71,7 @@ Minimap::InitializationThread()
     // draw rivers
     for(auto const& river : world->Rivers()) {
         if(thread_killed) { return; }
-        std::vector<Point> pts;
+        vector<Point> pts;
         for(auto const& p : river) {
             pts.push_back(Point(
                 (p.X() / (limit_x2 - limit_x1) - prop_w) * W + W/2,
@@ -83,7 +84,7 @@ Minimap::InitializationThread()
     // draw roads
     for(auto const& road : world->Roads()) {
         if(thread_killed) { return; }
-        std::vector<Point> pts;
+        vector<Point> pts;
         for(auto const& p : road) {
             pts.push_back(Point(
                 (p.X() / (limit_x2 - limit_x1) - prop_w) * W + W/2,

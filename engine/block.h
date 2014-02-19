@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <vector>
+using namespace std;
 
 
 enum Block : uint8_t { 
@@ -36,10 +37,10 @@ public:
     BlockManager();
 
     inline BlockType const& Examine(Block b) const { return blocks.at(b); }
-    std::vector<Block> TerrainList() const;
+    vector<Block> TerrainList() const;
 
 private:
-    std::map<Block, BlockType> blocks;
+    map<Block, BlockType> blocks;
 };
 
 #endif  // ENGINE_BLOCK_H_

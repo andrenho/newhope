@@ -3,6 +3,7 @@
 
 #include <array>
 #include <string>
+using namespace std;
 
 enum Resource : char {
    GRAIN      = 'G', 
@@ -21,9 +22,9 @@ enum Resource : char {
    NOTHING    = '.',
 };
 
-extern std::array<Resource, Resource::__RCOUNT__> ResourceList;
+extern array<Resource, Resource::__RCOUNT__> ResourceList;
 
-std::string resource_name(Resource r);
+string resource_name(Resource r);
 
 #endif  // ENGINE_RESOURCES_H_
 

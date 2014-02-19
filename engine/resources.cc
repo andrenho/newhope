@@ -2,15 +2,17 @@
 
 #include <cstdlib>
 #include <string>
+using namespace std;
+
 
 #include "./main.h"
 
-std::array<Resource, Resource::__RCOUNT__> ResourceList {{ 
+array<Resource, Resource::__RCOUNT__> ResourceList {{ 
    GRAIN, WOOD, OIL, HERBS, SILICON, IRON, URANIUM, ELECRONICS, MACHINES,
    WEAPONS, MEDICINE, DRUGS,
 }};
 
-std::string resource_name(Resource r)
+string resource_name(Resource r)
 {
     switch(r) {
 	case Resource::GRAIN:

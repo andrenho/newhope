@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <vector>
+using namespace std;
 
 #include "ui/dialogmanager.h"
 #include "engine/resources.h"
@@ -17,7 +18,7 @@ public:
     WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren);
     ~WDialogManager();
 
-    void Speech(class Person const& person, std::string const& message) const override;
+    void Speech(class Person const& person, string const& message) const override;
 
     // workers
     void Banker(class Banker& banker) const override;
@@ -25,20 +26,20 @@ public:
     void Shopkeeper(class Shopkeeper& shopkeeper) const override;
 
 protected:
-    std::string QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, 
+    string QuestionString(class Person const& person, string const& message, bool limit_to_numbers, 
             unsigned int digits) const override;
 
 private:
     WDialogManager(const WDialogManager&);
     WDialogManager& operator=(const WDialogManager&);
 
-    int MessageBox(class Person const& person, std::string const& message) const;
+    int MessageBox(class Person const& person, string const& message) const;
 
-    void ShopKeeperDraw(class Shopkeeper& shopkeeper, std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const;
+    void ShopKeeperDraw(class Shopkeeper& shopkeeper, map<Resource, SDL_Rect>& mrects, vector<SDL_Rect>& crects) const;
     bool ShopKeeperEvents(class Shopkeeper& shopkeeper, 
-            std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const;
+            map<Resource, SDL_Rect> const& mrects, vector<SDL_Rect> const& crects) const;
 
-    int WriteTextOnScreen(TTF_Font* font, std::string const& text, int x, int y, 
+    int WriteTextOnScreen(TTF_Font* font, string const& text, int x, int y, 
             uint8_t r, uint8_t g, uint8_t b) const;
 
     struct SDL_Window* win;

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+using namespace std;
+
 #include "engine/vehicle.h"
 
 Hero::Hero(Point init) 
@@ -10,7 +12,7 @@ Hero::Hero(Point init)
 }
 
 
-Hero::Hero(Point init, std::shared_ptr<class Vehicle> vehicle)
+Hero::Hero(Point init, shared_ptr<class Vehicle> vehicle)
     : Hero(init)
 {
     this->vehicle = vehicle;
@@ -18,10 +20,10 @@ Hero::Hero(Point init, std::shared_ptr<class Vehicle> vehicle)
 
 
 void 
-Hero::Collision(std::shared_ptr<Object> obj)
+Hero::Collision(shared_ptr<Object> obj)
 {
-    std::shared_ptr<class Vehicle> vehicle = std::dynamic_pointer_cast<class Vehicle>(obj);
-    std::shared_ptr<class Person> person = std::dynamic_pointer_cast<class Person>(obj);
+    shared_ptr<class Vehicle> vehicle = dynamic_pointer_cast<class Vehicle>(obj);
+    shared_ptr<class Person> person = dynamic_pointer_cast<class Person>(obj);
 
     // if it's a car, enter in it
     if(vehicle) {

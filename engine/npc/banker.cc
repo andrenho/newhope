@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <climits>
+using namespace std;
 
 #include "./main.h"
 #include "ui/ui.h"

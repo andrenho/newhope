@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <map>
+using namespace std;
 
 
 BlockManager::BlockManager()
@@ -27,10 +28,10 @@ BlockManager::BlockManager()
 }
 
 
-std::vector<Block> 
+vector<Block> 
 BlockManager::TerrainList() const
 {
-    return std::vector<Block>({ GRASS, WATER, DESERT, SAVANNAH, 
+    return vector<Block>({ GRASS, WATER, DESERT, SAVANNAH, 
          BARE, TROPICAL_FOREST, TEMPERATE_FOREST, SHRUBLAND,
          TUNDRA, SNOW, BEACH });
 }

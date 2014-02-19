@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include <iostream>
+using namespace std;
 
 #include "./main.h"
 #include "ui/w/wireframeui.h"
@@ -54,7 +55,7 @@ WMinimap::DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b)
 
 
 void 
-WMinimap::DrawPoints(std::vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b)
+WMinimap::DrawPoints(vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b)
 {
     SDL_SetRenderDrawColor(sr, r, g, b, SDL_ALPHA_OPAQUE);
     SDL_Point* points = 

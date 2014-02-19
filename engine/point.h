@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <functional>
+using namespace std;
 
 class Point final {
 public:

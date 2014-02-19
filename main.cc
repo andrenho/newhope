@@ -10,6 +10,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+using namespace std;
 
 #include "./main.h"
 #include "engine/command.h"
@@ -21,8 +22,8 @@
 #  include "ui/w/wireframeui.h"
 #endif
 
-std::unique_ptr<World> world = nullptr;
-std::unique_ptr<UI> ui = nullptr;
+unique_ptr<World> world = nullptr;
+unique_ptr<UI> ui = nullptr;
 cpSpace* space = nullptr;
 
 int main(int argc, char** argv)
@@ -49,11 +50,11 @@ int main(int argc, char** argv)
 
     // initialize engine and UI
 #ifdef DUMMY
-    ui = std::unique_ptr<UI>(new DummyUI()); // this dummy lib is used for testing memory leaks
+    ui = unique_ptr<UI>(new DummyUI()); // this dummy lib is used for testing memory leaks
 #else
-    ui = std::unique_ptr<UI>(new WireframeUI());
+    ui = unique_ptr<UI>(new WireframeUI());
 #endif
-    world = std::unique_ptr<World>(new World(-10000, -10000, 10000, 10000, seedp));
+    world = unique_ptr<World>(new World(-10000, -10000, 10000, 10000, seedp));
     world->Initialize();
     ui->Initialize();
 
@@ -62,7 +63,7 @@ int main(int argc, char** argv)
         uint32_t next_frame = ui->Now() + static_cast<int>(1000.0/60.0);
 
         // process keyboard
-        std::vector<std::unique_ptr<Command>> commands = ui->GetEvents();
+        vector<unique_ptr<Command>> commands = ui->GetEvents();
         for(auto const& command : commands) {
             command->Execute();
         }
@@ -81,7 +82,7 @@ int main(int argc, char** argv)
         uint32_t now = ui->Now();
         // int64_t time_present = static_cast<int>(next_frame) - static_cast<int>(now);
 
-        // std::cout << "Step: " << time_step << " Redrawing: " << redraw_time << " Rendering: " << time_present << "\n";
+        // cout << "Step: " << time_step << " Redrawing: " << redraw_time << " Rendering: " << time_present << "\n";
         
         if(now < next_frame) {
             ui->Wait(next_frame - now);

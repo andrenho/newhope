@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <utility>
+using namespace std;
 
 #include "engine/city.h"
 
@@ -50,7 +51,7 @@ Roadgen::CreateRoads(vector<class City>& cities)
         }
     }
 
-    FindUnconnected();
+    //FindUnconnected();
 
     return roads;
 }

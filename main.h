@@ -3,11 +3,12 @@
 
 #include <libintl.h>
 #include <memory>
+using namespace std;
 
 #define _(STRING) gettext(STRING)
 
-extern std::unique_ptr<class World> world;
-extern std::unique_ptr<class UI> ui;
+extern unique_ptr<class World> world;
+extern unique_ptr<class UI> ui;
 extern struct cpSpace* space;
 
 #endif  // MAIN_H_

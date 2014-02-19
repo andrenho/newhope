@@ -2,6 +2,7 @@
 #define ENGINE_HERO_H_
 
 #include <memory>
+using namespace std;
 
 #include "engine/person.h"
 #include "engine/point.h"
@@ -10,10 +11,10 @@
 class Hero final : public Person {
 public:
     explicit Hero(Point init);
-    Hero(Point init, std::shared_ptr<class Vehicle> vehicle);
+    Hero(Point init, shared_ptr<class Vehicle> vehicle);
     virtual ~Hero() { }
 
-    void Collision(std::shared_ptr<Object> obj) override;
+    void Collision(shared_ptr<Object> obj) override;
 
 private:
     Hero(const Hero&);

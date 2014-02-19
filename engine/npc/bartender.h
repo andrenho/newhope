@@ -2,6 +2,7 @@
 #define ENGINE_NPC_BARTENDER_H_
 
 #include <string>
+using namespace std;
 
 #include "engine/worker.h"
 #include "engine/point.h"
@@ -12,7 +13,7 @@ public:
     ~Bartender();
 
     void TalkToHero() override;
-    std::string News() const;
+    string News() const;
 
 private:
     Bartender(const Bartender&);

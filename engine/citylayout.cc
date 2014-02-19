@@ -1,6 +1,9 @@
 #include "engine/citylayout.h"
 
-std::map<CityPair, CityLayout> CityLayouts = {
+#include <map>
+using namespace std;
+
+map<CityPair, CityLayout> CityLayouts = {
 {
     CityPair(CityType::AGRICULTURAL, 1),
     {

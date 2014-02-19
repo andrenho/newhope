@@ -3,6 +3,8 @@
 #include <glog/logging.h>
 #include <cstdlib>
 #include <iostream>
+using namespace std;
+
 
 #include "engine/world.h"
 
@@ -36,12 +38,12 @@ World::Initialize()
 
     // initialize vehicles
     LOG(INFO) << "Initializing vehicles.\n";
-    std::shared_ptr<Vehicle> car(new Vehicle(Point(10, 10), VehicleModel::GENERIC));
+    shared_ptr<Vehicle> car(new Vehicle(Point(10, 10), VehicleModel::GENERIC));
     AddObject(car);
 
     // initialize people
     LOG(INFO) << "Initializing hero.\n";
-    hero = std::shared_ptr<class Hero>(new class Hero(Point(0, 0) , car));
+    hero = shared_ptr<class Hero>(new class Hero(Point(0, 0) , car));
     AddObject(hero);
 
     // initialize cities
@@ -137,7 +139,7 @@ World::Random() const
 void
 World::CreateCities()
 {
-    std::unordered_set<Point> positions = mapgen.CitiesPositions(30);
+    unordered_set<Point> positions = mapgen.CitiesPositions(30);
     for(auto const& pos : positions) {
         int x = static_cast<int>(pos.X()),
             y = static_cast<int>(pos.Y());
@@ -170,7 +172,7 @@ World::AddWorkers()
 {
     for(auto& city: cities) {
         for(auto const& worker : city.Workers()) {
-            std::shared_ptr<Worker> wk = Worker::MakeWorker(worker.second, city, worker.first);
+            shared_ptr<Worker> wk = Worker::MakeWorker(worker.second, city, worker.first);
             AddObject(wk);
         }
     }

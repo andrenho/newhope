@@ -3,12 +3,13 @@
 
 #include <utility>
 #include <vector>
+using namespace std;
 
 #include "engine/object.h"
 #include "engine/point.h"
 #include "engine/resources.h"
 
-typedef std::shared_ptr<const class VehicleModel> VehicleModelP;
+typedef shared_ptr<const class VehicleModel> VehicleModelP;
 
 class VehicleModel final {
 public:
@@ -72,7 +73,7 @@ private:
 
     VehicleModelP const& model;
     const Point init_pos;
-    std::vector<CargoSlot> cargo_slots;
+    vector<CargoSlot> cargo_slots;
 
     struct cpBody *body, *rear_wheel_body, *front_wheel_body;
     struct cpShape *shape, *rear_wheel_shape, *front_wheel_shape;

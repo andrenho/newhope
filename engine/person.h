@@ -2,6 +2,7 @@
 #define ENGINE_PERSON_H_
 
 #include <memory>
+using namespace std;
 
 #include "engine/object.h"
 #include "engine/resources.h"
@@ -40,10 +41,10 @@ protected:
     struct cpBody *body, *target;
     struct cpShape* shape;
     struct cpConstraint* joint;
-    std::shared_ptr<class Vehicle> vehicle;
+    shared_ptr<class Vehicle> vehicle;
     bool in_vehicle;
     int loan;
-    std::unique_ptr<class Wallet> wallet;
+    unique_ptr<class Wallet> wallet;
 
 private:
     Person(const Person&);

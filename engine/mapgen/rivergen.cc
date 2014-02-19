@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
+using namespace std;
 
 #include "./main.h"
 #include "engine/world.h"
@@ -30,10 +31,10 @@ Rivergen::CalculateAltitudes()
 }
 
 
-std::vector<Point> 
+vector<Point> 
 Rivergen::CreateRiver()
 {
-    std::vector<Point> segment;
+    vector<Point> segment;
 
 try_again:
     Point p = RandomPoint();
@@ -61,21 +62,21 @@ try_again:
 Point 
 Rivergen::RandomPoint() const
 {
-    return points.at(static_cast<std::vector<Point>::size_type>(world->Random() * static_cast<double>(points.size())));
+    return points.at(static_cast<vector<Point>::size_type>(world->Random() * static_cast<double>(points.size())));
 }
 
 
 Point 
-Rivergen::NextPoint(Point& p, std::vector<Point> ignore) const
+Rivergen::NextPoint(Point& p, vector<Point> ignore) const
 {
     double r = 1000; // radius
-    std::vector<Point> pts_in_circle;
+    vector<Point> pts_in_circle;
 
     // find all points in a circle
     while(pts_in_circle.empty()) {
         for(auto& pt : points) {
             if(pow(pt.X() - p.X(), 2) + pow(pt.Y() - p.Y(), 2) < pow(r, 2)) {
-                if(std::find(ignore.begin(), ignore.end(), pt) == ignore.end()) {
+                if(find(ignore.begin(), ignore.end(), pt) == ignore.end()) {
                     pts_in_circle.push_back(pt);
                 }
             }

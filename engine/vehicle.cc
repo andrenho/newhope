@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
+using namespace std;
+
 
 #include "./main.h"
 #include "engine/vehicle.h"
@@ -163,7 +165,7 @@ Vehicle::AddCargo(Resource res, unsigned int amount)
     unsigned int left = amount;
     for(auto& slot: cargo_slots) {
         if(left > 0 && (slot.Cargo == res || slot.Cargo == Resource::NOTHING)) {
-            int add_to_slot = std::min(100 - slot.Amount, left);
+            int add_to_slot = min(100 - slot.Amount, left);
             left -= add_to_slot;
             slot = { res, slot.Amount + add_to_slot };
         }
@@ -174,7 +176,7 @@ Vehicle::AddCargo(Resource res, unsigned int amount)
 void 
 Vehicle::RemoveCargo(Resource res, unsigned int amount)
 {
-    std::map<Resource, int> cargo;
+    map<Resource, int> cargo;
 
     // check amounts
     for(auto& slot: cargo_slots) {
@@ -202,7 +204,7 @@ Vehicle::RemoveCargo(Resource res, unsigned int amount)
     for(auto const& box: cargo) {
         int left = box.second;
         while(left > 0) {
-            cargo_slots[slotn] = { box.first, std::min(100U, static_cast<unsigned int>(left)) };
+            cargo_slots[slotn] = { box.first, min(100U, static_cast<unsigned int>(left)) };
             left -= cargo_slots[slotn].Amount;
             if(left > 0) {
                 ++slotn;

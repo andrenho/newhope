@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
+using namespace std;
 
 #include "./main.h"
 #include "engine/world.h"
@@ -42,7 +43,7 @@ WDialogManager::~WDialogManager()
 }
 
 void 
-WDialogManager::Speech(class Person const& person, std::string const& message) const
+WDialogManager::Speech(class Person const& person, string const& message) const
 {
     MessageBox(person, message);
 
@@ -56,8 +57,8 @@ void
 WDialogManager::Shopkeeper(class Shopkeeper& shopkeeper) const
 {
     bool closed = false;
-    std::map<Resource, SDL_Rect> mrects;
-    std::vector<SDL_Rect> crects;
+    map<Resource, SDL_Rect> mrects;
+    vector<SDL_Rect> crects;
     while(!closed) {
         ShopKeeperDraw(shopkeeper, mrects, crects);
         closed = ShopKeeperEvents(shopkeeper, mrects, crects);
@@ -114,10 +115,10 @@ WDialogManager::Bartender(class Bartender& bartender) const
 /************************************************************************/
 
 
-std::string 
-WDialogManager::QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, unsigned int digits) const
+string 
+WDialogManager::QuestionString(class Person const& person, string const& message, bool limit_to_numbers, unsigned int digits) const
 {
-    std::string reply;
+    string reply;
 
     // get parameters
     int win_w, win_h;
@@ -171,7 +172,7 @@ WDialogManager::QuestionString(class Person const& person, std::string const& me
 
 
 int 
-WDialogManager::MessageBox(class Person const& person, std::string const& message) const
+WDialogManager::MessageBox(class Person const& person, string const& message) const
 {
     (void) person;
 
@@ -183,7 +184,7 @@ WDialogManager::MessageBox(class Person const& person, std::string const& messag
     int advance;
     TTF_GlyphMetrics(main_font, 'A', NULL, NULL, NULL, NULL, &advance);
     
-    std::vector<std::string> lines = Wrap(message, static_cast<unsigned int>((win_w-50) / advance));
+    vector<string> lines = Wrap(message, static_cast<unsigned int>((win_w-50) / advance));
     int nlines = static_cast<int>(lines.size());
     
     // draw black box
@@ -207,7 +208,7 @@ WDialogManager::MessageBox(class Person const& person, std::string const& messag
 
 void 
 WDialogManager::ShopKeeperDraw(class Shopkeeper& shopkeeper, 
-        std::map<Resource, SDL_Rect>& mrects, std::vector<SDL_Rect>& crects) const
+        map<Resource, SDL_Rect>& mrects, vector<SDL_Rect>& crects) const
 {
     Hero& hero = world->Hero();
 
@@ -219,7 +220,7 @@ WDialogManager::ShopKeeperDraw(class Shopkeeper& shopkeeper,
     SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
     SDL_RenderFillRect(ren, &r2);
     WriteTextOnScreen(small_font, "Shopkeeper:", 150, 150, 0, 0, 0);
-    WriteTextOnScreen(small_font, "Hero ($" + std::to_string(hero.Money()) + "):", 
+    WriteTextOnScreen(small_font, "Hero ($" + to_string(hero.Money()) + "):", 
             150, 270, 0, 0, 0);
  
     // draw shopkeeper merchindising
@@ -231,10 +232,10 @@ WDialogManager::ShopKeeperDraw(class Shopkeeper& shopkeeper,
         SDL_Rect r3 = { mrects[res].x+2, 172, 21, 21 };
         SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
         SDL_RenderFillRect(ren, &r3);
-        WriteTextOnScreen(main_font, std::string(1, static_cast<char>(res)), x+5, 175, 0, 0, 0);
-        WriteTextOnScreen(small_font, std::to_string(shopkeeper.ResourceAmount(res)), x, 200, 0, 0, 0);
+        WriteTextOnScreen(main_font, string(1, static_cast<char>(res)), x+5, 175, 0, 0, 0);
+        WriteTextOnScreen(small_font, to_string(shopkeeper.ResourceAmount(res)), x, 200, 0, 0, 0);
         auto s = mprintf("%d/%d", shopkeeper.ResourceBuyPrice(res), shopkeeper.ResourceSellPrice(res));
-        WriteTextOnScreen(small_font, std::string(s), x, 212, 0, 0, 0);
+        WriteTextOnScreen(small_font, string(s), x, 212, 0, 0, 0);
         
         x += 40;
     }
@@ -250,8 +251,8 @@ WDialogManager::ShopKeeperDraw(class Shopkeeper& shopkeeper,
         SDL_RenderFillRect(ren, &r3);
         CargoSlot const& cs = hero.Vehicle().Cargo(i);
         if(cs.Cargo != Resource::NOTHING) {
-            WriteTextOnScreen(main_font, std::string(1, static_cast<char>(cs.Cargo)), x+5, 295, 0, 0, 0);
-            WriteTextOnScreen(small_font, std::to_string(cs.Amount), x, 320, 0, 0, 0);
+            WriteTextOnScreen(main_font, string(1, static_cast<char>(cs.Cargo)), x+5, 295, 0, 0, 0);
+            WriteTextOnScreen(small_font, to_string(cs.Amount), x, 320, 0, 0, 0);
         }
         
         x += 35;
@@ -263,7 +264,7 @@ WDialogManager::ShopKeeperDraw(class Shopkeeper& shopkeeper,
 
 bool
 WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper, 
-        std::map<Resource, SDL_Rect> const& mrects, std::vector<SDL_Rect> const& crects) const
+        map<Resource, SDL_Rect> const& mrects, vector<SDL_Rect> const& crects) const
 {
     Resource dragging = Resource::NOTHING;
     int cargo_slot = -1;
@@ -312,15 +313,15 @@ WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper,
                         int slot = 0;
                         for(auto const& crect: crects) {
                             if(in_rect(e.button.x, e.button.y, crect)) {
-                                std::string message;
-                                unsigned int amount = std::min(100U, shopkeeper.ResourceAmount(dragging));
+                                string message;
+                                unsigned int amount = min(100U, shopkeeper.ResourceAmount(dragging));
                                 if(SDL_GetModState() & KMOD_SHIFT) {
-                                    std::string s = mprintf(_("How much %s do you want to buy?"), resource_name(dragging).c_str());
+                                    string s = mprintf(_("How much %s do you want to buy?"), resource_name(dragging).c_str());
                                     amount = QuestionNumber(shopkeeper, s, 5);
                                 }
                                 shopkeeper.Sell(world->Hero(), dragging, amount, message);
                                 if(!message.empty()) {
-                                    std::cout << message << "\n";
+                                    cout << message << "\n";
                                 }
                                 return false;
                             }
@@ -333,15 +334,15 @@ WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper,
                             if(in_rect(e.button.x, e.button.y, mrect.second)) {
                                 auto& slot = world->Hero().Vehicle().Cargo(cargo_slot);
                                 if(slot.Cargo != Resource::NOTHING) {
-                                    int amount = std::min(100U, slot.Amount);
+                                    int amount = min(100U, slot.Amount);
                                     if(SDL_GetModState() & KMOD_SHIFT) {
-                                        std::string s = mprintf(_("How much %s do you want to sell?"), resource_name(slot.Cargo).c_str());
+                                        string s = mprintf(_("How much %s do you want to sell?"), resource_name(slot.Cargo).c_str());
                                         amount = QuestionNumber(shopkeeper, s, 5);
                                     }
-                                    std::string message;
+                                    string message;
                                     shopkeeper.Buy(world->Hero(), slot.Cargo, amount, message);
                                     if(!message.empty()) {
-                                        std::cout << message << "\n";
+                                        cout << message << "\n";
                                     }
                                     return false;
                                 }
@@ -363,7 +364,7 @@ WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper,
 
 
 int
-WDialogManager::WriteTextOnScreen(TTF_Font* font, std::string const& text, int x, int y, uint8_t r, uint8_t g, uint8_t b) const
+WDialogManager::WriteTextOnScreen(TTF_Font* font, string const& text, int x, int y, uint8_t r, uint8_t g, uint8_t b) const
 {
     if(text != "") {
 		SDL_Surface* sf = TTF_RenderUTF8_Solid(font, text.c_str(), 

@@ -1,6 +1,7 @@
 #include "engine/npc/bartender.h"
 
 #include <memory>
+using namespace std;
 
 #include "./main.h"
 #include "ui/ui.h"
@@ -23,7 +24,7 @@ Bartender::TalkToHero()
 }
 
 
-std::string 
+string 
 Bartender::News() const
 {
     return _("No news is good news.");

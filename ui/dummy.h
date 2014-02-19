@@ -1,16 +1,17 @@
 #ifndef UI_DUMMY_H_
 #define UI_DUMMY_H_
 
+using namespace std;
 #include "ui/dialogmanager.h"
 #include "ui/ui.h"
 
 class DummyDialogManager : public DialogManager {
 public:
-    void Speech(class Person const& person, std::string const& message) const override { }
+    void Speech(class Person const& person, string const& message) const override { }
     void Shopkeeper(class Shopkeeper& shopkeeper) const override { }
 
 protected:
-    std::string QuestionString(class Person const& person, std::string const& message, bool limit_to_numbers, 
+    string QuestionString(class Person const& person, string const& message, bool limit_to_numbers, 
             unsigned int digits) const override { return ""; }
 };
 
@@ -25,8 +26,8 @@ public:
     uint32_t Now() const override { return 0; }
     void Wait(uint32_t tm) const override { }
 
-    std::vector<std::unique_ptr<Command>> GetEvents() const override { 
-        std::vector<std::unique_ptr<Command>> a; a.push_back(std::unique_ptr<Command>(new QuitCommand())); return a;
+    vector<unique_ptr<Command>> GetEvents() const override { 
+        vector<unique_ptr<Command>> a; a.push_back(unique_ptr<Command>(new QuitCommand())); return a;
     }
 
     Rectangle& GetVisibleArea(Rectangle& r) const override { r.setP1(Point(0, 0)); r.setP2(Point(100, 100)); return r; }

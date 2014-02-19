@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+using namespace std;
 
 #include "engine/block.h"
 #include "engine/rectangle.h"
@@ -27,13 +28,13 @@ public:
     MapGen(MapGen&&) = default;
 
     void Create();
-    void CreateRoads(std::vector<class City>& cities);
+    void CreateRoads(vector<class City>& cities);
     
     Block Terrain(int x, int y) const;
-    std::unordered_set<Point> CitiesPositions(unsigned int n) const;
+    unordered_set<Point> CitiesPositions(unsigned int n) const;
 
-    inline std::vector<std::vector<Point>> const& Rivers() const { return rivers; }
-    inline std::vector<std::vector<Point>> const& Roads() const { return roads; }
+    inline vector<vector<Point>> const& Rivers() const { return rivers; }
+    inline vector<vector<Point>> const& Roads() const { return roads; }
 
     ~MapGen();
 
@@ -54,20 +55,20 @@ private:
 
     double PointAltitude(Point const& p) const;
     bool RandomPointWithBiome(Point& p, Block biome,
-        std::unordered_set<Point> ignore) const;
+        unordered_set<Point> ignore) const;
 
     const Rectangle rect;
     mutable unsigned int seedp;
 
-    std::unordered_set<Point> points;
-    std::unordered_map<Point,PointData> data;
-    std::vector<std::vector<Point>> rivers, roads;
+    unordered_set<Point> points;
+    unordered_map<Point,PointData> data;
+    vector<vector<Point>> rivers, roads;
     double hm[255][255]; // heightmap
 
-    mutable std::unordered_map<Point,Block> tile_cache;
+    mutable unordered_map<Point,Block> tile_cache;
 
-    std::unique_ptr<class Rivergen> rivergen;
-    std::unique_ptr<class Roadgen> roadgen;
+    unique_ptr<class Rivergen> rivergen;
+    unique_ptr<class Roadgen> roadgen;
 
     const int NUMPOINTS = 1250;
 };

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+using namespace std;
 
 #include "engine/building.h"
 #include "engine/citylayout.h"
@@ -20,7 +21,7 @@ public:
     inline int H() const { return layout.h; }
 
     static CityType Type(Block biome);
-    const std::vector<WorkerPair> Workers() const;
+    const vector<WorkerPair> Workers() const;
 
     const int X, Y;
 
@@ -29,7 +30,7 @@ private:
     City& operator=(const City&);
 
     CityLayout const& layout;
-    std::vector<Building> buildings;
+    vector<Building> buildings;
 };
 
 #endif  // ENGINE_CITY_H_

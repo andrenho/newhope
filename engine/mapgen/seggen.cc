@@ -4,6 +4,7 @@
 #include <cfloat>
 #include <cmath>
 #include <iostream>
+using namespace std;
 
 #include "./main.h"
 #include "engine/world.h"
@@ -40,7 +41,7 @@ Seggen::TileInSegment(int x, int y) const
 
 
 void 
-Seggen::AddSegment(std::vector<Point> segment, int width)
+Seggen::AddSegment(vector<Point> segment, int width)
 {
     for(unsigned int i=0; i<segment.size()-1; i++) {
         segments.push_back(Segment(segment[i], segment[i+1], width));
@@ -51,8 +52,8 @@ Seggen::AddSegment(std::vector<Point> segment, int width)
 Segment::Segment(Point const& p1, Point const& p2, int width)
     : p1(p1), p2(p2), width(width), 
       rect(Rectangle(
-                  Point(std::min(p1.X()-width, p2.X()-width), std::min(p1.Y()-width, p2.Y()-width)),
-                  Point(std::max(p1.X()+width, p2.X()+width), std::max(p1.Y()+width, p2.Y()+width)))),
+                  Point(min(p1.X()-width, p2.X()-width), min(p1.Y()-width, p2.Y()-width)),
+                  Point(max(p1.X()+width, p2.X()+width), max(p1.Y()+width, p2.Y()+width)))),
       polygon({})
 {
     // create polygon
