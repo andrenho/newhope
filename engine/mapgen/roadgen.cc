@@ -1,6 +1,7 @@
 #include "engine/mapgen/roadgen.h"
 
 #include <algorithm>
+#include <iostream>
 #include <map>
 #include <vector>
 #include <utility>
@@ -24,16 +25,15 @@ Roadgen::CreateRoads(vector<class City>& cities)
     for(auto const& city1: cities) {
         Point p1(city1.X, city1.Y);
 
-        decltype(city_ptr) cities_by_distance(city_ptr);
-        /*
-        decltype(city_ptr) cities_by_distance(cities.size());
+        decltype(city_ptr) cities_by_distance;
+
         // copy city array, excluding cities already connected
-        remove_copy_if(city_ptr.begin(), city_ptr.end(), back_inserter(cities_by_distance),
-                [&](const City* c) { 
-                    return find(already_connected.begin(), already_connected.end(), 
-                        make_pair(&city1, c)) != already_connected.end();
+        for_each(begin(city_ptr), end(city_ptr),
+                [&](const City* c) {
+                    if(find(already_connected.begin(), already_connected.end(), make_pair(&city1, c)) == already_connected.end()) {
+                        cities_by_distance.push_back(c);
+                    }
                 });
-        */
 
         // order by distance
         sort(cities_by_distance.begin(), cities_by_distance.end(),
@@ -49,6 +49,8 @@ Roadgen::CreateRoads(vector<class City>& cities)
             roads.push_back(ConnectCities(city1, *cities_by_distance[1]));
         }
     }
+
+    FindUnconnected();
 
     return roads;
 }

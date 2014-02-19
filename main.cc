@@ -34,8 +34,8 @@ int main(int argc, char** argv)
     google::InstallFailureSignalHandler();
 
     // initialize seed
-    //unsigned int seedp = static_cast<unsigned int>(time(nullptr));
-    unsigned int seedp = 1;
+    unsigned int seedp = static_cast<unsigned int>(time(nullptr));
+    //unsigned int seedp = 1;
     LOG(INFO) << "Seed initialized to " << seedp << ".\n";
 
     // initialize gettext

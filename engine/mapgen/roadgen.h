@@ -14,6 +14,8 @@ public:
 
 private:
     vector<Point> ConnectCities(class City const& city1, class City const& city2);
+    void FindUnconnected();
+
     set<pair<const City*, const City*>> already_connected = {};
 
     Roadgen(const Roadgen&) = delete;
