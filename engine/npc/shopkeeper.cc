@@ -1,6 +1,5 @@
 #include "engine/npc/shopkeeper.h"
 
-#include <glog/logging.h>
 #include <cassert>
 #include <climits>
 #include <string>

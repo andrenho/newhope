@@ -1,10 +1,12 @@
 #include <chipmunk.h>
 
-#include <glog/logging.h>
 #include <cstdlib>
 #include <iostream>
 using namespace std;
 
+#ifdef __MINGW32__
+#  define rand_r(x) rand()
+#endif
 
 #include "engine/world.h"
 

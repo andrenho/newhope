@@ -1,6 +1,7 @@
 #include "ui/dialogmanager.h"
 
-#include <glog/logging.h>
+#include <cstdlib>
+#include <string>
 using namespace std;
 
 vector<string>
@@ -46,7 +47,7 @@ int
 DialogManager::QuestionNumber(class Person const& person, string const& message, unsigned int digits) const
 {
     try {
-        return stoi(QuestionString(person, message, true, digits));
+        return strtol(QuestionString(person, message, true, digits).c_str(), 0, 10);
     } catch(exception& e) {
         return 0;
     }

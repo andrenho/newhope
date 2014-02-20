@@ -1,6 +1,5 @@
 #include "engine/mapgen/mapgen.h"
 
-#include <glog/logging.h>
 #include <cfloat>
 #include <cmath>
 #include <ctime>
@@ -8,6 +7,10 @@
 #include <algorithm>
 #include <iostream>
 using namespace std;
+
+#ifndef M_PI
+#  define M_PI 3.14159265358979323846
+#endif
 
 #include "./main.h"
 #include "engine/block.h"

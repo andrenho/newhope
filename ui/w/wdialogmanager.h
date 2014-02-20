@@ -33,7 +33,7 @@ protected:
             unsigned int digits) const override;
 
 private:
-    int MessageBox(class Person const& person, string const& message) const;
+    int MessageBox_(class Person const& person, string const& message) const;
 
     void ShopKeeperDraw(class Shopkeeper& shopkeeper, map<Resource, SDL_Rect>& mrects, vector<SDL_Rect>& crects) const;
     bool ShopKeeperEvents(class Shopkeeper& shopkeeper, 

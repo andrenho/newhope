@@ -47,7 +47,7 @@ WARNINGS=-Weffc++ -pedantic  \
     -Wunused-function  -Wunused-label  -Wunused-parameter \
     -Wunused-value  -Wunused-variable  -Wvariadic-macros \
     -Wvolatile-register-var  -Wwrite-strings
-CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATADIR=\"${DATAPREFIX}\" -DLOCALEDIR=\"${LOCALEPREFIX}\" ${WARNINGS} -I. -I/usr/include -std=c++11
+CPPFLAGS = -DVERSION=\"${VERSION}\" -DDATAPREFIX=\"${DATAPREFIX}\" -DLOCALEDIR=\"${LOCALEPREFIX}\" ${WARNINGS} -I. -std=c++11
 LDFLAGS = -L/usr/lib
 
 # Duma libraries

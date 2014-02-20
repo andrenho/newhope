@@ -64,7 +64,7 @@ ${OBJ}: build/config.mk build/libraries.mk
 
 newhope: ${OBJ}
 	@echo CPP -o $@
-	@${CPP} -o $@ ${OBJ} ${LDFLAGS}
+	${CPP} -o $@ ${OBJ} ${LDFLAGS}
 
 docs: doc/newhope.uml
 	@echo plantuml $<

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
+#include <string>
 using namespace std;
 
 #include "./main.h"
@@ -16,6 +17,19 @@ using namespace std;
 #include "ui/ui.h"
 #include "util/stdio.h"
 
+#ifdef __MINGW32__
+#include <sstream>
+namespace std
+{
+    inline string to_string(int _Val)
+    {
+        ostringstream ss;
+        ss << _Val;
+        return ss.str();
+    }
+}
+#endif
+
 WDialogManager::WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren)
     : win(win), ren(ren)
 {
@@ -26,8 +40,8 @@ WDialogManager::WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren)
     }
 
     // load font
-    main_font = TTF_OpenFont(DATADIR "/PressStart2P.ttf", 16);
-    small_font = TTF_OpenFont(DATADIR "/PressStart2P.ttf", 8);
+    main_font = TTF_OpenFont(DATAPREFIX "/PressStart2P.ttf", 16);
+    small_font = TTF_OpenFont(DATAPREFIX "/PressStart2P.ttf", 8);
     if(!main_font || !small_font) {
         fprintf(stderr, "\nUnable to load font: %s\n", TTF_GetError());
         exit(1);
@@ -45,7 +59,7 @@ WDialogManager::~WDialogManager()
 void 
 WDialogManager::Speech(class Person const& person, string const& message) const
 {
-    MessageBox(person, message);
+    MessageBox_(person, message);
 
     ui->WaitForKeypress();
     ui->RedrawScene();
@@ -126,7 +140,7 @@ WDialogManager::QuestionString(class Person const& person, string const& message
     int h = TTF_FontLineSkip(main_font);
 
     // print message
-    int y = MessageBox(person, message + "\n");
+    int y = MessageBox_(person, message + "\n");
 
     // draw edit text
     auto redraw_text = [&]() -> void {
@@ -172,7 +186,7 @@ WDialogManager::QuestionString(class Person const& person, string const& message
 
 
 int 
-WDialogManager::MessageBox(class Person const& person, string const& message) const
+WDialogManager::MessageBox_(class Person const& person, string const& message) const
 {
     (void) person;
 

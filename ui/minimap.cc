@@ -1,6 +1,5 @@
 #include "ui/minimap.h"
 
-#include <glog/logging.h>
 #include <iostream>
 using namespace std;
 
