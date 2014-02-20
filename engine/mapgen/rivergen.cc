@@ -11,7 +11,7 @@ using namespace std;
 #include "engine/world.h"
 
 Rivergen::Rivergen(const double (&hm)[255][255], const Rectangle rect, unsigned int& seedp)
-    : Seggen(rect, seedp), hm(hm), altitude({}) 
+    : Seggen(rect, seedp), hm(hm)
 {
     CalculateAltitudes();
 }

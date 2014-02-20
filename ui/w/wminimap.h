@@ -8,7 +8,9 @@ using namespace std;
 class WMinimap final : public Minimap {
 public:
     WMinimap(int w, int h, struct SDL_Renderer& ren);
-    ~WMinimap();
+
+    WMinimap(const WMinimap&) = delete;
+    WMinimap& operator=(const WMinimap&) = delete;
 
     void DestroyImage();
 
@@ -24,13 +26,10 @@ protected:
     void UpdateScreen() const override;
 
 private:
-    WMinimap(const WMinimap&);
-    WMinimap& operator=(const WMinimap&);
-
     struct SDL_Renderer& ren;
-    struct SDL_Renderer* sr;
-    struct SDL_Surface* sf;
-    struct SDL_Texture* texture;
+    struct SDL_Renderer* sr = nullptr;
+    struct SDL_Surface* sf = nullptr;
+    struct SDL_Texture* texture = nullptr;
 };
 
 #endif  // UI_W_WMINIMAP_H_

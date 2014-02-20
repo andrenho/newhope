@@ -12,7 +12,9 @@ using namespace std;
 class Shopkeeper final : public Worker {
 public:
     Shopkeeper(Point init, class City& city);
-    ~Shopkeeper();
+
+    Shopkeeper(const Shopkeeper&) = delete;
+    Shopkeeper& operator=(const Shopkeeper&) = delete;
 
     inline unsigned int ResourceAmount(Resource r) const { return resources.at(r); }
     inline unsigned int ResourceSellPrice(Resource r) const { (void)r; return 5; }
@@ -24,12 +26,9 @@ public:
     void TalkToHero() override;
 
 private:
-    Shopkeeper(const Shopkeeper&);
-    Shopkeeper& operator=(const Shopkeeper&);
-
     void ChangeCargoAmount(Resource res, int amount);
 
-    map<Resource, int> resources;
+    map<Resource, int> resources = {};
 };
 
 #endif  // ENGINE_NPC_SHOPKEEPER_H_

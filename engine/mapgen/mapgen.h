@@ -26,6 +26,8 @@ public:
     MapGen(int x1, int y1, int x2, int y2, unsigned int seed);
 
     MapGen(MapGen&&) = default;
+    MapGen(const MapGen&) = delete;
+    MapGen& operator=(const MapGen&) = delete;
 
     void Create();
     void CreateRoads(vector<class City>& cities);
@@ -39,9 +41,6 @@ public:
     ~MapGen();
 
 private:
-    MapGen(const MapGen&);
-    MapGen& operator=(const MapGen&);
-
     void CreatePoints(int points);
     void CreateHeightmap();
     void CalculateMoisture();
@@ -60,15 +59,15 @@ private:
     const Rectangle rect;
     mutable unsigned int seedp;
 
-    unordered_set<Point> points;
-    unordered_map<Point,PointData> data;
-    vector<vector<Point>> rivers, roads;
-    double hm[255][255]; // heightmap
+    unordered_set<Point> points = {};
+    unordered_map<Point,PointData> data = {};
+    vector<vector<Point>> rivers = {}, roads = {};
+    double hm[255][255] = {}; // heightmap
 
-    mutable unordered_map<Point,Block> tile_cache;
+    mutable unordered_map<Point,Block> tile_cache = {};
 
-    unique_ptr<class Rivergen> rivergen;
-    unique_ptr<class Roadgen> roadgen;
+    unique_ptr<class Rivergen> rivergen = nullptr;
+    unique_ptr<class Roadgen> roadgen = nullptr;
 
     const int NUMPOINTS = 1250;
 };

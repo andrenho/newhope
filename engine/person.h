@@ -9,6 +9,9 @@ using namespace std;
 
 class Person : public Object {
 public:
+    Person(const Person&) = delete;
+    Person& operator=(const Person&) = delete;
+
     virtual ~Person();
 
     virtual void SetTarget(Point const& p);
@@ -38,24 +41,23 @@ protected:
     Person(Point init, int money);
 
     const Point init;
-    struct cpBody *body, *target;
-    struct cpShape* shape;
-    struct cpConstraint* joint;
-    shared_ptr<class Vehicle> vehicle;
-    bool in_vehicle;
-    int loan;
+    struct cpBody *body = nullptr, *target = nullptr;
+    struct cpShape* shape = nullptr;
+    struct cpConstraint* joint = nullptr;
+    shared_ptr<class Vehicle> vehicle = nullptr;
+    bool in_vehicle = false;
+    int loan = 0;
     unique_ptr<class Wallet> wallet;
-
-private:
-    Person(const Person&);
-    Person& operator=(const Person&);
 };
 
 
 // this proxy class ensures that a person is only paid when the other one is giving money
-class Wallet {
+class Wallet final {
 public:
     explicit Wallet(int money) : money(money) {}
+
+    Wallet(const Wallet&) = delete;
+    Wallet& operator=(const Wallet&) = delete;
 
     inline int Money() const { return money; }
 

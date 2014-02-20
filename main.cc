@@ -22,11 +22,32 @@ using namespace std;
 #  include "ui/w/wireframeui.h"
 #endif
 
+
+// function prototypes
+static void initialize(int argc, char** argv);
+static void main_loop();
+static void finalize();
+
+
+// global variables
 unique_ptr<World> world = nullptr;
 unique_ptr<UI> ui = nullptr;
 cpSpace* space = nullptr;
 
-int main(int argc, char** argv)
+
+int 
+main(int argc, char** argv)
+{
+    initialize(argc, argv);
+    main_loop();
+    finalize();
+
+    return EXIT_SUCCESS;
+}
+
+
+static void 
+initialize(int argc, char** argv)
 {
     (void) argc;
 
@@ -57,8 +78,12 @@ int main(int argc, char** argv)
     world = unique_ptr<World>(new World(-10000, -10000, 10000, 10000, seedp));
     world->Initialize();
     ui->Initialize();
+}
 
-    // main loop
+
+static void 
+main_loop()
+{
     while(ui->Active()) {
         uint32_t next_frame = ui->Now() + static_cast<int>(1000.0/60.0);
 
@@ -88,14 +113,16 @@ int main(int argc, char** argv)
             ui->Wait(next_frame - now);
         }
     }
+}
 
+
+static void 
+finalize()
+{
     ui.reset();
     world.reset();
     cpSpaceFree(space);
     google::ShutdownGoogleLogging();
-
-    return EXIT_SUCCESS;
 }
-
 
 // vim: ts=4:sw=4:sts=4:expandtab

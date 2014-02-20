@@ -12,13 +12,11 @@ class Hero final : public Person {
 public:
     explicit Hero(Point init);
     Hero(Point init, shared_ptr<class Vehicle> vehicle);
-    virtual ~Hero() { }
+
+    Hero(const Hero&) = delete;
+    Hero& operator=(const Hero&) = delete;
 
     void Collision(shared_ptr<Object> obj) override;
-
-private:
-    Hero(const Hero&);
-    Hero& operator=(const Hero&);
 };
 
 #endif  // ENGINE_HERO_H_

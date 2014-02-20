@@ -7,12 +7,13 @@
 
 class Command {
 public:
-    Command() { }
+    Command(const Command&) = delete;
+    Command& operator=(const Command&) = delete;
 
     virtual void Execute() const = 0;
-private:
-    Command(const Command&);
-    Command& operator=(const Command&);
+
+protected:
+    Command() { }
 };
 
 

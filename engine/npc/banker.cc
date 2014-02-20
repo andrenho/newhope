@@ -12,10 +12,6 @@ Banker::Banker(Point init, class City& city)
 {
 }
 
-Banker::~Banker()
-{
-}
-
 
 int 
 Banker::Collateral(class Person const& person) const

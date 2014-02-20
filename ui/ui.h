@@ -15,7 +15,10 @@ class Command;
 
 class UI {
 public:
-    virtual ~UI() { }
+    virtual ~UI() = default;
+
+    UI(const UI&) = delete;
+    UI& operator=(const UI&) = delete;
 
     virtual void Initialize() = 0;
     virtual bool Active() const = 0;
@@ -37,14 +40,10 @@ public:
     virtual void WaitForKeypress() const = 0;
 
 protected:
-    UI() : minimap(nullptr), dialog(nullptr) { }
+    UI() {}
 
-    unique_ptr<Minimap> minimap;
-    unique_ptr<DialogManager> dialog;
-
-private:
-    UI(const UI&);
-    UI& operator=(const UI&);
+    unique_ptr<Minimap> minimap = nullptr;
+    unique_ptr<DialogManager> dialog = nullptr;
 };
 
 #endif  // UI_UI_H_

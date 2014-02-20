@@ -21,12 +21,14 @@ typedef pair<BuildingPair, Point> BuildingPosition;
 struct CityLayout final {
     CityLayout(int w, int h, vector<BuildingPosition> buildings)
         : w(w), h(h), buildings(buildings) {}
+    CityLayout() {}
 
-    CityLayout()
-        : w(0), h(0), buildings({}) {}
+    CityLayout(CityLayout&&) = default;
+    CityLayout(const CityLayout&) = default;
+    CityLayout& operator=(const CityLayout&) = delete;
 
-    const int w, h;
-    vector<BuildingPosition> buildings;
+    const int w = 0, h = 0;
+    vector<BuildingPosition> buildings = {};
 };
 
 extern map<CityPair, CityLayout> CityLayouts;

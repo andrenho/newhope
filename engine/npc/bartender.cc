@@ -12,11 +12,6 @@ Bartender::Bartender(Point init, class City& city)
 {
 }
 
-Bartender::~Bartender()
-{
-}
-
-
 void
 Bartender::TalkToHero()
 {

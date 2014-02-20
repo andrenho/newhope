@@ -8,26 +8,20 @@ using namespace std;
 
 class Object {
 public:
-    typedef shared_ptr<Object> Ptr;
+    typedef shared_ptr<Object> Ptr; // type for shared pointer
 
-    virtual ~Object() { }
-
-    virtual void Collision(shared_ptr<Object> obj) {
-        (void) obj;
-    }
+    Object(const Object&) = delete;
+    Object& operator=(const Object&) = delete;
+    virtual ~Object() = default;
 
     virtual struct cpBody* PhysicsBodyPtr() const = 0;
     virtual Point Position() const = 0;
 
     virtual void Step() {}
+    virtual void Collision(shared_ptr<Object> obj) { (void) obj; }
 
 protected:
     Object() { }
-
-private:
-    Object(const Object&);
-    Object& operator=(const Object&);
-
 };
 
 #endif  // ENGINE_OBJECT_H_

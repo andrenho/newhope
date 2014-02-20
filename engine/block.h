@@ -3,7 +3,6 @@
 
 #include <cstdint>
 #include <map>
-#include <memory>
 #include <vector>
 using namespace std;
 
@@ -26,6 +25,8 @@ struct BlockType final {
         : Crossable(crossable), R(r), G(g), B(b) {}
 
     BlockType(BlockType&&) = default;
+    BlockType(const BlockType&) = delete;
+    BlockType& operator=(const BlockType&) = delete;
 
     const bool Crossable;
     const uint8_t R, G, B;
@@ -35,6 +36,9 @@ struct BlockType final {
 class BlockManager final {
 public:
     BlockManager();
+
+    BlockManager(const BlockManager&) = delete;
+    BlockManager& operator=(const BlockManager&) = delete;
 
     inline BlockType const& Examine(Block b) const { return blocks.at(b); }
     vector<Block> TerrainList() const;

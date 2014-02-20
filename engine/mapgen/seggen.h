@@ -10,13 +10,17 @@ using namespace std;
 class Segment final {
 public:
     Segment(Point const& p1, Point const& p2, int width);
+
+    Segment(const Segment&) = default;
+    Segment& operator=(const Segment&) = delete;
+    
     bool TileInSegment(int x, int y) const;
 
 private:
     Point const& p1, p2;
     const int width;
     Rectangle const rect;
-    vector<Point> polygon;
+    vector<Point> polygon = {};
 };
 
 
@@ -27,18 +31,17 @@ public:
 
 protected:
     Seggen(const Rectangle rect, unsigned int& seedp);
-    virtual ~Seggen() {}
+    virtual ~Seggen() = default;
+
+    Seggen(const Seggen&) = delete;
+    Seggen& operator=(const Seggen&) = delete;
 
     virtual void CreatePoints();
 
     const Rectangle rect;
     unsigned int& seedp;
-    vector<Point> points;
-    vector<Segment> segments;
-    
-private:
-    Seggen(const Seggen&);
-    Seggen& operator=(const Seggen&);
+    vector<Point> points = {};
+    vector<Segment> segments = {};
 };
 
 #endif  // ENGINE_MAPGEN_SEGGEN_H_

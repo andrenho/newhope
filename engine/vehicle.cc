@@ -13,11 +13,7 @@ using namespace std;
 const VehicleModelP VehicleModel::GENERIC = VehicleModelP(new VehicleModel(3, 7, 4));
 
 Vehicle::Vehicle(Point init_pos, const VehicleModelP& model)
-    : Steering({false, false, 0}), model(model), init_pos(init_pos), cargo_slots({}),
-    body(nullptr), rear_wheel_body(nullptr), front_wheel_body(nullptr),
-    shape(nullptr), rear_wheel_shape(nullptr), front_wheel_shape(nullptr),
-    rear_wheel_joint1(nullptr), rear_wheel_joint2(nullptr),
-    front_wheel_joint1(nullptr), front_wheel_joint2(nullptr)
+    : model(model), init_pos(init_pos)
 {
     for(unsigned int i=0; i<model->CargoSlots; i++) {
         cargo_slots.push_back(EmptySlot);

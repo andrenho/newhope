@@ -12,7 +12,10 @@ using namespace std;
 
 class Minimap {
 public:
-    virtual ~Minimap();
+    virtual ~Minimap() = default;
+
+    Minimap(const Minimap&) = delete;
+    Minimap& operator=(const Minimap&) = delete;
 
     void Initialize();
     void Finalize();
@@ -39,14 +42,11 @@ protected:
     virtual void PresentImage(int x, int y) const = 0;
 
 private:
-    Minimap(const Minimap&);
-    Minimap& operator=(const Minimap&);
-
     static void* ThreadInvoker(void* arg);
     void InitializationThread();
     
-    bool minimap_built, thread_killed;
-    pthread_t thread;
+    bool minimap_built = false, thread_killed = false;
+    pthread_t thread = 0;
 };
 
 #endif  // UI_MINIMAP_H_

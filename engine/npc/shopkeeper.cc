@@ -13,15 +13,11 @@ using namespace std;
 #include "util/stdio.h"
 
 Shopkeeper::Shopkeeper(Point init, class City& city)
-    : Worker(init, city, INT_MAX/2 /* TODO */), resources({})
+    : Worker(init, city, INT_MAX/2 /* TODO */)
 {
     for(Resource res: ResourceList) {
         resources[res] = 250; // TODO
     }
-}
-
-Shopkeeper::~Shopkeeper()
-{
 }
 
 

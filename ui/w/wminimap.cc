@@ -9,12 +9,7 @@ using namespace std;
 #include "ui/w/wireframeui.h"
 
 WMinimap::WMinimap(int w, int h, SDL_Renderer& ren)
-    : Minimap(w, h), ren(ren), sr(nullptr), sf(nullptr), texture(nullptr)
-{
-}
-
-
-WMinimap::~WMinimap()
+    : Minimap(w, h), ren(ren)
 {
 }
 

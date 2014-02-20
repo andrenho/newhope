@@ -18,6 +18,9 @@ public:
     World(int x1, int y1, int x2, int y2, unsigned int seedp);
     ~World();
 
+    World(const World&) = delete;
+    World& operator=(const World&) = delete;
+
     void Initialize();
     void Step();
 
@@ -38,9 +41,6 @@ public:
     const BlockManager Blocks;
 
 private:
-    World(const World&);
-    World& operator=(const World&);
-
     void CreateCities();
     void AddObject(Object::Ptr obj);
     void AddWorkers();
@@ -52,14 +52,14 @@ private:
 
     int x1, y1, x2, y2;
     mutable unsigned int seedp;
-    shared_ptr<class Hero> hero;
+    shared_ptr<class Hero> hero = nullptr;
 
     class MapGen mapgen;
 
-    vector<Object::Ptr> objects;
-    vector<City> cities;
+    vector<Object::Ptr> objects = {};
+    vector<City> cities = {};
 
-    map<struct cpBody*, Object::Ptr> physics_ptr;
+    map<struct cpBody*, Object::Ptr> physics_ptr = {};
 };
 
 #endif  // ENGINE_WORLD_H_

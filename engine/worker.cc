@@ -16,11 +16,6 @@ Worker::Worker(Point init, City& city, int money)
 }
 
 
-Worker::~Worker()
-{
-}
-
-
 shared_ptr<Worker>
 Worker::MakeWorker(Point init, class City& city, WorkerJob job)
 {

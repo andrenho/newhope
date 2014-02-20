@@ -18,6 +18,9 @@ public:
     WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren);
     ~WDialogManager();
 
+    WDialogManager(const WDialogManager&) = delete;
+    WDialogManager& operator=(const WDialogManager&) = delete;
+
     void Speech(class Person const& person, string const& message) const override;
 
     // workers
@@ -30,9 +33,6 @@ protected:
             unsigned int digits) const override;
 
 private:
-    WDialogManager(const WDialogManager&);
-    WDialogManager& operator=(const WDialogManager&);
-
     int MessageBox(class Person const& person, string const& message) const;
 
     void ShopKeeperDraw(class Shopkeeper& shopkeeper, map<Resource, SDL_Rect>& mrects, vector<SDL_Rect>& crects) const;
@@ -44,7 +44,7 @@ private:
 
     struct SDL_Window* win;
     struct SDL_Renderer* ren;
-    TTF_Font *small_font, *main_font;
+    TTF_Font *small_font = nullptr, *main_font = nullptr;
 };
 
 #endif  // UI_W_WDIALOGMANAGER_H_

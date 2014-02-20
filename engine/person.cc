@@ -18,8 +18,7 @@ using namespace std;
 #include "util/stdio.h"
 
 Person::Person(Point init, int money)
-    : init(init), body(nullptr), target(nullptr), shape(nullptr), 
-      joint(nullptr), vehicle(nullptr), in_vehicle(false), loan(0), wallet(new Wallet(money))
+    : init(init), wallet(new Wallet(money))
 {
     // get object fields
     cpFloat x = init.X(), y = init.Y();

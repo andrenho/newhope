@@ -10,14 +10,12 @@ using namespace std;
 class Bartender final : public Worker {
 public:
     Bartender(Point init, class City& city);
-    ~Bartender();
+
+    Bartender(const Bartender&) = delete;
+    Bartender& operator=(const Bartender&) = delete;
 
     void TalkToHero() override;
     string News() const;
-
-private:
-    Bartender(const Bartender&);
-    Bartender& operator=(const Bartender&);
 };
 
 #endif  // ENGINE_NPC_BARTENDER_H_

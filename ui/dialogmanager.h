@@ -7,7 +7,10 @@ using namespace std;
 
 class DialogManager {
 public:
-    virtual ~DialogManager() {}
+    virtual ~DialogManager() = default;
+
+    DialogManager(const DialogManager&) = delete;
+    DialogManager& operator=(const DialogManager&) = delete;
 
     virtual void Speech(class Person const& person, string const& message) const = 0;
     virtual string Question(class Person const& person, string const& message) const;
@@ -24,10 +27,6 @@ protected:
     virtual string QuestionString(class Person const& person, string const& message, bool limit_to_numbers, 
             unsigned int digits) const = 0;
     static vector<string> Wrap(string const& text, unsigned int nchars);
-
-private:
-    DialogManager(const DialogManager&);
-    DialogManager& operator=(const DialogManager&);
 };
 
 #endif  // UI_DIALOGMANAGER_H_

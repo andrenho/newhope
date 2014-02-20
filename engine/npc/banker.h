@@ -7,17 +7,15 @@
 class Banker final : public Worker {
 public:
     Banker(Point init, class City& city);
-    ~Banker();
+
+    Banker(const Banker&) = delete;
+    Banker& operator=(const Banker&) = delete;
 
     void TalkToHero() override;
 
     int MaxLoanPossible(class Person const& person) const { return Collateral(person) - person.LoanValue(); }
     int Collateral(class Person const& person) const;
     void GiveLoan(class Person& person, int value);
-
-private:
-    Banker(const Banker&);
-    Banker& operator=(const Banker&);
 };
 
 #endif  // ENGINE_NPC_BANKER_H_

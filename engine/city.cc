@@ -7,7 +7,7 @@ using namespace std;
 #include "engine/world.h"
 
 City::City(int x, int y, CityType type, int n)
-    : X(x), Y(y), layout(CityLayouts[CityPair(type, n)]), buildings()
+    : X(x), Y(y), layout(CityLayouts[CityPair(type, n)])
 {
     for(auto const& bpos : layout.buildings) {
         buildings.emplace_back(

@@ -10,12 +10,7 @@ using namespace std;
 #include "ui/ui.h"
 
 Minimap::Minimap(int w, int h)
-    : W(w), H(h), minimap_built(false), thread_killed(false), thread(0)
-{
-}
-
-
-Minimap::~Minimap()
+    : W(w), H(h)
 {
 }
 

@@ -11,7 +11,10 @@ using namespace std;
 class Building final {
 public:
     Building(int x, int y, BuildingType type, int n);
+
     Building(Building&&) = default;
+    Building(const Building&) = delete;
+    Building& operator=(const Building&) = delete;
 
     int Tiles(Block (&block)[10], int x, int y) const;
 
@@ -23,9 +26,6 @@ public:
     const int X, Y;
 
 private:
-    Building(const Building&);
-    Building& operator=(const Building&);
-
     const BuildingType type;
     BuildingLayout const& layout;
 };

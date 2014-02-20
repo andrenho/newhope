@@ -21,7 +21,6 @@ using namespace std;
 #include "ui/w/wdialogmanager.h"
 
 WireframeUI::WireframeUI()
-    : active(true), win(nullptr), ren(nullptr), rx(0), ry(0)
 {
     // initialize SDL
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {

@@ -7,22 +7,20 @@ using namespace std;
 #include "engine/person.h"
 
 enum WorkerJob {
-    SHOPKEEPER, BANKER, CAR_DEALER, BARTENDER, MEDIC, SECRETARY, DISPATCHER/*?*/,
+    SHOPKEEPER, BANKER, CAR_DEALER, BARTENDER, MEDIC, SECRETARY, DISPATCHER, /*?*/
 };
 
 class Worker : public Person {
 public:
     static shared_ptr<Worker> MakeWorker(Point init, class City& city, WorkerJob job);
-    virtual ~Worker();
+
+    Worker(const Worker&) = delete;
+    Worker& operator=(const Worker&) = delete;
 
 protected:
     Worker(Point init, class City& city, int money);
 
     class City& city;
-
-private:
-    Worker(const Worker&);
-    Worker& operator=(const Worker&);
 };
 
 #endif  // ENGINE_WORKER_H_

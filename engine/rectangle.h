@@ -9,7 +9,9 @@ public:
         : p1(Point(0,0)), p2(Point(0,0)) {}
     Rectangle(Point const& p1, Point const& p2)
         : p1(p1), p2(p2) {}
-    // automatic copy constructor
+    
+    Rectangle(const Rectangle&) = default;
+    Rectangle& operator=(const Rectangle&) = delete;
 
     Point const& P1() const { return p1; }
     Point const& P2() const { return p2; }
@@ -27,8 +29,6 @@ public:
     }
 
 private:
-    Rectangle& operator=(const Rectangle&);
-
     Point p1, p2;
 };
 

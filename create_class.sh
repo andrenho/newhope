@@ -20,11 +20,9 @@ echo -e "#ifndef $DEF
 class $CLASS {
 public:
     $CLASS();
-    ~$CLASS();
 
-private:
-    $CLASS(const $CLASS&);
-    $CLASS& operator=(const $CLASS&);
+	$CLASS(const $CLASS&) = delete;
+    $CLASS& operator=(const $CLASS&) = delete;
 };
 
 #endif  // $DEF
@@ -35,10 +33,6 @@ private:
 echo -e "#include \"$DIR/${CLASS,,}.h\"
 
 $CLASS::$CLASS()
-{
-}
-
-$CLASS::~$CLASS()
 {
 }
 

@@ -13,7 +13,10 @@ using namespace std;
 class City final {
 public:
     City(int x, int y, CityType type, int n);
+
     City(City&&) = default;
+    City(const City&) = delete;
+    City& operator=(const City&) = delete;
 
     int Tiles(Block (&block)[10], int x, int y) const;
 
@@ -26,11 +29,8 @@ public:
     const int X, Y;
 
 private:
-    City(const City&);
-    City& operator=(const City&);
-
     CityLayout const& layout;
-    vector<Building> buildings;
+    vector<Building> buildings = {};
 };
 
 #endif  // ENGINE_CITY_H_

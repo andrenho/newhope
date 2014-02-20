@@ -17,6 +17,9 @@ public:
     WireframeUI();
     ~WireframeUI();
 
+    WireframeUI(const WireframeUI&) = delete;
+    WireframeUI& operator=(const WireframeUI&) = delete;
+
     void Initialize() override;
     inline bool Active() const override { return active; }
     void Quit() override;
@@ -35,9 +38,6 @@ public:
     void WaitForKeypress() const override;
 
 private:
-    WireframeUI(const WireframeUI&);
-    WireframeUI& operator=(const WireframeUI&);
-
     void CenterScreen(Point const& p) const;
     void GetVisibleTiles(vector<Block[10]>& tiles,
             Rectangle const& area) const;
@@ -49,13 +49,10 @@ private:
             void* data);
     void RenderCircle(double x1, double y1, double r) const;
     
-    bool active;
-    
-    struct SDL_Window* win;
-    struct SDL_Renderer* ren;
-
-    mutable double rx, ry;
-
+    bool active = true;
+    struct SDL_Window* win = nullptr;
+    struct SDL_Renderer* ren = nullptr;
+    mutable double rx = 0, ry = 0;
     const double Z = 10;
 };
 

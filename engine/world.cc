@@ -16,8 +16,8 @@ using namespace std;
 #include "engine/mapgen/mapgen.h"
 
 World::World(int x1, int y1, int x2, int y2, unsigned int seedp)
-    : Blocks(), x1(x1), y1(y1), x2(x2), y2(y2), seedp(seedp), hero(nullptr), 
-      mapgen(MapGen(x1, y1, x2, y2)), objects({}), cities(), physics_ptr({})
+    : Blocks(), x1(x1), y1(y1), x2(x2), y2(y2), seedp(seedp),
+      mapgen(MapGen(x1, y1, x2, y2))
 { 
     cpSpaceSetDefaultCollisionHandler(space, CollisionCallback, 
             NULL, NULL, NULL, this);

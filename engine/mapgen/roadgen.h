@@ -10,16 +10,18 @@ using namespace std;
 class Roadgen final : public Seggen {
 public:
     Roadgen(const Rectangle rect, unsigned int& seedp);
-    vector<vector<Point>> CreateRoads(vector<class City>& cities);
 
+    Roadgen(const Roadgen&) = delete;
+    Roadgen& operator=(const Roadgen&) = delete;
+
+    vector<vector<Point>> CreateRoads(vector<class City>& cities);
+    
 private:
     vector<Point> ConnectCities(class City const& city1, class City const& city2);
     void FindUnconnected();
 
     set<pair<const City*, const City*>> already_connected = {};
 
-    Roadgen(const Roadgen&) = delete;
-    Roadgen& operator=(const Roadgen&) = delete;
 };
 
 #endif  // ENGINE_MAPGEN_ROADGEN_H_

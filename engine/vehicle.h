@@ -42,6 +42,9 @@ public:
     Vehicle(Point init_pos, const VehicleModelP& model);
     ~Vehicle();
 
+    Vehicle(const Vehicle&) = delete;
+    Vehicle& operator=(const Vehicle&) = delete;
+
     void Step() override;
 
     Point Position() const override;
@@ -58,12 +61,9 @@ public:
     void PhysicsShapes(struct cpShape*& shape, struct cpShape*& rear_wheel_shape, struct cpShape*& front_wheel_shape) const;
     inline struct cpBody* PhysicsBodyPtr() const { return body; }
 
-    VehicleSteering Steering;
+    VehicleSteering Steering = { false, false, 0 };
 
 private:
-    Vehicle(const Vehicle&);
-    Vehicle& operator=(const Vehicle&);
-
     void UpdateFriction(struct cpBody* body);
     void UpdateDrive(struct cpBody* wheel, double maxForce);
     void UpdateTurn(struct cpBody* wheel);
@@ -73,12 +73,12 @@ private:
 
     VehicleModelP const& model;
     const Point init_pos;
-    vector<CargoSlot> cargo_slots;
+    vector<CargoSlot> cargo_slots = {};
 
-    struct cpBody *body, *rear_wheel_body, *front_wheel_body;
-    struct cpShape *shape, *rear_wheel_shape, *front_wheel_shape;
-    struct cpConstraint *rear_wheel_joint1, *rear_wheel_joint2,
-                *front_wheel_joint1, *front_wheel_joint2;
+    struct cpBody *body = nullptr, *rear_wheel_body = nullptr, *front_wheel_body = nullptr;
+    struct cpShape *shape = nullptr, *rear_wheel_shape = nullptr, *front_wheel_shape = nullptr;
+    struct cpConstraint *rear_wheel_joint1 = nullptr, *rear_wheel_joint2 = nullptr,
+                *front_wheel_joint1 = nullptr, *front_wheel_joint2 = nullptr;
 };
 
 #endif  // ENGINE_VEHICLE_H_

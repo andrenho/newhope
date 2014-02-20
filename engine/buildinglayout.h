@@ -18,20 +18,19 @@ typedef pair<BuildingType, int> BuildingPair;
 typedef pair<WorkerJob, Point> WorkerPair;
 
 struct BuildingLayout final {
-    BuildingLayout()
-        : w(0), h(0), floors(0), floor({}), label({}), workers({}) {}
-
-    BuildingLayout(int w, int h, int floors,
-            vector<vector<string>> floor,
-            map<const char, const Block> label,
+    BuildingLayout(int w, int h, int floors, vector<vector<string>> floor, map<const char, const Block> label,
             vector<WorkerPair> workers)
-        : w(w), h(h), floors(floors), floor(floor), label(label),
-              workers(workers){}
+        : w(w), h(h), floors(floors), floor(floor), label(label), workers(workers){}
+    BuildingLayout() {}
 
-    int w, h, floors;
-    vector<vector<string>> floor;
-    map<const char, const Block> label;
-    vector<WorkerPair> workers;
+    BuildingLayout(BuildingLayout&&) = default;
+    BuildingLayout(const BuildingLayout&) = default;
+    BuildingLayout& operator=(const BuildingLayout&) = delete;
+
+    int w = 0, h = 0, floors = 0;
+    vector<vector<string>> floor = {};
+    map<const char, const Block> label = {};
+    vector<WorkerPair> workers = {};
 };
 
 extern map<BuildingPair, BuildingLayout> BuildingLayouts;

@@ -17,7 +17,7 @@ using namespace std;
 #include "util/stdio.h"
 
 WDialogManager::WDialogManager(struct SDL_Window* win, struct SDL_Renderer* ren)
-    : win(win), ren(ren), small_font(nullptr), main_font(nullptr)
+    : win(win), ren(ren)
 {
     // initialize TTF_Init
     if(TTF_Init() == -1) {
