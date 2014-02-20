@@ -30,7 +30,7 @@ public:
         vector<unique_ptr<Command>> a; a.push_back(unique_ptr<Command>(new QuitCommand())); return a;
     }
 
-    Rectangle& GetVisibleArea(Rectangle& r) const override { r.setP1(Point(0, 0)); r.setP2(Point(100, 100)); return r; }
+    Rectangle_& GetVisibleArea(Rectangle_& r) const override { r.setP1(Point(0, 0)); r.setP2(Point(100, 100)); return r; }
     void RedrawScene() const override { }
     void PresentScene() const override { }
 

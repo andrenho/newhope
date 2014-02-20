@@ -29,7 +29,7 @@ public:
 
     virtual vector<unique_ptr<Command>> GetEvents() const = 0;
 
-    virtual Rectangle& GetVisibleArea(Rectangle& r) const = 0;
+    virtual Rectangle_& GetVisibleArea(Rectangle_& r) const = 0;
     virtual void RedrawScene() const = 0;
     virtual void PresentScene() const = 0;
 

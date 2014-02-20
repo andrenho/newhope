@@ -123,8 +123,8 @@ WireframeUI::GetEvents() const
 }
 
 
-Rectangle& 
-WireframeUI::GetVisibleArea(Rectangle& r) const
+Rectangle_& 
+WireframeUI::GetVisibleArea(Rectangle_& r) const
 {
     int win_w, win_h;
     SDL_GetWindowSize(win, &win_w, &win_h);
@@ -143,7 +143,7 @@ WireframeUI::RedrawScene() const
     Point hero_pos = world->Hero().Position();
     CenterScreen(hero_pos);
 
-    Rectangle visible_area;
+    Rectangle_ visible_area;
     GetVisibleArea(visible_area);
     RenderScene(visible_area);
 }
@@ -199,7 +199,7 @@ WireframeUI::CenterScreen(Point const& p) const
 
 
 void
-WireframeUI::RenderScene(Rectangle const& rect) const
+WireframeUI::RenderScene(Rectangle_ const& rect) const
 {
     SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
     SDL_RenderClear(ren);
@@ -309,7 +309,7 @@ WireframeUI::DrawStaticShape(cpBody *body, cpShape *shape, void* data)
     (void) body;
 
     WireframeUI* self = static_cast<WireframeUI*>(data);
-    Rectangle r;
+    Rectangle_ r;
     self->GetVisibleArea(r);
 
     cpBB bb = cpShapeGetBB(shape);

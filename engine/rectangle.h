@@ -3,15 +3,15 @@
 
 #include "engine/point.h"
 
-class Rectangle final {
+class Rectangle_ final {
 public:
-    Rectangle()
+    Rectangle_()
         : p1(Point(0,0)), p2(Point(0,0)) {}
-    Rectangle(Point const& p1, Point const& p2)
+    Rectangle_(Point const& p1, Point const& p2)
         : p1(p1), p2(p2) {}
     
-    Rectangle(const Rectangle&) = default;
-    Rectangle& operator=(const Rectangle&) = delete;
+    Rectangle_(const Rectangle_&) = default;
+    Rectangle_& operator=(const Rectangle_&) = delete;
 
     Point const& P1() const { return p1; }
     Point const& P2() const { return p2; }
@@ -24,7 +24,7 @@ public:
             && p.X() <= p2.X() && p.Y() <= p2.Y();
     }
 
-    bool operator<(const Rectangle& rhs) const {
+    bool operator<(const Rectangle_& rhs) const {
         return (p1.Id()+p2.Id()) < (rhs.p1.Id()+rhs.p2.Id());
     }
 

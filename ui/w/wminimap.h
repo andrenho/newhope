@@ -18,8 +18,8 @@ protected:
     void CreateImage(int w, int h) override;
     void DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b) override;
     void DrawPoints(vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b) override;
-    void DrawRectangle(int x1, int y1, int x2, int y2, bool fill, uint8_t r, uint8_t g, uint8_t b) const override;
-    void DrawRectangleScreen(int x1, int y1, int x2, int y2, bool fill, uint8_t r, uint8_t g, uint8_t b) const override;
+    void DrawRectangle_(int x1, int y1, int x2, int y2, bool fill, uint8_t r, uint8_t g, uint8_t b) const override;
+    void DrawRectangle_Screen(int x1, int y1, int x2, int y2, bool fill, uint8_t r, uint8_t g, uint8_t b) const override;
     void DrawWaitingScreen() const override {}
     void FinishImage() override;
     void PresentImage(int x, int y) const override;

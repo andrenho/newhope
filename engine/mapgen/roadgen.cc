@@ -9,7 +9,7 @@ using namespace std;
 
 #include "engine/city.h"
 
-Roadgen::Roadgen(const Rectangle rect, unsigned int& seedp)
+Roadgen::Roadgen(const Rectangle_ rect, unsigned int& seedp)
     : Seggen(rect, seedp)
 {
 }

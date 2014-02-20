@@ -31,9 +31,9 @@ protected:
     virtual void DrawPoint(int x, int y, uint8_t r, uint8_t g, uint8_t b) = 0;
     virtual void DrawPoints(vector<Point> const& pts, 
             uint8_t r, uint8_t g, uint8_t b) = 0;
-    virtual void DrawRectangle(int x1, int y1, int x2, int y2, 
+    virtual void DrawRectangle_(int x1, int y1, int x2, int y2, 
             bool fill, uint8_t r, uint8_t g, uint8_t b) const = 0;
-    virtual void DrawRectangleScreen(int x1, int y1, int x2, int y2, 
+    virtual void DrawRectangle_Screen(int x1, int y1, int x2, int y2, 
             bool fill, uint8_t r, uint8_t g, uint8_t b) const = 0;
     virtual void DrawWaitingScreen() const = 0;
     virtual void FinishImage() = 0;

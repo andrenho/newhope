@@ -56,7 +56,7 @@ private:
     bool RandomPointWithBiome(Point& p, Block biome,
         unordered_set<Point> ignore) const;
 
-    const Rectangle rect;
+    const Rectangle_ rect;
     mutable unsigned int seedp;
 
     unordered_set<Point> points = {};

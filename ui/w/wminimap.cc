@@ -64,7 +64,7 @@ WMinimap::DrawPoints(vector<Point> const& pts, uint8_t r, uint8_t g, uint8_t b)
 
 
 void 
-WMinimap::DrawRectangleScreen(int x1, int y1, int x2, int y2, bool fill, 
+WMinimap::DrawRectangle_Screen(int x1, int y1, int x2, int y2, bool fill, 
         uint8_t r, uint8_t g, uint8_t b) const
 {
     SDL_SetRenderDrawColor(&ren, r, g, b, SDL_ALPHA_OPAQUE);
@@ -78,7 +78,7 @@ WMinimap::DrawRectangleScreen(int x1, int y1, int x2, int y2, bool fill,
 
 
 void 
-WMinimap::DrawRectangle(int x1, int y1, int x2, int y2, bool fill, 
+WMinimap::DrawRectangle_(int x1, int y1, int x2, int y2, bool fill, 
         uint8_t r, uint8_t g, uint8_t b) const
 {
     SDL_SetRenderDrawColor(sr, r, g, b, SDL_ALPHA_OPAQUE);

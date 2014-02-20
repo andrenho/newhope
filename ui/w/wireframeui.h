@@ -10,7 +10,7 @@ using namespace std;
 
 class Object;
 class Point;
-class Rectangle;
+class Rectangle_;
 
 class WireframeUI final : public UI {
 public:
@@ -29,7 +29,7 @@ public:
 
     vector<unique_ptr<Command>> GetEvents() const override;
 
-    Rectangle& GetVisibleArea(Rectangle& r) const override;
+    Rectangle_& GetVisibleArea(Rectangle_& r) const override;
     void RedrawScene() const override;
     void PresentScene() const override;
 
@@ -40,8 +40,8 @@ public:
 private:
     void CenterScreen(Point const& p) const;
     void GetVisibleTiles(vector<Block[10]>& tiles,
-            Rectangle const& area) const;
-    void RenderScene(Rectangle const& rect) const;
+            Rectangle_ const& area) const;
+    void RenderScene(Rectangle_ const& rect) const;
     void DrawTile(int x, int y) const;
     void DrawObject(Object const& object) const;
     void DrawShape(struct cpBody* body, struct cpShape* shape) const;

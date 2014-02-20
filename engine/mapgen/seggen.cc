@@ -9,7 +9,7 @@ using namespace std;
 #include "./main.h"
 #include "engine/world.h"
 
-Seggen::Seggen(const Rectangle rect, unsigned int& seedp)
+Seggen::Seggen(const Rectangle_ rect, unsigned int& seedp)
     : rect(rect), seedp(seedp)
 {
     CreatePoints();
@@ -51,7 +51,7 @@ Seggen::AddSegment(vector<Point> segment, int width)
 
 Segment::Segment(Point const& p1, Point const& p2, int width)
     : p1(p1), p2(p2), width(width), 
-      rect(Rectangle(
+      rect(Rectangle_(
                   Point(min(p1.X()-width, p2.X()-width), min(p1.Y()-width, p2.Y()-width)),
                   Point(max(p1.X()+width, p2.X()+width), max(p1.Y()+width, p2.Y()+width))))
 {

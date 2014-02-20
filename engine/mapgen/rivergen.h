@@ -8,7 +8,7 @@ using namespace std;
 
 class Rivergen final : public Seggen {
 public:
-    Rivergen(const double (&hm)[255][255], const Rectangle rect,
+    Rivergen(const double (&hm)[255][255], const Rectangle_ rect,
             unsigned int& seedp);
 
     Rivergen(Rivergen const&) = delete;

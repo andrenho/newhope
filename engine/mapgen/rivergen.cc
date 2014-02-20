@@ -10,7 +10,7 @@ using namespace std;
 #include "./main.h"
 #include "engine/world.h"
 
-Rivergen::Rivergen(const double (&hm)[255][255], const Rectangle rect, unsigned int& seedp)
+Rivergen::Rivergen(const double (&hm)[255][255], const Rectangle_ rect, unsigned int& seedp)
     : Seggen(rect, seedp), hm(hm)
 {
     CalculateAltitudes();

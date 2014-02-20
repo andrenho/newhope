@@ -19,7 +19,7 @@ public:
 private:
     Point const& p1, p2;
     const int width;
-    Rectangle const rect;
+    Rectangle_ const rect;
     vector<Point> polygon = {};
 };
 
@@ -30,7 +30,7 @@ public:
     void AddSegment(vector<Point> points, int width);
 
 protected:
-    Seggen(const Rectangle rect, unsigned int& seedp);
+    Seggen(const Rectangle_ rect, unsigned int& seedp);
     virtual ~Seggen() = default;
 
     Seggen(const Seggen&) = delete;
@@ -38,7 +38,7 @@ protected:
 
     virtual void CreatePoints();
 
-    const Rectangle rect;
+    const Rectangle_ rect;
     unsigned int& seedp;
     vector<Point> points = {};
     vector<Segment> segments = {};

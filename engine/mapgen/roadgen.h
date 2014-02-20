@@ -9,7 +9,7 @@ using namespace std;
 
 class Roadgen final : public Seggen {
 public:
-    Roadgen(const Rectangle rect, unsigned int& seedp);
+    Roadgen(const Rectangle_ rect, unsigned int& seedp);
 
     Roadgen(const Roadgen&) = delete;
     Roadgen& operator=(const Roadgen&) = delete;

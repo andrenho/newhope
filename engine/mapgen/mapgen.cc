@@ -24,7 +24,7 @@ MapGen::MapGen(int x1, int y1, int x2, int y2)
 
 
 MapGen::MapGen(int x1, int y1, int x2, int y2, unsigned int seed)
-    : rect(Rectangle(Point(x1, y1), Point(x2, y2))), seedp(seed)
+    : rect(Rectangle_(Point(x1, y1), Point(x2, y2))), seedp(seed)
 {
 }
 
