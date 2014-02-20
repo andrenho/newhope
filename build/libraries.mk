@@ -13,10 +13,6 @@ else
   $(error The SDL2 library was not detected in the system. Please install it and try again)
 endif
 
-# google-glog
-CPPFLAGS += `pkg-config --cflags libglog`
-LDFLAGS += `pkg-config --libs libglog`
-
 # chipmkunk library
 CPPFLAGS += -isystem/usr/include/chipmunk
 LDFLAGS += -lchipmunk -lm

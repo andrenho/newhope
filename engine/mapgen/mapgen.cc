@@ -38,13 +38,10 @@ void
 MapGen::Create()
 {
     // create land
-    LOG(INFO) << "Creating points...\n";
     CreatePoints(NUMPOINTS);
-    LOG(INFO) << "Creating and applying heightmap...\n";
     CreateHeightmap();
     
     // create rivers
-    LOG(INFO) << "Creating rivers...\n";
     rivergen = unique_ptr<Rivergen>(new Rivergen(hm, rect, seedp));
     for(int i=0; i<12; i++) {
         rivers.push_back(rivergen->CreateRiver());
@@ -52,14 +49,9 @@ MapGen::Create()
     roadgen = unique_ptr<Roadgen>(new Roadgen(rect, seedp));
 
     // find biomes
-    LOG(INFO) << "Calculating moisture...\n";
     CalculateMoisture();
-    LOG(INFO) << "Creating biomes...\n";
     CreateBiomes();
-    LOG(INFO) << "Creating beaches...\n";
     CreateBeaches();
-
-    LOG(INFO) << "World creation complete.\n";
 }
 
 
@@ -67,7 +59,6 @@ void
 MapGen::CreateRoads(vector<class City>& cities)
 {
     // create roads
-    LOG(INFO) << "Creating roads...\n";
     roads = roadgen->CreateRoads(cities);
 }
 
@@ -135,7 +126,6 @@ MapGen::CreatePoints(int npoints)
 void
 MapGen::CreateHeightmap()
 {
-    LOG(INFO) << "  Clearing heightmap...\n";
     // clear up
     for(int x=0; x<255; x++) {
         for(int y=0; y<255; y++) {
@@ -144,9 +134,7 @@ MapGen::CreateHeightmap()
     }
 
     // create hills
-    LOG(INFO) << "  Creating hills...\n";
     for(int i=0; i<500; i++) {
-        LOG(INFO) << "    Hill " << i << "...\n";
         int x, y;
         double r;
         RandomOffcentre(x, y, r);
@@ -154,7 +142,6 @@ MapGen::CreateHeightmap()
     }
 
     // normalize
-    LOG(INFO) << "  Normalizing heightmap...\n";
     double max_alt = 0;
     for(int x=0; x<255; x++) {
         for(int y=0; y<255; y++) {
@@ -173,7 +160,6 @@ MapGen::CreateHeightmap()
     }
 
     // apply heightmap
-    LOG(INFO) << "  Applying heightmap...\n";
     for(auto const& p : points) {
         data[p].Altitude = PointAltitude(p);
     }

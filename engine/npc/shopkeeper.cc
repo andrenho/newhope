@@ -76,7 +76,6 @@ Shopkeeper::Sell(Person& person, Resource resource, unsigned int amount, string&
 
     // message
     message = mprintf(_("That'll be $%d."), price);
-    LOG(INFO) << amount << " " << resource_name(resource) << " bought for $" << price;
 
     // world response
     world->RecalculatePrices();
@@ -119,7 +118,6 @@ Shopkeeper::Buy(Person& person, Resource resource, unsigned int amount, string& 
 
     // message
     message = mprintf(_("Here's $%d. Spend wisely."), price);
-    LOG(INFO) << amount << " " << resource_name(resource) << " sold for $" << price;
 
     // world response
     world->RecalculatePrices();

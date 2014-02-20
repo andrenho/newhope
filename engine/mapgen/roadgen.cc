@@ -45,7 +45,9 @@ Roadgen::CreateRoads(vector<class City>& cities)
         // connect the closest roads
         for(unsigned int i=0; i<3; i++) {
             if(cities_by_distance.size() > i) {
-                roads.push_back(ConnectCities(city1, *cities_by_distance[i]));
+                auto road = ConnectCities(city1, *cities_by_distance[i]);
+                roads.push_back(road);
+                AddSegment(road, 20);
             }
         }
     }

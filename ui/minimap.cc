@@ -43,8 +43,6 @@ Minimap::ThreadInvoker(void* self)
 void
 Minimap::InitializationThread()
 {
-    LOG(INFO) << "Minimap creation thread initialized.\n";
-
     int limit_x1, limit_y1, limit_x2, limit_y2;
     world->Limits(limit_x1, limit_y1, limit_x2, limit_y2);
 
@@ -100,8 +98,6 @@ Minimap::InitializationThread()
 
     FinishImage();
     minimap_built = true;
-
-    LOG(INFO) << "Minimap creation thread finished.\n";
 }
 
 

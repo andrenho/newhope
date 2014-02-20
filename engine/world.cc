@@ -37,26 +37,21 @@ World::Initialize()
     mapgen.Create();
 
     // initialize vehicles
-    LOG(INFO) << "Initializing vehicles.\n";
     shared_ptr<Vehicle> car(new Vehicle(Point(10, 10), VehicleModel::GENERIC));
     AddObject(car);
 
     // initialize people
-    LOG(INFO) << "Initializing hero.\n";
     hero = shared_ptr<class Hero>(new class Hero(Point(0, 0) , car));
     AddObject(hero);
 
     // initialize cities
-    LOG(INFO) << "Creating cities.\n";
     CreateCities();
 
     // create roads
     mapgen.CreateRoads(cities);
 
     // create people
-    LOG(INFO) << "Creating workers.\n";
     AddWorkers();
-    LOG(INFO) << "Adding static objects.\n";
     AddStaticObjects();
 }
 

@@ -48,7 +48,6 @@ DialogManager::QuestionNumber(class Person const& person, string const& message,
     try {
         return stoi(QuestionString(person, message, true, digits));
     } catch(exception& e) {
-        LOG(WARNING) << "Exception caught: '" << e.what() << "'\n";
         return 0;
     }
 }

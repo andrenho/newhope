@@ -1,7 +1,6 @@
 #include <chipmunk.h>
 #include <libintl.h>
 #include <locale.h>
-#include <glog/logging.h>
 
 #include <ctime>
 #include <cstdlib>
@@ -50,21 +49,16 @@ static void
 initialize(int argc, char** argv)
 {
     (void) argc;
-
-    // initialize glog
-    google::InitGoogleLogging(argv[0]);
-    google::InstallFailureSignalHandler();
+    (void) argv;
 
     // initialize seed
     unsigned int seedp = static_cast<unsigned int>(time(nullptr));
     //unsigned int seedp = 1;
-    LOG(INFO) << "Seed initialized to " << seedp << ".\n";
 
     // initialize gettext
-    char* locale = setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "");
     bindtextdomain("newhope", "./" LOCALEDIR);
     textdomain("newhope");
-    LOG(INFO) << "Locale set to " << locale << ".\n";
 
     // initialize physics
     space = cpSpaceNew();
@@ -122,7 +116,6 @@ finalize()
     ui.reset();
     world.reset();
     cpSpaceFree(space);
-    google::ShutdownGoogleLogging();
 }
 
 // vim: ts=4:sw=4:sts=4:expandtab
