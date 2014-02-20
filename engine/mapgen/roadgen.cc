@@ -42,16 +42,13 @@ Roadgen::CreateRoads(vector<class City>& cities)
                     return p1.Distance(Point(a->X, a->Y)) < p1.Distance(Point(b->X, b->Y));
                 });
 
-        // connect the two closest roads
-        if(cities_by_distance.size() > 0) {
-            roads.push_back(ConnectCities(city1, *cities_by_distance[0]));
-        }
-        if(cities_by_distance.size() > 1) {
-            roads.push_back(ConnectCities(city1, *cities_by_distance[1]));
+        // connect the closest roads
+        for(unsigned int i=0; i<3; i++) {
+            if(cities_by_distance.size() > i) {
+                roads.push_back(ConnectCities(city1, *cities_by_distance[i]));
+            }
         }
     }
-
-    //FindUnconnected();
 
     return roads;
 }
