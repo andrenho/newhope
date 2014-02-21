@@ -11,8 +11,8 @@ using namespace std;
 class Point final {
 public:
     Point(double x, double y)
-        : x(static_cast<double>(floor(x*100)/100.0)),
-          y(static_cast<double>(floor(y*100)/100.0)),
+        : x(floor(x*100)/100.0),
+          y(floor(y*100)/100.0),
           id(static_cast<int64_t>(this->x * 100 * 100000 + this->y * 100)) {}
 
     Point& operator=(const Point& other) { 

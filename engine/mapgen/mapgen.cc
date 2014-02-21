@@ -74,8 +74,10 @@ MapGen::Terrain(int x, int y) const
     if((it = tile_cache.find(pt)) != tile_cache.end()) {
         return it->second;
     } else if(rivergen->TileInSegment(x, y)) {
+        tile_cache[Point(x,y)] = Block::WATER;
         return Block::WATER;
     } else if(roadgen->TileInSegment(x, y)) {
+        tile_cache[Point(x,y)] = Block::ASPHALT;
         return Block::ASPHALT;
     } else {
         Point p = ClosestPoint(x, y);
