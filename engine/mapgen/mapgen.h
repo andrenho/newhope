@@ -59,12 +59,12 @@ private:
     const Rectangle_ rect;
     mutable unsigned int seedp;
 
-    unordered_set<Point> points = {};
-    unordered_map<Point,PointData> data = {};
+    unordered_set<Point> points;
+    unordered_map<Point,PointData> data;
     vector<vector<Point>> rivers = {}, roads = {};
     double hm[255][255] = {}; // heightmap
 
-    mutable unordered_map<Point,Block> tile_cache = {};
+    mutable unordered_map<Point,Block> tile_cache;
 
     unique_ptr<class Rivergen> rivergen = nullptr;
     unique_ptr<class Roadgen> roadgen = nullptr;

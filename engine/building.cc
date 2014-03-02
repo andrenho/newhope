@@ -1,7 +1,7 @@
 #include "engine/building.h"
 
 Building::Building(int x, int y, BuildingType type, int n)
-    : X(x), Y(y), type(type), 
+    : X(x), Y(y),
       layout(BuildingLayouts[BuildingPair(type, n)])
 {
 }

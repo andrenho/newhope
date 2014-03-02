@@ -17,7 +17,7 @@ DialogManager::Wrap(string const& text, unsigned int nchars)
         string::size_type pos;
         if((pos = text.substr(last_ptr, ptr).find('\n')) != string::npos) {
             lines.push_back(text.substr(last_ptr, pos));
-            last_ptr = ptr = last_ptr + static_cast<int>(pos)+1;
+            last_ptr = ptr = last_ptr + static_cast<unsigned int>(pos)+1;
             continue;
         }
 
@@ -47,7 +47,7 @@ int
 DialogManager::QuestionNumber(class Person const& person, string const& message, unsigned int digits) const
 {
     try {
-        return strtol(QuestionString(person, message, true, digits).c_str(), 0, 10);
+        return static_cast<int>(strtol(QuestionString(person, message, true, digits).c_str(), 0, 10));
     } catch(exception& e) {
         return 0;
     }

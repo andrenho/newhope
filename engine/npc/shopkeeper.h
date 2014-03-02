@@ -26,9 +26,9 @@ public:
     void TalkToHero() override;
 
 private:
-    void ChangeCargoAmount(Resource res, int amount);
+    void ChangeCargoAmount(Resource res, unsigned int amount);
 
-    map<Resource, int> resources = {};
+    map<Resource, unsigned int> resources = {};
 };
 
 #endif  // ENGINE_NPC_SHOPKEEPER_H_

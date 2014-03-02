@@ -91,18 +91,18 @@ main_loop()
 
         // advance time
         world->Step();
-        int64_t time_step = next_frame - static_cast<int>(ui->Now());
+//        int64_t time_step = next_frame - static_cast<int>(ui->Now());
 
         // redraw screen
         ui->RedrawScene();
-        int64_t redraw_time = static_cast<int>(next_frame) - static_cast<int>(ui->Now());
+//        int64_t redraw_time = static_cast<int>(next_frame) - static_cast<int>(ui->Now());
         ui->PresentScene();
 
         // wait for next frame
         uint32_t now = ui->Now();
-        int64_t time_present = static_cast<int>(next_frame) - static_cast<int>(now);
+//        int64_t time_present = static_cast<int>(next_frame) - static_cast<int>(now);
 
-        cout << "Step: " << time_step << " Redrawing: " << redraw_time << " Rendering: " << time_present << "\n";
+//        cout << "Step: " << time_step << " Redrawing: " << redraw_time << " Rendering: " << time_present << "\n";
         
         if(now < next_frame) {
             ui->Wait(next_frame - now);

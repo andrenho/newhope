@@ -1,6 +1,7 @@
 #include "ui/w/wdialogmanager.h"
 
 #include <algorithm>
+#include <climits>
 #include <cstdint>
 #include <iostream>
 #include <string>
@@ -281,7 +282,7 @@ WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper,
         map<Resource, SDL_Rect> const& mrects, vector<SDL_Rect> const& crects) const
 {
     Resource dragging = Resource::NOTHING;
-    int cargo_slot = -1;
+    unsigned int cargo_slot = UINT_MAX;
     enum { BUYING, SELLING, NOTHING } action = NOTHING;
 
     auto in_rect = [](int32_t& x, int32_t& y, SDL_Rect const& rect) -> bool {
@@ -309,7 +310,7 @@ WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper,
                         }
                     }
                     // check if dragging from cargo
-                    int slot = 0;
+                    unsigned int slot = 0;
                     for(auto const& crect: crects) {
                         if(in_rect(e.button.x, e.button.y, crect)) {
                             cargo_slot = slot;
@@ -331,7 +332,7 @@ WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper,
                                 unsigned int amount = min(100U, shopkeeper.ResourceAmount(dragging));
                                 if(SDL_GetModState() & KMOD_SHIFT) {
                                     string s = mprintf(_("How much %s do you want to buy?"), resource_name(dragging).c_str());
-                                    amount = QuestionNumber(shopkeeper, s, 5);
+                                    amount = static_cast<unsigned int>(QuestionNumber(shopkeeper, s, 5));
                                 }
                                 shopkeeper.Sell(world->Hero(), dragging, amount, message);
                                 if(!message.empty()) {
@@ -348,10 +349,10 @@ WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper,
                             if(in_rect(e.button.x, e.button.y, mrect.second)) {
                                 auto& slot = world->Hero().Vehicle().Cargo(cargo_slot);
                                 if(slot.Cargo != Resource::NOTHING) {
-                                    int amount = min(100U, slot.Amount);
+                                    unsigned int amount = min(100U, slot.Amount);
                                     if(SDL_GetModState() & KMOD_SHIFT) {
                                         string s = mprintf(_("How much %s do you want to sell?"), resource_name(slot.Cargo).c_str());
-                                        amount = QuestionNumber(shopkeeper, s, 5);
+                                        amount = static_cast<unsigned int>(QuestionNumber(shopkeeper, s, 5));
                                     }
                                     string message;
                                     shopkeeper.Buy(world->Hero(), slot.Cargo, amount, message);
@@ -373,7 +374,6 @@ WDialogManager::ShopKeeperEvents(class Shopkeeper& shopkeeper,
             }
         }
     }
-    return false;
 }
 
 

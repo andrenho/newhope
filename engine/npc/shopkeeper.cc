@@ -28,9 +28,9 @@ Shopkeeper::TalkToHero()
 
 
 void 
-Shopkeeper::ChangeCargoAmount(Resource res, int amount)
+Shopkeeper::ChangeCargoAmount(Resource res, unsigned int amount)
 {
-    assert(resources.at(res) + amount >= 0);
+    assert(static_cast<int>(resources.at(res)) + static_cast<int>(amount) >= 0);
     resources[res] += amount;
 }
 
@@ -71,7 +71,7 @@ Shopkeeper::Sell(Person& person, Resource resource, unsigned int amount, string&
 
     // purchase
     person_vehicle->AddCargo(resource, amount);
-    ChangeCargoAmount(resource, -static_cast<int>(amount));
+    ChangeCargoAmount(resource, -amount);
 
     // message
     message = mprintf(_("That'll be $%d."), price);
@@ -112,7 +112,7 @@ Shopkeeper::Buy(Person& person, Resource resource, unsigned int amount, string& 
         return false;
     }
 
-    ChangeCargoAmount(resource, static_cast<int>(amount));
+    ChangeCargoAmount(resource, amount);
     person_vehicle->RemoveCargo(resource, amount);
 
     // message

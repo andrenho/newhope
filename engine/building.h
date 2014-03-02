@@ -26,7 +26,6 @@ public:
     const int X, Y;
 
 private:
-    const BuildingType type;
     BuildingLayout const& layout;
 };
 

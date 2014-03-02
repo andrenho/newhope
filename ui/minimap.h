@@ -46,7 +46,7 @@ private:
     void InitializationThread();
     
     bool minimap_built = false, thread_killed = false;
-    pthread_t thread;
+    pthread_t thread = 0;
 };
 
 #endif  // UI_MINIMAP_H_

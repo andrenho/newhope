@@ -78,7 +78,7 @@ Segment::TileInSegment(int x, int y) const
     // coarse check
     if(rect.ContainsPoint(p)) {
         // fine check
-        uint32_t i, j;
+        long unsigned int i, j;
         bool c = false;
         auto nvert = polygon.size();
         for(i=0, j=nvert-1; i < nvert; j = i++) {

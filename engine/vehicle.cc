@@ -161,7 +161,7 @@ Vehicle::AddCargo(Resource res, unsigned int amount)
     unsigned int left = amount;
     for(auto& slot: cargo_slots) {
         if(left > 0 && (slot.Cargo == res || slot.Cargo == Resource::NOTHING)) {
-            int add_to_slot = min(100 - slot.Amount, left);
+            unsigned int add_to_slot = min(100 - slot.Amount, left);
             left -= add_to_slot;
             slot = { res, slot.Amount + add_to_slot };
         }
