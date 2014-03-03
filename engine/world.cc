@@ -76,7 +76,7 @@ World::Tiles(Block (&block)[10], int x, int y) const
     for(auto const& city: cities) {
         if(x >= city.X && x<(city.X+city.W())
         && y >= city.Y && y<(city.Y+city.H())) {
-            int n = city.Tiles(block, x, y);
+            int n = city.Tiles(block, x-city.X, y-city.Y);
             if(block[0] == Block::EMPTY) {
                 block[0] = mapgen.Terrain(x, y);
             }
