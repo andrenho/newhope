@@ -10,6 +10,7 @@ map<CityPair, CityLayout> CityLayouts = {
             CityLayout(70, 20,
             {
                 BuildingPosition(BuildingPair(BuildingType::GENERAL_STORE, 1), Point(0, 0)),
+                BuildingPosition(BuildingPair(BuildingType::BAR, 1), Point(17, 0)),
             }),
         },
     }, {
@@ -28,6 +29,7 @@ map<CityPair, CityLayout> CityLayouts = {
             CityLayout(70, 20,
             {
                 BuildingPosition(BuildingPair(BuildingType::GENERAL_STORE, 1), Point(0, 0)),
+                BuildingPosition(BuildingPair(BuildingType::BAR, 1), Point(17, 0)),
             }),
         },
     }, {
@@ -36,6 +38,7 @@ map<CityPair, CityLayout> CityLayouts = {
             CityLayout(70, 20,
             {
                 BuildingPosition(BuildingPair(BuildingType::GENERAL_STORE, 1), Point(0, 0)),
+                BuildingPosition(BuildingPair(BuildingType::BAR, 1), Point(17, 0)),
             }),
         },
     }, {
@@ -44,6 +47,7 @@ map<CityPair, CityLayout> CityLayouts = {
             CityLayout(70, 20,
             {
                 BuildingPosition(BuildingPair(BuildingType::GENERAL_STORE, 1), Point(0, 0)),
+                BuildingPosition(BuildingPair(BuildingType::BAR, 1), Point(17, 0)),
             }),
         },
     }, {
@@ -52,6 +56,7 @@ map<CityPair, CityLayout> CityLayouts = {
             CityLayout(70, 20,
             {
                 BuildingPosition(BuildingPair(BuildingType::GENERAL_STORE, 1), Point(0, 0)),
+                BuildingPosition(BuildingPair(BuildingType::BAR, 1), Point(17, 0)),
             }),
         },
     }, {
@@ -60,6 +65,7 @@ map<CityPair, CityLayout> CityLayouts = {
             CityLayout(70, 20,
             {
                 BuildingPosition(BuildingPair(BuildingType::GENERAL_STORE, 1), Point(0, 0)),
+                BuildingPosition(BuildingPair(BuildingType::BAR, 1), Point(17, 0)),
             }),
         },
     },

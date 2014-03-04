@@ -132,6 +132,7 @@ map<BuildingPair, BuildingLayout> BuildingLayouts = {
         },
         {
             { WorkerJob::BARTENDER, Point(1.5, 1.5) },
+            { WorkerJob::SMUGGLER, Point(3.5, 1.5) },
         }),
     },
 
