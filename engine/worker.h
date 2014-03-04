@@ -7,7 +7,7 @@ using namespace std;
 #include "engine/person.h"
 
 enum WorkerJob {
-    SHOPKEEPER, BANKER, CAR_DEALER, BARTENDER, MEDIC, SECRETARY, DISPATCHER, /*?*/
+    SHOPKEEPER, BANKER, CAR_DEALER, BARTENDER, MEDIC, SECRETARY, DISPATCHER, SMUGGLER, ORDINARY,
 };
 
 class Worker : public Person {

@@ -31,6 +31,12 @@ SRC = main.cc			\
       engine/mapgen/rivergen.cc	\
       engine/npc/banker.cc	\
       engine/npc/bartender.cc	\
+      engine/npc/cardealer.cc	\
+      engine/npc/dispatcher.cc	\
+      engine/npc/medic.cc	\
+      engine/npc/ordinary.cc	\
+      engine/npc/secretary.cc	\
+      engine/npc/smuggler.cc	\
       engine/npc/shopkeeper.cc 	\
       ui/dialogmanager.cc	\
       ui/minimap.cc		\

@@ -38,16 +38,17 @@ World::Initialize()
     // create map
     mapgen.Create();
 
-    // initialize vehicles
-    shared_ptr<Vehicle> car(new Vehicle(Point(10, 10), VehicleModel::GENERIC));
-    AddObject(car);
-
-    // initialize people
-    hero = shared_ptr<class Hero>(new class Hero(Point(0, 0) , car));
-    AddObject(hero);
-
     // initialize cities
     CreateCities();
+    City& newhope = cities[0];
+
+    // initialize vehicles
+    shared_ptr<Vehicle> car(new Vehicle(Point(newhope.X+10, newhope.Y+10), VehicleModel::GENERIC));
+    AddObject(car);
+
+    // initialize hero
+    hero = shared_ptr<class Hero>(new class Hero(Point(newhope.X, newhope.Y), car));
+    AddObject(hero);
 
     // create roads
     mapgen.CreateRoads(cities);
