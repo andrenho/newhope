@@ -2,8 +2,23 @@
 - Game (world, cities, buildings, player, vehicles, interaction)
   - NPC AI
   - Physics
+  - Economics engine
+  - Mission engine
 - Util
   - I18N
 - UI
   - 3d world
   - dialog system
+  - event manager
+
+
+Init:
+  - create world
+  - create world elements
+Loop:
+  - receive events
+  - do events (may call dialog system)
+  - calculate physics
+  - AI events
+  - calculate economics
+  - render
