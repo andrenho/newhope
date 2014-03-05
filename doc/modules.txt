@@ -1,0 +1,9 @@
+- World building
+- Game (world, cities, buildings, player, vehicles, interaction)
+  - NPC AI
+  - Physics
+- Util
+  - I18N
+- UI
+  - 3d world
+  - dialog system
